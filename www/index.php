@@ -50,9 +50,8 @@ of the kinetic models recommended by the FOCUS group for parent only) can be fou
 <p> The project is developed on the R-Forge platform, making it easy for interested parties or 
 individuals to join. </p>
 
-<p> Find out more at the R-Forge <strong>project summary page</strong> which
-you can find 
-<a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> Find out more at the R-Forge 
+<a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>project summary page</strong></a>. </p>
 
 </body>
 </html>
