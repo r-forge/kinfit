@@ -45,7 +45,7 @@ echo $contents; } ?>
 
 <p> A quick overview of the current capabilities of the kinfit package (rapid and simultaneous fitting
 of the kinetic models recommended by the FOCUS group for parent only) can be found in the 
-<a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit&view=co">package vignette</a>. </p>
+<a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
 
 <p> The project is developed on the R-Forge platform, making it easy for interested parties or 
 individuals to join. </p>
