@@ -47,11 +47,9 @@ echo $contents; } ?>
 of the kinetic models recommended by the FOCUS group for parent only) can be found in the 
 <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
 
-<p> The project is developed on the R-Forge platform, making it easy for interested parties or 
-individuals to join. </p>
-
-<p> Find out more at the R-Forge 
-<a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>project summary page</strong></a>. </p>
+<p> Development of the project has moved to BerliOS as of July 2010. Please 
+visit the <a href="http://developer.berlios.de/projects/mkin"><strong>project 
+summary page</strong></a>at BerliOS developer. </p>
 
 </body>
 </html>
