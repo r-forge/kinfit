@@ -44,12 +44,11 @@ echo $contents; } ?>
 <!-- end of project description -->
 
 <p> A quick overview of the current capabilities of the kinfit package (rapid and simultaneous fitting
-of the kinetic models recommended by the FOCUS group for parent only) can be found in the 
+of the kinetic models recommended by the FOCUS group for parent only) and a comparison to other software can be found in the 
 <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
 
-<p> Development of the project has moved to BerliOS as of July 2010. Please 
-visit the <a href="http://developer.berlios.de/projects/mkin"><strong>project 
-summary page</strong></a>at BerliOS developer. </p>
+<p> Some aspects of the mkin package are describe in its 
+<a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/mkin/inst/doc/mkin.pdf?root=kinfit">package vignette</a>. </p>
 
 </body>
 </html>
