@@ -45,10 +45,10 @@ echo $contents; } ?>
 
 <p> A quick overview of the current capabilities of the kinfit package (rapid and simultaneous fitting
 of the kinetic models recommended by the FOCUS group for parent only) and a comparison to other software can be found in the 
-<a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
+<a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
 
 <p> Some aspects of the mkin package are describe in its 
-<a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/pkg/mkin/inst/doc/mkin.pdf?root=kinfit">package vignette</a>. </p>
+<a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/mkin/inst/doc/mkin.pdf?root=kinfit">package vignette</a>. </p>
 
 </body>
 </html>
