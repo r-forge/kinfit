@@ -23,6 +23,13 @@ model <- mkinmod(
     B1 = list(type = "SFO"),
     C1 = list(type = "SFO"),
     A2 = list(type = "SFO"))
+model <- mkinmod(
+    parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
+    A1 = list(type = "SFO", to = "A2"),
+    B1 = list(type = "SFO"),
+    C1 = list(type = "SFO"),
+    A2 = list(type = "SFO"), use_of_ff = "max")
+model
 
 fit <- mkinfit(model, data, plot=TRUE)
 fit <- mkinfit(model, data, eigen=TRUE, plot=TRUE)
@@ -44,17 +51,29 @@ model3 <- mkinmod(#{{{
 fit3 <- mkinfit(model3, data, plot=FALSE)
 summary(fit3)#}}}
 
+debug(mkinmod)
+
 SFO <- mkinmod(parent = list(type = "SFO"))
 DFOP <- mkinmod(parent = list(type = "DFOP"))
 SFORB <- mkinmod(parent = list(type = "SFORB"))
 SFO_SFO <- mkinmod(parent = list(type = "SFO", to = "m1"),
 	           m1 = list(type = "SFO"))
+SFO_SFO
+SFO_SFO <- mkinmod(parent = list(type = "SFO", to = "m1"),
+	           m1 = list(type = "SFO"), use_of_ff = "max")
 FOMC_SFO <- mkinmod(parent = list(type = "FOMC", to = "m1"),
 	           m1 = list(type = "SFO"))
+FOMC_SFO <- mkinmod(parent = list(type = "FOMC", to = "m1"),
+	           m1 = list(type = "SFO"), use_of_ff = "max")
 DFOP_SFO <- mkinmod(parent = list(type = "DFOP", to = "m1"),
 	           m1 = list(type = "SFO"))
+DFOP_SFO <- mkinmod(parent = list(type = "DFOP", to = "m1"),
+	           m1 = list(type = "SFO"), use_of_ff = "max")
 SFORB_SFO <- mkinmod(parent = list(type = "SFORB", to = "m1"),
 	           m1 = list(type = "SFO"))
+SFORB_SFO <- mkinmod(parent = list(type = "SFORB", to = "m1"),
+	           m1 = list(type = "SFO"), use_of_ff = "max")
+SFORB_SFO
 system.time(fit.SFORB <- mkinfit(SFORB_SFO, d2, 
   parms.ini = f.SFORB$parms.all,
   plot=TRUE))
