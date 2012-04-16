@@ -33,7 +33,7 @@ model
 
 fit <- mkinfit(model, data, plot=TRUE)
 fit <- mkinfit(model, data, eigen=TRUE, plot=TRUE)
-summary(fit)#}}}
+summary(fit, data=FALSE)#}}}
 model2 <- mkinmod(#{{{
     parent = list(type = "FOMC", to = c("A1", "B1", "C1"), sink = FALSE),
     A1 = list(type = "SFO", to = "A2"),
@@ -58,7 +58,6 @@ DFOP <- mkinmod(parent = list(type = "DFOP"))
 SFORB <- mkinmod(parent = list(type = "SFORB"))
 SFO_SFO <- mkinmod(parent = list(type = "SFO", to = "m1"),
 	           m1 = list(type = "SFO"))
-SFO_SFO
 SFO_SFO <- mkinmod(parent = list(type = "SFO", to = "m1"),
 	           m1 = list(type = "SFO"), use_of_ff = "max")
 FOMC_SFO <- mkinmod(parent = list(type = "FOMC", to = "m1"),
@@ -87,6 +86,7 @@ d2 <- rbind(FOCUS_2006_C,
        time = FOCUS_2006_C$time,
        value = c(0, 20, 40, 45, 48, 49, 48, 46, 45)))
 system.time(fit.SFO <- mkinfit(SFO_SFO, d2, plot=TRUE))
+summary(fit.SFO)
 system.time(fit.FOMC <- mkinfit(FOMC_SFO, d2, plot=TRUE))
 f.DFOP <- mkinfit(DFOP, d2)
 system.time(fit.DFOP <- mkinfit(DFOP_SFO, d2, 
