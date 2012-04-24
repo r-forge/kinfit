@@ -1,4 +1,6 @@
-library(colorout)
+# This file contains fold markers for the vim editor, but can be edited with
+# any other editor
+library(colorout) # Not available on Windows
 library(mkin)
 # {{{ Source new versions of mkin functions
 source("mkin/R/ilr.R")
@@ -7,17 +9,6 @@ source("mkin/R/transform_odeparms.R")
 source("mkin/R/mkinmod.R")
 source("mkin/R/mkinfit.R")
 source("mkin/R/mkinplot.R")
-# }}}
-
-# {{{ Parent only models, for one degradation data series named "parent"
-SFO.1 <- mkinmod(parent = list(type = "SFO"))
-SFO.2 <- mkinmod(parent = list(type = "SFO"), use_of_ff = "max")
-mkinpredict(SFO.1, c(k_parent_sink = 0.1), c(parent = 100), 1:100, solution_type = "analytical")
-mkinpredict(SFO.2, c(k_parent = 0.1), c(parent = 100), 1:100, solution_type = "analytical")
-FOMC <- mkinmod(parent = list(type = "FOMC"))
-HS <- mkinmod(parent = list(type = "HS"))
-DFOP <- mkinmod(parent = list(type = "DFOP"))
-SFORB <- mkinmod(parent = list(type = "SFORB"))
 # }}}
 
 # Dataset d2 {{{
@@ -218,4 +209,4 @@ fit.1.eigen.sink$distimes
 fit.2.lsoda$distimes
 # }}}
 
-# vim: set foldmethod=marker:
+# vim: set foldmethod=marker ts=2 sw=2 expandtab:
