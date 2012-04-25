@@ -71,6 +71,11 @@ SFORB_SFO.2 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
 # Compare eigenvalue and deSolve based fitting {{{
 testdata = d2
 # SFO_SFO {{{
+SFO_SFO.1 <- mkinmod(parent = list(type = "SFO", to = "m1"),
+       m1 = list(type = "SFO"), use_of_ff = "min")
+SFO_SFO.2 <- mkinmod(parent = list(type = "SFO", to = "m1"),
+       m1 = list(type = "SFO"), use_of_ff = "max")
+
 # for both model specification variants
 system.time(fit.SFO.1.eigen <- mkinfit(SFO_SFO.1, testdata, plot=TRUE))
 system.time(fit.SFO.1.lsoda <- mkinfit(SFO_SFO.1, testdata, solution_type = "deSolve", plot=TRUE))
@@ -137,7 +142,6 @@ model.2 <- mkinmod(
     A2 = list(type = "SFO"), use_of_ff = "max")
 
 # Compare eigenvalue and deSolve based solutions {{{
-undebug(mkinpredict)
 print(mkinpredict(model.1, 
   fit.1.eigen$odeparms.final, 
   c(parent = 100, A1 = 0, B1 = 0, C1 = 0, A2 = 0),
@@ -163,6 +167,10 @@ fit.1.eigen.sink <- mkinfit(model.1.sink, data, plot=TRUE)
 fit.2.lsoda <- mkinfit(model.2, data, solution_type = "deSolve", plot=TRUE)
 # Again, the following is very slow
 #fit.2.lsoda.1000 <- mkinfit(model.2, data, solution_type = "deSolve", n.outtimes = 1000, plot=TRUE)
+# This works with very good starting parameters...
+fit.2.eigen <- mkinfit(model.2, data, parms.ini = fit.2.lsoda$odeparms.final, plot=TRUE) 
+summary(fit.2.eigen, data=FALSE)
+
 
 summary(fit.1.eigen.sink, data=FALSE)
 #summary(fit.2.eigen, data=FALSE) # See above, did not work
@@ -174,4 +182,11 @@ fit.1.eigen.sink$distimes
 fit.2.lsoda$distimes
 # }}}
 
+# mkinplot {{{
+debug(mkinplot)
+mkinplot(fit.SFO.1.eigen)
+mkinplot(fit.1.lsoda)
+mkinplot(fit.2.lsoda)
+mkinplot(fit.2.eigen)
+# }}}
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
