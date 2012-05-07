@@ -5,6 +5,7 @@ library(mkin)
 # {{{ Source new versions of mkin functions
 source("mkin/R/ilr.R")
 source("mkin/R/mkinpredict.R")
+source("mkin/R/mkinerrmin.R")
 source("mkin/R/transform_odeparms.R")
 source("mkin/R/mkinmod.R")
 source("mkin/R/mkinfit.R")
@@ -23,6 +24,16 @@ d2 <- rbind(FOCUS_2006_C,
 as.list(body(mkinfit))
 trace("mkinfit", quote(browser(skipCalls=4)), at = 55)
 untrace("mkinfit")
+# }}}
+
+# Simple parent only fitting {{{
+SFORB = mkinmod(parent = list(type = "SFORB"))
+f.SFORB <- mkinfit(SFORB, FOCUS_2006_C)
+f.SFORB$obs_vars
+undebug(summary.mkinfit)
+debug(mkinerrmin)
+summary(f.SFORB)
+mkinplot(f.SFORB)
 # }}}
 
 # Test different types of model specification {{{
@@ -63,8 +74,8 @@ print(tail(mkinpredict(SFO_SFO2_SFO.2,
 # SFORB_SFO {{{
 SFORB_SFO.1 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
 	           m1 = list(type = "SFO"))
-SFORB_SFO.2 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
-	           m1 = list(type = "SFO"), use_of_ff = "max")
+#SFORB_SFO.2 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
+#	           m1 = list(type = "SFO"), use_of_ff = "max") # not supported
 # }}}
 # }}}
 
@@ -80,8 +91,11 @@ SFO_SFO.2 <- mkinmod(parent = list(type = "SFO", to = "m1"),
 system.time(fit.SFO.1.eigen <- mkinfit(SFO_SFO.1, testdata, plot=TRUE))
 system.time(fit.SFO.1.lsoda <- mkinfit(SFO_SFO.1, testdata, solution_type = "deSolve", plot=TRUE))
 system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, testdata, plot=TRUE))
-f.SFO <- mkinfit(SFO.2, testdata)
+SFO.2 <- mkinmod(parent = list(type = "SFO"))
+f.SFO <- mkinfit(SFO.2, testdata, plot=TRUE)
 system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = f.SFO$odeparms.final, 
+  testdata, plot=TRUE))
+system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = c(k_m1 = 0.001),
   testdata, plot=TRUE))
 system.time(fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve", plot=TRUE))
 summary(fit.SFO.1.eigen, data=FALSE)
@@ -105,12 +119,15 @@ fit.FOMC <- mkinfit(FOMC, d2)
 
 FOMC_SFO <- mkinmod(parent = list(type = "FOMC", to = "m1"),
 	           m1 = list(type = "SFO"))
-fit.FOMC_SFO <- mkinfit(FOMC_SFO.1, d2, parms.ini = fit.FOMC$odeparms.final)
+fit.FOMC_SFO <- mkinfit(FOMC_SFO, d2, parms.ini = fit.FOMC$odeparms.final)
+mkinplot(fit.FOMC_SFO)
+summary(fit.FOMC_SFO)
 # }}}
 
 # Check DFOP_SFO {{{
 DFOP_SFO <- mkinmod(parent = list(type = "DFOP", to = "m1"),
 	           m1 = list(type = "SFO"))
+DFOP <- mkinmod(parent = list(type = "DFOP"))
 f.DFOP <- mkinfit(DFOP, d2)
 summary(f.DFOP)
 system.time(fit.DFOP <- mkinfit(DFOP_SFO, d2, 
@@ -119,6 +136,18 @@ system.time(fit.DFOP <- mkinfit(DFOP_SFO, FOCUS_2006_D,
   plot=TRUE))
 summary(fit.DFOP, data=FALSE)
 # }}}
+
+# Check SFORB_SFO {{{
+SFORB_SFO <- mkinmod(parent = list(type = "SFORB", to = "m1"),
+	           m1 = list(type = "SFO"))
+system.time(fit.SFORB <- mkinfit(SFORB_SFO, d2, 
+  plot=TRUE))
+system.time(fit.SFORB <- mkinfit(SFORB_SFO, FOCUS_2006_D, 
+  plot=TRUE))
+debug(summary.mkinfit)
+summary(fit.SFORB, data=FALSE)
+# }}}
+
 
 # {{{ KinGUI test data from 2007
 data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
@@ -135,7 +164,7 @@ model.1.sink <- mkinmod(
     C1 = list(type = "SFO"),
     A2 = list(type = "SFO"))
 model.2 <- mkinmod(
-    parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
+    parent = list(type = "SFO", to = c("A1", "B1", "C1")),
     A1 = list(type = "SFO", to = "A2"),
     B1 = list(type = "SFO"),
     C1 = list(type = "SFO"),
@@ -188,5 +217,19 @@ mkinplot(fit.SFO.1.eigen)
 mkinplot(fit.1.lsoda)
 mkinplot(fit.2.lsoda)
 mkinplot(fit.2.eigen)
+# }}}
+# mkinerrmin {{{
+system.time(fit.SFO.1.eigen <- mkinfit(SFO_SFO.1, testdata, plot=TRUE))
+fit <- fit.SFO.1.eigen
+debug(mkinerrmin)
+mkinerrmin(fit.SFO.1.eigen)
+mkinerrmin(fit.SFO.1.lsoda)
+mkinerrmin(fit.SFO.2.eigen)
+mkinerrmin(fit.SFO.2.lsoda)
+mkinerrmin(fit.FOMC_SFO)
+mkinerrmin(fit.DFOP)
+mkinerrmin(fit.SFORB)
+mkinerrmin(fit.1.eigen)
+mkinerrmin(fit.2.eigen)
 # }}}
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
