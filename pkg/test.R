@@ -9,6 +9,7 @@ source("mkin/R/mkinerrmin.R")
 source("mkin/R/transform_odeparms.R")
 source("mkin/R/mkinmod.R")
 source("mkin/R/mkinfit.R")
+source("mkin/R/endpoints.R")
 source("mkin/R/mkinplot.R")
 # }}}
 
@@ -31,7 +32,9 @@ SFORB = mkinmod(parent = list(type = "SFORB"))
 f.SFORB <- mkinfit(SFORB, FOCUS_2006_C)
 f.SFORB$obs_vars
 undebug(summary.mkinfit)
-debug(mkinerrmin)
+debug(endpoints)
+endpoints(f.SFORB)
+mkinerrmin(f.SFORB)
 summary(f.SFORB)
 mkinplot(f.SFORB)
 # }}}
@@ -93,8 +96,8 @@ system.time(fit.SFO.1.lsoda <- mkinfit(SFO_SFO.1, testdata, solution_type = "deS
 system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, testdata, plot=TRUE))
 SFO.2 <- mkinmod(parent = list(type = "SFO"))
 f.SFO <- mkinfit(SFO.2, testdata, plot=TRUE)
-system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = f.SFO$odeparms.final, 
-  testdata, plot=TRUE))
+#system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = f.SFO$odeparms.final, 
+#  testdata, plot=TRUE))
 system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = c(k_m1 = 0.001),
   testdata, plot=TRUE))
 system.time(fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve", plot=TRUE))
@@ -207,8 +210,8 @@ summary(fit.2.lsoda, data=FALSE)
 summary(fit.2.lsoda.1000, data=FALSE) # Not a lot different from n.outtimes = 100
 
 # Compare the models with sink - the solution method does not make a significant difference
-fit.1.eigen.sink$distimes
-fit.2.lsoda$distimes
+endpoints(fit.1.eigen.sink)
+endpoints(fit.2.lsoda)
 # }}}
 
 # mkinplot {{{
@@ -227,9 +230,8 @@ mkinerrmin(fit.SFO.1.lsoda)
 mkinerrmin(fit.SFO.2.eigen)
 mkinerrmin(fit.SFO.2.lsoda)
 mkinerrmin(fit.FOMC_SFO)
-mkinerrmin(fit.DFOP)
-mkinerrmin(fit.SFORB)
+mkinerrmin(f.SFORB)
 mkinerrmin(fit.1.eigen)
-mkinerrmin(fit.2.eigen)
+mkinerrmin(fit.2.lsoda)
 # }}}
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
