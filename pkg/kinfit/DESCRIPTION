@@ -1,8 +1,8 @@
 Package: kinfit
 Type: Package
 Title: Routines for fitting kinetic models to chemical degradation data
-Version: 1.1.06
-Date: 2011-11-09
+Version: 1.1.07
+Date: 2012-06-26
 Author: Johannes Ranke and Katrin Lindenberger
 Maintainer: Johannes Ranke <jranke@users.berlios.de>
 Description: Simple calculation routines based on the FOCUS Kinetics 
@@ -13,4 +13,4 @@ Description: Simple calculation routines based on the FOCUS Kinetics
 License: GPL
 LazyLoad: yes
 LazyData: yes
-URL: http://cran.r-project.org, http://developer.berlios.de/projects/mkin/
+URL: http://cran.r-project.org, http://kinfit.r-forge.r-project.org
