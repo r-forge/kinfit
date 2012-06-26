@@ -97,19 +97,95 @@
   <span class="argument">m1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="comment"># Fit the model to the FOCUS example dataset D using defaults</span>
 <span class="symbol">fit</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinfit.html'>mkinfit</a></span><span class="keyword">(</span><span class="symbol">SFO_SFO</span><span class="keyword">,</span> <span class="symbol">FOCUS_2006_D</span><span class="keyword">)</span></div>
-<strong class='error'>Error in match(x, table, nomatch = 0L): Objekt 'name' nicht gefunden</strong>
+<div class='output'>Model cost at call  1 :  18994.29 
+Model cost at call  3 :  18994.29 
+Model cost at call  7 :  10642.61 
+Model cost at call  8 :  10642.61 
+Model cost at call  10 :  10642.61 
+Model cost at call  12 :  7148.118 
+Model cost at call  14 :  7148.118 
+Model cost at call  17 :  412.0354 
+Model cost at call  18 :  412.0353 
+Model cost at call  22 :  371.2203 
+Model cost at call  23 :  371.2203 
+Model cost at call  25 :  371.2203 
+Model cost at call  27 :  371.2134 
+Model cost at call  28 :  371.2134 
+Model cost at call  30 :  371.2134 
+Model cost at call  32 :  371.2134 
+</div>
 <div class='input'><span class="functioncall"><a href='NA'>summary</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">,</span> <span class="argument">data</span><span class="argument">=</span><span class="number">FALSE</span><span class="keyword">)</span> <span class="comment"># See transformed and backtransformed parameters</span></div>
-<strong class='error'>Error in summary(fit, data = FALSE): Objekt 'fit' nicht gefunden</strong>
-<div class='input'><span class="symbol">initials</span> <span class="assignement">&lt;-</span> <span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">$</span><span class="symbol">initial</span></div>
-<strong class='error'>Error in eval(expr, envir, enclos): Objekt 'fit' nicht gefunden</strong>
-<div class='input'><span class="symbol">transformed</span> <span class="assignement">&lt;-</span> <span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">$</span><span class="symbol">transformed</span></div>
-<strong class='error'>Error in eval(expr, envir, enclos): Objekt 'fit' nicht gefunden</strong>
-<div class='input'><span class="functioncall"><a href='NA'>names</a></span><span class="keyword">(</span><span class="symbol">initials</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>names</a></span><span class="keyword">(</span><span class="symbol">transformed</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>rownames</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">)</span></div>
-<strong class='error'>Error in rownames(fit$start): Objekt 'fit' nicht gefunden</strong>
-<div class='input'><span class="functioncall"><a href='transform_odeparms.html'>transform_odeparms</a></span><span class="keyword">(</span><span class="symbol">initials</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"parent"</span><span class="keyword">,</span> <span class="string">"m1"</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<strong class='error'>Error in transform_odeparms(initials, c("parent", "m1")): Objekt 'initials' nicht gefunden</strong>
+<div class='output'>mkin version:    0.9.4 
+R version:       2.15.1 
+Date of fit:     Tue Jun 26 23:13:18 2012 
+Date of summary: Tue Jun 26 23:13:18 2012 
+
+Equations:
+[1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
+[2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+
+Starting values for optimised parameters:
+              initial   type transformed
+parent_0        100.0  state  100.000000
+k_parent_sink     0.1 deparm   -2.302585
+k_parent_m1       0.1 deparm   -2.302585
+k_m1_sink         0.1 deparm   -2.302585
+
+Fixed parameter values:
+   value  type
+m1     0 state
+
+Optimised, transformed parameters:
+              Estimate Std. Error
+parent_0        99.598      1.614
+k_parent_sink   -3.038      0.078
+k_parent_m1     -2.980      0.041
+k_m1_sink       -5.248      0.136
+
+Backtransformed parameters:
+              Estimate
+parent_0        99.598
+k_parent_sink    0.048
+k_parent_m1      0.051
+k_m1_sink        0.005
+
+Residual standard error: 3.211 on 36 degrees of freedom
+
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   6.565       4 16
+parent     6.827       3  6
+m1         4.748       1 10
+
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
+
+Estimated formation fractions:
+                ff
+parent_sink 0.4855
+parent_m1   0.5145
+m1_sink     1.0000
+
+Parameter correlation:
+              parent_0 k_parent_sink k_parent_m1 k_m1_sink
+parent_0       1.00000       0.60752    -0.06625   -0.1701
+k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
+k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
+k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
+</div>
+<div class='input'><span class="symbol">initials</span> <span class="assignement">&lt;-</span> <span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">$</span><span class="symbol">initial</span>
+<span class="symbol">transformed</span> <span class="assignement">&lt;-</span> <span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">$</span><span class="symbol">transformed</span>
+<span class="functioncall"><a href='NA'>names</a></span><span class="keyword">(</span><span class="symbol">initials</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>names</a></span><span class="keyword">(</span><span class="symbol">transformed</span><span class="keyword">)</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>rownames</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">start</span><span class="keyword">)</span>
+<span class="functioncall"><a href='transform_odeparms.html'>transform_odeparms</a></span><span class="keyword">(</span><span class="symbol">initials</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"parent"</span><span class="keyword">,</span> <span class="string">"m1"</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
+   100.000000     -2.302585     -2.302585     -2.302585 
+</div>
 <div class='input'><span class="functioncall"><a href='transform_odeparms.html'>backtransform_odeparms</a></span><span class="keyword">(</span><span class="symbol">transformed</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"parent"</span><span class="keyword">,</span> <span class="string">"m1"</span><span class="keyword">)</span><span class="keyword">)</span></div>
-<strong class='error'>Error in backtransform_odeparms(transformed, c("parent", "m1")): Objekt 'transformed' nicht gefunden</strong></pre>
+<div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
+        100.0           0.1           0.1           0.1 
+</div></pre>
         </div>
         <div class="span4">
           <!-- <ul>

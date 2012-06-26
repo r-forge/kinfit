@@ -3,11 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>
-Datasets A to F from the FOCUS Kinetics report from 2006
+Function to calculate endpoints for further use from kinetic models fitted with mkinfit
 . mkin </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="
+  Johannes Ranke
+">
 
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -42,83 +44,66 @@ Datasets A to F from the FOCUS Kinetics report from 2006
 
     <div class="container">
       <h1>
-Datasets A to F from the FOCUS Kinetics report from 2006
+Function to calculate endpoints for further use from kinetic models fitted with mkinfit
 </h1>
 
       <div class="row">
         <div class="span8">
           <h2>Usage</h2>
-          <pre><span class="symbol">FOCUS_2006_datasets</span></pre>
-                    
-          <div class="
-Datasets A to F from the FOCUS Kinetics report from 2006
-">
-            <h2>
-Datasets A to F from the FOCUS Kinetics report from 2006
-</h2>
-            
-          </div>
-
-          <div class="
-Datasets A to F from the FOCUS Kinetics report from 2006
-">
-            <h2>
-Datasets A to F from the FOCUS Kinetics report from 2006
-</h2>
-            
-          </div>
-
+          <pre><span class="functioncall"><a href='endpoints.html'>endpoints</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">,</span> <span class="argument">pseudoDT50</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>fit</dt>
+            <dd>
+  An object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
+</dd>
+            <dt>pseudoDT50</dt>
+            <dd>
+  Should pseudoDT50 values for FOMC, DFOP and SFORB models be reported, as 
+  recommended by the FOCUS group? Currently not implemented.
+</dd>
+          </dl>
+          
           <div class="Description">
             <h2>Description</h2>
             
-            <p>Data taken from FOCUS (2006), p. 258.</p>
+            <p>This function calculates DT50 and DT90 values as well as formation fractions from kinetic models
+fitted with mkinfit. If the SFORB model was specified for one of the parents or metabolites, 
+the Eigenvalues are returned. These are equivalent to the rate constantes of the DFOP model, but 
+with the advantage that the SFORB model can also be used for metabolites.</p>
         
           </div>
 
-          <div class="Format">
-            <h2>Format</h2>
+          <div class="Note">
+            <h2>Note</h2>
             
-            <p>6 datasets with observations on the following variables.
-  <span class='describe'>
-    <code>name</code>a factor containing the name of the observed variable
-    <code>time</code>a numeric vector containing time points
-    <code>value</code>a numeric vector containing concentrations in percent of applied radioactivity
-  </span></p>
+            <p>The function is used internally by <code><a href='summary.mkinfit.html'>summary.mkinfit</a></code>.</p>
         
           </div>
 
-          <div class="
-Datasets A to F from the FOCUS Kinetics report from 2006
-">
-            <h2>
-Datasets A to F from the FOCUS Kinetics report from 2006
-</h2>
+          <div class="Value">
+            <h2>Value</h2>
             
+            <p>A list with the components mentioned above.</p>
+        
           </div>
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="symbol">FOCUS_2006_C</span></div>
-<div class='output'>    name time value
-1 parent    0  85.1
-2 parent    1  57.9
-3 parent    3  29.9
-4 parent    7  14.6
-5 parent   14   9.7
-6 parent   28   6.6
-7 parent   63   4.0
-8 parent   91   3.9
-9 parent  119   0.6
-</div></pre>
         </div>
         <div class="span4">
           <!-- <ul>
-            <li>FOCUS_2006_A</li><li>FOCUS_2006_B</li><li>FOCUS_2006_C</li><li>FOCUS_2006_D</li><li>FOCUS_2006_E</li><li>FOCUS_2006_F</li>
+            <li>endpoints</li>
           </ul>
           <ul>
-            <li>datasets</li>
+            <li> manip </li>
           </ul> -->
             
-                    
+          
+          <h2>Author</h2>
+          
+  Johannes Ranke
+
+          
         </div>
       </div>
       <footer class="footer">

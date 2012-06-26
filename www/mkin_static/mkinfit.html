@@ -178,11 +178,203 @@
   <span class="argument">m1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span>
 <span class="comment"># Fit the model to the FOCUS example dataset D using defaults</span>
 <span class="symbol">fit</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinfit.html'>mkinfit</a></span><span class="keyword">(</span><span class="symbol">SFO_SFO</span><span class="keyword">,</span> <span class="symbol">FOCUS_2006_D</span><span class="keyword">)</span></div>
-<strong class='error'>Error in match(x, table, nomatch = 0L): Objekt 'name' nicht gefunden</strong>
+<div class='output'>Model cost at call  1 :  18994.29 
+Model cost at call  3 :  18994.29 
+Model cost at call  7 :  10642.61 
+Model cost at call  8 :  10642.61 
+Model cost at call  10 :  10642.61 
+Model cost at call  12 :  7148.118 
+Model cost at call  14 :  7148.118 
+Model cost at call  17 :  412.0354 
+Model cost at call  18 :  412.0353 
+Model cost at call  22 :  371.2203 
+Model cost at call  23 :  371.2203 
+Model cost at call  25 :  371.2203 
+Model cost at call  27 :  371.2134 
+Model cost at call  28 :  371.2134 
+Model cost at call  30 :  371.2134 
+Model cost at call  32 :  371.2134 
+</div>
 <div class='input'><span class="functioncall"><a href='NA'>str</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">)</span></div>
-<strong class='error'>Error in str(fit): Objekt 'fit' nicht gefunden</strong>
+<div class='output'>List of 27
+ $ par              : Named num [1:4] 99.6 -3.04 -2.98 -5.25
+  ..- attr(*, "names")= chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
+ $ hessian          : num [1:4, 1:4] 15.1 -280.1 131.2 -89 -280.1 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
+  .. ..$ : chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
+ $ residuals        : Named num [1:40] 0.138 -2.442 -3.262 -2.262 10.843 ...
+  ..- attr(*, "names")= chr [1:40] "parent" "parent" "parent" "parent" ...
+ $ info             : int 1
+ $ message          : chr "Relative error in the sum of squares is at most `ftol'."
+ $ iterations       : int 6
+ $ rsstrace         : num [1:7] 18994 10643 7148 412 371 ...
+ $ ssr              : num 371
+ $ diag             : Named num [1:4] 3.06 75.96 109.31 40.9
+  ..- attr(*, "names")= chr [1:4] "diag.parent_0" "diag.k_parent_sink" "diag.k_parent_m1" "diag.k_m1_sink"
+ $ ms               : num 9.28
+ $ var_ms           : Named num [1:2] 11.55 7.42
+  ..- attr(*, "names")= chr [1:2] "parent" "m1"
+ $ var_ms_unscaled  : Named num [1:2] 11.55 7.42
+  ..- attr(*, "names")= chr [1:2] "parent" "m1"
+ $ var_ms_unweighted: Named num [1:2] 11.55 7.42
+  ..- attr(*, "names")= chr [1:2] "parent" "m1"
+ $ rank             : int 4
+ $ df.residual      : int 36
+ $ solution_type    : chr "eigen"
+ $ mkinmod          :List of 5
+  ..$ diffs    : Named chr [1:2] "d_parent = - k_parent_sink * parent - k_parent_m1 * parent" "d_m1 = + k_parent_m1 * parent - k_m1_sink * m1"
+  .. ..- attr(*, "names")= chr [1:2] "parent" "m1"
+  ..$ parms    : chr [1:3] "k_parent_sink" "k_parent_m1" "k_m1_sink"
+  ..$ map      :List of 2
+  .. ..$ parent: Named chr "parent"
+  .. .. ..- attr(*, "names")= chr "SFO"
+  .. ..$ m1    : Named chr "m1"
+  .. .. ..- attr(*, "names")= chr "SFO"
+  ..$ use_of_ff: chr "min"
+  ..$ coefmat  : chr [1:2, 1:2] "- k_parent_sink - k_parent_m1" "k_parent_m1" "0" "- k_m1_sink"
+  .. ..- attr(*, "dimnames")=List of 2
+  .. .. ..$ : chr [1:2] "parent" "m1"
+  .. .. ..$ : chr [1:2] "parent" "m1"
+  ..- attr(*, "class")= chr "mkinmod"
+ $ observed         :'data.frame':	44 obs. of  3 variables:
+  ..$ name : Factor w/ 2 levels "m1","parent": 2 2 2 2 2 2 2 2 2 2 ...
+  ..$ time : num [1:44] 0 0 1 1 3 3 7 7 14 14 ...
+  ..$ value: num [1:44] 99.5 102 93.5 92.5 63.2 ...
+ $ obs_vars         : chr [1:2] "parent" "m1"
+ $ predicted        :'data.frame':	218 obs. of  3 variables:
+  ..$ name : Factor w/ 2 levels "m1","parent": 2 2 2 2 2 2 2 2 2 2 ...
+  ..$ time : num [1:218] 0 1 1.21 2.42 3 ...
+  ..$ value: num [1:218] 99.6 90.2 88.4 78.4 74.1 ...
+ $ start            :'data.frame':	4 obs. of  3 variables:
+  ..$ initial    : num [1:4] 100 0.1 0.1 0.1
+  ..$ type       : chr [1:4] "state" "deparm" "deparm" "deparm"
+  ..$ transformed: num [1:4] 100 -2.3 -2.3 -2.3
+ $ fixed            :'data.frame':	1 obs. of  2 variables:
+  ..$ value: num 0
+  ..$ type : chr "state"
+ $ data             :'data.frame':	44 obs. of  5 variables:
+  ..$ time     : num [1:44] 0 0 1 1 3 3 7 7 14 14 ...
+  ..$ variable : Ord.factor w/ 2 levels "parent"<"m1": 1 1 1 1 1 1 1 1 1 1 ...
+  ..$ observed : num [1:44] 99.5 102 93.5 92.5 63.2 ...
+  ..$ predicted: num [1:44] 99.6 99.6 90.2 90.2 74.1 ...
+  ..$ residual : num [1:44] -0.138 2.442 3.262 2.262 -10.843 ...
+ $ atol             : num 1e-06
+ $ parms.all        : Named num [1:4] 99.59848 0.04792 0.05078 0.00526
+  ..- attr(*, "names")= chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
+ $ odeparms.final   : Named num [1:3] 0.04792 0.05078 0.00526
+  ..- attr(*, "names")= chr [1:3] "k_parent_sink" "k_parent_m1" "k_m1_sink"
+ $ date             : chr "Tue Jun 26 23:13:14 2012"
+ - attr(*, "class")= chr [1:2] "mkinfit" "modFit"
+</div>
 <div class='input'><span class="functioncall"><a href='NA'>summary</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">)</span></div>
-<strong class='error'>Error in summary(fit): Objekt 'fit' nicht gefunden</strong></pre>
+<div class='output'>mkin version:    0.9.4 
+R version:       2.15.1 
+Date of fit:     Tue Jun 26 23:13:14 2012 
+Date of summary: Tue Jun 26 23:13:14 2012 
+
+Equations:
+[1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
+[2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+
+Starting values for optimised parameters:
+              initial   type transformed
+parent_0        100.0  state  100.000000
+k_parent_sink     0.1 deparm   -2.302585
+k_parent_m1       0.1 deparm   -2.302585
+k_m1_sink         0.1 deparm   -2.302585
+
+Fixed parameter values:
+   value  type
+m1     0 state
+
+Optimised, transformed parameters:
+              Estimate Std. Error
+parent_0        99.598      1.614
+k_parent_sink   -3.038      0.078
+k_parent_m1     -2.980      0.041
+k_m1_sink       -5.248      0.136
+
+Backtransformed parameters:
+              Estimate
+parent_0        99.598
+k_parent_sink    0.048
+k_parent_m1      0.051
+k_m1_sink        0.005
+
+Residual standard error: 3.211 on 36 degrees of freedom
+
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   6.565       4 16
+parent     6.827       3  6
+m1         4.748       1 10
+
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
+
+Estimated formation fractions:
+                ff
+parent_sink 0.4855
+parent_m1   0.5145
+m1_sink     1.0000
+
+Parameter correlation:
+              parent_0 k_parent_sink k_parent_m1 k_m1_sink
+parent_0       1.00000       0.60752    -0.06625   -0.1701
+k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
+k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
+k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
+
+Data:
+ time variable observed  predicted    residual
+    0   parent    99.46 99.5984830  -0.1384830
+    0   parent   102.04 99.5984830   2.4415170
+    1   parent    93.50 90.2378716   3.2621284
+    1   parent    92.50 90.2378716   2.2621284
+    3   parent    63.23 74.0731958 -10.8431958
+    3   parent    68.99 74.0731958  -5.0831958
+    7   parent    52.32 49.9120675   2.4079325
+    7   parent    55.13 49.9120675   5.2179325
+   14   parent    27.27 25.0125746   2.2574254
+   14   parent    26.64 25.0125746   1.6274254
+   21   parent    11.50 12.5346218  -1.0346218
+   21   parent    11.64 12.5346218  -0.8946218
+   35   parent     2.85  3.1478709  -0.2978709
+   35   parent     2.91  3.1478709  -0.2378709
+   50   parent     0.69  0.7162402  -0.0262402
+   50   parent     0.63  0.7162402  -0.0862402
+   75   parent     0.05  0.0607382  -0.0107382
+   75   parent     0.06  0.0607382  -0.0007382
+  100   parent       NA  0.0051507          NA
+  100   parent       NA  0.0051507          NA
+  120   parent       NA  0.0007155          NA
+  120   parent       NA  0.0007155          NA
+    0       m1     0.00  0.0000000   0.0000000
+    0       m1     0.00  0.0000000   0.0000000
+    1       m1     4.84  4.8029570   0.0370430
+    1       m1     5.64  4.8029570   0.8370430
+    3       m1    12.91 13.0239989  -0.1139989
+    3       m1    12.96 13.0239989  -0.0639989
+    7       m1    22.97 25.0447608  -2.0747608
+    7       m1    24.47 25.0447608  -0.5747608
+   14       m1    41.69 36.6900240   4.9999760
+   14       m1    33.21 36.6900240  -3.4800240
+   21       m1    44.37 41.6530971   2.7169029
+   21       m1    46.44 41.6530971   4.7869029
+   35       m1    41.22 43.3131226  -2.0931226
+   35       m1    37.95 43.3131226  -5.3631226
+   50       m1    41.19 41.2183138  -0.0283138
+   50       m1    40.01 41.2183138  -1.2083138
+   75       m1    40.09 36.4470336   3.6429664
+   75       m1    33.85 36.4470336  -2.5970336
+  100       m1    31.04 31.9816232  -0.9416232
+  100       m1    33.13 31.9816232   1.1483768
+  120       m1    25.15 28.7898365  -3.6398365
+  120       m1    33.31 28.7898365   4.5201635
+</div></pre>
         </div>
         <div class="span4">
           <!-- <ul>
