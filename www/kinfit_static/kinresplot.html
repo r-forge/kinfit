@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+Creates a plot of the residual for specified kinetic fits
+. kinfit </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content=" Johannes Ranke ">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">kinfit </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>
+Creates a plot of the residual for specified kinetic fits
+</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='kinresplot.html'>kinresplot</a></span><span class="keyword">(</span><span class="symbol">kinobject</span><span class="keyword">,</span> <span class="symbol">kinmodel</span><span class="keyword">,</span> <span class="argument">xlab</span> <span class="argument">=</span> <span class="string">"Time [days]"</span><span class="keyword">,</span> <span class="argument">ylab</span> <span class="argument">=</span> <span class="string">"Residual [% of applied radioactivity]"</span><span class="keyword">,</span>
+  <span class="argument">maxabs</span> <span class="argument">=</span> <span class="string">"auto"</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>kinobject</dt>
+            <dd>
+	A list containing the following elements:
+	The name of the parent compound to be output (<code>parent</code>),
+	the type of the test system (<code>type</code>), 
+	the name of the specific test system used for generating this dataset
+        (<code>system</code>), 
+	the list of fitted kinetic models (<code>fits</code>), as returned by
+        <code><a href='kinfit.html'>kinfit</a></code>, and optionally the list of results
+        (<code>results</code>) as returned by <code><a href='kinresults.html'>kinresults</a></code>.
+        Also optional is the label position of the test compound (<code>label</code>)
+        and the source of the data (<code>source</code>). </dd>
+            <dt>kinmodel</dt>
+            <dd> The fitted model for which the residuals should be plotted. </dd>
+            <dt>xlab</dt>
+            <dd> Label for the x axis. </dd>
+            <dt>ylab</dt>
+            <dd> Label for the y axis. </dd>
+            <dt>maxabs</dt>
+            <dd> Maximum value of the absolute residuals, will be calculated
+        from the residuals if not specified otherwise. </dd>
+          </dl>
+          
+          <div class="
+Creates a plot of the residual for specified kinetic fits
+">
+            <h2>
+Creates a plot of the residual for specified kinetic fits
+</h2>
+            
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>Function to create a residual plot for a specified fitted model</p>
+        
+          </div>
+
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>The function is called for its side effect, namely creating a residual plot
+for the specified fit.</p>
+        
+          </div>
+      
+          <h2 id="examples">Examples</h2>
+          <pre class="examples"><div class='input'><span class="functioncall"><a href='NA'>data</a></span><span class="keyword">(</span><span class="symbol">FOCUS_2006_C</span><span class="keyword">)</span></div>
+<strong class='warning'>Warning message:
+data set ‘FOCUS_2006_C’ not found</strong>
+<div class='input'><span class="symbol">kinfits</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='kinfit.html'>kinfit</a></span><span class="keyword">(</span><span class="symbol">FOCUS_2006_C</span><span class="keyword">)</span>
+<span class="symbol">kinobject</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span>
+        <span class="argument">parent</span> <span class="argument">=</span> <span class="string">"Compound XY"</span><span class="keyword">,</span>
+        <span class="argument">type</span> <span class="argument">=</span> <span class="string">"Degradation in the environment"</span><span class="keyword">,</span>
+        <span class="argument">system</span> <span class="argument">=</span> <span class="string">"System 1"</span><span class="keyword">,</span>
+        <span class="argument">source</span> <span class="argument">=</span> <span class="string">"Synthetic example data from FOCUS kinetics"</span><span class="keyword">,</span>
+        <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">FOCUS_2006_C</span><span class="keyword">,</span>
+        <span class="argument">fits</span> <span class="argument">=</span> <span class="symbol">kinfits</span><span class="keyword">,</span>
+        <span class="argument">results</span> <span class="argument">=</span> <span class="functioncall"><a href='kinresults.html'>kinresults</a></span><span class="keyword">(</span><span class="symbol">kinfits</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="comment">## &lt;strong&gt;Not run&lt;/strong&gt;: kinresplot(kinobject, "SFO")</span></div></pre>
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>kinresplot</li>
+          </ul>
+          <ul>
+            <li> hplot </li>
+          </ul> -->
+            
+          
+          <h2>Author</h2>
+           Johannes Ranke 
+          
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

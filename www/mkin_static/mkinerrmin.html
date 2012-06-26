@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+Calculate the minimum error to assume in order to pass the variance test
+. mkin </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">mkin </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>
+Calculate the minimum error to assume in order to pass the variance test
+</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='mkinerrmin.html'>mkinerrmin</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">,</span> <span class="argument">alpha</span> <span class="argument">=</span> <span class="number">0.05</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>fit</dt>
+            <dd>
+    an object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
+  </dd>
+            <dt>alpha</dt>
+            <dd>
+    The confidence level chosen for the chi-squared test.
+</dd>
+          </dl>
+          
+          <div class="
+Calculate the minimum error to assume in order to pass the variance test
+">
+            <h2>
+Calculate the minimum error to assume in order to pass the variance test
+</h2>
+            
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>This function uses <code><a href='NA'>optimize</a></code> in order to iteratively find the
+smallest relative error still resulting in passing the chi-squared test
+as defined in the FOCUS kinetics report from 2006.</p>
+        
+          </div>
+
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>A dataframe with the following components:
+  err.minThe relative error, expressed as a fraction.
+  n.optimThe number of optimised parameters attributed to the data series.
+  dfThe number of remaining degrees of freedom for the chi2 error level
+    calculations.  Note that mean values are used for the chi2 statistic and
+    therefore every time point with observed values in the series only counts
+    one time.
+  The dataframe has one row for the total dataset and one further row for
+  each observed state variable in the model.</p>
+        
+          </div>
+
+          <div class="Details">
+            <h2>Details</h2>
+            
+            <p>This function is used internally by <code><a href='summary.mkinfit.html'>summary.mkinfit</a></code>.</p>
+        
+          </div>
+
+          <div class="References">
+            <h2>References</h2>
+            
+            <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
+  Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
+  Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
+  EC Document Reference Sanco/10058/2005 version 2.0, 434 pp,
+  <a href = 'http://focus.jrc.ec.europa.eu/dk'>http://focus.jrc.ec.europa.eu/dk</a></p>
+        
+          </div>
+      
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>mkinerrmin</li>
+          </ul>
+          <ul>
+            <li> manip </li>
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

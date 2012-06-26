@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+  Convert a dataframe from long to wide format.
+. mkin </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="
+  Johannes Ranke
+">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">mkin </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>
+  Convert a dataframe from long to wide format.
+</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='mkin_long_to_wide.html'>mkin_long_to_wide</a></span><span class="keyword">(</span><span class="symbol">long_data</span><span class="keyword">,</span> <span class="argument">time</span> <span class="argument">=</span> <span class="string">"time"</span><span class="keyword">,</span> <span class="argument">outtime</span> <span class="argument">=</span> <span class="string">"time"</span><span class="keyword">)</span></pre>
+          
+          <h2>Arguments</h2>
+          <dl>
+            <dt>long_data</dt>
+            <dd>
+  The dataframe must contain one variable with the time values specified by the 
+  <code>time</code> argument and one column of observed values named "value".
+</dd>
+            <dt>time</dt>
+            <dd>
+  The name of the time variable in the long input data.
+</dd>
+            <dt>outtime</dt>
+            <dd>
+  The name of the time variable in the wide output data.
+</dd>
+          </dl>
+          
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>This function takes a dataframe in the long form as required by <code><a href='NA'>modCost</a></code> 
+  and converts it into a dataframe with one independent variable and several 
+  dependent variables as columns.</p>
+        
+          </div>
+
+          <div class="Value">
+            <h2>Value</h2>
+            
+            <p>Dataframe in wide format.</p>
+        
+          </div>
+      
+          <h2 id="examples">Examples</h2>
+          <pre class="examples"><div class='input'><span class="functioncall"><a href='mkin_long_to_wide.html'>mkin_long_to_wide</a></span><span class="keyword">(</span><span class="symbol">FOCUS_2006_D</span><span class="keyword">)</span></div>
+<strong class='error'>Error in eval(expr, envir, enclos): Objekt 'name' nicht gefunden</strong></pre>
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>mkin_long_to_wide</li>
+          </ul>
+          <ul>
+            <li> manip </li>
+          </ul> -->
+            
+          
+          <h2>Author</h2>
+          
+  Johannes Ranke
+
+          
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>

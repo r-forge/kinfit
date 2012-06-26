@@ -25,7 +25,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <!-- R-Forge Logo -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-<tr><td>
+<tr><td align="right">
 <a href="/"><img src="<?php echo $themeroot; ?>/images/logo.png" border="0" alt="R-Forge Logo" /> </a> </td> </tr>
 </table>
 
@@ -43,14 +43,18 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> Please refer to the <a href="http://www.r-forge.r-project.org/projects/kinfit">project homepage</a> for further information. </p>
 
-<p> A quick overview of the current capabilities of the kinfit package (rapid and simultaneous fitting
-of the kinetic models recommended by the FOCUS group for parent only) and a comparison to other software can be found in the 
-<a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/kinfit/inst/doc/kinfit.pdf?root=kinfit">package vignette</a>. </p>
+<p> An overview of the current capabilities of the kinfit package (rapid and
+simultaneous fitting of the kinetic models recommended by the FOCUS group for
+parent only) is given in the <a href="kinfit_static/index.html">kinfit documentation page.</a> 
+which also contains the <a href="kinfit_static/vignettes/kinfit.pdf">package vignette</a>.</p>
 
-<p> Some aspects of the mkin package are describe in its 
-<a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/mkin/vignettes/mkin.pdf?root=kinfit">package vignette</a>. </p>
+<p> The mkin package which can fit complex degradation models to degradation data also
+has a <a href="mkin_static/index.html">documentation page.</a> including the
+<a href="mkin_static/vignettes/mkin.pdf">vignette</a>.</p>
+
+<p> Please refer to the <a href="http://www.r-forge.r-project.org/projects/kinfit">project homepage</a> for further information on 
+the project and a link to the source code repository. </p>
 
 </body>
 </html>

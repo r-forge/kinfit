@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+  Metabolism data set used for checking the software quality of KinGUI
+. mkin </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {padding-top: 60px;}
+      h2 {padding-top: 20px}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/highlight.css" rel="stylesheet">
+    <link href="css/staticdocs.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class = "container">
+          <a class="brand">mkin </a>
+          <div class="nav">
+            <ul class="nav">
+              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>
+  Metabolism data set used for checking the software quality of KinGUI
+</h1>
+
+      <div class="row">
+        <div class="span8">
+          <h2>Usage</h2>
+          <pre><span class="functioncall"><a href='NA'>data</a></span><span class="keyword">(</span><span class="symbol">schaefer07_complex_case</span><span class="keyword">)</span></pre>
+                    
+          <div class="
+  Metabolism data set used for checking the software quality of KinGUI
+">
+            <h2>
+  Metabolism data set used for checking the software quality of KinGUI
+</h2>
+            
+          </div>
+
+          <div class="
+  Metabolism data set used for checking the software quality of KinGUI
+">
+            <h2>
+  Metabolism data set used for checking the software quality of KinGUI
+</h2>
+            
+          </div>
+
+          <div class="Description">
+            <h2>Description</h2>
+            
+            <p>This dataset was used for a comparison of KinGUI and ModelMaker to check the
+  software quality of KinGUI in the original publication (Schäfer et al., 2007).
+  The results from the fitting are also included.</p>
+        
+          </div>
+
+          <div class="Format">
+            <h2>Format</h2>
+            
+            <p>The data set is a data frame with 8 observations on the following 6 variables.
+  <span class='describe'>
+    <code>time</code>a numeric vector
+    <code>parent</code>a numeric vector
+    <code>A1</code>a numeric vector
+    <code>B1</code>a numeric vector
+    <code>C1</code>a numeric vector
+    <code>A2</code>a numeric vector
+  </span>
+  The results are a data frame with 14 results for different parameter values</p>
+        
+          </div>
+
+          <div class="References">
+            <h2>References</h2>
+            
+            <p>Schäfer D, Mikolasch M, Rainbird P and Harvey B (2007). KinGUI: a new kinetic
+  software tool for evaluations according to FOCUS degradation kinetics. In: Del
+  Re AAM, Capri E, Fragoulis G and Trevisan M (Eds.). Proceedings of the XIII
+  Symposium Pesticide Chemistry, Piacenza, 2007, p. 916-923.</p>
+        
+          </div>
+      
+          <h2 id="examples">Examples</h2>
+          <pre class="examples"><div class='input'><span class="symbol">data</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkin_wide_to_long.html'>mkin_wide_to_long</a></span><span class="keyword">(</span><span class="symbol">schaefer07_complex_case</span><span class="keyword">,</span> <span class="argument">time</span> <span class="argument">=</span> <span class="string">"time"</span><span class="keyword">)</span>
+<span class="symbol">model</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span>
+  <span class="argument">parent</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">,</span> <span class="argument">to</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="string">"A1"</span><span class="keyword">,</span> <span class="string">"B1"</span><span class="keyword">,</span> <span class="string">"C1"</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">sink</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">A1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">,</span> <span class="argument">to</span> <span class="argument">=</span> <span class="string">"A2"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">B1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">C1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">,</span>
+  <span class="argument">A2</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span>
+<span class="comment">## &lt;strong&gt;Not run&lt;/strong&gt;: mkinfit(model, data, plot=TRUE)</span></div></pre>
+        </div>
+        <div class="span4">
+          <!-- <ul>
+            <li>schaefer07_complex_case</li><li>schaefer07_complex_results</li>
+          </ul>
+          <ul>
+            <li>datasets</li>
+          </ul> -->
+            
+                    
+        </div>
+      </div>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>
