@@ -26,11 +26,13 @@ options(SweaveHooks = list(
 \begin{document}
 \title{kinfit -\\
 Routines for fitting kinetic models to chemical degradation data}
-\author{\textbf{Johannes Ranke} \\
+\author{\textbf{Johannes Ranke} \\[0.5cm]
 %EndAName
-Product Safety \\
-Harlan Laboratories Ltd. \\
-Zelgliweg 1, CH--4452 Itingen, Switzerland}
+Eurofins Regulatory AG\\
+Weidenweg 15, CH--4310 Rheinfelden, Switzerland\\[0.5cm]
+and\\[0.5cm]
+University of Bremen\\
+}
 \maketitle
 
 \begin{abstract}
@@ -1003,6 +1005,12 @@ are within the variability and even very close to the median of results obtained
 with other packages, except for some cases where \Rpackage{kinfit} does not 
 produce results and the results obtained with other software packages are
 strongly divergent. 
+
+\section{Acknowledgements}
+
+This package would not have been written without me being introduced to regulatory
+fate modelling of pesticides by Adrian Gurney during my time at Harlan Laboratories Ltd
+(formerly RCC Ltd). Parts of the package were written during my employment at Harlan.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
