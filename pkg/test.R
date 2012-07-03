@@ -185,14 +185,45 @@ print(mkinpredict(model.1,
 # }}}
 
 fit.1.eigen <- mkinfit(model.1, data, plot=TRUE)
-fit.1.lsoda <- mkinfit(model.1, data, solution_type = "deSolve", plot=TRUE)
+# 40 seconds on the workstation, 134 solutions
+system.time(fit.1.lsoda <- mkinfit(model.1, data, solution_type = "deSolve",
+                                   plot=TRUE)) 
 # The following is much closer to the eigenvalue based solution, but very slow
-#fit.1.lsoda.1000 <- mkinfit(model.1, data, solution_type = "deSolve", n.outtimes = 1000, plot=TRUE)
+fit.1.lsoda.1000 <- mkinfit(model.1, data, solution_type = "deSolve",
+                            n.outtimes = 1000, plot=TRUE)
+# Lowering atol and rtol helps as well with less impact on the computing time
+# 114 seconds on the workstation, 332 solutions:
+print(system.time(fit.1.lsoda.atol8 <- mkinfit(model.1, data, 
+                                               solution_type = "deSolve",
+                                               atol=1e-8, plot=TRUE)))
+# 73 seconds on the workstation, 185 solutions:
+print(system.time(fit.1.lsoda.artol10 <- mkinfit(model.1, data, 
+                                           solution_type = "deSolve",
+                                           atol=1e-10, rtol=1e-10, plot=TRUE)))
+# 57 seconds on the workstation, 186 solutions:
+print(system.time(fit.1.lsoda.rtol10 <- mkinfit(model.1, data, 
+                                           solution_type = "deSolve",
+                                           rtol=1e-10, plot=TRUE)))
+# The following fails after 34 steps, obviously 10 output times are not enough
+print(system.time(fit.1.lsoda.10.artol10 <- mkinfit(model.1, data, 
+                                  solution_type = "deSolve", atol=1e-10,
+                                  rtol=1e-10, n.outtimes = 10, plot=TRUE)))
 
 summary(fit.1.eigen, data=FALSE) # Fast and fits very nicely with Schaefer 2007
 summary(fit.1.lsoda, data=FALSE) # Slower, not as precise, presumably because
 # this model without sink term does not fit the data well.
 #summary(fit.1.lsoda.1000, data=FALSE) # Much closer to eigen solution, but slow!
+summary(fit.1.lsoda)$errmin
+summary(fit.1.lsoda.1000)$errmin
+endpoints(fit.1.eigen)
+endpoints(fit.1.lsoda)
+endpoints(fit.1.lsoda.atol8)
+endpoints(fit.1.lsoda.artol10)
+endpoints(fit.1.lsoda.rtol10)
+endpoints(fit.1.lsoda.1000)
+summary(fit.1.lsoda.atol8)$errmin
+summary(fit.1.lsoda.artol10)$errmin
+summary(fit.1.lsoda.rtol10)$errmin
 
 fit.1.eigen.sink <- mkinfit(model.1.sink, data, plot=TRUE)
 #fit.2.eigen <- mkinfit(model.2, data, plot=TRUE) # Does not work, singular matrix...
