@@ -52,8 +52,8 @@
           <h2>Usage</h2>
           <pre><span class="functioncall"><a href='mkinfit.html'>mkinfit</a></span><span class="keyword">(</span><span class="symbol">mkinmod</span><span class="keyword">,</span> <span class="symbol">observed</span><span class="keyword">,</span> <span class="argument">parms.ini</span> <span class="argument">=</span> <span class="string">"auto"</span><span class="keyword">,</span> <span class="argument">state.ini</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">100</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>rep</a></span><span class="keyword">(</span><span class="number">0</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>length</a></span><span class="keyword">(</span><span class="symbol">mkinmod</span><span class="keyword">$</span><span class="symbol">diffs</span><span class="keyword">)</span> <span class="keyword">-</span>
   <span class="number">1</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">fixed_parms</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">fixed_initials</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>names</a></span><span class="keyword">(</span><span class="symbol">mkinmod</span><span class="keyword">$</span><span class="symbol">diffs</span><span class="keyword">)</span><span class="keyword">[</span><span class="keyword">-</span><span class="number">1</span><span class="keyword">]</span><span class="keyword">,</span> <span class="argument">solution_type</span> <span class="argument">=</span> <span class="string">"auto"</span><span class="keyword">,</span>
-      <span class="argument">plot</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">err</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">weight</span> <span class="argument">=</span> <span class="string">"none"</span><span class="keyword">,</span> <span class="argument">scaleVar</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">atol</span> <span class="argument">=</span> <span class="number">1e-06</span><span class="keyword">,</span>
-      <span class="symbol">n.outtimes</span><span class="keyword">,</span> <span class="symbol">trace_parms</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+      <span class="argument">plot</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">quiet</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">err</span> <span class="argument">=</span> NULL<span class="keyword">,</span> <span class="argument">weight</span> <span class="argument">=</span> <span class="string">"none"</span><span class="keyword">,</span> <span class="argument">scaleVar</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">atol</span> <span class="argument">=</span> <span class="number">1e-08</span><span class="keyword">,</span>
+      <span class="argument">rtol</span> <span class="argument">=</span> <span class="number">1e-10</span><span class="keyword">,</span> <span class="argument">n.outtimes</span> <span class="argument">=</span> <span class="number">100</span><span class="keyword">,</span> <span class="symbol">trace_parms</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
           
           <h2>Arguments</h2>
           <dl>
@@ -133,8 +133,13 @@
   </dd>
             <dt>atol</dt>
             <dd>
-    Absolute error tolerance, passed to <code><a href='NA'>ode</a></code>. Default is 1e-6 as in 
-    <code><a href='NA'>lsoda</a></code>.
+    Absolute error tolerance, passed to <code><a href='NA'>ode</a></code>. Default is 1e-8,
+    lower than in <code><a href='NA'>lsoda</a></code>.
+  </dd>
+            <dt>rtol</dt>
+            <dd>
+    Absolute error tolerance, passed to <code><a href='NA'>ode</a></code>. Default is 1e-10,
+    much lower than in <code><a href='NA'>lsoda</a></code>.
   </dd>
             <dt>n.outtimes</dt>
             <dd>
@@ -196,7 +201,7 @@ Model cost at call  30 :  371.2134
 Model cost at call  32 :  371.2134 
 </div>
 <div class='input'><span class="functioncall"><a href='NA'>str</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">)</span></div>
-<div class='output'>List of 27
+<div class='output'>List of 28
  $ par              : Named num [1:4] 99.6 -3.04 -2.98 -5.25
   ..- attr(*, "names")= chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
  $ hessian          : num [1:4, 1:4] 15.1 -280.1 131.2 -89 -280.1 ...
@@ -259,19 +264,20 @@ Model cost at call  32 :  371.2134
   ..$ observed : num [1:44] 99.5 102 93.5 92.5 63.2 ...
   ..$ predicted: num [1:44] 99.6 99.6 90.2 90.2 74.1 ...
   ..$ residual : num [1:44] -0.138 2.442 3.262 2.262 -10.843 ...
- $ atol             : num 1e-06
+ $ atol             : num 1e-08
+ $ rtol             : num 1e-10
  $ parms.all        : Named num [1:4] 99.59848 0.04792 0.05078 0.00526
   ..- attr(*, "names")= chr [1:4] "parent_0" "k_parent_sink" "k_parent_m1" "k_m1_sink"
  $ odeparms.final   : Named num [1:3] 0.04792 0.05078 0.00526
   ..- attr(*, "names")= chr [1:3] "k_parent_sink" "k_parent_m1" "k_m1_sink"
- $ date             : chr "Tue Jun 26 23:13:14 2012"
+ $ date             : chr "Tue Jul  3 23:34:48 2012"
  - attr(*, "class")= chr [1:2] "mkinfit" "modFit"
 </div>
 <div class='input'><span class="functioncall"><a href='NA'>summary</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">)</span></div>
 <div class='output'>mkin version:    0.9.4 
 R version:       2.15.1 
-Date of fit:     Tue Jun 26 23:13:14 2012 
-Date of summary: Tue Jun 26 23:13:14 2012 
+Date of fit:     Tue Jul  3 23:34:48 2012 
+Date of summary: Tue Jul  3 23:34:48 2012 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
