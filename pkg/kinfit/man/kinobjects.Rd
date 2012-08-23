@@ -8,7 +8,7 @@ Creates list of objects, each representing a kinetic experiment or trial
 Function to initialise several objects representing a kinetic experiment or trial at once.
 }
 \usage{
-  kinobjects(parent, type, systems, layers = NA, sampling_times = NA)
+  kinobjects(parent, type, systems, layers = NA, sampling_times = NA, replicates = 1)
 }
 \arguments{
   \item{parent}{ The name of the parent compound }
