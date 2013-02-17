@@ -2,101 +2,95 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>
-  Summary method for class &quot;mkinfit&quot;.
-. mkin </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="
+<title>summary.mkinfit. mkin 0.9-11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
   Johannes Ranke &lt;jranke@harlan.com,uni-bremen.de&gt;
 ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">mkin </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>
   Summary method for class "mkinfit".
 </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='NA'>summary</a></span><span class="keyword">(</span><span class="symbol">object</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">distimes</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>summary(object, data = TRUE, distimes = TRUE, ...)
 
-<span class="functioncall"><a href='NA'>print</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">digits</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>max</a></span><span class="keyword">(</span><span class="number">3</span><span class="keyword">,</span> <span class="functioncall"><a href='NA'>getOption</a></span><span class="keyword">(</span><span class="string">"digits"</span><span class="keyword">)</span> <span class="keyword">-</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>object</dt>
-            <dd>
+print(x, digits = max(3, getOption("digits") - 3), ...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>object</dt>
+      <dd>
   an object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
 </dd>
-            <dt>x</dt>
-            <dd>
+      <dt>x</dt>
+      <dd>
   an object of class <code>summary.mkinfit</code>.
 </dd>
-            <dt>data</dt>
-            <dd>
+      <dt>data</dt>
+      <dd>
   logical, indicating whether the data should be included in the summary. 
 </dd>
-            <dt>distimes</dt>
-            <dd>
+      <dt>distimes</dt>
+      <dd>
   logical, indicating whether DT50 and DT90 values should be included.
 </dd>
-            <dt>digits</dt>
-            <dd>
+      <dt>digits</dt>
+      <dd>
   Number of digits to use for printing
 </dd>
-            <dt>...</dt>
-            <dd>
+      <dt>...</dt>
+      <dd>
   optional arguments passed to methods like <code>print</code>.
 </dd>
-          </dl>
-          
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Lists model equations, the summary as returned by <code><a href='NA'>summary.modFit</a></code>,
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Lists model equations, the summary as returned by <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>summary.modFit</a></code>,
   the chi2 error levels calculated according to FOCUS guidance (2006) as far
   as defined therein, and optionally the data, consisting of observed, predicted
   and residual values.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>The summary function returns a list with the same components as
-  <code><a href='NA'>summary.modFit</a></code>, and the additional components
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The summary function returns a list with the same components as
+  <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>summary.modFit</a></code>, and the additional components
   diffs The differential equations used in the model
   data The data (see Description above).
   start The starting values and bounds, if applicable, for optimised parameters.
@@ -105,22 +99,23 @@
   disstimes The DT50 and DT90 values for each observed variable.
   ff The estimated formation fractions derived from the fitted model.
   The print method is called for its side effect, i.e. printing the summary.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="References">
-            <h2>References</h2>
-            
-            <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
+    <div class="References">
+      <h2>References</h2>
+      
+      <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
   EC Document Reference Sanco/10058/2005 version 2.0, 434 pp,
   <a href = 'http://focus.jrc.ec.europa.eu/dk'>http://focus.jrc.ec.europa.eu/dk</a></p>
-        
-          </div>
-      
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'>  <span class="functioncall"><a href='NA'>summary</a></span><span class="keyword">(</span><span class="functioncall"><a href='mkinfit.html'>mkinfit</a></span><span class="keyword">(</span><span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span><span class="argument">parent</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">FOCUS_2006_A</span><span class="keyword">)</span><span class="keyword">)</span></div>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>  summary(mkinfit(mkinmod(parent = list(type = "SFO")), FOCUS_2006_A))
+</div>
 <div class='output'>Model cost at call  1 :  5178.93 
 Model cost at call  3 :  5178.929 
 Model cost at call  5 :  578.5964 
@@ -142,10 +137,10 @@ Model cost at call  23 :  221.8078
 Model cost at call  25 :  221.8078 
 Model cost at call  26 :  221.8078 
 </div>
-<div class='output'>mkin version:    0.9.7 
-R version:       2.15.1 
-Date of fit:     Thu Sep 20 09:10:14 2012 
-Date of summary: Thu Sep 20 09:10:14 2012 
+<div class='output'>mkin version:    0.9.11 
+R version:       2.15.2 
+Date of fit:     Mon Feb 18 00:33:31 2013 
+Date of summary: Mon Feb 18 00:33:31 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent
@@ -199,27 +194,28 @@ Data:
    90   parent     1.54     3.831  -2.2911
   118   parent     0.39     1.351  -0.9613
 </div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>summary.mkinfit</li><li>print.summary.mkinfit</li>
-          </ul>
-          <ul>
-            <li> utilities </li>
-          </ul> -->
-            
-          
-          <h2>Author</h2>
-          
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>summary.mkinfit</li><li>print.summary.mkinfit</li>
+    </ul>
+    <ul>
+      <li> utilities </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
   Johannes Ranke <jranke@harlan.com,uni-bremen.de>
 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

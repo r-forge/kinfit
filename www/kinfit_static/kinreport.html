@@ -2,58 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>
-Creates a report of the kinetic fits
-. kinfit </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content=" Johannes Ranke ">
+<title>kinreport. kinfit 1.1.11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content=" Johannes Ranke ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">kinfit </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">kinfit 1.1.11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>
 Creates a report of the kinetic fits
 </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='kinreport.html'>kinreport</a></span><span class="keyword">(</span><span class="symbol">kinobject</span><span class="keyword">,</span> <span class="argument">file</span> <span class="argument">=</span> <span class="number">NA</span><span class="keyword">,</span> <span class="argument">data</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="argument">R2</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">vcov</span> <span class="argument">=</span> <span class="number">FALSE</span><span class="keyword">,</span> <span class="argument">endpoint.digits</span> <span class="argument">=</span> <span class="number">1</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>kinobject</dt>
-            <dd>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>kinreport(kinobject, file = NA, data = TRUE, R2 = FALSE, vcov = FALSE, endpoint.digits = 1)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>kinobject</dt>
+      <dd>
 	A list containing the following elements:
 	The name of the parent compound to be output (<code>parent</code>),
 	the type of the test system (<code>type</code>), 
@@ -66,67 +60,66 @@ Creates a report of the kinetic fits
 	Optionally also
 	the label position of the test compound (<code>label</code>) and
 	the source of the data (<code>source</code>). </dd>
-            <dt>file</dt>
-            <dd> The name of the file to which to write. </dd>
-            <dt>data</dt>
-            <dd> Boolean specifying if the input data should be printed? </dd>
-            <dt>R2</dt>
-            <dd> Boolean specifying if the coefficient of determination R2 should
+      <dt>file</dt>
+      <dd> The name of the file to which to write. </dd>
+      <dt>data</dt>
+      <dd> Boolean specifying if the input data should be printed? </dd>
+      <dt>R2</dt>
+      <dd> Boolean specifying if the coefficient of determination R2 should
     be printed. R2 is calculated from all values (not mean values) as 1 - RSS/TSS where
     RSS is the sum of squares of residuals, and TSS ist the total sum of squares, i.e. 
     the sum of squares of the difference of each observation from the overall mean.  </dd>
-            <dt>vcov</dt>
-            <dd> Should the variance-covariance matrix/matrices be reported? </dd>
-            <dt>endpoint.digits</dt>
-            <dd> How many digits should be reported for DT50 and DT90 values? </dd>
-          </dl>
-          
-          <div class="
+      <dt>vcov</dt>
+      <dd> Should the variance-covariance matrix/matrices be reported? </dd>
+      <dt>endpoint.digits</dt>
+      <dd> How many digits should be reported for DT50 and DT90 values? </dd>
+    </dl>
+    
+    <div class="
 Creates a report of the kinetic fits
 ">
-            <h2>
+      <h2>
 Creates a report of the kinetic fits
 </h2>
-            
-          </div>
-
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Function to create a report for a set of fitted models, passing it to the 
-console as well as to a file, if specified.</p>
-        
-          </div>
-
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>The function is called for its side effect, namely the report being passed
-to the R console as well as to a text file if a filename is specified.</p>
-        
-          </div>
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="functioncall"><a href='NA'>data</a></span><span class="keyword">(</span><span class="symbol">FOCUS_2006_A</span><span class="keyword">)</span></div>
-<strong class='warning'>Warning message:
-data set ‘FOCUS_2006_A’ not found</strong>
-<div class='input'><span class="symbol">kinfits</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='kinfit.html'>kinfit</a></span><span class="keyword">(</span><span class="symbol">FOCUS_2006_A</span><span class="keyword">)</span>
-<span class="symbol">kinobject</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span>
-        <span class="argument">parent</span> <span class="argument">=</span> <span class="string">"Compound XY"</span><span class="keyword">,</span>
-        <span class="argument">type</span> <span class="argument">=</span> <span class="string">"Degradation in the environment"</span><span class="keyword">,</span>
-        <span class="argument">system</span> <span class="argument">=</span> <span class="string">"System 1"</span><span class="keyword">,</span>
-        <span class="argument">data</span> <span class="argument">=</span> <span class="symbol">FOCUS_2006_A</span><span class="keyword">,</span>
-        <span class="argument">source</span> <span class="argument">=</span> <span class="string">"Synthetic example data from FOCUS kinetics"</span><span class="keyword">,</span>
-        <span class="argument">fits</span> <span class="argument">=</span> <span class="symbol">kinfits</span><span class="keyword">,</span>
-        <span class="argument">results</span> <span class="argument">=</span> <span class="functioncall"><a href='kinresults.html'>kinresults</a></span><span class="keyword">(</span><span class="symbol">kinfits</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="functioncall"><a href='kinreport.html'>kinreport</a></span><span class="keyword">(</span><span class="symbol">kinobject</span><span class="keyword">)</span></div>
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Function to create a report for a set of fitted models, passing it to the 
+console as well as to a file, if specified.</p>
+  
+    </div>
+
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The function is called for its side effect, namely the report being passed
+to the R console as well as to a text file if a filename is specified.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>data(FOCUS_2006_A)
+kinfits <- kinfit(FOCUS_2006_A)
+kinobject <- list(
+	parent = "Compound XY",
+	type = "Degradation in the environment",
+	system = "System 1",	
+	data = FOCUS_2006_A,
+	source = "Synthetic example data from FOCUS kinetics",
+	fits = kinfits,
+	results = kinresults(kinfits))	
+kinreport(kinobject)
+</div>
 <div class='output'>Parent compound:  Compound XY 
 Study type:       Degradation in the environment 
 System:           System 1 
 Source:           Synthetic example data from FOCUS kinetics 
-kinfit version:   1.1.10 
-R version:        2.15.1 
-Report generated: Thu Sep 20 09:10:57 2012 
+kinfit version:   1.1.11 
+R version:        2.15.2 
+Report generated: Mon Feb 18 00:33:45 2013 
 
 Data:
     t parent
@@ -159,25 +152,26 @@ Endpoint estimates
     DT50 DT90
 SFO 18.6 61.9
 </div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>kinreport</li>
-          </ul>
-          <ul>
-            <li> manip </li>
-          </ul> -->
-            
-          
-          <h2>Author</h2>
-           Johannes Ranke 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>kinreport</li>
+    </ul>
+    <ul>
+      <li> manip </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+     Johannes Ranke 
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

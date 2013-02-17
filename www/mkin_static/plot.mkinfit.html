@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>plot.mkinfit. mkin 0.9-11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+  Johannes Ranke
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>
+  Plot the observed data and the fitted model of an mkinfit object.
+</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>plot(x, fit = x, xlab = "Time", ylab = "Observed", xlim = range(fit$data$time), ylim = c(0, 
+  max(fit$data$observed, na.rm = TRUE)), col_obs = 1:length(fit$mkinmod$map), pch_obs = col_obs, 
+      lty_obs = 1, add = FALSE, legend = !add, ...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>
+    Alias for fit introduced for compatibility with the generic S3 method.  
+</dd>
+      <dt>fit</dt>
+      <dd>
+    an object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
+</dd>
+      <dt>xlab</dt>
+      <dd>
+    label for the x axis.
+  </dd>
+      <dt>ylab</dt>
+      <dd>
+    label for the y axis.
+  </dd>
+      <dt>xlim</dt>
+      <dd>
+    plot range in x direction.
+  </dd>
+      <dt>ylim</dt>
+      <dd>
+    plot range in y direction.
+  </dd>
+      <dt>col_obs</dt>
+      <dd>
+    colors used for plotting the observed data and the corresponding model prediction lines.
+</dd>
+      <dt>pch_obs</dt>
+      <dd>
+    symbols to be used for plotting the data.
+</dd>
+      <dt>lty_obs</dt>
+      <dd>
+    line types to be used for the model predictions.
+</dd>
+      <dt>add</dt>
+      <dd>
+    should the plot be added to an existing plot?
+</dd>
+      <dt>legend</dt>
+      <dd>
+    should a legend be added to the plot?
+</dd>
+      <dt>...</dt>
+      <dd>
+   further arguments passed to <code><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></code>.
+</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Solves the differential equations with the optimised and fixed parameters
+  from a previous successful call to <code><a href='mkinfit.html'>mkinfit</a></code> and plots 
+  the observed data together with the numerical solution of the fitted model.</p>
+  
+    </div>
+
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The function is called for its side effect.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># One parent compound, one metabolite, both single first order.
+SFO_SFO <- mkinmod(
+  parent = list(type = "SFO", to = "m1", sink = TRUE),
+  m1 = list(type = "SFO"))
+# Fit the model to the FOCUS example dataset D using defaults
+fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
+</div>
+<div class='output'>Model cost at call  1 :  18994.29 
+Model cost at call  3 :  18994.29 
+Model cost at call  7 :  10642.61 
+Model cost at call  8 :  10642.61 
+Model cost at call  10 :  10642.61 
+Model cost at call  12 :  7148.119 
+Model cost at call  14 :  7148.118 
+Model cost at call  17 :  412.0354 
+Model cost at call  18 :  412.0353 
+Model cost at call  22 :  371.2203 
+Model cost at call  23 :  371.2203 
+Model cost at call  25 :  371.2203 
+Model cost at call  27 :  371.2134 
+Model cost at call  28 :  371.2134 
+Model cost at call  30 :  371.2134 
+Model cost at call  32 :  371.2134 
+</div>
+<div class='input'>## <strong>Not run</strong>: plot(fit)
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>plot.mkinfit</li>
+    </ul>
+    <ul>
+      <li> hplot </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
+  Johannes Ranke
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

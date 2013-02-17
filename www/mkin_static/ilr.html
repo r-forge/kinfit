@@ -2,157 +2,163 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>
-  Function to perform isotropic log-ratio transformation
-. mkin </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="
+<title>ilr. mkin 0.9-11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
   René Lehmann and Johannes Ranke
 ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">mkin </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>
   Function to perform isotropic log-ratio transformation
 </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>ilr(x)
 
-<span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>x</dt>
-            <dd>
+invilr(x)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>
     A numeric vector. Naturally, the forward transformation is only sensible for
     vectors with all elements being greater than zero.
   </dd>
-          </dl>
-          
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>This implementation is a special case of the class of isotropic log-ratio transformations.</p>
-        
-          </div>
-
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>The result of the forward or backward transformation. The returned components always 
-  sum to 1 for the case of the inverse log-ratio transformation.</p>
-        
-          </div>
-
-          <div class="References">
-            <h2>References</h2>
-            
-            <p>Peter Filzmoser, Karel Hron (2008) Outlier Detection for Compositional Data Using Robust Methods. Math Geosci 40 233-248</p>
-        
-          </div>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="comment"># Order matters</span>
-<span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">0.1</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="number">10</span><span class="keyword">)</span><span class="keyword">)</span></div>
+      <p>This implementation is a special case of the class of isotropic log-ratio transformations.</p>
+  
+    </div>
+
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The result of the forward or backward transformation. The returned components always 
+  sum to 1 for the case of the inverse log-ratio transformation.</p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+      
+      <p>Peter Filzmoser, Karel Hron (2008) Outlier Detection for Compositional Data Using Robust Methods. Math Geosci 40 233-248</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Order matters
+ilr(c(0.1, 1, 10))
+</div>
 <div class='output'>[1] -1.628174 -2.820079
 </div>
-<div class='input'><span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">10</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">,</span> <span class="number">0.1</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'>ilr(c(10, 1, 0.1))
+</div>
 <div class='output'>[1] 1.628174 2.820079
 </div>
-<div class='input'><span class="comment"># Equal entries give ilr transformations with zeros as elements</span>
-<span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">3</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">,</span> <span class="number">3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'># Equal entries give ilr transformations with zeros as elements
+ilr(c(3, 3, 3))
+</div>
 <div class='output'>[1] 0 0
 </div>
-<div class='input'><span class="comment"># Almost equal entries give small numbers</span>
-<span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">0.3</span><span class="keyword">,</span> <span class="number">0.4</span><span class="keyword">,</span> <span class="number">0.3</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'># Almost equal entries give small numbers
+ilr(c(0.3, 0.4, 0.3))
+</div>
 <div class='output'>[1] -0.2034219  0.1174457
 </div>
-<div class='input'><span class="comment"># Only the ratio between the numbers counts, not their sum</span>
-<span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">0.7</span><span class="keyword">,</span> <span class="number">0.29</span><span class="keyword">,</span> <span class="number">0.01</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'># Only the ratio between the numbers counts, not their sum
+invilr(ilr(c(0.7, 0.29, 0.01)))
+</div>
 <div class='output'>[1] 0.70 0.29 0.01
 </div>
-<div class='input'><span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="number">2.1</span> <span class="keyword">*</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">0.7</span><span class="keyword">,</span> <span class="number">0.29</span><span class="keyword">,</span> <span class="number">0.01</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'>invilr(ilr(2.1 * c(0.7, 0.29, 0.01)))
+</div>
 <div class='output'>[1] 0.70 0.29 0.01
 </div>
-<div class='input'><span class="comment"># Inverse transformation of larger numbers gives unequal elements</span>
-<span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">10</span><span class="keyword">)</span></div>
+<div class='input'># Inverse transformation of larger numbers gives unequal elements
+invilr(-10)
+</div>
 <div class='output'>[1] 7.213536e-07 9.999993e-01
 </div>
-<div class='input'><span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">10</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'>invilr(c(-10, 0))
+</div>
 <div class='output'>[1] 7.207415e-07 9.991507e-01 8.486044e-04
 </div>
-<div class='input'><span class="comment"># The sum of the elements of the inverse ilr is 1</span>
-<span class="functioncall"><a href='NA'>sum</a></span><span class="keyword">(</span><span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="keyword">-</span><span class="number">10</span><span class="keyword">,</span> <span class="number">0</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></div>
+<div class='input'># The sum of the elements of the inverse ilr is 1
+sum(invilr(c(-10, 0)))
+</div>
 <div class='output'>[1] 1
 </div>
-<div class='input'><span class="comment"># This is why we do not need all elements of the inverse transformation to go back:</span>
-<span class="symbol">a</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="number">0.1</span><span class="keyword">,</span> <span class="number">0.3</span><span class="keyword">,</span> <span class="number">0.5</span><span class="keyword">)</span>
-<span class="symbol">b</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='ilr.html'>invilr</a></span><span class="keyword">(</span><span class="symbol">a</span><span class="keyword">)</span>
-<span class="functioncall"><a href='NA'>length</a></span><span class="keyword">(</span><span class="symbol">b</span><span class="keyword">)</span> <span class="comment"># Four elements</span></div>
+<div class='input'># This is why we do not need all elements of the inverse transformation to go back:
+a <- c(0.1, 0.3, 0.5)
+b <- invilr(a)
+length(b) # Four elements
+</div>
 <div class='output'>[1] 4
 </div>
-<div class='input'><span class="functioncall"><a href='ilr.html'>ilr</a></span><span class="keyword">(</span><span class="functioncall"><a href='NA'>c</a></span><span class="keyword">(</span><span class="symbol">b</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">,</span> <span class="number">1</span> <span class="keyword">-</span> <span class="functioncall"><a href='NA'>sum</a></span><span class="keyword">(</span><span class="symbol">b</span><span class="keyword">[</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">]</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span> <span class="comment"># Gives c(0.1, 0.3, 0.5)</span></div>
+<div class='input'>ilr(c(b[1:3], 1 - sum(b[1:3]))) # Gives c(0.1, 0.3, 0.5)
+</div>
 <div class='output'>[1] 0.1 0.3 0.5
 </div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>ilr</li><li>invilr</li>
-          </ul>
-          <ul>
-            <li> manip </li>
-          </ul> -->
-            
-          <h2>See also</h2>
-          
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>ilr</li><li>invilr</li>
+    </ul>
+    <ul>
+      <li> manip </li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
   Other implementations are in R packages <code>compositions</code> and <code>robCompositions</code>.
 
-          
-          <h2>Author</h2>
-          
+    
+    <h2>Author</h2>
+    
   René Lehmann and Johannes Ranke
 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>
