@@ -2,60 +2,54 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>
-  Function to set up a kinetic model with one or more state variables.
-. mkin </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="
+<title>mkinmod. mkin 0.9-11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
   Johannes Ranke
 ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">mkin </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>
   Function to set up a kinetic model with one or more state variables.
 </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span><span class="symbol">...</span><span class="keyword">,</span> <span class="argument">use_of_ff</span> <span class="argument">=</span> <span class="string">"min"</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>...</dt>
-            <dd>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>mkinmod(..., use_of_ff = "min")</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>
     For each observed variable, a list has to be specified as an argument, containing
     at least a component <code>type</code>, specifying the type of kinetics to use
     for the variable. Currently, single first order kinetics "SFO" or
@@ -70,28 +64,28 @@
     the compartment is "SFO" or "SFORB", an additional component of the list
     can be "sink=FALSE" effectively fixing the flux to sink to zero.
   </dd>
-            <dt>use_of_ff</dt>
-            <dd>
+      <dt>use_of_ff</dt>
+      <dd>
     Specification of the use of formation fractions in the model equations and, if 
     applicable, the coefficient matrix. If "min", a minimum use of formation 
     fractions is made in order to avoid fitting the product of formation fractions 
     and rate constants. If "max", formation fractions are always used.
   </dd>
-          </dl>
-          
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>The function takes a specification, consisting of a list of the observed variables
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>The function takes a specification, consisting of a list of the observed variables
   in the data. Each observed variable is again represented by a list, specifying the 
   kinetic model type and reaction or transfer to other observed compartments.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>A list of class <code>mkinmod</code> for use with <code><a href='mkinfit.html'>mkinfit</a></code>, containing 
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>A list of class <code>mkinmod</code> for use with <code><a href='mkinfit.html'>mkinfit</a></code>, containing 
     diffs A vector of string representations of differential equations,
       one for each modelling variable. 
     parms A vector of parameter names occurring in the differential equations. 
@@ -99,38 +93,41 @@
       the modelling variables by which it is represented. 
     use_of_ff The content of <code>use_of_ff</code> is passed on in this list component. 
     coefmat The coefficient matrix, if the system of differential equations can be represented by one.</p>
-        
-          </div>
-      
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="comment"># Specify the SFO model</span>
-<span class="symbol">SFO</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span><span class="argument">parent</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Specify the SFO model
+SFO <- mkinmod(parent = list(type = "SFO"))
 
-<span class="comment"># One parent compound, one metabolite, both single first order.</span>
-<span class="symbol">SFO_SFO</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span>
-  <span class="argument">parent</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">,</span> <span class="argument">to</span> <span class="argument">=</span> <span class="string">"m1"</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">m1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span></div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>mkinmod</li>
-          </ul>
-          <ul>
-            <li> models </li>
-          </ul> -->
-            
-          
-          <h2>Author</h2>
-          
+# One parent compound, one metabolite, both single first order.
+SFO_SFO <- mkinmod(
+  parent = list(type = "SFO", to = "m1"),
+  m1 = list(type = "SFO"))
+
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>mkinmod</li>
+    </ul>
+    <ul>
+      <li> models </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
   Johannes Ranke
 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

@@ -2,152 +2,97 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>
-  Plot the observed data and the fitted model of an mkinfit.
-. mkin </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="
+<title>mkinplot. mkin 0.9-11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
   Johannes Ranke
 ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">mkin </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1>
   Plot the observed data and the fitted model of an mkinfit.
 </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='mkinplot.html'>mkinplot</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">,</span> <span class="argument">xlab</span> <span class="argument">=</span> <span class="string">"Time"</span><span class="keyword">,</span> <span class="argument">ylab</span> <span class="argument">=</span> <span class="string">"Observed"</span><span class="keyword">,</span> <span class="argument">xlim</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>range</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">data</span><span class="keyword">$</span><span class="symbol">time</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">ylim</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>range</a></span><span class="keyword">(</span><span class="symbol">fit</span><span class="keyword">$</span><span class="symbol">data</span><span class="keyword">$</span><span class="symbol">observed</span><span class="keyword">,</span>
-  <span class="argument">na.rm</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">legend</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>fit</dt>
-            <dd>
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>mkinplot(fit, ...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fit</dt>
+      <dd>
     an object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
   </dd>
-            <dt>xlab</dt>
-            <dd>
-    label for the x axis.
-  </dd>
-            <dt>ylab</dt>
-            <dd>
-    label for the y axis.
-  </dd>
-            <dt>xlim</dt>
-            <dd>
-    plot range in x direction.
-  </dd>
-            <dt>ylim</dt>
-            <dd>
-    plot range in y direction.
-  </dd>
-            <dt>legend</dt>
-            <dd>
-    legend specifying if a legend should be included in the plot.
-  </dd>
-            <dt>...</dt>
-            <dd>
-   further arguments passed to <code><a href='NA'>plot</a></code>.
+      <dt>...</dt>
+      <dd>
+   further arguments passed to <code><a href='plot.mkinfit.html'>plot.mkinfit</a></code>.
 </dd>
-          </dl>
-          
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Solves the differential equations with the optimised and fixed parameters
-  from a previous successful call to <code><a href='mkinfit.html'>mkinfit</a></code> and plots 
-  the observed data together with the numerical solution of the fitted model.</p>
-        
-          </div>
-
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>The function is called for its side effect.</p>
-        
-          </div>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'><span class="comment"># One parent compound, one metabolite, both single first order.</span>
-<span class="symbol">SFO_SFO</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinmod.html'>mkinmod</a></span><span class="keyword">(</span>
-  <span class="argument">parent</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">,</span> <span class="argument">to</span> <span class="argument">=</span> <span class="string">"m1"</span><span class="keyword">,</span> <span class="argument">sink</span> <span class="argument">=</span> <span class="number">TRUE</span><span class="keyword">)</span><span class="keyword">,</span>
-  <span class="argument">m1</span> <span class="argument">=</span> <span class="functioncall"><a href='NA'>list</a></span><span class="keyword">(</span><span class="argument">type</span> <span class="argument">=</span> <span class="string">"SFO"</span><span class="keyword">)</span><span class="keyword">)</span>
-<span class="comment"># Fit the model to the FOCUS example dataset D using defaults</span>
-<span class="symbol">fit</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='mkinfit.html'>mkinfit</a></span><span class="keyword">(</span><span class="symbol">SFO_SFO</span><span class="keyword">,</span> <span class="symbol">FOCUS_2006_D</span><span class="keyword">)</span></div>
-<div class='output'>Model cost at call  1 :  18994.29 
-Model cost at call  3 :  18994.29 
-Model cost at call  7 :  10642.61 
-Model cost at call  8 :  10642.61 
-Model cost at call  10 :  10642.61 
-Model cost at call  12 :  7148.117 
-Model cost at call  14 :  7148.117 
-Model cost at call  17 :  412.0354 
-Model cost at call  18 :  412.0353 
-Model cost at call  22 :  371.2203 
-Model cost at call  23 :  371.2203 
-Model cost at call  25 :  371.2203 
-Model cost at call  27 :  371.2134 
-Model cost at call  28 :  371.2134 
-Model cost at call  30 :  371.2134 
-Model cost at call  32 :  371.2134 
-</div>
-<div class='input'>## <strong>Not run</strong>: mkinplot(fit)
-</div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>mkinplot</li>
-          </ul>
-          <ul>
-            <li> hplot </li>
-          </ul> -->
-            
-          
-          <h2>Author</h2>
-          
+      <p>Deprecated function. It now only calls the plot method <code><a href='plot.mkinfit.html'>plot.mkinfit</a></code>.</p>
+  
+    </div>
+
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The function is called for its side effect.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>mkinplot</li>
+    </ul>
+    <ul>
+      <li> hplot </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
   Johannes Ranke
 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>

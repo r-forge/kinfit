@@ -2,118 +2,115 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Hockey-Stick kinetics . kinfit </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content=" Johannes Ranke ">
+<title>HS. kinfit 1.1.11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content=" Johannes Ranke ">
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {padding-top: 60px;}
-      h2 {padding-top: 20px}
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/highlight.css" rel="stylesheet">
-    <link href="css/staticdocs.css" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class = "container">
-          <a class="brand">kinfit </a>
-          <div class="nav">
-            <ul class="nav">
-              <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">kinfit 1.1.11</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
       </div>
     </div>
+  </div>
+</div>
 
     <div class="container">
+      <header>
+        
+      </header>
+      
       <h1> Hockey-Stick kinetics </h1>
 
-      <div class="row">
-        <div class="span8">
-          <h2>Usage</h2>
-          <pre><span class="functioncall"><a href='HS.html'>HS</a></span><span class="keyword">(</span><span class="symbol">t</span><span class="keyword">,</span> <span class="symbol">parent.0</span><span class="keyword">,</span> <span class="symbol">k1</span><span class="keyword">,</span> <span class="symbol">k2</span><span class="keyword">,</span> <span class="symbol">tb</span><span class="keyword">)</span></pre>
-          
-          <h2>Arguments</h2>
-          <dl>
-            <dt>t</dt>
-            <dd> Time. </dd>
-            <dt>parent.0</dt>
-            <dd> Starting value for the response variable at time zero. </dd>
-            <dt>k1</dt>
-            <dd> First kinetic constant. </dd>
-            <dt>k2</dt>
-            <dd> Second kinetic constant. </dd>
-            <dt>tb</dt>
-            <dd> Break point. Before this time, exponential decline according
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre>HS(t, parent.0, k1, k2, tb)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>t</dt>
+      <dd> Time. </dd>
+      <dt>parent.0</dt>
+      <dd> Starting value for the response variable at time zero. </dd>
+      <dt>k1</dt>
+      <dd> First kinetic constant. </dd>
+      <dt>k2</dt>
+      <dd> Second kinetic constant. </dd>
+      <dt>tb</dt>
+      <dd> Break point. Before this time, exponential decline according
     to <code>k1</code> is calculated, after this time, exponential decline proceeds
     according to <code>k2</code>. </dd>
-          </dl>
-          
-          <div class=" Hockey-Stick kinetics ">
-            <h2> Hockey-Stick kinetics </h2>
-            
-          </div>
+    </dl>
+    
+    <div class=" Hockey-Stick kinetics ">
+      <h2> Hockey-Stick kinetics </h2>
+      
+    </div>
 
-          <div class="Description">
-            <h2>Description</h2>
-            
-            <p>Function describing two exponential decline functions with a break point
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Function describing two exponential decline functions with a break point
   between them.</p>
-        
-          </div>
+  
+    </div>
 
-          <div class="Value">
-            <h2>Value</h2>
-            
-            <p>The value of the response variable at time <code>t</code>.</p>
-        
-          </div>
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>The value of the response variable at time <code>t</code>.</p>
+  
+    </div>
 
-          <div class="References">
-            <h2>References</h2>
-            
-            <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
+    <div class="References">
+      <h2>References</h2>
+      
+      <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
   EC Document Reference Sanco/10058/2005 version 2.0, 434 pp,
   <a href = 'http://focus.jrc.ec.europa.eu/dk'>http://focus.jrc.ec.europa.eu/dk</a></p>
-        
-          </div>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>  ## <strong>Not run</strong>: plot(function(x) HS(x, 100, 2, 0.3, 0.5), 0, 2, ylim=c(0,100))</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>HS</li>
+    </ul>
+    <ul>
+      <li> manip </li>
+    </ul> -->
       
-          <h2 id="examples">Examples</h2>
-          <pre class="examples"><div class='input'>  ## <strong>Not run</strong>: plot(function(x) HS(x, 100, 2, 0.3, 0.5), 0, 2, ylim=c(0,100))</div></pre>
-        </div>
-        <div class="span4">
-          <!-- <ul>
-            <li>HS</li>
-          </ul>
-          <ul>
-            <li> manip </li>
-          </ul> -->
-            
-          
-          <h2>Author</h2>
-           Johannes Ranke 
-          
-        </div>
-      </div>
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+    
+    <h2>Author</h2>
+     Johannes Ranke 
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>
