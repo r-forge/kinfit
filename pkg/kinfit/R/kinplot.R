@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
 
-utils::globalVariables("x")
+if(getRversion() >= '2.15.1') utils::globalVariables("x")
+
 kinplot <- function(kinobject, 
 	main = "",
 	xlab = "Time [days]", ylab = "Parent [% of applied radioactivity]",
