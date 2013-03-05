@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-13</title>
+<title>mkinfit. mkin 0.9-16</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-13</a>
+      <a class="brand" href="#">mkin 0.9-16</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -268,15 +268,15 @@ Model cost at call  32 :  371.2134
   ..- attr(*, "names")= chr "m1"
  $ bparms.ode       : Named num [1:3] 0.04792 0.05078 0.00526
   ..- attr(*, "names")= chr [1:3] "k_parent_sink" "k_parent_m1" "k_m1_sink"
- $ date             : chr "Mon Feb 18 22:54:16 2013"
+ $ date             : chr "Tue Mar  5 02:10:15 2013"
  - attr(*, "class")= chr [1:2] "mkinfit" "modFit"
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.13 
-R version:       2.15.2 
-Date of fit:     Mon Feb 18 22:54:16 2013 
-Date of summary: Mon Feb 18 22:54:16 2013 
+<div class='output'>mkin version:    0.9.16 
+R version:       2.15.3 
+Date of fit:     Tue Mar  5 02:10:15 2013 
+Date of summary: Tue Mar  5 02:10:15 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -294,18 +294,18 @@ Fixed parameter values:
 m1     0 state
 
 Optimised, transformed parameters:
-              Estimate Std. Error
-parent_0        99.598      1.614
-k_parent_sink   -3.038      0.078
-k_parent_m1     -2.980      0.041
-k_m1_sink       -5.248      0.136
+              Estimate Std. Error  Lower   Upper
+parent_0        99.600    1.61400 96.330 102.900
+k_parent_sink   -3.038    0.07826 -3.197  -2.879
+k_parent_m1     -2.980    0.04124 -3.064  -2.897
+k_m1_sink       -5.248    0.13610 -5.523  -4.972
 
 Backtransformed parameters:
-              Estimate
-parent_0        99.598
-k_parent_sink    0.048
-k_parent_m1      0.051
-k_m1_sink        0.005
+               Estimate     Lower     Upper
+parent_0      99.600000 96.330000 1.029e+02
+k_parent_sink  0.047920  0.040890 5.616e-02
+k_parent_m1    0.050780  0.046700 5.521e-02
+k_m1_sink      0.005261  0.003992 6.933e-03
 
 Residual standard error: 3.211 on 36 degrees of freedom
 
