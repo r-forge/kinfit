@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>summary.mkinfit. mkin 0.9-13</title>
+<title>summary.mkinfit. mkin 0.9-16</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@harlan.com,uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-13</a>
+      <a class="brand" href="#">mkin 0.9-16</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,7 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>summary(object, data = TRUE, distimes = TRUE, ...)
+    <pre>summary(object, data = TRUE, distimes = TRUE, alpha = 0.05, ...)
 
 print(x, digits = max(3, getOption("digits") - 3), ...)</pre>
     
@@ -65,6 +65,10 @@ print(x, digits = max(3, getOption("digits") - 3), ...)</pre>
       <dt>distimes</dt>
       <dd>
   logical, indicating whether DT50 and DT90 values should be included.
+</dd>
+      <dt>alpha</dt>
+      <dd>
+  error level for confidence interval estimation from t distribution
 </dd>
       <dt>digits</dt>
       <dd>
@@ -89,15 +93,24 @@ print(x, digits = max(3, getOption("digits") - 3), ...)</pre>
     <div class="Value">
       <h2>Value</h2>
       
-      <p>The summary function returns a list with the same components as
-  <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>summary.modFit</a></code>, and the additional components
+      <p>The summary function returns a list derived from
+  <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>summary.modFit</a></code>, with components, among others
+  version, RversionThe mkin and R versions used
+  date.fit, date.summaryThe dates where the fit and the summary were produced
+  use_of_ffWas maximum or minimum use made of formation fractions
+  residuals, residualVariance, sigma, modVariance, dfAs in summary.modFit
+  cov.unscaled, cov.scaled, info, niter, stopmess, parAs in summary.modFit
+  bparOptimised and backtransformed parameters
   diffs The differential equations used in the model
   data The data (see Description above).
   start The starting values and bounds, if applicable, for optimised parameters.
   fixed The values of fixed parameters.
   errmin The chi2 error levels for each observed variable.
-  disstimes The DT50 and DT90 values for each observed variable.
+  bparms.ode All backtransformed ODE parameters, for use as starting parameters for
+    related models.
   ff The estimated formation fractions derived from the fitted model.
+  distimes The DT50 and DT90 values for each observed variable.
+  SFORBIf applicable, eigenvalues of SFORB components of the model.
   The print method is called for its side effect, i.e. printing the summary.</p>
   
     </div>
@@ -137,10 +150,10 @@ Model cost at call  23 :  221.8078
 Model cost at call  25 :  221.8078 
 Model cost at call  26 :  221.8078 
 </div>
-<div class='output'>mkin version:    0.9.13 
-R version:       2.15.2 
-Date of fit:     Mon Feb 18 22:54:19 2013 
-Date of summary: Mon Feb 18 22:54:19 2013 
+<div class='output'>mkin version:    0.9.16 
+R version:       2.15.3 
+Date of fit:     Tue Mar  5 02:10:18 2013 
+Date of summary: Tue Mar  5 02:10:18 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent
@@ -154,14 +167,14 @@ Fixed parameter values:
 None
 
 Optimised, transformed parameters:
-              Estimate Std. Error
-parent_0       109.153      4.391
-k_parent_sink   -3.291      0.115
+              Estimate Std. Error  Lower   Upper
+parent_0       109.200     4.3910 98.410 119.900
+k_parent_sink   -3.291     0.1152 -3.573  -3.009
 
 Backtransformed parameters:
-              Estimate
-parent_0       109.153
-k_parent_sink    0.037
+               Estimate    Lower     Upper
+parent_0      109.20000 98.41000 119.90000
+k_parent_sink   0.03722  0.02807   0.04934
 
 Residual standard error: 6.08 on 6 degrees of freedom
 

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plot.mkinfit. mkin 0.9-13</title>
+<title>plot.mkinfit. mkin 0.9-16</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-13</a>
+      <a class="brand" href="#">mkin 0.9-16</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,7 +46,8 @@
     <h2>Usage</h2>
     <pre>plot(x, fit = x, xlab = "Time", ylab = "Observed", xlim = range(fit$data$time), ylim = c(0, 
   max(fit$data$observed, na.rm = TRUE)), col_obs = 1:length(fit$mkinmod$map), pch_obs = col_obs, 
-      lty_obs = rep(1, length(fit$mkinmod$map)), add = FALSE, legend = !add, ...)</pre>
+      lty_obs = rep(1, length(fit$mkinmod$map)), add = FALSE, legend = !add, lpos = "topright", 
+      inset = c(0.05, 0.05), ...)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -94,6 +95,14 @@
       <dd>
     should a legend be added to the plot?
 </dd>
+      <dt>lpos</dt>
+      <dd>
+    position of the legend. Passed to <code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code> as the first argument.
+</dd>
+      <dt>inset</dt>
+      <dd>
+    Passed to <code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code> if applicable.
+</dd>
       <dt>...</dt>
       <dd>
    further arguments passed to <code><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></code>.
@@ -105,7 +114,7 @@
       
       <p>Solves the differential equations with the optimised and fixed parameters
   from a previous successful call to <code><a href='mkinfit.html'>mkinfit</a></code> and plots 
-  the observed data together with the numerical solution of the fitted model.</p>
+  the observed data together with the solution of the fitted model.</p>
   
     </div>
 
