@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-16</title>
+<title>mkinfit. mkin 0.9-19</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-16</a>
+      <a class="brand" href="#">mkin 0.9-19</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,8 +46,9 @@
     <h2>Usage</h2>
     <pre>mkinfit(mkinmod, observed, parms.ini = "auto", state.ini = c(100, rep(0, length(mkinmod$diffs) - 
   1)), fixed_parms = NULL, fixed_initials = names(mkinmod$diffs)[-1], solution_type = "auto", 
-      plot = FALSE, quiet = FALSE, err = NULL, weight = "none", scaleVar = FALSE, atol = 1e-08, 
-      rtol = 1e-10, n.outtimes = 100, trace_parms, ...)</pre>
+      method.modFit = "Marq", control.modFit = list(), plot = FALSE, quiet = FALSE, 
+      err = NULL, weight = "none", scaleVar = FALSE, atol = 1e-08, rtol = 1e-10, n.outtimes = 100, 
+      trace_parms, ...)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -71,6 +72,13 @@
     A named vector of initial values for the parameters, including parameters to
     be optimised and potentially also fixed parameters as indicated by <code>fixed_parms</code>.
     If set to "auto", initial values for rate constants are set to default values.
+    Using parameter names that are not in the model gives an error.
+
+    It is possible to only specify a subset of the parameters that the model
+    needs. You can use the parameter lists "bparms.ode" from a previously
+    fitted model, which contains the differential equation parameters from this
+    model. This works nicely if the models are nested. An example is given
+    below.
   </dd>
       <dt>state.ini</dt>
       <dd>
@@ -101,6 +109,17 @@
     which uses "analytical" if possible, otherwise "eigen" if the model can be expressed
     using eigenvalues and eigenvectors, and finally "deSolve" for the remaining
     models (time dependence of degradation rates and metabolites).
+  </dd>
+      <dt>method.modFit</dt>
+      <dd>
+    The optimisation method passed to <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>modFit</a></code>. The default "Marq" is the Levenberg Marquardt
+    algorithm <code><a href='http://www.inside-r.org/r-doc/minpack.lm/nls.lm'>nls.lm</a></code> from the package <code>minpack.lm</code>. Often other methods need
+    more iterations to find the same result. When using "Pseudo", "upper" and "lower" need to be 
+    specified for the transformed parameters.
+  </dd>
+      <dt>control.modFit</dt>
+      <dd>
+    Additional arguments passed to the optimisation method used by <code><a href='http://www.inside-r.org/r-doc/FME/modFit'>modFit</a></code>. 
   </dd>
       <dt>plot</dt>
       <dd>
@@ -268,19 +287,22 @@ Model cost at call  32 :  371.2134
   ..- attr(*, "names")= chr "m1"
  $ bparms.ode       : Named num [1:3] 0.04792 0.05078 0.00526
   ..- attr(*, "names")= chr [1:3] "k_parent_sink" "k_parent_m1" "k_m1_sink"
- $ date             : chr "Tue Mar  5 02:10:15 2013"
+ $ date             : chr "Sun Apr 14 14:20:09 2013"
  - attr(*, "class")= chr [1:2] "mkinfit" "modFit"
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.16 
+<div class='output'>mkin version:    0.9.19 
 R version:       2.15.3 
-Date of fit:     Tue Mar  5 02:10:15 2013 
-Date of summary: Tue Mar  5 02:10:15 2013 
+Date of fit:     Sun Apr 14 14:20:09 2013 
+Date of summary: Sun Apr 14 14:20:09 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
 [2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+
+Method used for solution of differential equation system:
+eigen 
 
 Starting values for optimised parameters:
               initial   type transformed
@@ -334,51 +356,243 @@ k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
 k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
 
 Data:
- time variable observed             predicted               residual
-    0   parent    99.46 99.598483102551412571  -0.138483102551418824
-    0   parent   102.04 99.598483102551412571   2.441516897448593681
-    1   parent    93.50 90.237871664430755914   3.262128335569244086
-    1   parent    92.50 90.237871664430755914   2.262128335569244086
-    3   parent    63.23 74.073195848117975970 -10.843195848117979097
-    3   parent    68.99 74.073195848117975970  -5.083195848117981086
-    7   parent    52.32 49.912067533842055411   2.407932466157944873
-    7   parent    55.13 49.912067533842055411   5.217932466157947147
-   14   parent    27.27 25.012574568407188735   2.257425431592810838
-   14   parent    26.64 25.012574568407188735   1.627425431592811833
-   21   parent    11.50 12.534621734832612105  -1.034621734832612105
-   21   parent    11.64 12.534621734832612105  -0.894621734832611537
-   35   parent     2.85  3.147870841631791983  -0.297870841631791894
-   35   parent     2.91  3.147870841631791983  -0.237870841631791841
-   50   parent     0.69  0.716240206166767868  -0.026240206166767921
-   50   parent     0.63  0.716240206166767868  -0.086240206166767863
-   75   parent     0.05  0.060738167189573450  -0.010738167189573447
-   75   parent     0.06  0.060738167189573450  -0.000738167189573452
-  100   parent       NA  0.005150681184587969                     NA
-  100   parent       NA  0.005150681184587969                     NA
-  120   parent       NA  0.000715462799982884                     NA
-  120   parent       NA  0.000715462799982884                     NA
-    0       m1     0.00  0.000000000000007105  -0.000000000000007105
-    0       m1     0.00  0.000000000000007105  -0.000000000000007105
-    1       m1     4.84  4.802957023916746948   0.037042976083252910
-    1       m1     5.64  4.802957023916746948   0.837042976083252732
-    3       m1    12.91 13.023998924142922817  -0.113998924142922675
-    3       m1    12.96 13.023998924142922817  -0.063998924142921965
-    7       m1    22.97 25.044760779275236473  -2.074760779275237610
-    7       m1    24.47 25.044760779275236473  -0.574760779275237610
-   14       m1    41.69 36.690024013585997409   4.999975986414000317
-   14       m1    33.21 36.690024013585997409  -3.480024013585996556
-   21       m1    44.37 41.653097145062609741   2.716902854937387701
-   21       m1    46.44 41.653097145062609741   4.786902854937387986
-   35       m1    41.22 43.313122565081414450  -2.093122565081415587
-   35       m1    37.95 43.313122565081414450  -5.363122565081411608
-   50       m1    41.19 41.218313780432936255  -0.028313780432938529
-   50       m1    40.01 41.218313780432936255  -1.208313780432938245
-   75       m1    40.09 36.447033546767862333   3.642966453232141077
-   75       m1    33.85 36.447033546767862333  -2.597033546767860912
-  100       m1    31.04 31.981623203150189028  -0.941623203150189880
-  100       m1    33.13 31.981623203150189028   1.148376796849813530
-  120       m1    25.15 28.789836487140348709  -3.639836487140350130
-  120       m1    33.31 28.789836487140348709   4.520163512859653565
+ time variable observed predicted   residual
+    0   parent    99.46 9.960e+01 -1.385e-01
+    0   parent   102.04 9.960e+01  2.442e+00
+    1   parent    93.50 9.024e+01  3.262e+00
+    1   parent    92.50 9.024e+01  2.262e+00
+    3   parent    63.23 7.407e+01 -1.084e+01
+    3   parent    68.99 7.407e+01 -5.083e+00
+    7   parent    52.32 4.991e+01  2.408e+00
+    7   parent    55.13 4.991e+01  5.218e+00
+   14   parent    27.27 2.501e+01  2.257e+00
+   14   parent    26.64 2.501e+01  1.627e+00
+   21   parent    11.50 1.253e+01 -1.035e+00
+   21   parent    11.64 1.253e+01 -8.946e-01
+   35   parent     2.85 3.148e+00 -2.979e-01
+   35   parent     2.91 3.148e+00 -2.379e-01
+   50   parent     0.69 7.162e-01 -2.624e-02
+   50   parent     0.63 7.162e-01 -8.624e-02
+   75   parent     0.05 6.074e-02 -1.074e-02
+   75   parent     0.06 6.074e-02 -7.382e-04
+  100   parent       NA 5.151e-03         NA
+  100   parent       NA 5.151e-03         NA
+  120   parent       NA 7.155e-04         NA
+  120   parent       NA 7.155e-04         NA
+    0       m1     0.00 7.105e-15 -7.105e-15
+    0       m1     0.00 7.105e-15 -7.105e-15
+    1       m1     4.84 4.803e+00  3.704e-02
+    1       m1     5.64 4.803e+00  8.370e-01
+    3       m1    12.91 1.302e+01 -1.140e-01
+    3       m1    12.96 1.302e+01 -6.400e-02
+    7       m1    22.97 2.504e+01 -2.075e+00
+    7       m1    24.47 2.504e+01 -5.748e-01
+   14       m1    41.69 3.669e+01  5.000e+00
+   14       m1    33.21 3.669e+01 -3.480e+00
+   21       m1    44.37 4.165e+01  2.717e+00
+   21       m1    46.44 4.165e+01  4.787e+00
+   35       m1    41.22 4.331e+01 -2.093e+00
+   35       m1    37.95 4.331e+01 -5.363e+00
+   50       m1    41.19 4.122e+01 -2.831e-02
+   50       m1    40.01 4.122e+01 -1.208e+00
+   75       m1    40.09 3.645e+01  3.643e+00
+   75       m1    33.85 3.645e+01 -2.597e+00
+  100       m1    31.04 3.198e+01 -9.416e-01
+  100       m1    33.13 3.198e+01  1.148e+00
+  120       m1    25.15 2.879e+01 -3.640e+00
+  120       m1    33.31 2.879e+01  4.520e+00
+</div>
+<div class='input'>
+# Use stepwise fitting, using optimised parameters from parent only fit, FOMC
+## <strong>Not run</strong>: 
+# FOMC <- mkinmod(parent = list(type = "FOMC"))
+# FOMC_SFO <- mkinmod(
+#   parent = list(type = "FOMC", to = "m1", sink = TRUE),
+#   m1 = list(type = "SFO"))
+# # Fit the model to the FOCUS example dataset D using defaults
+# fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D)
+# # Use starting parameters from parent only FOMC fit (not really needed in this case)
+# fit.FOMC = mkinfit(FOMC, FOCUS_2006_D)
+# fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
+# ## <strong>End(Not run)</strong>
+
+# Use stepwise fitting, using optimised parameters from parent only fit, SFORB
+SFORB <- mkinmod(parent = list(type = "SFORB"))
+SFORB_SFO <- mkinmod(
+  parent = list(type = "SFORB", to = "m1", sink = TRUE),
+  m1 = list(type = "SFO"))
+# Fit the model to the FOCUS example dataset D using defaults
+fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D)
+</div>
+<div class='output'>Model cost at call  1 :  19252.94 
+Model cost at call  3 :  19252.93 
+Model cost at call  6 :  19252.93 
+Model cost at call  9 :  18210.81 
+Model cost at call  10 :  18210.81 
+Model cost at call  14 :  18210.81 
+Model cost at call  16 :  1545.842 
+Model cost at call  17 :  1545.841 
+Model cost at call  24 :  949.7984 
+Model cost at call  25 :  949.7984 
+Model cost at call  30 :  949.7984 
+Model cost at call  31 :  564.269 
+Model cost at call  32 :  564.269 
+Model cost at call  36 :  564.269 
+Model cost at call  38 :  444.2523 
+Model cost at call  39 :  444.2523 
+Model cost at call  45 :  369.1132 
+Model cost at call  47 :  369.1132 
+Model cost at call  50 :  369.1132 
+Model cost at call  53 :  354.8494 
+Model cost at call  55 :  354.8494 
+Model cost at call  58 :  354.8493 
+Model cost at call  60 :  353.4189 
+Model cost at call  62 :  353.4189 
+Model cost at call  65 :  353.4189 
+Model cost at call  68 :  352.4084 
+Model cost at call  71 :  352.4084 
+Model cost at call  76 :  352.2537 
+Model cost at call  77 :  352.2537 
+Model cost at call  83 :  352.23 
+Model cost at call  86 :  352.23 
+Model cost at call  90 :  352.2092 
+Model cost at call  91 :  352.2092 
+Model cost at call  92 :  352.2092 
+Model cost at call  98 :  352.2058 
+Model cost at call  99 :  352.2058 
+Model cost at call  101 :  352.2058 
+Model cost at call  105 :  352.2058 
+Model cost at call  107 :  352.2058 
+Model cost at call  112 :  352.2049 
+Model cost at call  115 :  352.2049 
+Model cost at call  120 :  352.2049 
+Model cost at call  121 :  352.2049 
+Model cost at call  122 :  352.2049 
+Model cost at call  127 :  352.2049 
+Model cost at call  130 :  352.2049 
+Model cost at call  134 :  352.2048 
+Model cost at call  136 :  352.2048 
+Model cost at call  142 :  352.2048 
+Model cost at call  144 :  352.2048 
+</div>
+<div class='input'># Use starting parameters from parent only SFORB fit (not really needed in this case)
+fit.SFORB = mkinfit(SFORB, FOCUS_2006_D)
+</div>
+<div class='output'>Model cost at call  1 :  10207.89 
+Model cost at call  4 :  10207.89 
+Model cost at call  7 :  1311.766 
+Model cost at call  9 :  1311.766 
+Model cost at call  12 :  304.4769 
+Model cost at call  14 :  304.4769 
+Model cost at call  17 :  217.1969 
+Model cost at call  19 :  217.1969 
+Model cost at call  22 :  204.7337 
+Model cost at call  23 :  204.7337 
+Model cost at call  27 :  201.0464 
+Model cost at call  29 :  201.0464 
+Model cost at call  33 :  197.2565 
+Model cost at call  35 :  197.2565 
+Model cost at call  38 :  191.7914 
+Model cost at call  40 :  191.7914 
+Model cost at call  44 :  186.6841 
+Model cost at call  46 :  186.6841 
+Model cost at call  49 :  181.2484 
+Model cost at call  51 :  181.2484 
+Model cost at call  55 :  179.6418 
+Model cost at call  56 :  179.6418 
+Model cost at call  60 :  175.1768 
+Model cost at call  61 :  175.1768 
+Model cost at call  65 :  174.0369 
+Model cost at call  67 :  174.0369 
+Model cost at call  71 :  173.7107 
+Model cost at call  73 :  173.7107 
+Model cost at call  77 :  173.7065 
+Model cost at call  79 :  173.7065 
+Model cost at call  82 :  173.682 
+Model cost at call  84 :  173.682 
+Model cost at call  87 :  173.6799 
+Model cost at call  90 :  173.6799 
+Model cost at call  93 :  173.6799 
+Model cost at call  96 :  173.6799 
+Model cost at call  99 :  173.6799 
+Model cost at call  100 :  173.6799 
+Model cost at call  101 :  173.6799 
+Model cost at call  105 :  173.6799 
+Model cost at call  108 :  173.6799 
+</div>
+<div class='input'>fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode, plot=TRUE)
+</div>
+<div class='output'>Model cost at call  1 :  18462.04 
+</div>
+<div class='output'>Model cost at call  3 :  18462.04 
+</div>
+<div class='output'>Model cost at call  9 :  15218.2 
+</div>
+<div class='output'>Model cost at call  10 :  15218.2 
+</div>
+<div class='output'>Model cost at call  14 :  15218.2 
+</div>
+<div class='output'>Model cost at call  17 :  7330.362 
+</div>
+<div class='output'>Model cost at call  19 :  7330.362 
+</div>
+<div class='output'>Model cost at call  24 :  1244.473 
+</div>
+<div class='output'>Model cost at call  25 :  1244.473 
+</div>
+<div class='output'>Model cost at call  31 :  380.1647 
+</div>
+<div class='output'>Model cost at call  32 :  380.1647 
+</div>
+<div class='output'>Model cost at call  39 :  353.3024 
+</div>
+<div class='output'>Model cost at call  40 :  353.3024 
+</div>
+<div class='output'>Model cost at call  47 :  352.4372 
+</div>
+<div class='output'>Model cost at call  48 :  352.4372 
+</div>
+<div class='output'>Model cost at call  55 :  352.227 
+</div>
+<div class='output'>Model cost at call  56 :  352.227 
+</div>
+<div class='output'>Model cost at call  63 :  352.2091 
+</div>
+<div class='output'>Model cost at call  64 :  352.2091 
+</div>
+<div class='output'>Model cost at call  66 :  352.2091 
+</div>
+<div class='output'>Model cost at call  70 :  352.2065 
+</div>
+<div class='output'>Model cost at call  72 :  352.2065 
+</div>
+<div class='output'>Model cost at call  74 :  352.2065 
+</div>
+<div class='output'>Model cost at call  77 :  352.2056 
+</div>
+<div class='output'>Model cost at call  80 :  352.2056 
+</div>
+<div class='output'>Model cost at call  84 :  352.2049 
+</div>
+<div class='output'>Model cost at call  85 :  352.2049 
+</div>
+<div class='output'>Model cost at call  86 :  352.2049 
+</div>
+<div class='output'>Model cost at call  93 :  352.2049 
+</div>
+<div class='output'>Model cost at call  96 :  352.2049 
+</div>
+<div class='output'>Model cost at call  100 :  352.2048 
+</div>
+<div class='output'>Model cost at call  101 :  352.2048 
+</div>
+<div class='output'>Model cost at call  104 :  352.2048 
+</div>
+<div class='output'>Model cost at call  109 :  352.2048 
+</div>
+<div class='output'>Model cost at call  112 :  352.2048 
+</div>
+<div class='output'>Model cost at call  116 :  352.2048 
 </div></pre>
   </div>
   <div class="span4">
