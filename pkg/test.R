@@ -1,7 +1,11 @@
+# Some test code used in the development of mkin
+
 # This file contains fold markers for the vim editor, but can be edited with
 # any other editor
+
 library(colorout) # Only useful if R runs in a unix terminal
 library(mkin)
+
 # {{{ Source new versions of mkin functions
 source("mkin/R/ilr.R")
 source("mkin/R/mkinpredict.R")
@@ -13,77 +17,8 @@ source("mkin/R/endpoints.R")
 source("mkin/R/mkinplot.R")
 # }}}
 
-# Dataset d2 {{{
-d2 <- rbind(FOCUS_2006_C, 
-    data.frame(
-       name = "m1", 
-       time = FOCUS_2006_C$time,
-       value = c(0, 20, 40, 45, 48, 49, 48, 46, 45)))
-# }}}
-
-# Some code useful for debugging {{{
-as.list(body(mkinfit))
-trace("mkinfit", quote(browser(skipCalls=4)), at = 55)
-untrace("mkinfit")
-# }}}
-
-# Simple parent only fitting {{{
-SFORB = mkinmod(parent = list(type = "SFORB"))
-f.SFORB <- mkinfit(SFORB, FOCUS_2006_C)
-f.SFORB$obs_vars
-undebug(summary.mkinfit)
-debug(endpoints)
-endpoints(f.SFORB)
-mkinerrmin(f.SFORB)
-summary(f.SFORB)
-mkinplot(f.SFORB)
-# }}}
-
-# Test different types of model specification {{{
-# SFO_SFO2_SFO {{{
-SFO_SFO2_SFO.1 <- mkinmod(parent = list(type = "SFO", to = c("m1", "m2")),
-		   m1 = list(type = "SFO", to = "m3"),
-		   m2 = list(type = "SFO"),
-		   m3 = list(type = "SFO"), 
-		   use_of_ff = "min")
-SFO_SFO2_SFO.2 <- mkinmod(parent = list(type = "SFO", to = c("m1", "m2")),
-		   m1 = list(type = "SFO", to = "m3"),
-		   m2 = list(type = "SFO"),
-		   m3 = list(type = "SFO"), 
-		   use_of_ff = "max")
-
-ot = seq(0, 100, by = 1)
-print(tail(mkinpredict(SFO_SFO2_SFO.1, c(k_parent_m1 = 0.1, k_parent_m2 = 0.1, 
-	    k_parent_sink = 0.1, k_m1_m3 = 0.1, k_m1_sink = 0.1, 
-	    k_m2_sink = 0.1, k_m3_sink = 0.1),
-	    c(parent = 100, m1 = 0, m2 = 0, m3 = 0), ot, solution_type = "deSolve")))
-print(tail(mkinpredict(SFO_SFO2_SFO.1, c(k_parent_m1 = 0.1, k_parent_m2 = 0.1, 
-	    k_parent_sink = 0.1, k_m1_m3 = 0.1, k_m1_sink = 0.1, 
-	    k_m2_sink = 0.1, k_m3_sink = 0.1),
-	    c(parent = 100, m1 = 0, m2 = 0, m3 = 0), ot, solution_type = "eigen")))
-print(tail(mkinpredict(SFO_SFO2_SFO.2, 
-            c(k_parent = 0.3, f_parent_to_m1 = 1/3, f_parent_to_m2 = 1/3, 
-              k_m1 = 0.2, f_m1_to_m3 = 0.5,
-	      k_m2 = 0.1,
-	      k_m3 = 0.1),
-	    c(parent = 100, m1 = 0, m2 = 0, m3 = 0), ot, solution_type = "deSolve")))
-print(tail(mkinpredict(SFO_SFO2_SFO.2, 
-            c(k_parent = 0.3, f_parent_to_m1 = 1/3, f_parent_to_m2 = 1/3, 
-              k_m1 = 0.2, f_m1_to_m3 = 0.5,
-	      k_m2 = 0.1,
-	      k_m3 = 0.1),
-	    c(parent = 100, m1 = 0, m2 = 0, m3 = 0), ot, solution_type = "eigen")))
-# }}}
-# SFORB_SFO {{{
-SFORB_SFO.1 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
-	           m1 = list(type = "SFO"))
-#SFORB_SFO.2 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
-#	           m1 = list(type = "SFO"), use_of_ff = "max") # not supported
-# }}}
-# }}}
-
 # Compare eigenvalue and deSolve based fitting {{{
-testdata = d2
+testdata = FOCUS_2006_D
 # SFO_SFO {{{
 SFO_SFO.1 <- mkinmod(parent = list(type = "SFO", to = "m1"),
        m1 = list(type = "SFO"), use_of_ff = "min")
@@ -107,7 +42,6 @@ summary(fit.SFO.2.eigen, data=FALSE)
 summary(fit.SFO.2.lsoda, data=FALSE)
 # }}}
 # SFORB_SFO {{{
-testdata = FOCUS_2006_D
 f.SFORB.1.eigen <- mkinfit(SFORB_SFO.1, testdata, plot=TRUE)
 f.SFORB.1.lsoda <- mkinfit(SFORB_SFO.1, testdata, solution_type = "deSolve", plot=TRUE)
 # SFORB_SFO.2 is not there because combining maximum use of ff with SFORB is not supported
@@ -115,43 +49,6 @@ summary(f.SFORB.1.eigen, data = FALSE)
 summary(f.SFORB.1.lsoda, data = FALSE)
 # }}}
 # }}}
-
-# Check coupled FOMC model {{{
-FOMC <- mkinmod(parent = list(type = "FOMC"))
-fit.FOMC <- mkinfit(FOMC, d2)
-
-FOMC_SFO <- mkinmod(parent = list(type = "FOMC", to = "m1"),
-	           m1 = list(type = "SFO"))
-fit.FOMC_SFO <- mkinfit(FOMC_SFO, d2, parms.ini = fit.FOMC$odeparms.final)
-mkinplot(fit.FOMC_SFO)
-summary(fit.FOMC_SFO)
-# }}}
-
-# Check DFOP_SFO {{{
-DFOP_SFO <- mkinmod(parent = list(type = "DFOP", to = "m1"),
-	           m1 = list(type = "SFO"))
-DFOP <- mkinmod(parent = list(type = "DFOP"))
-f.DFOP <- mkinfit(DFOP, d2)
-summary(f.DFOP)
-system.time(fit.DFOP <- mkinfit(DFOP_SFO, d2, 
-  plot=TRUE))
-system.time(fit.DFOP <- mkinfit(DFOP_SFO, FOCUS_2006_D, 
-  plot=TRUE))
-summary(fit.DFOP, data=FALSE)
-# }}}
-
-# Check SFORB_SFO {{{
-SFORB_SFO <- mkinmod(parent = list(type = "SFORB", to = "m1"),
-	           m1 = list(type = "SFO"))
-system.time(fit.SFORB <- mkinfit(SFORB_SFO, d2, 
-  plot=TRUE))
-system.time(fit.SFORB <- mkinfit(SFORB_SFO, FOCUS_2006_D, 
-  plot=TRUE))
-debug(summary.mkinfit)
-summary(fit.SFORB, data=FALSE)
-# }}}
-
-
 # {{{ KinGUI test data from 2007
 data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
 model.1 <- mkinmod(
@@ -244,25 +141,50 @@ summary(fit.2.lsoda.1000, data=FALSE) # Not a lot different from n.outtimes = 10
 endpoints(fit.1.eigen.sink)
 endpoints(fit.2.lsoda)
 # }}}
+# Different optimisation methods {{{
+fit.Marq <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
+fit.Port <- mkinfit(SFO_SFO, FOCUS_2006_D, method.modFit = "Port", plot = TRUE)
+fit.Pseudo <- mkinfit(SFO_SFO, FOCUS_2006_D, method.modFit = "Pseudo", lower = c(10, rep(-10, 3)), 
+                                                                       upper = c(200, rep(5, 3)), plot = TRUE)
+# }}}
+# {{{ Water sediment models
+ws <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
+  sediment = list(type = "SFO"))
+ws_back <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
+  sediment = list(type = "SFO", to = "water"))
 
-# mkinplot {{{
-debug(mkinplot)
-mkinplot(fit.SFO.1.eigen)
-mkinplot(fit.1.lsoda)
-mkinplot(fit.2.lsoda)
-mkinplot(fit.2.eigen)
+summary(fit <- mkinfit(ws, FOCUS_2006_F, plot = TRUE))
+summary(fit <- mkinfit(ws_back, FOCUS_2006_F, plot=TRUE))
+
 # }}}
-# mkinerrmin {{{
-system.time(fit.SFO.1.eigen <- mkinfit(SFO_SFO.1, testdata, plot=TRUE))
-fit <- fit.SFO.1.eigen
-debug(mkinerrmin)
-mkinerrmin(fit.SFO.1.eigen)
-mkinerrmin(fit.SFO.1.lsoda)
-mkinerrmin(fit.SFO.2.eigen)
-mkinerrmin(fit.SFO.2.lsoda)
-mkinerrmin(fit.FOMC_SFO)
-mkinerrmin(f.SFORB)
-mkinerrmin(fit.1.eigen)
-mkinerrmin(fit.2.lsoda)
+# Show how to use nesting of models for getting suitable starting parameters {{{
+# Add synthetic data to two metabolites to FOCUS 2006 C  
+d <- FOCUS_2006_C
+d2 <- FOCUS_2006_C
+d2$name <- "m1"
+d2$value <- cumsum(c(0, 9.5, 12, 6.8, 2, 1.2, 0.2, -0.1, -0.5))
+d3 <- FOCUS_2006_C
+d3$name <- "m2"
+d3$value <- cumsum(c(0, 6.3, 7.2, 2.0, 1.0, -2, -3.5, -4, -4.5))
+observed <- rbind(d, d2, d3)
+
+FOMC <- mkinmod(parent = list(type="FOMC"))
+FOMC_SFO <- mkinmod(parent = list(type="FOMC", to = "m1"), m1 = list(type="SFO"))
+FOMC_SFO2 <- mkinmod(parent = list(type="FOMC", to = c("m1", "m2")),
+  m1 = list(type = "SFO"), m2 = list(type="SFO"))
+
+fit.FOMC = mkinfit(FOMC, observed)
+fit <- mkinfit(FOMC_SFO, observed, 
+               parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
+fit <- mkinfit(FOMC_SFO2, observed, 
+               parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
+summary(fit)
 # }}}
+
+SFO_SFO = mkinmod(parent = list(type = "SFO", to = "m1"),
+                  m1 = list(type = "SFO"))
+debug(mkinfit)
+source("mkin/R/mkinfit.R")
+fit <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
+
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:

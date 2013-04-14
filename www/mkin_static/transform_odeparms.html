@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-16</title>
+<title>transform_odeparms. mkin 0.9-19</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-16</a>
+      <a class="brand" href="#">mkin 0.9-19</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -111,14 +111,17 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.16 
+<div class='output'>mkin version:    0.9.19 
 R version:       2.15.3 
-Date of fit:     Tue Mar  5 02:10:19 2013 
-Date of summary: Tue Mar  5 02:10:19 2013 
+Date of fit:     Sun Apr 14 14:20:18 2013 
+Date of summary: Sun Apr 14 14:20:18 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
 [2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+
+Method used for solution of differential equation system:
+eigen 
 
 Starting values for optimised parameters:
               initial   type transformed
