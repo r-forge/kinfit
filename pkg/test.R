@@ -13,6 +13,7 @@ source("mkin/R/mkinerrmin.R")
 source("mkin/R/transform_odeparms.R")
 source("mkin/R/mkinmod.R")
 source("mkin/R/mkinfit.R")
+source("mkin/R/mkin_wide_to_long.R")
 source("mkin/R/endpoints.R")
 source("mkin/R/mkinplot.R")
 # }}}
@@ -128,7 +129,7 @@ fit.2.lsoda <- mkinfit(model.2, data, solution_type = "deSolve", plot=TRUE)
 # Again, the following is very slow
 #fit.2.lsoda.1000 <- mkinfit(model.2, data, solution_type = "deSolve", n.outtimes = 1000, plot=TRUE)
 # This works with very good starting parameters...
-fit.2.eigen <- mkinfit(model.2, data, parms.ini = fit.2.lsoda$odeparms.final, plot=TRUE) 
+fit.2.eigen <- mkinfit(model.2, data, parms.ini = fit.2.lsoda$bparms.ode, plot=TRUE) 
 summary(fit.2.eigen, data=FALSE)
 
 
@@ -153,9 +154,31 @@ ws <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
 ws_back <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
   sediment = list(type = "SFO", to = "water"))
 
-summary(fit <- mkinfit(ws, FOCUS_2006_F, plot = TRUE))
-summary(fit <- mkinfit(ws_back, FOCUS_2006_F, plot=TRUE))
+# Stepwise approach to schaefer data with ffs and eigenvalue solution {{{
+m.SFO <- mkinmod(parent = list(type = "SFO", to = c("A1", "C1")),
+  A1 = list(type = "SFO"),
+  C1 = list(type = "SFO"), use_of_ff = "max")
+f.SFO <- mkinfit(m.SFO, data, plot=TRUE)
+m.final <- mkinmod(parent = list(type = "SFO", to = c("A1", "B1", "C1")),
+  A1 = list(type = "SFO", to = "A2"),
+  B1 = list(type = "SFO"),
+  C1 = list(type = "SFO"),
+  A2 = list(type = "SFO"), use_of_ff = "max")
+m.1 <- mkinfit(m.final, data, parms.ini = f.SFO$bparms.ode, plot=TRUE)
+m.2 <- mkinfit(m.final, data, parms.ini = f.SFO$bparms.ode, plot=TRUE, solution_type = "deSolve")
+m.3 <- mkinfit(m.final, data, plot=TRUE, solution_type = "deSolve")
+summary(m.1)
+summary(m.2)
+summary(m.3)
+# The covarianc matrix is only returned in the last of the three cases :(
 
+
+# mkinplot {{{
+debug(mkinplot)
+mkinplot(fit.SFO.1.eigen)
+mkinplot(fit.1.lsoda)
+mkinplot(fit.2.lsoda)
+mkinplot(fit.2.eigen)
 # }}}
 # Show how to use nesting of models for getting suitable starting parameters {{{
 # Add synthetic data to two metabolites to FOCUS 2006 C  
