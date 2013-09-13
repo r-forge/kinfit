@@ -210,4 +210,8 @@ debug(mkinfit)
 source("mkin/R/mkinfit.R")
 fit <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
 
+# Test the GUI (still WIP)
+library(gWidgetsWWW2)
+load_app("mkin/inst/GUI/simple.R")
+
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
