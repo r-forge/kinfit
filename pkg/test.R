@@ -3,7 +3,6 @@
 # This file contains fold markers for the vim editor, but can be edited with
 # any other editor
 
-library(colorout) # Only useful if R runs in a unix terminal
 library(mkin)
 
 # {{{ Source new versions of mkin functions
@@ -18,9 +17,9 @@ source("mkin/R/endpoints.R")
 source("mkin/R/mkinplot.R")
 # }}}
 
-# Compare eigenvalue and deSolve based fitting {{{
+# Compare eigenvalue and deSolve based fitting {{{1
 testdata = FOCUS_2006_D
-# SFO_SFO {{{
+# SFO_SFO {{{2
 SFO_SFO.1 <- mkinmod(parent = list(type = "SFO", to = "m1"),
        m1 = list(type = "SFO"), use_of_ff = "min")
 SFO_SFO.2 <- mkinmod(parent = list(type = "SFO", to = "m1"),
@@ -42,15 +41,14 @@ summary(fit.SFO.1.lsoda, data=FALSE)
 summary(fit.SFO.2.eigen, data=FALSE)
 summary(fit.SFO.2.lsoda, data=FALSE)
 # }}}
-# SFORB_SFO {{{
+# SFORB_SFO {{{2
 f.SFORB.1.eigen <- mkinfit(SFORB_SFO.1, testdata, plot=TRUE)
 f.SFORB.1.lsoda <- mkinfit(SFORB_SFO.1, testdata, solution_type = "deSolve", plot=TRUE)
 # SFORB_SFO.2 is not there because combining maximum use of ff with SFORB is not supported
 summary(f.SFORB.1.eigen, data = FALSE)
 summary(f.SFORB.1.lsoda, data = FALSE)
 # }}}
-# }}}
-# {{{ KinGUI test data from 2007
+# {{{1 KinGUI test data from 2007
 data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
 model.1 <- mkinmod(
     parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
@@ -71,7 +69,7 @@ model.2 <- mkinmod(
     C1 = list(type = "SFO"),
     A2 = list(type = "SFO"), use_of_ff = "max")
 
-# Compare eigenvalue and deSolve based solutions {{{
+# Compare eigenvalue and deSolve based solutions {{{2
 print(mkinpredict(model.1, 
   fit.1.eigen$odeparms.final, 
   c(parent = 100, A1 = 0, B1 = 0, C1 = 0, A2 = 0),
@@ -141,20 +139,12 @@ summary(fit.2.lsoda.1000, data=FALSE) # Not a lot different from n.outtimes = 10
 # Compare the models with sink - the solution method does not make a significant difference
 endpoints(fit.1.eigen.sink)
 endpoints(fit.2.lsoda)
-# }}}
-# Different optimisation methods {{{
+# Different optimisation methods {{{1
 fit.Marq <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
 fit.Port <- mkinfit(SFO_SFO, FOCUS_2006_D, method.modFit = "Port", plot = TRUE)
 fit.Pseudo <- mkinfit(SFO_SFO, FOCUS_2006_D, method.modFit = "Pseudo", lower = c(10, rep(-10, 3)), 
                                                                        upper = c(200, rep(5, 3)), plot = TRUE)
-# }}}
-# {{{ Water sediment models
-ws <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
-  sediment = list(type = "SFO"))
-ws_back <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
-  sediment = list(type = "SFO", to = "water"))
-
-# Stepwise approach to schaefer data with ffs and eigenvalue solution {{{
+# Stepwise approach to schaefer data with ffs and eigenvalue solution {{{2
 m.SFO <- mkinmod(parent = list(type = "SFO", to = c("A1", "C1")),
   A1 = list(type = "SFO"),
   C1 = list(type = "SFO"), use_of_ff = "max")
@@ -172,14 +162,13 @@ summary(m.2)
 summary(m.3)
 # The covarianc matrix is only returned in the last of the three cases :(
 
+# {{{1 Water sediment models
+ws <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
+  sediment = list(type = "SFO"))
+ws_back <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
+  sediment = list(type = "SFO", to = "water"))
 
-# mkinplot {{{
-debug(mkinplot)
-mkinplot(fit.SFO.1.eigen)
-mkinplot(fit.1.lsoda)
-mkinplot(fit.2.lsoda)
-mkinplot(fit.2.eigen)
-# }}}
+
 # Show how to use nesting of models for getting suitable starting parameters {{{
 # Add synthetic data to two metabolites to FOCUS 2006 C  
 d <- FOCUS_2006_C
@@ -202,17 +191,19 @@ fit <- mkinfit(FOMC_SFO, observed,
 fit <- mkinfit(FOMC_SFO2, observed, 
                parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
 summary(fit)
-# }}}
 
-SFO_SFO = mkinmod(parent = list(type = "SFO", to = "m1"),
-                  m1 = list(type = "SFO"))
-debug(mkinfit)
-source("mkin/R/mkinfit.R")
-fit <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
-
-# Test the GUI (still WIP)
+# Test the GUI (still WIP) {{{1
 library(gWidgetsWWW2)
 load_app("mkin/inst/GUI/simple.R")
+str(app)
 
-demo(gWidgetsWWW2) # does not work at the moment
+str(app$session_manager$sessions[[1]]$e$studies.df)
+str(data.frame(app$session_manager$sessions[[1]]$e$studies.gdf[,], 
+               stringsAsFactors = FALSE))
+
+names(app$session_manager$sessions[[7]]$e$ds)
+
+app$session_manager$sessions[[7]]$e$ds.cur
+
+demo(gWidgetsWWW2)
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
