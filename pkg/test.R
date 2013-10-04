@@ -195,15 +195,14 @@ summary(fit)
 # Test the GUI (still WIP) {{{1
 library(gWidgetsWWW2)
 load_app("mkin/inst/GUI/simple.R")
-str(app)
 
-str(app$session_manager$sessions[[1]]$e$studies.df)
-str(data.frame(app$session_manager$sessions[[1]]$e$studies.gdf[,], 
-               stringsAsFactors = FALSE))
+cur <- length(app$session_manager$sessions)
 
-names(app$session_manager$sessions[[7]]$e$ds)
+ls(app$session_manager$sessions[[cur]]$e)
+svalue(app$session_manager$sessions[[cur]]$e$ds.e.st) 
 
-app$session_manager$sessions[[7]]$e$ds.cur
+load_app("gpanedgroup.R")
+
 
 demo(gWidgetsWWW2)
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
