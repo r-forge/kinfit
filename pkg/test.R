@@ -192,6 +192,28 @@ fit <- mkinfit(FOMC_SFO2, observed,
                parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
 summary(fit)
 
+# Weighted fits {{{1
+SFO_SFO.ff <- mkinmod(parent = list(type = "SFO", to = "m1"),
+                      m1 = list(type = "SFO"), use_of_ff = "max")
+f.noweight <- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
+summary(f.noweight)
+f.irls <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, reweight.method = "obs")
+summary(f.irls)
+f.w.mean <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = "mean")
+summary(f.w.mean)
+f.w.mean.irls <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = "mean",
+                         reweight.method = "obs")
+summary(f.w.mean.irls)
+
+dw <- FOCUS_2006_D
+errors <- c(parent = 2, m1 = 1)
+dw$err.man <- errors[FOCUS_2006_D$name]
+f.w.man <- mkinfit(SFO_SFO.ff, dw, err = "err.man")
+summary(f.w.man)
+f.w.man.irls <- mkinfit(SFO_SFO.ff, dw, err = "err.man",
+                       reweight.method = "obs")
+summary(f.w.man.irls)
+
 # Test the GUI (still WIP) {{{1
 library(gWidgetsWWW2)
 load_app("mkin/inst/GUI/simple.R")
