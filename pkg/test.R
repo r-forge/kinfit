@@ -214,7 +214,7 @@ f.w.man.irls <- mkinfit(SFO_SFO.ff, dw, err = "err.man",
                        reweight.method = "obs")
 summary(f.w.man.irls)
 
-# Test the GUI (still WIP) {{{1
+# Test the GUI experiments {{{1
 library(gWidgetsWWW2)
 load_app("mkin/inst/GUI/simple.R")
 
@@ -223,15 +223,9 @@ cur <- length(app$session_manager$sessions)
 app$session_manager$sessions[[cur]]$e$m[[1]]
 
 app$session_manager$sessions[[cur]]$e$m.e.rows
-app$session_manager$sessions[[cur]]$e$m.e.obs
-app$session_manager$sessions[[cur]]$e$m.e.to
-app$session_manager$sessions[[cur]]$e$m.e.sink
 
 ls(app$session_manager$sessions[[cur]]$e)
 svalue(app$session_manager$sessions[[cur]]$e$ds.e.st) 
-
-load_app("gpanedgroup.R")
-
 
 demo(gWidgetsWWW2)
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
