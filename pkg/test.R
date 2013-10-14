@@ -4,8 +4,7 @@
 # any other editor
 
 library(mkin)
-
-# {{{ Source new versions of mkin functions
+# {{{1 Source new versions of mkin functions
 source("mkin/R/ilr.R")
 source("mkin/R/mkinpredict.R")
 source("mkin/R/mkinerrmin.R")
@@ -15,8 +14,6 @@ source("mkin/R/mkinfit.R")
 source("mkin/R/mkin_wide_to_long.R")
 source("mkin/R/endpoints.R")
 source("mkin/R/mkinplot.R")
-# }}}
-
 # Compare eigenvalue and deSolve based fitting {{{1
 testdata = FOCUS_2006_D
 # SFO_SFO {{{2
@@ -78,7 +75,6 @@ print(mkinpredict(model.1,
   fit.1.eigen$odeparms.final, 
   c(parent = 100, A1 = 0, B1 = 0, C1 = 0, A2 = 0),
   outtimes = 0:100, solution_type = "deSolve")[101,])
-# }}}
 
 fit.1.eigen <- mkinfit(model.1, data, plot=TRUE)
 # 40 seconds on the workstation, 134 solutions
@@ -228,4 +224,5 @@ ls(app$session_manager$sessions[[cur]]$e)
 svalue(app$session_manager$sessions[[cur]]$e$ds.e.st) 
 
 demo(gWidgetsWWW2)
+# {{{1
 # vim: set foldmethod=marker ts=2 sw=2 expandtab:
