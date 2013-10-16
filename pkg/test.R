@@ -226,7 +226,6 @@ svalue(app$session_manager$sessions[[cur]]$e$ds.e.st)
 load_app("gpanedgroup.R")
 load_app("gimage.R")
 
-
 demo(gWidgetsWWW2)
 # {{{1
 # vim: set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
