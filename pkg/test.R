@@ -216,12 +216,16 @@ load_app("mkin/inst/GUI/simple.R")
 
 cur <- length(app$session_manager$sessions)
 
-app$session_manager$sessions[[cur]]$e$m[[1]]
+app$session_manager$sessions[[cur]]$e$f.gn[[1]]
 
 app$session_manager$sessions[[cur]]$e$m.e.rows
 
 ls(app$session_manager$sessions[[cur]]$e)
 svalue(app$session_manager$sessions[[cur]]$e$ds.e.st) 
+
+load_app("gpanedgroup.R")
+load_app("gimage.R")
+
 
 demo(gWidgetsWWW2)
 # {{{1
