@@ -216,16 +216,14 @@ load_app("mkin/inst/GUI/simple.R")
 
 cur <- length(app$session_manager$sessions)
 
-app$session_manager$sessions[[cur]]$e$f.gn[[1]]
-
-app$session_manager$sessions[[cur]]$e$m.e.rows
-
-ls(app$session_manager$sessions[[cur]]$e)
-svalue(app$session_manager$sessions[[cur]]$e$ds.e.st) 
+names(app$session_manager$sessions[[cur]]$e$f)
+plot(app$session_manager$sessions[[cur]]$e$f[["1"]][["1"]], main = "test")
+plot(app$session_manager$sessions[[cur]]$e$f[["4"]][["5"]], main = "test")
+Parameters <- app$session_manager$sessions[[cur]]$e$f.gg.parms[["1"]][["1"]][,]
 
 load_app("gpanedgroup.R")
 load_app("gimage.R")
 
 demo(gWidgetsWWW2)
 # {{{1
-# vim: set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
+# vim: set foldmethod=marker ts=2 sw=2 expandtab:
