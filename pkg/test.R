@@ -245,6 +245,13 @@ load_app("mkin/inst/GUI/simple.R")
 cur <- length(app$session_manager$sessions)
 
 names(app$session_manager$sessions[[cur]]$e$f)
+app$session_manager$sessions[[cur]]$e$m[["1"]]
+app$session_manager$sessions[[cur]]$e$ds[["1"]]
+x <- mkinfit(
+  app$session_manager$sessions[[cur]]$e$m[["1"]],
+  app$session_manager$sessions[[cur]]$e$ds[["1"]]$data, 
+  err = "err", control.modFit = list(maxiter = 0))
+app$session_manager$sessions[[cur]]$e$f
 plot(app$session_manager$sessions[[cur]]$e$f[["1"]][["1"]], main = "test")
 plot(app$session_manager$sessions[[cur]]$e$f[["4"]][["5"]], main = "test")
 Parameters <- app$session_manager$sessions[[cur]]$e$f.gg.parms[["1"]][["1"]][,]
