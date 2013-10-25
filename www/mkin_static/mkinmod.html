@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinmod. mkin 0.9-19</title>
+<title>mkinmod. mkin 0.9-22</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-19</a>
+      <a class="brand" href="#">mkin 0.9-22</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,7 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>mkinmod(..., use_of_ff = "min")</pre>
+    <pre>mkinmod(..., use_of_ff = "min", speclist = NULL)</pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -70,6 +70,11 @@
     applicable, the coefficient matrix. If "min", a minimum use of formation 
     fractions is made in order to avoid fitting the product of formation fractions 
     and rate constants. If "max", formation fractions are always used.
+  </dd>
+      <dt>speclist</dt>
+      <dd>
+    The specification of the observed variables and their submodel types and 
+    pathways can be given as a single list using this argument. Default is NULL.
   </dd>
     </dl>
     
@@ -104,7 +109,6 @@ SFO <- mkinmod(parent = list(type = "SFO"))
 SFO_SFO <- mkinmod(
   parent = list(type = "SFO", to = "m1"),
   m1 = list(type = "SFO"))
-
 </div></pre>
   </div>
   <div class="span4">
