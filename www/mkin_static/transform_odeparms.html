@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-19</title>
+<title>transform_odeparms. mkin 0.9-22</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-19</a>
+      <a class="brand" href="#">mkin 0.9-22</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -111,10 +111,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.19 
-R version:       2.15.3 
-Date of fit:     Sun Apr 14 14:20:18 2013 
-Date of summary: Sun Apr 14 14:20:18 2013 
+<div class='output'>mkin version:    0.9.22 
+R version:       3.0.1 
+Date of fit:     Fri Oct 25 23:43:40 2013 
+Date of summary: Fri Oct 25 23:43:40 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -123,16 +123,18 @@ Equations:
 Method used for solution of differential equation system:
 eigen 
 
+Weighting: none
+
 Starting values for optimised parameters:
-              initial   type transformed
-parent_0        100.0  state  100.000000
-k_parent_sink     0.1 deparm   -2.302585
-k_parent_m1       0.1 deparm   -2.302585
-k_m1_sink         0.1 deparm   -2.302585
+              value   type transformed
+parent_0      100.0  state  100.000000
+k_parent_sink   0.1 deparm   -2.302585
+k_parent_m1     0.1 deparm   -2.302585
+k_m1_sink       0.1 deparm   -2.302585
 
 Fixed parameter values:
-   value  type
-m1     0 state
+     value  type
+m1_0     0 state
 
 Optimised, transformed parameters:
               Estimate Std. Error  Lower   Upper
@@ -152,9 +154,9 @@ Residual standard error: 3.211 on 36 degrees of freedom
 
 Chi2 error levels in percent:
          err.min n.optim df
-All data   6.565       4 16
+All data   6.398       4 15
 parent     6.827       3  6
-m1         4.748       1 10
+m1         4.490       1  9
 
 Estimated disappearance times:
           DT50   DT90
@@ -174,7 +176,7 @@ k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
 k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
 k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
 </div>
-<div class='input'>initials <- fit$start$initial
+<div class='input'>initials <- fit$start$value
 transformed <- fit$start$transformed
 names(initials) <- names(transformed) <- rownames(fit$start)
 transform_odeparms(initials, c("parent", "m1"))
