@@ -240,12 +240,11 @@ summary(m.Z.FOCUS, data = FALSE)
 
 # Test the GUI experiments {{{1
 library(gWidgetsWWW2)
-#load_app("mkin/inst/GUI/simple.R")
 load_app("mkin/inst/GUI/mkinGUI.R")
 
 cur <- length(app$session_manager$sessions)
 
-app$session_manager$sessions[[cur]]$e$f
+ls(app$session_manager$sessions[[cur]]$e$ds.gtable)
 names(app$session_manager$sessions[[cur]]$e$f.gg.sel)
 length(app$session_manager$sessions[[cur]]$e$f.gg.sel)
 
