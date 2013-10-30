@@ -244,11 +244,9 @@ load_app("mkin/inst/GUI/mkinGUI.R")
 
 cur <- length(app$session_manager$sessions)
 
-ls(app$session_manager$sessions[[cur]]$e$ds.gtable)
-names(app$session_manager$sessions[[cur]]$e$f.gg.sel)
-length(app$session_manager$sessions[[cur]]$e$f.gg.sel)
+app$session_manager$sessions[[cur]]$e$f.df
+str(app$session_manager$sessions[[cur]]$e$f)
 
-load_app("gpanedgroup.R")
 load_app("gimage.R")
 
 demo(gWidgetsWWW2)
