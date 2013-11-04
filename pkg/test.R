@@ -26,17 +26,25 @@ SFO_SFO.2 <- mkinmod(parent = list(type = "SFO", to = "m1"),
 system.time(fit.SFO.1.eigen <- mkinfit(SFO_SFO.1, testdata, plot=TRUE))
 system.time(fit.SFO.1.lsoda <- mkinfit(SFO_SFO.1, testdata, solution_type = "deSolve", plot=TRUE))
 system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, testdata, plot=TRUE))
+system.time(fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve", plot=TRUE))
 SFO.2 <- mkinmod(parent = list(type = "SFO"))
 f.SFO <- mkinfit(SFO.2, testdata, plot=TRUE)
-#system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = f.SFO$odeparms.final, 
-#  testdata, plot=TRUE))
-system.time(fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, parms.ini = c(k_m1 = 0.001),
-  testdata, plot=TRUE))
-system.time(fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve", plot=TRUE))
+fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, testdata, plot = TRUE)
+fit.SFO.2.eigen <- mkinfit(SFO_SFO.2, testdata, plot = TRUE,
+                           trace_parms = TRUE, 
+                           control.modFit = list(maxiter = 0))
+fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve")
+fit.SFO.2.lsoda <- mkinfit(SFO_SFO.2, testdata, solution_type = "deSolve", 
+                           plot = TRUE, trace_parms = TRUE,
+                           control.modFit = list(maxiter = 0))
 summary(fit.SFO.1.eigen, data=FALSE)
 summary(fit.SFO.1.lsoda, data=FALSE)
 summary(fit.SFO.2.eigen, data=FALSE)
 summary(fit.SFO.2.lsoda, data=FALSE)
+plot(fit.SFO.1.eigen)
+plot(fit.SFO.1.lsoda)
+plot(fit.SFO.2.eigen)
+plot(fit.SFO.2.lsoda)
 # }}}
 # SFORB_SFO {{{2
 f.SFORB.1.eigen <- mkinfit(SFORB_SFO.1, testdata, plot=TRUE)
