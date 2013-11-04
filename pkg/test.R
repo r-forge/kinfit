@@ -209,7 +209,6 @@ summary(f.w.man)
 f.w.man.irls <- mkinfit(SFO_SFO.ff, dw, err = "err.man",
                        reweight.method = "obs")
 summary(f.w.man.irls)
-
 # Test the new kinerrmin implementation {{{1
 LOD = 0.5
 FOCUS_2006_Z = data.frame(
@@ -237,6 +236,21 @@ m.Z.FOCUS <- mkinfit(Z.FOCUS, FOCUS_2006_Z_mkin,
 capture.output(summary(m.Z.FOCUS), file = "summary_m.Z.FOCUS_0.9.22a.txt")
 summary(m.Z.FOCUS, data = FALSE)
 
+# Test fixing initial state variables {{{1
+library(mkin)
+SFO_SFO = mkinmod(parent = list(type = "SFO", to = "m1"),
+                  m1 = list(type = "SFO"))
+f0 <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
+f1 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = "parent", plot = TRUE)
+f1a <- mkinfit(SFO_SFO, FOCUS_2006_D, state.ini = c(m1 = 0, parent = 100), 
+               fixed_initials = "parent", plot = TRUE)
+debug(plot.mkinfit)
+plot(f1a)
+
+f2 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = "m1", solution_type = "deSolve", plot = TRUE)
+f3 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = c("parent", "m1"), plot = TRUE)
+summary(f1)
+
 
 # Test the GUI experiments {{{1
 library(gWidgetsWWW2)
@@ -244,7 +258,7 @@ load_app("mkin/inst/GUI/mkinGUI.R")
 
 cur <- length(app$session_manager$sessions)
 
-app$session_manager$sessions[[cur]]$e$f.df
+app$session_manager$sessions[[cur]]$e$f.gg.parms[,]
 str(app$session_manager$sessions[[cur]]$e$f)
 
 load_app("gimage.R")
