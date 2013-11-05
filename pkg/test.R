@@ -47,6 +47,8 @@ plot(fit.SFO.2.eigen)
 plot(fit.SFO.2.lsoda)
 # }}}
 # SFORB_SFO {{{2
+SFORB_SFO.1 <- mkinmod(parent = list(type = "SFORB", to = "m1"),
+       m1 = list(type = "SFO"), use_of_ff = "min")
 f.SFORB.1.eigen <- mkinfit(SFORB_SFO.1, testdata, plot=TRUE)
 f.SFORB.1.lsoda <- mkinfit(SFORB_SFO.1, testdata, solution_type = "deSolve", plot=TRUE)
 # SFORB_SFO.2 is not there because combining maximum use of ff with SFORB is not supported
@@ -161,10 +163,10 @@ m.final <- mkinmod(parent = list(type = "SFO", to = c("A1", "B1", "C1")),
 m.1 <- mkinfit(m.final, data, parms.ini = f.SFO$bparms.ode, plot=TRUE)
 m.2 <- mkinfit(m.final, data, parms.ini = f.SFO$bparms.ode, plot=TRUE, solution_type = "deSolve")
 m.3 <- mkinfit(m.final, data, plot=TRUE, solution_type = "deSolve")
+summary(f.SFO)
 summary(m.1)
 summary(m.2)
 summary(m.3)
-# The covarianc matrix is only returned in the last of the three cases :(
 
 # {{{1 Water sediment models
 ws <- mkinmod(water = list(type = "SFO", to = "sediment", sink = TRUE),
@@ -252,12 +254,12 @@ f0 <- mkinfit(SFO_SFO, FOCUS_2006_D, plot = TRUE)
 f1 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = "parent", plot = TRUE)
 f1a <- mkinfit(SFO_SFO, FOCUS_2006_D, state.ini = c(m1 = 0, parent = 100), 
                fixed_initials = "parent", plot = TRUE)
-debug(plot.mkinfit)
 plot(f1a)
 
 f2 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = "m1", solution_type = "deSolve", plot = TRUE)
 f3 <- mkinfit(SFO_SFO, FOCUS_2006_D, fixed_initials = c("parent", "m1"), plot = TRUE)
 summary(f1)
+summary(f2)
 
 
 # Test the GUI experiments {{{1
