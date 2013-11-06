@@ -273,6 +273,7 @@ str(app$session_manager$sessions[[cur]]$e$f)
 
 load_app("gimage.R")
 load_app("gimage_example.R")
+load_app("~/git/gWidgetsWWW2/inst/examples/ex-clt.R")
 
 demo(gWidgetsWWW2)
 # {{{1
