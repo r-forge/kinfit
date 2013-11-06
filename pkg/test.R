@@ -272,6 +272,7 @@ app$session_manager$sessions[[cur]]$e$f.gg.parms[,]
 str(app$session_manager$sessions[[cur]]$e$f)
 
 load_app("gimage.R")
+load_app("gimage_example.R")
 
 demo(gWidgetsWWW2)
 # {{{1
