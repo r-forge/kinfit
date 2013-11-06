@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-22</title>
+<title>transform_odeparms. mkin 0.9-25</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-22</a>
+      <a class="brand" href="#">mkin 0.9-25</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -92,18 +92,18 @@ backtransform_odeparms(transparms, mod_vars)</pre>
 # Fit the model to the FOCUS example dataset D using defaults
 fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
-<div class='output'>Model cost at call  1 :  18994.29 
-Model cost at call  3 :  18994.29 
-Model cost at call  7 :  10642.61 
-Model cost at call  8 :  10642.61 
-Model cost at call  10 :  10642.61 
-Model cost at call  12 :  7148.119 
-Model cost at call  14 :  7148.118 
-Model cost at call  17 :  412.0354 
-Model cost at call  18 :  412.0353 
-Model cost at call  22 :  371.2203 
-Model cost at call  23 :  371.2203 
-Model cost at call  25 :  371.2203 
+<div class='output'>Model cost at call  1 :  19007.22 
+Model cost at call  3 :  19007.22 
+Model cost at call  7 :  10654.43 
+Model cost at call  8 :  10654.43 
+Model cost at call  10 :  10654.43 
+Model cost at call  12 :  7167.606 
+Model cost at call  14 :  7167.606 
+Model cost at call  17 :  412.9611 
+Model cost at call  18 :  412.961 
+Model cost at call  22 :  371.2211 
+Model cost at call  23 :  371.2211 
+Model cost at call  25 :  371.2211 
 Model cost at call  27 :  371.2134 
 Model cost at call  28 :  371.2134 
 Model cost at call  30 :  371.2134 
@@ -111,10 +111,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.22 
+<div class='output'>mkin version:    0.9.25 
 R version:       3.0.1 
-Date of fit:     Fri Oct 25 23:43:40 2013 
-Date of summary: Fri Oct 25 23:43:40 2013 
+Date of fit:     Thu Nov  7 00:09:39 2013 
+Date of summary: Thu Nov  7 00:09:39 2013 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -126,11 +126,11 @@ eigen
 Weighting: none
 
 Starting values for optimised parameters:
-              value   type transformed
-parent_0      100.0  state  100.000000
-k_parent_sink   0.1 deparm   -2.302585
-k_parent_m1     0.1 deparm   -2.302585
-k_m1_sink       0.1 deparm   -2.302585
+                 value   type transformed
+parent_0      100.0000  state  100.000000
+k_parent_sink   0.1000 deparm   -2.302585
+k_parent_m1     0.1001 deparm   -2.301586
+k_m1_sink       0.1002 deparm   -2.300587
 
 Fixed parameter values:
      value  type
@@ -182,12 +182,12 @@ names(initials) <- names(transformed) <- rownames(fit$start)
 transform_odeparms(initials, c("parent", "m1"))
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
-   100.000000     -2.302585     -2.302585     -2.302585 
+   100.000000     -2.302585     -2.301586     -2.300587 
 </div>
 <div class='input'>backtransform_odeparms(transformed, c("parent", "m1"))
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
-        100.0           0.1           0.1           0.1 
+     100.0000        0.1000        0.1001        0.1002 
 </div></pre>
   </div>
   <div class="span4">
