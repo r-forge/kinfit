@@ -8,3 +8,4 @@ hist(rnorm(100))
 dev.off()
 
 i <- gimage(f, container=g)
+size(i) <- c(400, 400)
