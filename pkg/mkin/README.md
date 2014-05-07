@@ -1,9 +1,9 @@
 # mkin
 
-The R package **mkin** provides calculation routines for the analysis of chemical
-degradation data, including **m**ulticompartment **kin**etics as needed for modelling
-the formation and decline of transformation products, or if several compartments
-are involved.
+The R package **mkin** provides calculation routines for the analysis of
+chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
+needed for modelling the formation and decline of transformation products, or
+if several compartments are involved.
 
 ## Installation
 
@@ -21,11 +21,11 @@ install.packages('mkin', repos = 'http://r-forge.r-project.org')
 ```
 
 If R-Forge is lacking behind or if you prefer, you can install directly from
-github using the `devtools` package:
+github using the `devtools` package. 
 
 ```s
 require(devtools)
-install_github("mkin", "jranke")
+install_github("mkin", "jranke", quick = TRUE) # quick = TRUE avoids vignette rebuilds
 ```
 
 ## Background
@@ -102,6 +102,12 @@ or the package vignettes referenced from the
   componenent for each of the observed variables will be optimised
   in a second stage after the primary optimisation algorithm has converged.
 
+## GUI
+
+There is a graphical user interface that I consider useful for real work.
+It is available from github in the separate package 
+[gmkin](http://github.com/jranke/gmkin).
+
   
 ## Credits and historical remarks
 
@@ -112,7 +118,7 @@ of R and the packages [deSolve](http://cran.r-project.org/package=deSolve),
 
 It could not have been written without me being introduced to regulatory fate
 modelling of pesticides by Adrian Gurney during my time at Harlan Laboratories
-Ltd (formerly RCC Ltd). `mkin` greatly profits and largely follows
+Ltd (formerly RCC Ltd). `mkin` greatly profits from and largely follows
 the work done by the 
 [FOCUS Degradation Kinetics Workgroup](http://focus.jrc.ec.europa.eu/dk),
 as detailed in ther guidance document from 2006, slightly updated in 2011.
