@@ -1,10 +1,5 @@
-# $Id: $
-
-# Copyright (C) 2010-2013 Johannes Ranke
+# Copyright (C) 2010-2014 Johannes Ranke
 # Contact: jranke@uni-bremen.de
-# The summary function is an adapted and extended version of summary.modFit
-# from the FME package, v 1.1 by Soetart and Petzoldt, which was in turn
-# inspired by summary.nls.lm
 
 # This file is part of the R package mkin
 
@@ -23,14 +18,23 @@
 if(getRversion() >= '2.15.1') utils::globalVariables(c("type", "variable", "observed"))
 
 plot.mkinfit <- function(x, fit = x,
+  obs_vars = names(fit$mkinmod$map),
   xlab = "Time", ylab = "Observed",
-  xlim = range(fit$data$time), ylim = c(0, max(fit$data$observed, na.rm = TRUE)),
+  xlim = range(fit$data$time), 
+  ylim = "default",
   col_obs = 1:length(fit$mkinmod$map),
   pch_obs = col_obs, 
   lty_obs = rep(1, length(fit$mkinmod$map)),
   add = FALSE, legend = !add, 
+  show_residuals = FALSE, maxabs = "auto",
   lpos = "topright", inset = c(0.05, 0.05), ...)
 {
+  if (add && show_residuals) stop("If adding to an existing plot we can not show residuals")
+
+  if (ylim == "default") {
+    ylim = c(0, max(subset(fit$data, variable %in% obs_vars)$observed, na.rm = TRUE))
+  }
+
   solution_type = fit$solution_type
   parms.all <- c(fit$bparms.optim, fit$bparms.fixed)
 
@@ -55,19 +59,40 @@ plot.mkinfit <- function(x, fit = x,
 
   # Set up the plot if not to be added to an existing plot
   if (add == FALSE) {
+    if (show_residuals) {
+      oldpar <- par(no.readonly = TRUE)
+      layout(matrix(c(1, 2), 2, 1), heights = c(2, 1.3))
+      par(mar = c(3, 4, 4, 2) + 0.1)
+    }
     plot(0, type="n", 
       xlim = xlim, ylim = ylim,
       xlab = xlab, ylab = ylab, ...)
   }
   # Plot the data and model output
   names(col_obs) <- names(pch_obs) <- names(lty_obs) <- names(fit$mkinmod$map)
-  for (obs_var in names(fit$mkinmod$map)) {
+  for (obs_var in obs_vars) {
     points(subset(fit$data, variable == obs_var, c(time, observed)), 
       pch = pch_obs[obs_var], col = col_obs[obs_var])
   }
-  matlines(out$time, out[-1], col = col_obs, lty = lty_obs)
+  matlines(out$time, out[obs_vars], col = col_obs[obs_vars], lty = lty_obs[obs_vars])
   if (legend == TRUE) {
-    legend(lpos, inset= inset, legend=names(fit$mkinmod$map),
-      col=col_obs, pch=pch_obs, lty=lty_obs)
+    legend(lpos, inset= inset, legend = obs_vars,
+      col = col_obs[obs_vars], pch = pch_obs[obs_vars], lty = lty_obs[obs_vars])
+  }
+  # Show residuals if requested
+  if (show_residuals) {
+    par(mar = c(5, 4, 0, 2) + 0.1)
+    residuals <- subset(fit$data, variable %in% obs_vars, residual)
+    if (maxabs == "auto") maxabs = max(abs(residuals), na.rm = TRUE)
+    plot(0, type="n", 
+      xlim = xlim, 
+      ylim = c(-1.2 * maxabs, 1.2 * maxabs),
+      xlab = xlab, ylab = "Residuals")
+    for(obs_var in obs_vars){
+      residuals_plot <- subset(fit$data, variable == obs_var, c("time", "residual"))
+      points(residuals_plot, pch = pch_obs[obs_var], col = col_obs[obs_var])
+    }
+    abline(h = 0, lty = 2)
+    par(oldpar, no.readonly = TRUE)
   }
 }

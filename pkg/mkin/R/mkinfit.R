@@ -30,6 +30,8 @@ mkinfit <- function(mkinmod, observed,
   method.ode = "lsoda",
   method.modFit = "Marq",
   control.modFit = list(),
+  transform_rates = TRUE,
+  transform_fractions = TRUE,
   plot = FALSE, quiet = FALSE,
   err = NULL, weight = "none", scaleVar = FALSE,
   atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
@@ -83,7 +85,9 @@ mkinfit <- function(mkinmod, observed,
   if(is.null(names(state.ini))) names(state.ini) <- mod_vars
 
   # Transform initial parameter values for fitting
-  transparms.ini <- transform_odeparms(parms.ini, mod_vars)
+  transparms.ini <- transform_odeparms(parms.ini, mod_vars, 
+                                       transform_rates = transform_rates,
+                                       transform_fractions = transform_fractions)
 
   # Parameters to be optimised:
   # Kinetic parameters in parms.ini whose names are not in fixed_parms
@@ -156,7 +160,9 @@ mkinfit <- function(mkinmod, observed,
 
     odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], parms.fixed)
 
-    parms <- backtransform_odeparms(odeparms, mod_vars)
+    parms <- backtransform_odeparms(odeparms, mod_vars,
+                                    transform_rates = transform_rates,
+                                    transform_fractions = transform_fractions)
 
     # Solve the system with current transformed parameter values
     out <- mkinpredict(mkinmod, parms, odeini, outtimes, 
@@ -202,8 +208,17 @@ mkinfit <- function(mkinmod, observed,
     return(mC)
   }
 
+  lower <- rep(-Inf, length(c(state.ini.optim, parms.optim)))
+  names(lower) <- c(names(state.ini.optim), names(parms.optim))
+  if (!transform_rates) {
+    index_k <- grep("^k_", names(lower))
+    lower[index_k] <- 0
+    other_rate_parms <- intersect(c("alpha", "beta", "k1", "k2"), names(lower))
+    lower[other_rate_parms] <- 0
+  }
+
   fit <- modFit(cost, c(state.ini.optim, parms.optim), 
-                method = method.modFit, control = control.modFit, ...)
+                method = method.modFit, control = control.modFit, lower = lower, ...)
 
   # Reiterate the fit until convergence of the variance components (IRLS)
   # if requested by the user
@@ -228,7 +243,7 @@ mkinfit <- function(mkinmod, observed,
       sigma.old <- sqrt(fit$var_ms_unweighted)
       observed[err] <- sqrt(fit$var_ms_unweighted)[as.character(observed$name)]
       fit <- modFit(cost, fit$par, method = method.modFit,
-                    control = control.modFit, ...)
+                    control = control.modFit, lower = lower, ...)
       reweight.diff = sum((sqrt(fit$var_ms_unweighted) - sigma.old)^2)
       if (!quiet) {
         cat("Iteration", n.iter, "yields variance estimates:\n")
@@ -241,6 +256,8 @@ mkinfit <- function(mkinmod, observed,
 
   # We need to return some more data for summary and plotting
   fit$solution_type <- solution_type
+  fit$transform_rates <- transform_rates
+  fit$transform_fractions <- transform_fractions
 
   # We also need the model for summary and plotting
   fit$mkinmod <- mkinmod
@@ -252,19 +269,27 @@ mkinfit <- function(mkinmod, observed,
 
   # Collect initial parameter values in two dataframes
   fit$start <- data.frame(value = c(state.ini.optim, 
-		  backtransform_odeparms(parms.optim, mod_vars)))
+		  backtransform_odeparms(parms.optim, mod_vars,
+                             transform_rates = transform_rates,
+                             transform_fractions = transform_fractions)))
   fit$start$type = c(rep("state", length(state.ini.optim)), 
                      rep("deparm", length(parms.optim)))
   fit$start$transformed = c(state.ini.optim, parms.optim)
 
   fit$fixed <- data.frame(value = c(state.ini.fixed, 
-      backtransform_odeparms(parms.fixed, mod_vars)))
+      backtransform_odeparms(parms.fixed, mod_vars,
+                             transform_rates = transform_rates,
+                             transform_fractions = transform_fractions)))
   fit$fixed$type = c(rep("state", length(state.ini.fixed)), 
                      rep("deparm", length(parms.fixed)))
 
-  bparms.optim = backtransform_odeparms(fit$par, mod_vars)
+  bparms.optim = backtransform_odeparms(fit$par, mod_vars,
+                                        transform_rates = transform_rates,
+                                        transform_fractions = transform_fractions)
   bparms.fixed = backtransform_odeparms(c(state.ini.fixed, parms.fixed), 
-                                        mod_vars)
+                                        mod_vars,
+                                        transform_rates = transform_rates,
+                                        transform_fractions = transform_fractions)
   bparms.all = c(bparms.optim, bparms.fixed)
 
   # Collect observed, predicted, residuals and weighting
@@ -307,20 +332,23 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
   resvar <- object$ssr / rdf
   if (!is.numeric(covar)) {
     covar <- NULL
-    se <- lci <- uci <- rep(NA, p)
+    se <- lci <- uci <- tval <- pval1 <- pval2 <- rep(NA, p)
   } else {
     rownames(covar) <- colnames(covar) <- pnames
     se     <- sqrt(diag(covar) * resvar)
     lci    <- param + qt(alpha/2, rdf) * se
     uci    <- param + qt(1-alpha/2, rdf) * se
-
+    tval   <- param/se
+    pval1   <- 2 * pt(abs(tval), rdf, lower.tail = FALSE)
+    pval2   <- pt(abs(tval), rdf, lower.tail = FALSE)
   }
 
   names(se) <- pnames
   modVariance <- object$ssr / length(object$residuals)
 
-  param <- cbind(param, se, lci, uci)
-  dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper"))
+  param <- cbind(param, se, lci, uci, tval, pval1, pval2)
+  dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper",
+                                    "t value", "Pr(>|t|)", "Pr(>t)"))
 
   blci <- buci <- numeric()
   # Only transform boundaries of CI for one parameter at a time
@@ -328,8 +356,10 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
     par.lower <- par.upper <- object$par
     par.lower[pname] <- param[pname, "Lower"]
     par.upper[pname] <- param[pname, "Upper"]
-    blci[pname] <- backtransform_odeparms(par.lower, mod_vars)[pname]
-    buci[pname] <- backtransform_odeparms(par.upper, mod_vars)[pname]
+    blci[pname] <- backtransform_odeparms(par.lower, mod_vars, 
+                                          object$transform_rates, object$transform_fractions)[pname]
+    buci[pname] <- backtransform_odeparms(par.upper, mod_vars,
+                                          object$transform_rates, object$transform_fractions)[pname]
   }
   bparam <- cbind(object$bparms.optim, blci, buci)
   dimnames(bparam) <- list(pnames, c("Estimate", "Lower", "Upper"))
