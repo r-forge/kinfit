@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Homepage of kinfit and mkin - packages for the kinetic analysis of chemical degradation data</title>
+    <title>R-forge page of kinfit and mkin - packages for the kinetic analysis of chemical degradation data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Johannes Ranke">
@@ -39,39 +39,53 @@
       <div class="row">
         <div class="span8">
 
-        <h2>Homepage of kinfit and mkin</h2>
+        <h2>R-forge page of kinfit and mkin</h2>
 
         <p>kinfit and mkin provide calculation routines based on the FOCUS
         Kinetics Report (2006). In kinfit, only kinetic models for simple degradation 
         datasets are included. In mkin, there is no theoretical limit for the
         number of compartments or metabolites to model.</p>
 
+        <p>mkin is currently actively developed on 
+        <a href="http://github.com/jranke/mkin">github</a>. The source code of
+        released versions is synced to the r-forge 
+        <a href="http://www.r-forge.r-project.org/scm/?group_id=615">source
+            code repository</a>. 
+        </p>
+
+        <p>Please refer to the 
+        <a href="http://www.r-forge.r-project.org/projects/kinfit">project homepage</a> 
+        for further information on the r-forge project.</p>
+
         <p>Please note that no warranty is implied for correctness of results or
         fitness for a particular purpose.</p>
 
-        <p>An overview of the current capabilities of the <a href="kinfit_static/index.html">kinfit</a> package (rapid and
+        <h3>kinfit</h3>
+
+        <p>An overview of the current capabilities of the 
+        <a href="kinfit_static/index.html">kinfit</a> package (rapid and
         simultaneous fitting of the kinetic models recommended by the FOCUS group for
-        parent only) is given in the <a href="kinfit_static/index.html">kinfit documentation page</a> 
-        which also contains the <a href="kinfit_static/vignettes/kinfit.pdf">package vignette</a>.</p>
+        parent only) is given in the 
+        <a href="kinfit_static/index.html">kinfit documentation page</a> 
+        which also contains the 
+        <a href="kinfit_static/vignettes/kinfit.pdf">package vignette</a>.</p>
 
-        <p>The <a href="mkin_static/index.html">mkin</a> package which can fit complex degradation models to degradation data also
-        has a <a href="mkin_static/index.html">documentation page</a> including the
-        <a href="mkin_static/vignettes/mkin.pdf">vignette</a>.</p>
-
-        <p>Please refer to the <a href="http://www.r-forge.r-project.org/projects/kinfit">project homepage</a> 
-        for further information on the project and a link to the <a
-          href="http://www.r-forge.r-project.org/scm/?group_id=615">source code
-          repository</a>. </p>
-
-        <p>You can install the development version of the packages by using the R commands</p>
-        <p><code>install.packages("kinfit", repos= c("http://R-Forge.R-project.org", getOption("repos")))</code></p>
-        <p><code>install.packages("mkin", repos= c("http://R-Forge.R-project.org", getOption("repos")))</code></p>
+        <p>You can install the development version of the package by using the
+        R commands</p>
+        
+        <p><code>install.packages("kinfit", repos=
+        c("http://R-Forge.R-project.org", getOption("repos")))</code></p>
 
         <p>or you can get the stable release versions from CRAN using</p>
+
         <p><code>install.packages("kinfit")</code></p>
-        <p><code>install.packages("mkin")</code></p>
-        </div>
-      </div>
+
+        <h3>mkin</h3>
+
+        <p>The mkin package which can fit complex degradation models to
+        degradation data also has a 
+        <a href="mkin_static/index.html">documentation page</a> which 
+        also contains installation instructions.</p>
 
     </div> <!-- /container -->
   </body>
