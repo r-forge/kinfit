@@ -58,10 +58,12 @@ if several compartments are involved.</p>
 </code></pre>
 
 <p>If R-Forge is lacking behind or if you prefer, you can install directly from
-github using the <code>devtools</code> package. </p>
+github using the <code>devtools</code> package. Using <code>quick = TRUE</code> skips docs,
+multiple-architecture builds, demos, and vignettes, to make installation as fast 
+and painless as possible.</p>
 
 <pre><code class="s">require(devtools)
-install_github(&quot;mkin&quot;, &quot;jranke&quot;, quick = TRUE) # quick = TRUE avoids vignette rebuilds
+install_github(&quot;mkin&quot;, &quot;jranke&quot;, quick = TRUE)
 </code></pre>
 
 <h2>Background</h2>
