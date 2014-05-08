@@ -52,15 +52,10 @@ if several compartments are involved.</p>
 <pre><code class="s">install.packages(&#39;mkin&#39;)
 </code></pre>
 
-<p>A development version is usually available from <a href="http://r-forge.r-project.org/R/?group_id=615">R-Forge</a>:</p>
-
-<pre><code class="s">install.packages(&#39;mkin&#39;, repos = &#39;http://r-forge.r-project.org&#39;)
-</code></pre>
-
-<p>If R-Forge is lacking behind or if you prefer, you can install directly from
-github using the <code>devtools</code> package. Using <code>quick = TRUE</code> skips docs,
-multiple-architecture builds, demos, and vignettes, to make installation as fast 
-and painless as possible.</p>
+<p>If looking for the latest features, you can install directly from 
+<a href="http://github.com/jranke/mkin">github</a>, e.g.  using the <code>devtools</code> package.
+Using <code>quick = TRUE</code> skips docs, multiple-architecture builds, demos, and
+vignettes, to make installation as fast and painless as possible.</p>
 
 <pre><code class="s">require(devtools)
 install_github(&quot;mkin&quot;, &quot;jranke&quot;, quick = TRUE)
@@ -166,12 +161,14 @@ as detailed in ther guidance document from 2006, slightly updated in 2011.</p>
 <p>Also, it was inspired by the first version of KinGUI developed by
 BayerCropScience, which is based on the MatLab runtime environment.</p>
 
-<p>The companion package <a href="http://kinfit.r-forge.r-project.org/kinfit_static/index.html">kinfit</a> was <a href="https://r-forge.r-project.org/scm/viewvc.php?view=rev&amp;root=kinfit&amp;revision=2">started in 2008</a> and 
-<a href="http://cran.r-project.org/src/contrib/Archive/kinfit/">first published on
-CRAN</a> on 01 May
-2010.</p>
+<p>The companion package 
+<a href="http://kinfit.r-forge.r-project.org/kinfit_static/index.html">kinfit</a> was 
+<a href="https://r-forge.r-project.org/scm/viewvc.php?view=rev&amp;root=kinfit&amp;revision=2">started in 2008</a> and 
+<a href="http://cran.r-project.org/src/contrib/Archive/kinfit/">first published</a> on
+CRAN on 01 May 2010.</p>
 
-<p>The first <code>mkin</code> code was <a href="https://r-forge.r-project.org/scm/viewvc.php?view=rev&amp;root=kinfit&amp;revision=8">published on 11 May 2010</a> and the 
+<p>The first <code>mkin</code> code was 
+<a href="https://r-forge.r-project.org/scm/viewvc.php?view=rev&amp;root=kinfit&amp;revision=8">published on 11 May 2010</a> and the 
 <a href="http://cran.r-project.org/src/contrib/Archive/mkin">first CRAN version</a>
 on 18 May 2010.</p>
 
@@ -195,12 +192,15 @@ license.</p>
 a further development of the scripts used for KinGUII, so the different tools
 will hopefully be able to learn from each other in the future as well.</p>
 
-<h2>Contribute</h2>
+<h2>Development</h2>
 
-<p>Contributions are welcome! Your <a href="https://help.github.com/articles/fork-a-repo">mkin fork</a> is just a mouse click away&hellip; This git repository is now the 
-master branch, but I figured out how to merge changes in both directions,
-thanks to <a href="http://cameron.bracken.bz/git-with-r-forge">this blog entry</a>
-by Cameron Bracken, so contributors from r-forge are welcome as well.</p>
+<p>Contributions are welcome! Your 
+<a href="https://help.github.com/articles/fork-a-repo">mkin fork</a> is just a mouse click
+away&hellip; The master branch on github should always be in good shape, I implement 
+new features in separate branches now. If you prefer subversion, project
+members for the 
+<a href="http://r-forge.r-project.org/R/?group_id=615">r-forge project</a> are welcome as well.
+Generally, the source code of the latest CRAN version should be available there.</p>
 
 
     <h2>Help topics</h2>
@@ -317,7 +317,7 @@ by Cameron Bracken, so contributors from r-forge are welcome as well.</p>
     <h2>Vignettes</h2>
     <ul>
       <li><a href="vignettes/FOCUS_L.html">Example evaluation of FOCUS Laboratory Data L1 to L3</a></li>
-      <li><a href="vignettes/FOCUS_Z.pdf">Examples evaluation of FOCUS dataset Z</a></li>
+      <li><a href="vignettes/FOCUS_Z.pdf">Example evaluation of FOCUS dataset Z</a></li>
       <li><a href="vignettes/mkin.pdf">Routines for fitting kinetic models with one or more state variables to chemical degradation data</a></li>
     </ul>
         
@@ -326,7 +326,7 @@ by Cameron Bracken, so contributors from r-forge are welcome as well.</p>
       <li><strong>Depends</strong>: minpack.lm, rootSolve</li>
       <li><strong>Imports</strong>: FME, deSolve</li>
       <li><strong>Suggests</strong>: knitr, RUnit</li>
-      <li><strong>Extends</strong>: </li>
+      
     </ul>
      
     <h2>Authors</h2>
