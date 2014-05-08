@@ -121,8 +121,8 @@ Model cost at call  57 :  139.1138
 </div>
 <div class='output'>mkin version:    0.9.27 
 R version:       3.1.0 
-Date of fit:     Thu May  8 08:28:12 2014 
-Date of summary: Thu May  8 08:28:12 2014 
+Date of fit:     Thu May  8 20:33:12 2014 
+Date of summary: Thu May  8 20:33:12 2014 
 
 Equations:
 [1] d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245                                  
@@ -149,12 +149,18 @@ anisole_0         0  state
 k_phenol_sink     0 deparm
 
 Optimised, transformed parameters:
-                 Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
-T245_0           103.9000    2.35200 98.930 108.8000  44.160 1.292e-20 6.462e-21
-k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.646e-18 4.823e-18
-k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24 5.997e-25
-k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.127e-03 4.063e-03
-k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21 4.950e-21
+                 Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)
+T245_0           103.9000    2.35200 98.930 108.8000  44.160 1.292e-20
+k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.646e-18
+k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24
+k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.127e-03
+k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21
+                    Pr(&gt;t)
+T245_0           6.462e-21
+k_T245_sink      4.823e-18
+k_T245_phenol    5.997e-25
+k_phenol_anisole 4.063e-03
+k_anisole_sink   4.950e-21
 
 Backtransformed parameters:
                   Estimate     Lower     Upper
@@ -188,12 +194,18 @@ phenol_anisole 1.0000
 anisole_sink   1.0000
 
 Parameter correlation:
-                   T245_0 k_T245_sink k_T245_phenol k_phenol_anisole k_anisole_sink
-T245_0            1.00000     0.63761       -0.1742         -0.05948        -0.1621
-k_T245_sink       0.63761     1.00000       -0.3831          0.08745        -0.6047
-k_T245_phenol    -0.17416    -0.38314        1.0000         -0.30470         0.5227
-k_phenol_anisole -0.05948     0.08745       -0.3047          1.00000        -0.1774
-k_anisole_sink   -0.16208    -0.60469        0.5227         -0.17744         1.0000
+                   T245_0 k_T245_sink k_T245_phenol k_phenol_anisole
+T245_0            1.00000     0.63761       -0.1742         -0.05948
+k_T245_sink       0.63761     1.00000       -0.3831          0.08745
+k_T245_phenol    -0.17416    -0.38314        1.0000         -0.30470
+k_phenol_anisole -0.05948     0.08745       -0.3047          1.00000
+k_anisole_sink   -0.16208    -0.60469        0.5227         -0.17744
+                 k_anisole_sink
+T245_0                  -0.1621
+k_T245_sink             -0.6047
+k_T245_phenol            0.5227
+k_phenol_anisole        -0.1774
+k_anisole_sink           1.0000
 </div></pre>
   </div>
   <div class="span4">
