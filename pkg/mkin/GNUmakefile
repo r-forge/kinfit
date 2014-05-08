@@ -66,10 +66,6 @@ test: install-no-vignettes
 	cd tests;\
 		"$(RBIN)/Rscript" doRUnit.R
 
-test-no-vignettes: install-no-vignettes
-	cd tests;\
-		"$(RBIN)/Rscript" doRUnit.R
-
 #------------------------------------------------------------------------------
 # Packaging Tasks
 #------------------------------------------------------------------------------
