@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinpredict. mkin 0.9-25</title>
+<title>mkinpredict. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,8 +44,8 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>mkinpredict(mkinmod, odeparms, odeini, outtimes, solution_type = "deSolve", map_output = TRUE, 
-  atol = 1e-08, rtol = 1e-10, ...)</pre>
+    <pre><div>mkinpredict(mkinmod, odeparms, odeini, outtimes, solution_type&nbsp;=&nbsp;"deSolve",
+	      method.ode&nbsp;=&nbsp;"lsoda", atol&nbsp;=&nbsp;1e-08, rtol&nbsp;=&nbsp;1e-10, map_output&nbsp;=&nbsp;TRUE, ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -74,23 +74,29 @@
     The method that should be used for producing the predictions. This should
     generally be "analytical" if there is only one observed variable, and
     usually "deSolve" in the case of several observed variables. The third
-    possibility "eigen" is faster but produces results that the author believes
-    to be less accurate.
+    possibility "eigen" is faster but not applicable to some models e.g.
+    using FOMC for the parent compound.
+  </dd>
+      <dt>method.ode</dt>
+      <dd>
+    The solution method passed via <code><a href='mkinpredict.html'>mkinpredict</a></code> to
+    <code>ode</code> in case the solution type is "deSolve". The default
+    "lsoda" is performant, but sometimes fails to converge.
+  </dd>
+      <dt>atol</dt>
+      <dd>
+    Absolute error tolerance, passed to <code>ode</code>. Default is 1e-8,
+    lower than in <code>lsoda</code>.
+  </dd>
+      <dt>rtol</dt>
+      <dd>
+    Absolute error tolerance, passed to <code>ode</code>. Default is 1e-10,
+    much lower than in <code>lsoda</code>.
   </dd>
       <dt>map_output</dt>
       <dd>
     Boolean to specify if the output should list values for the observed
     variables (default) or for all state variables (if set to FALSE). 
-  </dd>
-      <dt>atol</dt>
-      <dd>
-    Absolute error tolerance, passed to <code><a href='http://www.inside-r.org/r-doc/deSolve/ode'>ode</a></code>. Default is 1e-8,
-    lower than in <code><a href='http://www.inside-r.org/r-doc/deSolve/lsoda'>lsoda</a></code>.
-  </dd>
-      <dt>rtol</dt>
-      <dd>
-    Absolute error tolerance, passed to <code><a href='http://www.inside-r.org/r-doc/deSolve/ode'>ode</a></code>. Default is 1e-10,
-    much lower than in <code><a href='http://www.inside-r.org/r-doc/deSolve/lsoda'>lsoda</a></code>.
   </dd>
       <dt>...</dt>
       <dd>
@@ -110,14 +116,14 @@
     <div class="Value">
       <h2>Value</h2>
       
-      <p>A matrix in the same format as the output of <code><a href='http://www.inside-r.org/r-doc/deSolve/ode'>ode</a></code>.</p>
+      <p>A matrix in the same format as the output of <code>ode</code>.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>  SFO <- mkinmod(degradinol = list(type = "SFO"))
+    <pre class="examples"><div class='input'>  SFO &lt;- mkinmod(degradinol = list(type = &quot;SFO&quot;))
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      solution_type = "analytical")
+	      solution_type = &quot;analytical&quot;)
 </div>
 <div class='output'>   time  degradinol
 1     0 100.0000000
@@ -143,7 +149,7 @@
 21   20   0.2478752
 </div>
 <div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      solution_type = "eigen")
+	      solution_type = &quot;eigen&quot;)
 </div>
 <div class='output'>   time  degradinol
 1     0 100.0000000
@@ -170,7 +176,7 @@
 </div>
 <div class='input'>
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 1:20, 
-	      solution_type = "analytical")[20,]
+	      solution_type = &quot;analytical&quot;)[20,]
 </div>
 <div class='output'>   time degradinol
 20   20  0.2478752
@@ -184,13 +190,13 @@
 <div class='input'>
   # The integration method does not make a lot of difference
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      atol = 1e-20, method = "ode45")[20,]
+	      atol = 1e-20, method = &quot;ode45&quot;)[20,]
 </div>
 <div class='output'>   time degradinol
 20   19  0.3345965
 </div>
 <div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      atol = 1e-20, method = "rk4")[20,]
+	      atol = 1e-20, method = &quot;rk4&quot;)[20,]
 </div>
 <div class='output'>   time degradinol
 20   19   0.334762

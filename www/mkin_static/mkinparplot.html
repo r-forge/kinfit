@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>mkinparplot. mkin 0.9-27</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+  Johannes Ranke
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-27</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>
+  Function to plot the confidence intervals obtained using
+  <code><a href='mkinfit.html'>mkinfit</a></code>
+</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>mkinparplot(object)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>object</dt>
+      <dd>
+    A fit represented in an <code><a href='mkinfit.html'>mkinfit</a></code> object.
+  </dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This function plots the confidence intervals for the parameters
+  fitted using <code><a href='mkinfit.html'>mkinfit</a></code>.</p>
+  
+    </div>
+
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p>Nothing is returned by this function, as it is called for its side effect, namely to produce a plot.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>model &lt;- mkinmod(
+  T245 = list(type = &quot;SFO&quot;, to = c(&quot;phenol&quot;)),
+  phenol = list(type = &quot;SFO&quot;, to = c(&quot;anisole&quot;)),
+  anisole = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
+fit &lt;- mkinfit(model, subset(mccall81_245T, soil == &quot;Commerce&quot;), 
+  parms.ini = c(f_phenol_to_anisole = 1), fixed_parms = &quot;f_phenol_to_anisole&quot;)
+</div>
+<div class='output'>Model cost at call  1 :  9598.641 
+Model cost at call  3 :  9598.641 
+Model cost at call  8 :  7188.399 
+Model cost at call  9 :  7188.399 
+Model cost at call  10 :  7188.399 
+Model cost at call  14 :  1596.465 
+Model cost at call  19 :  1596.465 
+Model cost at call  22 :  1111.031 
+Model cost at call  28 :  568.197 
+Model cost at call  29 :  568.197 
+Model cost at call  35 :  363.3114 
+Model cost at call  36 :  363.3113 
+Model cost at call  37 :  363.3113 
+Model cost at call  41 :  273.2533 
+Model cost at call  42 :  273.2532 
+Model cost at call  47 :  211.9597 
+Model cost at call  48 :  211.9597 
+Model cost at call  53 :  211.8371 
+Model cost at call  54 :  211.8371 
+Model cost at call  55 :  211.8371 
+Model cost at call  60 :  211.4948 
+Model cost at call  61 :  211.4948 
+Model cost at call  62 :  211.4948 
+Model cost at call  66 :  203.1403 
+Model cost at call  67 :  203.1403 
+Model cost at call  68 :  203.1403 
+Model cost at call  73 :  196.0796 
+Model cost at call  74 :  196.0796 
+Model cost at call  75 :  196.0796 
+Model cost at call  79 :  165.5098 
+Model cost at call  80 :  165.5098 
+Model cost at call  81 :  165.5098 
+Model cost at call  86 :  144.187 
+Model cost at call  87 :  144.187 
+Model cost at call  88 :  144.187 
+Model cost at call  92 :  139.1451 
+Model cost at call  93 :  139.1451 
+Model cost at call  98 :  139.1139 
+Model cost at call  99 :  139.1139 
+Model cost at call  100 :  139.1139 
+Model cost at call  104 :  139.1138 
+Model cost at call  108 :  139.1138 
+Model cost at call  110 :  139.1138 
+</div>
+<div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: mkinparplot(fit)
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>mkinparplot</li>
+    </ul>
+    <ul>
+      <li> hplot </li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
+  Johannes Ranke
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plot.mkinfit. mkin 0.9-25</title>
+<title>plot.mkinfit. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,21 +44,24 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>plot(x, fit = x, xlab = "Time", ylab = "Observed", xlim = range(fit$data$time), ylim = c(0, 
-  max(fit$data$observed, na.rm = TRUE)), col_obs = 1:length(fit$mkinmod$map), pch_obs = col_obs, 
-      lty_obs = rep(1, length(fit$mkinmod$map)), add = FALSE, legend = !add, lpos = "topright", 
-      inset = c(0.05, 0.05), ...)</pre>
+    <pre><div>"plot"(x, fit&nbsp;=&nbsp;x, obs_vars&nbsp;=&nbsp;names(fit$mkinmod$map), xlab&nbsp;=&nbsp;"Time", ylab&nbsp;=&nbsp;"Observed",  xlim&nbsp;=&nbsp;range(fit$data$time), ylim&nbsp;=&nbsp;"default", col_obs&nbsp;=&nbsp;1:length(fit$mkinmod$map), pch_obs&nbsp;=&nbsp;col_obs,  lty_obs&nbsp;=&nbsp;rep(1, length(fit$mkinmod$map)), add&nbsp;=&nbsp;FALSE, legend&nbsp;=&nbsp;!add, show_residuals&nbsp;=&nbsp;FALSE, maxabs&nbsp;=&nbsp;"auto", lpos&nbsp;=&nbsp;"topright", inset&nbsp;=&nbsp;c(0.05, 0.05), ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
       <dd>
     Alias for fit introduced for compatibility with the generic S3 method.  
-</dd>
+  </dd>
       <dt>fit</dt>
       <dd>
     an object of class <code><a href='mkinfit.html'>mkinfit</a></code>.
-</dd>
+  </dd>
+      <dt>obs_vars</dt>
+      <dd>
+    A character vector of names of the observed variables for which the 
+    data and the model should be plotted. Defauls to all observed variables
+    in the model.
+  </dd>
       <dt>xlab</dt>
       <dd>
     label for the x axis.
@@ -78,35 +81,44 @@
       <dt>col_obs</dt>
       <dd>
     colors used for plotting the observed data and the corresponding model prediction lines.
-</dd>
+  </dd>
       <dt>pch_obs</dt>
       <dd>
     symbols to be used for plotting the data.
-</dd>
+  </dd>
       <dt>lty_obs</dt>
       <dd>
     line types to be used for the model predictions.
-</dd>
+  </dd>
       <dt>add</dt>
       <dd>
     should the plot be added to an existing plot?
-</dd>
+  </dd>
       <dt>legend</dt>
       <dd>
     should a legend be added to the plot?
-</dd>
+  </dd>
+      <dt>show_residuals</dt>
+      <dd>
+    should residuals be shown in the lower third of the plot?
+  </dd>
+      <dt>maxabs</dt>
+      <dd>
+    Maximum absolute value of the residuals. This is used for the scaling of
+    the y axis and defaults to "auto".
+  </dd>
       <dt>lpos</dt>
       <dd>
-    position of the legend. Passed to <code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code> as the first argument.
-</dd>
+    position of the legend. Passed to <code><a href='http://www.inside-r.org/packages/cran/graphics/docs/legend'>legend</a></code> as the first argument.
+  </dd>
       <dt>inset</dt>
       <dd>
-    Passed to <code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code> if applicable.
-</dd>
+    Passed to <code><a href='http://www.inside-r.org/packages/cran/graphics/docs/legend'>legend</a></code> if applicable.
+  </dd>
       <dt>...</dt>
       <dd>
-   further arguments passed to <code><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></code>.
-</dd>
+   further arguments passed to <code><a href='http://www.inside-r.org/packages/cran/graphics/docs/plot'>plot</a></code>.
+  </dd>
     </dl>
     
     <div class="Description">
@@ -127,21 +139,21 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'># One parent compound, one metabolite, both single first order.
-SFO_SFO <- mkinmod(
-  parent = list(type = "SFO", to = "m1", sink = TRUE),
-  m1 = list(type = "SFO"))
+SFO_SFO &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
+  m1 = list(type = &quot;SFO&quot;))
 # Fit the model to the FOCUS example dataset D using defaults
-fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
+fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
 <div class='output'>Model cost at call  1 :  19007.22 
 Model cost at call  3 :  19007.22 
 Model cost at call  7 :  10654.43 
 Model cost at call  8 :  10654.43 
 Model cost at call  10 :  10654.43 
-Model cost at call  12 :  7167.606 
-Model cost at call  14 :  7167.606 
+Model cost at call  12 :  7167.609 
+Model cost at call  14 :  7167.608 
 Model cost at call  17 :  412.9611 
-Model cost at call  18 :  412.961 
+Model cost at call  18 :  412.9611 
 Model cost at call  22 :  371.2211 
 Model cost at call  23 :  371.2211 
 Model cost at call  25 :  371.2211 
@@ -150,7 +162,7 @@ Model cost at call  28 :  371.2134
 Model cost at call  30 :  371.2134 
 Model cost at call  32 :  371.2134 
 </div>
-<div class='input'>## <strong>Not run</strong>: plot(fit)
+<div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: plot(fit)
 </div></pre>
   </div>
   <div class="span4">

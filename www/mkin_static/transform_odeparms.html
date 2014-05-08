@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-25</title>
+<title>transform_odeparms. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,25 +44,43 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>transform_odeparms(parms, mod_vars)
-
-backtransform_odeparms(transparms, mod_vars)</pre>
+    <pre><div>transform_odeparms(parms, mod_vars, transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)
+backtransform_odeparms(transparms, mod_vars,  transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>parms</dt>
       <dd>
-  Parameters of kinetic models as used in the differential equations.
-</dd>
+    Parameters of kinetic models as used in the differential equations.
+  </dd>
       <dt>transparms</dt>
       <dd>
-  Transformed parameters of kinetic models as used in the fitting procedure.
-</dd>
+    Transformed parameters of kinetic models as used in the fitting procedure.
+  </dd>
       <dt>mod_vars</dt>
       <dd>
-  Names of the state variables in the kinetic model. These are used for 
-  grouping the formation fractions before <code><a href='ilr.html'>ilr</a></code> transformation.  
-</dd>
+    Names of the state variables in the kinetic model. These are used for 
+    grouping the formation fractions before <code><a href='ilr.html'>ilr</a></code> transformation.  
+  </dd>
+      <dt>transform_rates</dt>
+      <dd>
+    Boolean specifying if kinetic rate constants should be transformed in the
+    model specification used in the fitting for better compliance with the
+    assumption of normal distribution of the estimator. If TRUE, also 
+    alpha and beta parameters of the FOMC model are log-transformed, as well 
+    as k1 and k2 rate constants for the DFOP and HS models and the break point tb
+    of the HS model
+  </dd>
+      <dt>transform_fractions</dt>
+      <dd>
+    Boolean specifying if formation fractions constants should be transformed in the
+    model specification used in the fitting for better compliance with the
+    assumption of normal distribution of the estimator. The default (TRUE) is 
+    to do transformations. The g parameter of the DFOP and HS models are also 
+    transformed, as they can also be seen as compositional data. The
+    transformation used for these transformations is the <code><a href='ilr.html'>ilr</a></code>
+    transformation.
+  </dd>
     </dl>
     
     <div class="Description">
@@ -86,21 +104,21 @@ backtransform_odeparms(transparms, mod_vars)</pre>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>SFO_SFO <- mkinmod(
-  parent = list(type = "SFO", to = "m1", sink = TRUE),
-  m1 = list(type = "SFO"))
+    <pre class="examples"><div class='input'>SFO_SFO &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
+  m1 = list(type = &quot;SFO&quot;))
 # Fit the model to the FOCUS example dataset D using defaults
-fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
+fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
 <div class='output'>Model cost at call  1 :  19007.22 
 Model cost at call  3 :  19007.22 
 Model cost at call  7 :  10654.43 
 Model cost at call  8 :  10654.43 
 Model cost at call  10 :  10654.43 
-Model cost at call  12 :  7167.606 
-Model cost at call  14 :  7167.606 
+Model cost at call  12 :  7167.609 
+Model cost at call  14 :  7167.608 
 Model cost at call  17 :  412.9611 
-Model cost at call  18 :  412.961 
+Model cost at call  18 :  412.9611 
 Model cost at call  22 :  371.2211 
 Model cost at call  23 :  371.2211 
 Model cost at call  25 :  371.2211 
@@ -111,10 +129,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.25 
-R version:       3.0.1 
-Date of fit:     Thu Nov  7 00:09:39 2013 
-Date of summary: Thu Nov  7 00:09:39 2013 
+<div class='output'>mkin version:    0.9.27 
+R version:       3.1.0 
+Date of fit:     Thu May  8 08:28:22 2014 
+Date of summary: Thu May  8 08:28:22 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -137,11 +155,11 @@ Fixed parameter values:
 m1_0     0 state
 
 Optimised, transformed parameters:
-              Estimate Std. Error  Lower   Upper
-parent_0        99.600    1.61400 96.330 102.900
-k_parent_sink   -3.038    0.07826 -3.197  -2.879
-k_parent_m1     -2.980    0.04124 -3.064  -2.897
-k_m1_sink       -5.248    0.13610 -5.523  -4.972
+              Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
+parent_0        99.600    1.61400 96.330 102.900   61.72 4.048e-38 2.024e-38
+k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31 2.801e-31
+k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40 7.228e-41
+k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31 3.541e-31
 
 Backtransformed parameters:
                Estimate     Lower     Upper
@@ -176,15 +194,15 @@ k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
 k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
 k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
 </div>
-<div class='input'>initials <- fit$start$value
-transformed <- fit$start$transformed
-names(initials) <- names(transformed) <- rownames(fit$start)
-transform_odeparms(initials, c("parent", "m1"))
+<div class='input'>initials &lt;- fit$start$value
+transformed &lt;- fit$start$transformed
+names(initials) &lt;- names(transformed) &lt;- rownames(fit$start)
+transform_odeparms(initials, c(&quot;parent&quot;, &quot;m1&quot;))
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
    100.000000     -2.302585     -2.301586     -2.300587 
 </div>
-<div class='input'>backtransform_odeparms(transformed, c("parent", "m1"))
+<div class='input'>backtransform_odeparms(transformed, c(&quot;parent&quot;, &quot;m1&quot;))
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
      100.0000        0.1000        0.1001        0.1002 

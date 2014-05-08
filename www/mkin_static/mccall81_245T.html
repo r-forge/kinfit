@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>mccall81_245T. mkin 0.9-27</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">mkin 0.9-27</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>
+  Datasets on aerobic soil metabolism of 2,4,5-T in six soils
+</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>mccall81_245T</div></pre>
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>Time course of 2,4,5-trichlorophenoxyacetic acid, and the corresponding
+ 2,4,5-trichlorophenol and 2,4,5-trichloroanisole as recovered in diethylether
+ extracts.</p>
+  
+    </div>
+
+    <div class="Format">
+      <h2>Format</h2>
+      
+      <p>A dataframe containing the following variables.
+  <dl>
+<dt><code>name</code></dt><dd>the name of the compound observed. Note that T245 is used as 
+                       an acronym for 2,4,5-T. T245 is a legitimate object name
+                       in R, which is necessary for specifying models using
+                       <code><a href='mkinmod.html'>mkinmod</a></code>.</dd>
+<dt><code>time</code></dt><dd>a numeric vector containing sampling times in days after
+                       treatment</dd>
+<dt><code>value</code></dt><dd>a numeric vector containing concentrations in percent of applied radioactivity</dd>
+<dt><code>soil</code></dt><dd>a factor containing the name of the soil</dd>
+</dl></p>
+  
+      <p></p>
+  
+    </div>
+
+    <div class="
+  Datasets on aerobic soil metabolism of 2,4,5-T in six soils
+">
+      <h2>
+  Datasets on aerobic soil metabolism of 2,4,5-T in six soils
+</h2>
+      
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>  SFO_SFO_SFO &lt;- mkinmod(T245 = list(type = &quot;SFO&quot;, to = &quot;phenol&quot;),
+                         phenol = list(type = &quot;SFO&quot;, to = &quot;anisole&quot;),
+                         anisole = list(type = &quot;SFO&quot;))
+  ## &lt;strong&gt;Not run&lt;/strong&gt;: fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
+#   summary(fit.1, data = FALSE)## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+  # No covariance matrix and k_phenol_sink is really small, therefore fix it to zero
+  fit.2 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;),
+                 parms.ini = c(k_phenol_sink = 0),
+                 fixed_parms = &quot;k_phenol_sink&quot;)
+</div>
+<div class='output'>Model cost at call  1 :  13250.89 
+Model cost at call  3 :  13250.89 
+Model cost at call  8 :  3733.149 
+Model cost at call  9 :  3733.149 
+Model cost at call  11 :  3733.149 
+Model cost at call  15 :  2952.327 
+Model cost at call  16 :  2952.327 
+Model cost at call  21 :  522.8361 
+Model cost at call  22 :  522.8361 
+Model cost at call  27 :  158.3033 
+Model cost at call  28 :  158.3033 
+Model cost at call  30 :  158.3033 
+Model cost at call  33 :  139.318 
+Model cost at call  34 :  139.318 
+Model cost at call  39 :  139.1147 
+Model cost at call  40 :  139.1147 
+Model cost at call  41 :  139.1147 
+Model cost at call  42 :  139.1147 
+Model cost at call  45 :  139.1138 
+Model cost at call  46 :  139.1138 
+Model cost at call  51 :  139.1138 
+Model cost at call  53 :  139.1138 
+Model cost at call  54 :  139.1138 
+Model cost at call  57 :  139.1138 
+</div>
+<div class='input'>  summary(fit.2, data = FALSE)
+</div>
+<div class='output'>mkin version:    0.9.27 
+R version:       3.1.0 
+Date of fit:     Thu May  8 08:28:12 2014 
+Date of summary: Thu May  8 08:28:12 2014 
+
+Equations:
+[1] d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245                                  
+[2] d_phenol = + k_T245_phenol * T245 - k_phenol_sink * phenol - k_phenol_anisole * phenol
+[3] d_anisole = + k_phenol_anisole * phenol - k_anisole_sink * anisole                    
+
+Method used for solution of differential equation system:
+eigen 
+
+Weighting: none
+
+Starting values for optimised parameters:
+                    value   type transformed
+T245_0           100.0000  state  100.000000
+k_T245_sink        0.1000 deparm   -2.302585
+k_T245_phenol      0.1001 deparm   -2.301586
+k_phenol_anisole   0.1002 deparm   -2.300587
+k_anisole_sink     0.1003 deparm   -2.299590
+
+Fixed parameter values:
+              value   type
+phenol_0          0  state
+anisole_0         0  state
+k_phenol_sink     0 deparm
+
+Optimised, transformed parameters:
+                 Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
+T245_0           103.9000    2.35200 98.930 108.8000  44.160 1.292e-20 6.462e-21
+k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.646e-18 4.823e-18
+k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24 5.997e-25
+k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.127e-03 4.063e-03
+k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21 4.950e-21
+
+Backtransformed parameters:
+                  Estimate     Lower     Upper
+T245_0           1.039e+02 98.930000 108.80000
+k_T245_sink      1.636e-02  0.012400   0.02159
+k_T245_phenol    2.701e-02  0.024320   0.02999
+k_phenol_anisole 4.051e-01  0.213600   0.76820
+k_anisole_sink   6.679e-03  0.005285   0.00844
+
+Residual standard error: 2.706 on 19 degrees of freedom
+
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   9.831       5 17
+T245       7.908       3  5
+phenol    99.809       1  6
+anisole    5.379       1  6
+
+Estimated disappearance times:
+           DT50    DT90
+T245     15.982  53.091
+phenol    1.711   5.685
+anisole 103.784 344.763
+
+Estimated formation fractions:
+                   ff
+T245_sink      0.3772
+T245_phenol    0.6228
+phenol_sink    0.0000
+phenol_anisole 1.0000
+anisole_sink   1.0000
+
+Parameter correlation:
+                   T245_0 k_T245_sink k_T245_phenol k_phenol_anisole k_anisole_sink
+T245_0            1.00000     0.63761       -0.1742         -0.05948        -0.1621
+k_T245_sink       0.63761     1.00000       -0.3831          0.08745        -0.6047
+k_T245_phenol    -0.17416    -0.38314        1.0000         -0.30470         0.5227
+k_phenol_anisole -0.05948     0.08745       -0.3047          1.00000        -0.1774
+k_anisole_sink   -0.16208    -0.60469        0.5227         -0.17744         1.0000
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>mccall81_245T</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
