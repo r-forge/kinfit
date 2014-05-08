@@ -8,6 +8,8 @@ PKGSRC  := $(shell basename $(PWD))
 # containing the first instance of R on the PATH.
 RBIN ?= $(shell dirname "`which R`")
 
+SDDIR ?= $(HOME)/svn/kinfit.r-forge/www/mkin_static
+
 .PHONY: help
 
 help:
@@ -24,6 +26,8 @@ help:
 	@echo "  install-no-vignettes    Invoke build without rebuilding vignettes and then install the result"
 	@echo "  test                    Install a new copy of the package without vignette rebuilding"
 	@echo "                          and run it through the testsuite"
+	@echo "  sd                      Build the static documentation"
+	@echo "  move-sd                 Move the static documentation where it belongs"
 	@echo ""
 	@echo "Packaging Tasks"
 	@echo "---------------"
@@ -66,6 +70,13 @@ test: install-no-vignettes
 	cd tests;\
 		"$(RBIN)/Rscript" doRUnit.R
 
+sd:
+	"$(RBIN)/Rscript" -e "library(staticdocs); build_site()"
+
+move-sd:
+	rm -rf $(SDDIR)/*;\
+		cp -r inst/web/* $(SDDIR)
+
 #------------------------------------------------------------------------------
 # Packaging Tasks
 #------------------------------------------------------------------------------
@@ -75,7 +86,7 @@ release:
 	@echo "\nTo update the svn repository tied to the local r-forge branch with"
 	@echo "changes in the local master branch, run:"
 	@echo "'git checkout r-forge'"
-	@echo "'git merge --squash master'"
+	@echo "'git merge --squash -srecursive -Xtheirs --no-commit master'"
 	@echo "'git commit'"
 	@echo "'git svn dcommit'"
 	@echo "\nThen change back to the master branch:"
