@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>schaefer07_complex_case. mkin 0.9-25</title>
+<title>schaefer07_complex_case. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,7 +42,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>data(schaefer07_complex_case)</pre>
+    <pre><div>data(schaefer07_complex_case)</div></pre>
         
     <div class="
   Metabolism data set used for checking the software quality of KinGUI
@@ -66,15 +66,16 @@
       <h2>Format</h2>
       
       <p>The data set is a data frame with 8 observations on the following 6 variables.
-  <span class='describe'>
-    <code>time</code>a numeric vector
-    <code>parent</code>a numeric vector
-    <code>A1</code>a numeric vector
-    <code>B1</code>a numeric vector
-    <code>C1</code>a numeric vector
-    <code>A2</code>a numeric vector
-  </span>
-  The results are a data frame with 14 results for different parameter values</p>
+  <dl>
+<dt><code>time</code></dt><dd>a numeric vector</dd>
+<dt><code>parent</code></dt><dd>a numeric vector</dd>
+<dt><code>A1</code></dt><dd>a numeric vector</dd>
+<dt><code>B1</code></dt><dd>a numeric vector</dd>
+<dt><code>C1</code></dt><dd>a numeric vector</dd>
+<dt><code>A2</code></dt><dd>a numeric vector</dd>
+</dl></p>
+  
+      <p>The results are a data frame with 14 results for different parameter values</p>
   
     </div>
 
@@ -89,14 +90,14 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
-model <- mkinmod(
-  parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
-  A1 = list(type = "SFO", to = "A2"),
-  B1 = list(type = "SFO"),
-  C1 = list(type = "SFO"),
-  A2 = list(type = "SFO"))
-## <strong>Not run</strong>: mkinfit(model, data, plot=TRUE)
+    <pre class="examples"><div class='input'>data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
+model &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = c(&quot;A1&quot;, &quot;B1&quot;, &quot;C1&quot;), sink = FALSE),
+  A1 = list(type = &quot;SFO&quot;, to = &quot;A2&quot;),
+  B1 = list(type = &quot;SFO&quot;),
+  C1 = list(type = &quot;SFO&quot;),
+  A2 = list(type = &quot;SFO&quot;))
+## &lt;strong&gt;Not run&lt;/strong&gt;: mkinfit(model, data, plot=TRUE)
 </div></pre>
   </div>
   <div class="span4">

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkin_wide_to_long. mkin 0.9-25</title>
+<title>mkin_wide_to_long. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,7 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>mkin_wide_to_long(wide_data, time = "t")</pre>
+    <pre><div>mkin_wide_to_long(wide_data, time&nbsp;=&nbsp;"t")</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -63,19 +63,19 @@
       <h2>Description</h2>
       
       <p>This function simply takes a dataframe with one independent variable and several 
-  dependent variable and converts it into the long form as required by <code><a href='http://www.inside-r.org/r-doc/FME/modCost'>modCost</a></code>.</p>
+  dependent variable and converts it into the long form as required by <code>modCost</code>.</p>
   
     </div>
 
     <div class="Value">
       <h2>Value</h2>
       
-      <p>Dataframe in long format as needed for <code><a href='http://www.inside-r.org/r-doc/FME/modCost'>modCost</a></code>.</p>
+      <p>Dataframe in long format as needed for <code>modCost</code>.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>wide <- data.frame(t = c(1,2,3), x = c(1,4,7), y = c(3,4,5))
+    <pre class="examples"><div class='input'>wide &lt;- data.frame(t = c(1,2,3), x = c(1,4,7), y = c(3,4,5))
 mkin_wide_to_long(wide)
 </div>
 <div class='output'>  name time value

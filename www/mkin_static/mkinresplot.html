@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinresplot. mkin 0.9-25</title>
+<title>mkinresplot. mkin 0.9-27</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
-  Katrin Lindenberger and Johannes Ranke
+  Johannes Ranke
 ">
 
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-25</a>
+      <a class="brand" href="#">mkin 0.9-27</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,8 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>mkinresplot(object, obs_vars = vector(), xlab = "Time", ylab = "Residual", maxabs = "auto", 
-  legend = TRUE, lpos = "topright", ...)</pre>
+    <pre><div>mkinresplot(object,  obs_vars&nbsp;=&nbsp;names(object$mkinmod$map), xlab&nbsp;=&nbsp;"Time", ylab&nbsp;=&nbsp;"Residual",  maxabs&nbsp;=&nbsp;"auto", legend&nbsp;=&nbsp;TRUE, lpos&nbsp;=&nbsp;"topright", ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -56,7 +55,7 @@
       <dt>obs_vars</dt>
       <dd>
     A character vector of names of the observed variables for which residuals
-    should be plotted.
+    should be plotted. Defaults to all observed variables in the model
 </dd>
       <dt>xlab</dt>
       <dd>
@@ -78,10 +77,10 @@
       <dt>lpos</dt>
       <dd> 
     Where should the legend be placed? Default is "topright". Will be passed on to
-		<code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code>. </dd>
+		<code><a href='http://www.inside-r.org/packages/cran/graphics/docs/legend'>legend</a></code>. </dd>
       <dt>...</dt>
       <dd>
-   further arguments passed to <code><a href='http://www.inside-r.org/r-doc/graphics/plot'>plot</a></code>.
+   further arguments passed to <code><a href='http://www.inside-r.org/packages/cran/graphics/docs/plot'>plot</a></code>.
 </dd>
     </dl>
     
@@ -89,7 +88,9 @@
       <h2>Description</h2>
       
       <p>This function plots the residuals for the specified subset of the 
-  observed variables from an mkinfit object.</p>
+  observed variables from an mkinfit object. A combined plot of the fitted
+  model and the residuals can be obtained using <code><a href='plot.mkinfit.html'>plot.mkinfit</a></code>
+  using the argument <code>show_residuals = TRUE</code>.</p>
   
     </div>
 
@@ -101,15 +102,15 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
-model <- mkinmod(
-  parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
-  A1 = list(type = "SFO", to = "A2"),
-  B1 = list(type = "SFO"),
-  C1 = list(type = "SFO"),
-  A2 = list(type = "SFO"))
-## <strong>Not run</strong>: fit <- mkinfit(model, data, plot=TRUE)
-## <strong>Not run</strong>: mkinresplot(fit, "A1")
+    <pre class="examples"><div class='input'>data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
+model &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = c(&quot;A1&quot;, &quot;B1&quot;, &quot;C1&quot;), sink = FALSE),
+  A1 = list(type = &quot;SFO&quot;, to = &quot;A2&quot;),
+  B1 = list(type = &quot;SFO&quot;),
+  C1 = list(type = &quot;SFO&quot;),
+  A2 = list(type = &quot;SFO&quot;))
+## &lt;strong&gt;Not run&lt;/strong&gt;: fit &lt;- mkinfit(model, data, plot=TRUE)
+## &lt;strong&gt;Not run&lt;/strong&gt;: mkinresplot(fit, &quot;A1&quot;)
 </div></pre>
   </div>
   <div class="span4">
@@ -127,7 +128,7 @@ model <- mkinmod(
     
     <h2>Author</h2>
     
-  Katrin Lindenberger and Johannes Ranke
+  Johannes Ranke
 
     
   </div>
