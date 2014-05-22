@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-27</title>
+<title>mkinfit. mkin 0.9-28</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-27</a>
+      <a class="brand" href="#">mkin 0.9-28</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -279,10 +279,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.27 
+<div class='output'>mkin version:    0.9.28 
 R version:       3.1.0 
-Date of fit:     Thu May  8 20:33:13 2014 
-Date of summary: Thu May  8 20:33:13 2014 
+Date of fit:     Tue May 20 09:56:50 2014 
+Date of summary: Tue May 20 09:56:50 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -294,11 +294,11 @@ eigen
 Weighting: none
 
 Starting values for optimised parameters:
-                 value   type transformed
-parent_0      100.0000  state  100.000000
-k_parent_sink   0.1000 deparm   -2.302585
-k_parent_m1     0.1001 deparm   -2.301586
-k_m1_sink       0.1002 deparm   -2.300587
+                 value   type transformed lower_bound upper_bound
+parent_0      100.0000  state  100.000000        -Inf         Inf
+k_parent_sink   0.1000 deparm   -2.302585        -Inf         Inf
+k_parent_m1     0.1001 deparm   -2.301586        -Inf         Inf
+k_m1_sink       0.1002 deparm   -2.300587        -Inf         Inf
 
 Fixed parameter values:
      value  type
@@ -455,10 +455,10 @@ Model cost at call  65 :  371.2134
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.27 
+<div class='output'>mkin version:    0.9.28 
 R version:       3.1.0 
-Date of fit:     Thu May  8 20:33:14 2014 
-Date of summary: Thu May  8 20:33:14 2014 
+Date of fit:     Tue May 20 09:56:51 2014 
+Date of summary: Tue May 20 09:56:51 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -470,11 +470,11 @@ eigen
 Weighting: none
 
 Starting values for optimised parameters:
-                  value   type transformed
-parent_0       100.0000  state 100.0000000
-k_parent         0.1000 deparm  -2.3025851
-f_parent_to_m1   0.2000 deparm  -0.9802581
-k_m1             0.1001 deparm  -2.3015856
+                  value   type transformed lower_bound upper_bound
+parent_0       100.0000  state 100.0000000        -Inf         Inf
+k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
+f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
+k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
 
 Fixed parameter values:
      value  type
@@ -619,10 +619,10 @@ Sum of squared differences to last variance estimates: 1.7e-09
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.27 
+<div class='output'>mkin version:    0.9.28 
 R version:       3.1.0 
-Date of fit:     Thu May  8 20:33:15 2014 
-Date of summary: Thu May  8 20:33:15 2014 
+Date of fit:     Tue May 20 09:56:52 2014 
+Date of summary: Tue May 20 09:56:52 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -634,11 +634,11 @@ eigen
 Weighting: none then iterative reweighting method obs
 
 Starting values for optimised parameters:
-                  value   type transformed
-parent_0       100.0000  state 100.0000000
-k_parent         0.1000 deparm  -2.3025851
-f_parent_to_m1   0.2000 deparm  -0.9802581
-k_m1             0.1001 deparm  -2.3015856
+                  value   type transformed lower_bound upper_bound
+parent_0       100.0000  state 100.0000000        -Inf         Inf
+k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
+f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
+k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
 
 Fixed parameter values:
      value  type
@@ -766,10 +766,10 @@ Model cost at call  65 :  0.347807
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.27 
+<div class='output'>mkin version:    0.9.28 
 R version:       3.1.0 
-Date of fit:     Thu May  8 20:33:16 2014 
-Date of summary: Thu May  8 20:33:16 2014 
+Date of fit:     Tue May 20 09:56:53 2014 
+Date of summary: Tue May 20 09:56:53 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -781,11 +781,11 @@ eigen
 Weighting: mean
 
 Starting values for optimised parameters:
-                  value   type transformed
-parent_0       100.0000  state 100.0000000
-k_parent         0.1000 deparm  -2.3025851
-f_parent_to_m1   0.2000 deparm  -0.9802581
-k_m1             0.1001 deparm  -2.3015856
+                  value   type transformed lower_bound upper_bound
+parent_0       100.0000  state 100.0000000        -Inf         Inf
+k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
+f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
+k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
 
 Fixed parameter values:
      value  type
@@ -926,10 +926,10 @@ Sum of squared differences to last variance estimates: 1.4e-09
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.27 
+<div class='output'>mkin version:    0.9.28 
 R version:       3.1.0 
-Date of fit:     Thu May  8 20:33:17 2014 
-Date of summary: Thu May  8 20:33:17 2014 
+Date of fit:     Tue May 20 09:56:54 2014 
+Date of summary: Tue May 20 09:56:54 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -941,11 +941,11 @@ eigen
 Weighting: mean then iterative reweighting method obs
 
 Starting values for optimised parameters:
-                  value   type transformed
-parent_0       100.0000  state 100.0000000
-k_parent         0.1000 deparm  -2.3025851
-f_parent_to_m1   0.2000 deparm  -0.9802581
-k_m1             0.1001 deparm  -2.3015856
+                  value   type transformed lower_bound upper_bound
+parent_0       100.0000  state 100.0000000        -Inf         Inf
+k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
+f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
+k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
 
 Fixed parameter values:
      value  type
