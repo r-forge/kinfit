@@ -10,16 +10,12 @@ the Eigenvalues are returned. These are equivalent to the rate constantes of the
 with the advantage that the SFORB model can also be used for metabolites.
 }
 \usage{
-endpoints(fit, pseudoDT50 = FALSE)
+endpoints(fit)
 }
 \arguments{
   \item{fit}{
   An object of class \code{\link{mkinfit}}.
-}
-  \item{pseudoDT50}{
-  Should pseudoDT50 values for FOMC, DFOP and SFORB models be reported, as 
-  recommended by the FOCUS group? Currently not implemented.
-}
+  }
 }
 \note{
   The function is used internally by \code{\link{summary.mkinfit}}.
