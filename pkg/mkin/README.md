@@ -47,7 +47,23 @@ A very simple usage example would be
     summary(SFO.fit)
     plot(SFO.fit) 
 
-For more examples have a look at the examples provided in the
+A fairly complex usage example using a built-in dataset:
+
+    data <- mkin_wide_to_long(schaefer07_complex_case, time = "time")
+
+    model <- mkinmod(
+      parent = list(type = "SFO", to = c("A1", "B1", "C1"), sink = FALSE),
+      A1 = list(type = "SFO", to = "A2"),
+      B1 = list(type = "SFO"),
+      C1 = list(type = "SFO"),
+      A2 = list(type = "SFO"), use_of_ff = "max")
+
+    fit <- mkinfit(model, data, method.modFit = "Port")
+
+    plot(fit, show_residuals = TRUE) 
+    s <- summary(fit)
+
+For more examples and to see results, have a look at the examples provided in the
 [`mkinfit`](http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html)
 documentation 
 or the package vignettes referenced from the 
@@ -73,8 +89,8 @@ or the package vignettes referenced from the
   internally using the `modFit` function from the `FME` package,
   which uses the least-squares Levenberg-Marquardt algorithm from
   `minpack.lm` per default.
-* Kinetic rate constants and kinetic formation fractions are transformed 
-  internally using
+* By default, kinetic rate constants and kinetic formation fractions are
+  transformed internally using
   [`transform_odeparms`](http://kinfit.r-forge.r-project.org/mkin_static/transform_odeparms.html)
   so their estimators can more reasonably be expected to follow
   a normal distribution. This has the side effect that no constraints

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>summary.mkinfit. mkin 0.9-29</title>
+<title>summary.mkinfit. mkin 0.9-30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@harlan.com,uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-29</a>
+      <a class="brand" href="#">mkin 0.9-30</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -149,10 +149,10 @@ Model cost at call  23 :  221.8078
 Model cost at call  25 :  221.8078 
 Model cost at call  26 :  221.8078 
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:40 2014 
-Date of summary: Fri Jun 27 09:17:40 2014 
+Date of fit:     Fri Jul 11 12:37:28 2014 
+Date of summary: Fri Jul 11 12:37:28 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent
@@ -162,43 +162,51 @@ analytical
 
 Weighting: none
 
-Starting values for optimised parameters:
-              value   type transformed lower_bound upper_bound
-parent_0      100.0  state  100.000000        -Inf         Inf
-k_parent_sink   0.1 deparm   -2.302585        -Inf         Inf
+Starting values for parameters to be optimised:
+              value   type
+parent_0      100.0  state
+k_parent_sink   0.1 deparm
+
+Starting values for the transformed parameters actually optimised:
+                       value lower upper
+parent_0          100.000000  -Inf   Inf
+log_k_parent_sink  -2.302585  -Inf   Inf
 
 Fixed parameter values:
 None
 
 Optimised, transformed parameters:
-              Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
-parent_0       109.200     4.3910 98.410 119.900   24.86 2.788e-07 1.394e-07
-k_parent_sink   -3.291     0.1152 -3.573  -3.009  -28.56 1.220e-07 6.098e-08
+                  Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)
+parent_0           109.200     4.3910 98.410 119.900   24.86 2.788e-07
+log_k_parent_sink   -3.291     0.1152 -3.573  -3.009  -28.56 1.220e-07
+                     Pr(&gt;t)
+parent_0          1.394e-07
+log_k_parent_sink 6.098e-08
+
+Parameter correlation:
+                  parent_0 log_k_parent_sink
+parent_0             1.000             0.575
+log_k_parent_sink    0.575             1.000
+
+Residual standard error: 6.08 on 6 degrees of freedom
 
 Backtransformed parameters:
                Estimate    Lower     Upper
 parent_0      109.20000 98.41000 119.90000
 k_parent_sink   0.03722  0.02807   0.04934
 
-Residual standard error: 6.08 on 6 degrees of freedom
-
 Chi2 error levels in percent:
          err.min n.optim df
 All data   8.385       2  6
-parent     8.385       2  6
+parent     7.933       1  7
+
+Resulting formation fractions:
+            ff
+parent_sink  1
 
 Estimated disappearance times:
         DT50  DT90
 parent 18.62 61.87
-
-Estimated formation fractions:
-            ff
-parent_sink  1
-
-Parameter correlation:
-              parent_0 k_parent_sink
-parent_0         1.000         0.575
-k_parent_sink    0.575         1.000
 
 Data:
  time variable observed predicted residual

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-29</title>
+<title>transform_odeparms. mkin 0.9-30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-29</a>
+      <a class="brand" href="#">mkin 0.9-30</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -44,8 +44,8 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>transform_odeparms(parms, mod_vars, transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)
-backtransform_odeparms(transparms, mod_vars,  transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)</div></pre>
+    <pre><div>transform_odeparms(parms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)
+backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, transform_fractions&nbsp;=&nbsp;TRUE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -57,10 +57,12 @@ backtransform_odeparms(transparms, mod_vars,  transform_rates&nbsp;=&nbsp;TRUE, 
       <dd>
     Transformed parameters of kinetic models as used in the fitting procedure.
   </dd>
-      <dt>mod_vars</dt>
+      <dt>mkinmod</dt>
       <dd>
-    Names of the state variables in the kinetic model. These are used for 
-    grouping the formation fractions before <code><a href='ilr.html'>ilr</a></code> transformation.  
+    The kinetic model of class <code><a href='mkinmod.html'>mkinmod</a></code>, containing the names of
+    the model variables that are needed for grouping the formation fractions
+    before <code><a href='ilr.html'>ilr</a></code> transformation, the parameter names and 
+    the information if the pathway to sink is included in the model. 
   </dd>
       <dt>transform_rates</dt>
       <dd>
@@ -92,6 +94,10 @@ backtransform_odeparms(transparms, mod_vars,  transform_rates&nbsp;=&nbsp;TRUE, 
   simple log transformation is used. For compositional parameters, such as
   the formations fractions that should always sum up to 1 and can not be
   negative, the <code><a href='ilr.html'>ilr</a></code> transformation is used.</p>
+  
+      <p>The transformation of sets of formation fractions is fragile, as it supposes
+  the same ordering of the components in forward and backward transformation.
+  This is no problem for the internal use in <code><a href='mkinfit.html'>mkinfit</a></code>.</p>
   
     </div>
 
@@ -127,12 +133,31 @@ Model cost at call  28 :  371.2134
 Model cost at call  30 :  371.2134 
 Model cost at call  32 :  371.2134 
 </div>
+<div class='input'>fit.2 &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
+</div>
+<div class='output'>Model cost at call  1 :  19007.22 
+Model cost at call  3 :  19007.22 
+Model cost at call  7 :  10654.43 
+Model cost at call  8 :  10654.43 
+Model cost at call  10 :  10654.43 
+Model cost at call  12 :  7167.609 
+Model cost at call  14 :  7167.608 
+Model cost at call  17 :  412.9611 
+Model cost at call  18 :  412.9611 
+Model cost at call  22 :  371.2211 
+Model cost at call  23 :  371.2211 
+Model cost at call  25 :  371.2211 
+Model cost at call  27 :  371.2134 
+Model cost at call  28 :  371.2134 
+Model cost at call  30 :  371.2134 
+Model cost at call  32 :  371.2134 
+</div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:41 2014 
-Date of summary: Fri Jun 27 09:17:41 2014 
+Date of fit:     Fri Jul 11 12:37:29 2014 
+Date of summary: Fri Jul 11 12:37:29 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -143,23 +168,44 @@ eigen
 
 Weighting: none
 
-Starting values for optimised parameters:
-                 value   type transformed lower_bound upper_bound
-parent_0      100.0000  state  100.000000        -Inf         Inf
-k_parent_sink   0.1000 deparm   -2.302585        -Inf         Inf
-k_parent_m1     0.1001 deparm   -2.301586        -Inf         Inf
-k_m1_sink       0.1002 deparm   -2.300587        -Inf         Inf
+Starting values for parameters to be optimised:
+                 value   type
+parent_0      100.0000  state
+k_parent_sink   0.1000 deparm
+k_parent_m1     0.1001 deparm
+k_m1_sink       0.1002 deparm
+
+Starting values for the transformed parameters actually optimised:
+                       value lower upper
+parent_0          100.000000  -Inf   Inf
+log_k_parent_sink  -2.302585  -Inf   Inf
+log_k_parent_m1    -2.301586  -Inf   Inf
+log_k_m1_sink      -2.300587  -Inf   Inf
 
 Fixed parameter values:
      value  type
 m1_0     0 state
 
 Optimised, transformed parameters:
-              Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
-parent_0        99.600    1.61400 96.330 102.900   61.72 4.048e-38 2.024e-38
-k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31 2.801e-31
-k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40 7.228e-41
-k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31 3.541e-31
+                  Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)
+parent_0            99.600    1.61400 96.330 102.900   61.72 4.048e-38
+log_k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31
+log_k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40
+log_k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31
+                     Pr(&gt;t)
+parent_0          2.024e-38
+log_k_parent_sink 2.801e-31
+log_k_parent_m1   7.228e-41
+log_k_m1_sink     3.541e-31
+
+Parameter correlation:
+                  parent_0 log_k_parent_sink log_k_parent_m1 log_k_m1_sink
+parent_0           1.00000           0.60752        -0.06625       -0.1701
+log_k_parent_sink  0.60752           1.00000        -0.08741       -0.6253
+log_k_parent_m1   -0.06625          -0.08741         1.00000        0.4716
+log_k_m1_sink     -0.17006          -0.62527         0.47164        1.0000
+
+Residual standard error: 3.211 on 36 degrees of freedom
 
 Backtransformed parameters:
                Estimate     Lower     Upper
@@ -168,7 +214,84 @@ k_parent_sink  0.047920  0.040890 5.616e-02
 k_parent_m1    0.050780  0.046700 5.521e-02
 k_m1_sink      0.005261  0.003992 6.933e-03
 
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   6.398       4 15
+parent     6.152       1  8
+m1         4.317       0 10
+
+Resulting formation fractions:
+                ff
+parent_sink 0.4855
+parent_m1   0.5145
+m1_sink     1.0000
+
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
+</div>
+<div class='input'>summary(fit.2, data=FALSE) 
+</div>
+<div class='output'>mkin version:    0.9.30 
+R version:       3.1.0 
+Date of fit:     Fri Jul 11 12:37:29 2014 
+Date of summary: Fri Jul 11 12:37:29 2014 
+
+Equations:
+[1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
+[2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+
+Method used for solution of differential equation system:
+eigen 
+
+Weighting: none
+
+Starting values for parameters to be optimised:
+                 value   type
+parent_0      100.0000  state
+k_parent_sink   0.1000 deparm
+k_parent_m1     0.1001 deparm
+k_m1_sink       0.1002 deparm
+
+Starting values for the transformed parameters actually optimised:
+                 value lower upper
+parent_0      100.0000  -Inf   Inf
+k_parent_sink   0.1000     0   Inf
+k_parent_m1     0.1001     0   Inf
+k_m1_sink       0.1002     0   Inf
+
+Fixed parameter values:
+     value  type
+m1_0     0 state
+
+Optimised, transformed parameters:
+               Estimate Std. Error     Lower     Upper t value  Pr(&gt;|t|)
+parent_0      99.600000  1.6140000 96.330000 1.029e+02  61.720 4.048e-38
+k_parent_sink  0.047920  0.0037500  0.040310 5.553e-02  12.780 6.100e-15
+k_parent_m1    0.050780  0.0020940  0.046530 5.502e-02  24.250 6.813e-24
+k_m1_sink      0.005261  0.0007159  0.003809 6.713e-03   7.349 1.152e-08
+                 Pr(&gt;t)
+parent_0      2.024e-38
+k_parent_sink 3.050e-15
+k_parent_m1   3.407e-24
+k_m1_sink     5.758e-09
+
+Parameter correlation:
+              parent_0 k_parent_sink k_parent_m1 k_m1_sink
+parent_0       1.00000        0.6075    -0.06625   -0.1701
+k_parent_sink  0.60752        1.0000    -0.08740   -0.6253
+k_parent_m1   -0.06625       -0.0874     1.00000    0.4716
+k_m1_sink     -0.17006       -0.6253     0.47164    1.0000
+
 Residual standard error: 3.211 on 36 degrees of freedom
+
+Backtransformed parameters:
+               Estimate     Lower     Upper
+parent_0      99.600000 96.330000 1.029e+02
+k_parent_sink  0.047920  0.040310 5.553e-02
+k_parent_m1    0.050780  0.046530 5.502e-02
+k_m1_sink      0.005261  0.003809 6.713e-03
 
 Chi2 error levels in percent:
          err.min n.optim df
@@ -176,36 +299,234 @@ All data   6.398       4 15
 parent     6.827       3  6
 m1         4.490       1  9
 
-Estimated disappearance times:
-          DT50   DT90
-parent   7.023  23.33
-m1     131.761 437.70
-
-Estimated formation fractions:
+Resulting formation fractions:
                 ff
 parent_sink 0.4855
 parent_m1   0.5145
 m1_sink     1.0000
 
-Parameter correlation:
-              parent_0 k_parent_sink k_parent_m1 k_m1_sink
-parent_0       1.00000       0.60752    -0.06625   -0.1701
-k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
-k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
-k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
 </div>
 <div class='input'>initials &lt;- fit$start$value
-transformed &lt;- fit$start$transformed
-names(initials) &lt;- names(transformed) &lt;- rownames(fit$start)
-transform_odeparms(initials, c(&quot;parent&quot;, &quot;m1&quot;))
+names(initials) &lt;- rownames(fit$start)
+transformed &lt;- fit$start_transformed$value
+names(transformed) &lt;- rownames(fit$start_transformed)
+transform_odeparms(initials, SFO_SFO)
 </div>
-<div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
-   100.000000     -2.302585     -2.301586     -2.300587 
+<div class='output'>         parent_0 log_k_parent_sink   log_k_parent_m1     log_k_m1_sink 
+       100.000000         -2.302585         -2.301586         -2.300587 
 </div>
-<div class='input'>backtransform_odeparms(transformed, c(&quot;parent&quot;, &quot;m1&quot;))
+<div class='input'>backtransform_odeparms(transformed, SFO_SFO)
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
      100.0000        0.1000        0.1001        0.1002 
+</div>
+<div class='input'>
+# The case of formation fractions
+SFO_SFO.ff &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
+  m1 = list(type = &quot;SFO&quot;),
+  use_of_ff = &quot;max&quot;)
+
+fit.ff &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
+</div>
+<div class='output'>Model cost at call  1 :  15186.5 
+Model cost at call  3 :  15186.5 
+Model cost at call  7 :  14312.23 
+Model cost at call  8 :  14312.23 
+Model cost at call  11 :  14312.23 
+Model cost at call  12 :  3570.653 
+Model cost at call  15 :  3570.653 
+Model cost at call  17 :  828.6878 
+Model cost at call  18 :  828.6878 
+Model cost at call  22 :  374.5359 
+Model cost at call  23 :  374.5359 
+Model cost at call  27 :  371.2135 
+Model cost at call  28 :  371.2135 
+Model cost at call  29 :  371.2135 
+Model cost at call  32 :  371.2134 
+Model cost at call  36 :  371.2134 
+Model cost at call  37 :  371.2134 
+</div>
+<div class='input'>summary(fit.ff, data = FALSE)
+</div>
+<div class='output'>mkin version:    0.9.30 
+R version:       3.1.0 
+Date of fit:     Fri Jul 11 12:37:30 2014 
+Date of summary: Fri Jul 11 12:37:30 2014 
+
+Equations:
+[1] d_parent = - k_parent * parent                         
+[2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
+
+Method used for solution of differential equation system:
+eigen 
+
+Weighting: none
+
+Starting values for parameters to be optimised:
+                  value   type
+parent_0       100.0000  state
+k_parent         0.1000 deparm
+k_m1             0.1001 deparm
+f_parent_to_m1   0.5000 deparm
+
+Starting values for the transformed parameters actually optimised:
+                    value lower upper
+parent_0       100.000000  -Inf   Inf
+log_k_parent    -2.302585  -Inf   Inf
+log_k_m1        -2.301586  -Inf   Inf
+f_parent_ilr_1   0.000000  -Inf   Inf
+
+Fixed parameter values:
+     value  type
+m1_0     0 state
+
+Optimised, transformed parameters:
+               Estimate Std. Error   Lower    Upper  t value  Pr(&gt;|t|)
+parent_0       99.60000    1.61400 96.3300 102.9000  61.7200 4.048e-38
+log_k_parent   -2.31600    0.04187 -2.4010  -2.2310 -55.3100 2.019e-36
+log_k_m1       -5.24800    0.13610 -5.5230  -4.9720 -38.5600 7.086e-31
+f_parent_ilr_1  0.04096    0.06477 -0.0904   0.1723   0.6323 5.312e-01
+                  Pr(&gt;t)
+parent_0       2.024e-38
+log_k_parent   1.010e-36
+log_k_m1       3.543e-31
+f_parent_ilr_1 2.656e-01
+
+Parameter correlation:
+               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
+parent_0         1.0000       0.5178  -0.1701        -0.5489
+log_k_parent     0.5178       1.0000  -0.3285        -0.5451
+log_k_m1        -0.1701      -0.3285   1.0000         0.7466
+f_parent_ilr_1  -0.5489      -0.5451   0.7466         1.0000
+
+Residual standard error: 3.211 on 36 degrees of freedom
+
+Backtransformed parameters:
+                Estimate     Lower     Upper
+parent_0       99.600000 96.330000 1.029e+02
+k_parent        0.098700  0.090660 1.074e-01
+k_m1            0.005261  0.003992 6.933e-03
+f_parent_to_m1  0.514500  0.468100 5.606e-01
+
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   6.398       4 15
+parent     6.152       1  8
+m1         4.317       0 10
+
+Resulting formation fractions:
+                ff
+parent_m1   0.5145
+parent_sink 0.4855
+
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
+</div>
+<div class='input'>initials &lt;- c(&quot;f_parent_to_m1&quot; = 0.5)
+transformed &lt;- transform_odeparms(initials, SFO_SFO.ff)
+backtransform_odeparms(transformed, SFO_SFO.ff)
+</div>
+<div class='output'>f_parent_to_m1 
+           0.5 
+</div>
+<div class='input'>
+# And without sink
+SFO_SFO.ff.2 &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = FALSE),
+  m1 = list(type = &quot;SFO&quot;),
+  use_of_ff = &quot;max&quot;)
+
+
+fit.ff.2 &lt;- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
+</div>
+<div class='output'>Model cost at call  1 :  12443.52 
+Model cost at call  3 :  12443.52 
+Model cost at call  6 :  6607.685 
+Model cost at call  7 :  6607.685 
+Model cost at call  10 :  3082.636 
+Model cost at call  11 :  3082.636 
+Model cost at call  14 :  2601.074 
+Model cost at call  15 :  2601.074 
+Model cost at call  18 :  2571.037 
+Model cost at call  19 :  2571.037 
+Model cost at call  22 :  2569.48 
+Model cost at call  23 :  2569.48 
+Model cost at call  26 :  2569.404 
+Model cost at call  27 :  2569.404 
+Model cost at call  30 :  2569.4 
+Model cost at call  31 :  2569.4 
+Model cost at call  34 :  2569.4 
+Model cost at call  38 :  2569.4 
+</div>
+<div class='input'>summary(fit.ff.2, data = FALSE)
+</div>
+<div class='output'>mkin version:    0.9.30 
+R version:       3.1.0 
+Date of fit:     Fri Jul 11 12:37:30 2014 
+Date of summary: Fri Jul 11 12:37:30 2014 
+
+Equations:
+[1] d_parent = - k_parent * parent        
+[2] d_m1 = + k_parent * parent - k_m1 * m1
+
+Method used for solution of differential equation system:
+eigen 
+
+Weighting: none
+
+Starting values for parameters to be optimised:
+            value   type
+parent_0 100.0000  state
+k_parent   0.1000 deparm
+k_m1       0.1001 deparm
+
+Starting values for the transformed parameters actually optimised:
+                  value lower upper
+parent_0     100.000000  -Inf   Inf
+log_k_parent  -2.302585  -Inf   Inf
+log_k_m1      -2.301586  -Inf   Inf
+
+Fixed parameter values:
+     value  type
+m1_0     0 state
+
+Optimised, transformed parameters:
+             Estimate Std. Error Lower  Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
+parent_0       84.790    2.96500 78.78 90.800   28.60 7.878e-27 3.939e-27
+log_k_parent   -2.756    0.08088 -2.92 -2.593  -34.08 1.511e-29 7.554e-30
+log_k_m1       -4.214    0.11150 -4.44 -3.988  -37.79 3.672e-31 1.836e-31
+
+Parameter correlation:
+             parent_0 log_k_parent log_k_m1
+parent_0       1.0000      0.11059  0.46156
+log_k_parent   0.1106      1.00000  0.06274
+log_k_m1       0.4616      0.06274  1.00000
+
+Residual standard error: 8.333 on 37 degrees of freedom
+
+Backtransformed parameters:
+         Estimate    Lower    Upper
+parent_0 84.79000 78.78000 90.80000
+k_parent  0.06352  0.05392  0.07483
+k_m1      0.01478  0.01179  0.01853
+
+Chi2 error levels in percent:
+         err.min n.optim df
+All data   19.66       3 16
+parent     16.73       1  8
+m1         17.98       0 10
+
+Estimated disappearance times:
+        DT50   DT90
+parent 10.91  36.25
+m1     46.89 155.75
 </div></pre>
   </div>
   <div class="span4">
