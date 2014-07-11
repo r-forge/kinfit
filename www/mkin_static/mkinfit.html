@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-29</title>
+<title>mkinfit. mkin 0.9-30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-29</a>
+      <a class="brand" href="#">mkin 0.9-30</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -118,11 +118,16 @@
   </dd>
       <dt>method.modFit</dt>
       <dd>
-    The optimisation method passed to <code>modFit</code>. The default "Marq"
+    The optimisation method passed to <code>modFit</code>.  The default "Marq"
     is the Levenberg Marquardt algorithm <code><a href='http://www.inside-r.org/packages/cran/minpack.lm/docs/nls.lm'>nls.lm</a></code> from the package
-    <code>minpack.lm</code>. Often other methods need more iterations to find the
-    same result. When using "Pseudo", "upper" and "lower" need to be 
-    specified for the transformed parameters.
+    <code>minpack.lm</code> and usually needs the least number of iterations.
+
+    For more complex problems where local minima occur, the "Port" algorithm is
+    recommended as it is less prone to get trapped in local minima and depends
+    less on starting values for parameters.  However, it needs more iterations.
+
+    When using "Pseudo", "upper" and "lower" need to be specified for the
+    transformed parameters.
   </dd>
       <dt>control.modFit</dt>
       <dd>
@@ -279,10 +284,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:32 2014 
-Date of summary: Fri Jun 27 09:17:32 2014 
+Date of fit:     Fri Jul 11 12:37:22 2014 
+Date of summary: Fri Jul 11 12:37:22 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -293,23 +298,44 @@ eigen
 
 Weighting: none
 
-Starting values for optimised parameters:
-                 value   type transformed lower_bound upper_bound
-parent_0      100.0000  state  100.000000        -Inf         Inf
-k_parent_sink   0.1000 deparm   -2.302585        -Inf         Inf
-k_parent_m1     0.1001 deparm   -2.301586        -Inf         Inf
-k_m1_sink       0.1002 deparm   -2.300587        -Inf         Inf
+Starting values for parameters to be optimised:
+                 value   type
+parent_0      100.0000  state
+k_parent_sink   0.1000 deparm
+k_parent_m1     0.1001 deparm
+k_m1_sink       0.1002 deparm
+
+Starting values for the transformed parameters actually optimised:
+                       value lower upper
+parent_0          100.000000  -Inf   Inf
+log_k_parent_sink  -2.302585  -Inf   Inf
+log_k_parent_m1    -2.301586  -Inf   Inf
+log_k_m1_sink      -2.300587  -Inf   Inf
 
 Fixed parameter values:
      value  type
 m1_0     0 state
 
 Optimised, transformed parameters:
-              Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
-parent_0        99.600    1.61400 96.330 102.900   61.72 4.048e-38 2.024e-38
-k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31 2.801e-31
-k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40 7.228e-41
-k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31 3.541e-31
+                  Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)
+parent_0            99.600    1.61400 96.330 102.900   61.72 4.048e-38
+log_k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31
+log_k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40
+log_k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31
+                     Pr(&gt;t)
+parent_0          2.024e-38
+log_k_parent_sink 2.801e-31
+log_k_parent_m1   7.228e-41
+log_k_m1_sink     3.541e-31
+
+Parameter correlation:
+                  parent_0 log_k_parent_sink log_k_parent_m1 log_k_m1_sink
+parent_0           1.00000           0.60752        -0.06625       -0.1701
+log_k_parent_sink  0.60752           1.00000        -0.08741       -0.6253
+log_k_parent_m1   -0.06625          -0.08741         1.00000        0.4716
+log_k_m1_sink     -0.17006          -0.62527         0.47164        1.0000
+
+Residual standard error: 3.211 on 36 degrees of freedom
 
 Backtransformed parameters:
                Estimate     Lower     Upper
@@ -318,31 +344,22 @@ k_parent_sink  0.047920  0.040890 5.616e-02
 k_parent_m1    0.050780  0.046700 5.521e-02
 k_m1_sink      0.005261  0.003992 6.933e-03
 
-Residual standard error: 3.211 on 36 degrees of freedom
-
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.398       4 15
-parent     6.827       3  6
-m1         4.490       1  9
+parent     6.152       1  8
+m1         4.317       0 10
 
-Estimated disappearance times:
-          DT50   DT90
-parent   7.023  23.33
-m1     131.761 437.70
-
-Estimated formation fractions:
+Resulting formation fractions:
                 ff
 parent_sink 0.4855
 parent_m1   0.5145
 m1_sink     1.0000
 
-Parameter correlation:
-              parent_0 k_parent_sink k_parent_m1 k_m1_sink
-parent_0       1.00000       0.60752    -0.06625   -0.1701
-k_parent_sink  0.60752       1.00000    -0.08741   -0.6253
-k_parent_m1   -0.06625      -0.08741     1.00000    0.4716
-k_m1_sink     -0.17006      -0.62527     0.47164    1.0000
+Estimated disappearance times:
+          DT50   DT90
+parent   7.023  23.33
+m1     131.761 437.70
 
 Data:
  time variable observed predicted   residual
@@ -422,43 +439,30 @@ SFO_SFO.ff &lt;- mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;m1&quo
                       m1 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
 f.noweight &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
 </div>
-<div class='output'>Model cost at call  1 :  18635.19 
-Model cost at call  3 :  18635.19 
-Model cost at call  5 :  18635.19 
-Model cost at call  7 :  18059.44 
-Model cost at call  8 :  18059.44 
-Model cost at call  10 :  18059.44 
-Model cost at call  13 :  6605.279 
-Model cost at call  14 :  6605.279 
-Model cost at call  16 :  6605.278 
-Model cost at call  18 :  1067.272 
-Model cost at call  19 :  1067.272 
-Model cost at call  20 :  1067.272 
-Model cost at call  24 :  1009.357 
-Model cost at call  26 :  1009.357 
-Model cost at call  29 :  1001.038 
-Model cost at call  30 :  1001.038 
-Model cost at call  33 :  1001.038 
-Model cost at call  34 :  800.855 
-Model cost at call  35 :  800.855 
-Model cost at call  40 :  641.6486 
-Model cost at call  41 :  641.6486 
-Model cost at call  45 :  460.6378 
-Model cost at call  46 :  460.6378 
-Model cost at call  50 :  375 
-Model cost at call  51 :  375 
-Model cost at call  55 :  371.2136 
-Model cost at call  56 :  371.2136 
-Model cost at call  60 :  371.2134 
-Model cost at call  61 :  371.2134 
-Model cost at call  65 :  371.2134 
+<div class='output'>Model cost at call  1 :  15186.5 
+Model cost at call  3 :  15186.5 
+Model cost at call  7 :  14312.23 
+Model cost at call  8 :  14312.23 
+Model cost at call  11 :  14312.23 
+Model cost at call  12 :  3570.653 
+Model cost at call  15 :  3570.653 
+Model cost at call  17 :  828.6878 
+Model cost at call  18 :  828.6878 
+Model cost at call  22 :  374.5359 
+Model cost at call  23 :  374.5359 
+Model cost at call  27 :  371.2135 
+Model cost at call  28 :  371.2135 
+Model cost at call  29 :  371.2135 
+Model cost at call  32 :  371.2134 
+Model cost at call  36 :  371.2134 
+Model cost at call  37 :  371.2134 
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:33 2014 
-Date of summary: Fri Jun 27 09:17:33 2014 
+Date of fit:     Fri Jul 11 12:37:23 2014 
+Date of summary: Fri Jul 11 12:37:23 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -469,12 +473,19 @@ eigen
 
 Weighting: none
 
-Starting values for optimised parameters:
-                  value   type transformed lower_bound upper_bound
-parent_0       100.0000  state 100.0000000        -Inf         Inf
-k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
-f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
-k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
+Starting values for parameters to be optimised:
+                  value   type
+parent_0       100.0000  state
+k_parent         0.1000 deparm
+k_m1             0.1001 deparm
+f_parent_to_m1   0.5000 deparm
+
+Starting values for the transformed parameters actually optimised:
+                    value lower upper
+parent_0       100.000000  -Inf   Inf
+log_k_parent    -2.302585  -Inf   Inf
+log_k_m1        -2.301586  -Inf   Inf
+f_parent_ilr_1   0.000000  -Inf   Inf
 
 Fixed parameter values:
      value  type
@@ -483,134 +494,126 @@ m1_0     0 state
 Optimised, transformed parameters:
                Estimate Std. Error   Lower    Upper  t value  Pr(&gt;|t|)
 parent_0       99.60000    1.61400 96.3300 102.9000  61.7200 4.048e-38
-k_parent       -2.31600    0.04187 -2.4010  -2.2310 -55.3100 2.019e-36
-f_parent_to_m1  0.04096    0.06477 -0.0904   0.1723   0.6323 5.312e-01
-k_m1           -5.24800    0.13610 -5.5230  -4.9720 -38.5600 7.086e-31
+log_k_parent   -2.31600    0.04187 -2.4010  -2.2310 -55.3100 2.019e-36
+log_k_m1       -5.24800    0.13610 -5.5230  -4.9720 -38.5600 7.086e-31
+f_parent_ilr_1  0.04096    0.06477 -0.0904   0.1723   0.6323 5.312e-01
                   Pr(&gt;t)
 parent_0       2.024e-38
-k_parent       1.010e-36
-f_parent_to_m1 2.656e-01
-k_m1           3.543e-31
+log_k_parent   1.010e-36
+log_k_m1       3.543e-31
+f_parent_ilr_1 2.656e-01
+
+Parameter correlation:
+               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
+parent_0         1.0000       0.5178  -0.1701        -0.5489
+log_k_parent     0.5178       1.0000  -0.3285        -0.5451
+log_k_m1        -0.1701      -0.3285   1.0000         0.7466
+f_parent_ilr_1  -0.5489      -0.5451   0.7466         1.0000
+
+Residual standard error: 3.211 on 36 degrees of freedom
 
 Backtransformed parameters:
                 Estimate     Lower     Upper
 parent_0       99.600000 96.330000 1.029e+02
 k_parent        0.098700  0.090660 1.074e-01
-f_parent_to_m1  0.514500  0.468100 5.606e-01
 k_m1            0.005261  0.003992 6.933e-03
-
-Residual standard error: 3.211 on 36 degrees of freedom
+f_parent_to_m1  0.514500  0.468100 5.606e-01
 
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.398       4 15
-parent     6.459       2  7
-m1         4.690       2  8
+parent     6.152       1  8
+m1         4.317       0 10
+
+Resulting formation fractions:
+                ff
+parent_m1   0.5145
+parent_sink 0.4855
 
 Estimated disappearance times:
           DT50   DT90
 parent   7.023  23.33
 m1     131.761 437.70
 
-Parameter correlation:
-               parent_0 k_parent f_parent_to_m1    k_m1
-parent_0         1.0000   0.5178        -0.5489 -0.1701
-k_parent         0.5178   1.0000        -0.5451 -0.3285
-f_parent_to_m1  -0.5489  -0.5451         1.0000  0.7466
-k_m1            -0.1701  -0.3285         0.7466  1.0000
-
 Data:
- time variable observed  predicted   residual
-    0   parent    99.46  9.960e+01 -1.385e-01
-    0   parent   102.04  9.960e+01  2.442e+00
-    1   parent    93.50  9.024e+01  3.262e+00
-    1   parent    92.50  9.024e+01  2.262e+00
-    3   parent    63.23  7.407e+01 -1.084e+01
-    3   parent    68.99  7.407e+01 -5.083e+00
-    7   parent    52.32  4.991e+01  2.408e+00
-    7   parent    55.13  4.991e+01  5.218e+00
-   14   parent    27.27  2.501e+01  2.257e+00
-   14   parent    26.64  2.501e+01  1.627e+00
-   21   parent    11.50  1.253e+01 -1.035e+00
-   21   parent    11.64  1.253e+01 -8.946e-01
-   35   parent     2.85  3.148e+00 -2.979e-01
-   35   parent     2.91  3.148e+00 -2.379e-01
-   50   parent     0.69  7.162e-01 -2.624e-02
-   50   parent     0.63  7.162e-01 -8.624e-02
-   75   parent     0.05  6.074e-02 -1.074e-02
-   75   parent     0.06  6.074e-02 -7.382e-04
-  100   parent       NA  5.151e-03         NA
-  100   parent       NA  5.151e-03         NA
-  120   parent       NA  7.155e-04         NA
-  120   parent       NA  7.155e-04         NA
-    0       m1     0.00 -7.105e-15  7.105e-15
-    0       m1     0.00 -7.105e-15  7.105e-15
-    1       m1     4.84  4.803e+00  3.704e-02
-    1       m1     5.64  4.803e+00  8.370e-01
-    3       m1    12.91  1.302e+01 -1.140e-01
-    3       m1    12.96  1.302e+01 -6.400e-02
-    7       m1    22.97  2.504e+01 -2.075e+00
-    7       m1    24.47  2.504e+01 -5.748e-01
-   14       m1    41.69  3.669e+01  5.000e+00
-   14       m1    33.21  3.669e+01 -3.480e+00
-   21       m1    44.37  4.165e+01  2.717e+00
-   21       m1    46.44  4.165e+01  4.787e+00
-   35       m1    41.22  4.331e+01 -2.093e+00
-   35       m1    37.95  4.331e+01 -5.363e+00
-   50       m1    41.19  4.122e+01 -2.831e-02
-   50       m1    40.01  4.122e+01 -1.208e+00
-   75       m1    40.09  3.645e+01  3.643e+00
-   75       m1    33.85  3.645e+01 -2.597e+00
-  100       m1    31.04  3.198e+01 -9.416e-01
-  100       m1    33.13  3.198e+01  1.148e+00
-  120       m1    25.15  2.879e+01 -3.640e+00
-  120       m1    33.31  2.879e+01  4.520e+00
+ time variable observed predicted   residual
+    0   parent    99.46 9.960e+01 -1.385e-01
+    0   parent   102.04 9.960e+01  2.442e+00
+    1   parent    93.50 9.024e+01  3.262e+00
+    1   parent    92.50 9.024e+01  2.262e+00
+    3   parent    63.23 7.407e+01 -1.084e+01
+    3   parent    68.99 7.407e+01 -5.083e+00
+    7   parent    52.32 4.991e+01  2.408e+00
+    7   parent    55.13 4.991e+01  5.218e+00
+   14   parent    27.27 2.501e+01  2.257e+00
+   14   parent    26.64 2.501e+01  1.627e+00
+   21   parent    11.50 1.253e+01 -1.035e+00
+   21   parent    11.64 1.253e+01 -8.946e-01
+   35   parent     2.85 3.148e+00 -2.979e-01
+   35   parent     2.91 3.148e+00 -2.379e-01
+   50   parent     0.69 7.162e-01 -2.624e-02
+   50   parent     0.63 7.162e-01 -8.624e-02
+   75   parent     0.05 6.074e-02 -1.074e-02
+   75   parent     0.06 6.074e-02 -7.382e-04
+  100   parent       NA 5.151e-03         NA
+  100   parent       NA 5.151e-03         NA
+  120   parent       NA 7.155e-04         NA
+  120   parent       NA 7.155e-04         NA
+    0       m1     0.00 0.000e+00  0.000e+00
+    0       m1     0.00 0.000e+00  0.000e+00
+    1       m1     4.84 4.803e+00  3.704e-02
+    1       m1     5.64 4.803e+00  8.370e-01
+    3       m1    12.91 1.302e+01 -1.140e-01
+    3       m1    12.96 1.302e+01 -6.400e-02
+    7       m1    22.97 2.504e+01 -2.075e+00
+    7       m1    24.47 2.504e+01 -5.748e-01
+   14       m1    41.69 3.669e+01  5.000e+00
+   14       m1    33.21 3.669e+01 -3.480e+00
+   21       m1    44.37 4.165e+01  2.717e+00
+   21       m1    46.44 4.165e+01  4.787e+00
+   35       m1    41.22 4.331e+01 -2.093e+00
+   35       m1    37.95 4.331e+01 -5.363e+00
+   50       m1    41.19 4.122e+01 -2.831e-02
+   50       m1    40.01 4.122e+01 -1.208e+00
+   75       m1    40.09 3.645e+01  3.643e+00
+   75       m1    33.85 3.645e+01 -2.597e+00
+  100       m1    31.04 3.198e+01 -9.416e-01
+  100       m1    33.13 3.198e+01  1.148e+00
+  120       m1    25.15 2.879e+01 -3.640e+00
+  120       m1    33.31 2.879e+01  4.520e+00
 </div>
 <div class='input'>f.irls &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D, reweight.method = &quot;obs&quot;)
 </div>
-<div class='output'>Model cost at call  1 :  18635.19 
-Model cost at call  3 :  18635.19 
-Model cost at call  5 :  18635.19 
-Model cost at call  7 :  18059.44 
-Model cost at call  8 :  18059.44 
-Model cost at call  10 :  18059.44 
-Model cost at call  13 :  6605.279 
-Model cost at call  14 :  6605.279 
-Model cost at call  16 :  6605.278 
-Model cost at call  18 :  1067.272 
-Model cost at call  19 :  1067.272 
-Model cost at call  20 :  1067.272 
-Model cost at call  24 :  1009.357 
-Model cost at call  26 :  1009.357 
-Model cost at call  29 :  1001.038 
-Model cost at call  30 :  1001.038 
-Model cost at call  33 :  1001.038 
-Model cost at call  34 :  800.855 
-Model cost at call  35 :  800.855 
-Model cost at call  40 :  641.6486 
-Model cost at call  41 :  641.6486 
-Model cost at call  45 :  460.6378 
-Model cost at call  46 :  460.6378 
-Model cost at call  50 :  375 
-Model cost at call  51 :  375 
-Model cost at call  55 :  371.2136 
-Model cost at call  56 :  371.2136 
-Model cost at call  60 :  371.2134 
-Model cost at call  61 :  371.2134 
-Model cost at call  65 :  371.2134 
+<div class='output'>Model cost at call  1 :  15186.5 
+Model cost at call  3 :  15186.5 
+Model cost at call  7 :  14312.23 
+Model cost at call  8 :  14312.23 
+Model cost at call  11 :  14312.23 
+Model cost at call  12 :  3570.653 
+Model cost at call  15 :  3570.653 
+Model cost at call  17 :  828.6878 
+Model cost at call  18 :  828.6878 
+Model cost at call  22 :  374.5359 
+Model cost at call  23 :  374.5359 
+Model cost at call  27 :  371.2135 
+Model cost at call  28 :  371.2135 
+Model cost at call  29 :  371.2135 
+Model cost at call  32 :  371.2134 
+Model cost at call  36 :  371.2134 
+Model cost at call  37 :  371.2134 
 IRLS based on variance estimates for each observed variable
 Initial variance estimates are:
    parent        m1 
-11.552580  7.421227 
-Model cost at call  66 :  40 
-Model cost at call  69 :  40 
-Model cost at call  72 :  39.99278 
-Model cost at call  73 :  39.99278 
-Model cost at call  74 :  39.99278 
-Model cost at call  77 :  39.99278 
+11.552581  7.421226 
+Model cost at call  38 :  40 
+Model cost at call  41 :  40 
+Model cost at call  44 :  39.99278 
+Model cost at call  45 :  39.99278 
+Model cost at call  46 :  39.99278 
+Model cost at call  49 :  39.99278 
 Iteration 1 yields variance estimates:
    parent        m1 
-11.573171  7.407969 
+11.573172  7.407968 
 Sum of squared differences to last variance estimates: 1.5e-05 
 Iteration 2 yields variance estimates:
    parent        m1 
@@ -619,10 +622,10 @@ Sum of squared differences to last variance estimates: 1.7e-09
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:34 2014 
-Date of summary: Fri Jun 27 09:17:34 2014 
+Date of fit:     Fri Jul 11 12:37:24 2014 
+Date of summary: Fri Jul 11 12:37:24 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -633,12 +636,19 @@ eigen
 
 Weighting: none then iterative reweighting method obs
 
-Starting values for optimised parameters:
-                  value   type transformed lower_bound upper_bound
-parent_0       100.0000  state 100.0000000        -Inf         Inf
-k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
-f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
-k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
+Starting values for parameters to be optimised:
+                  value   type
+parent_0       100.0000  state
+k_parent         0.1000 deparm
+k_m1             0.1001 deparm
+f_parent_to_m1   0.5000 deparm
+
+Starting values for the transformed parameters actually optimised:
+                    value lower upper
+parent_0       100.000000  -Inf   Inf
+log_k_parent    -2.302585  -Inf   Inf
+log_k_m1        -2.301586  -Inf   Inf
+f_parent_ilr_1   0.000000  -Inf   Inf
 
 Fixed parameter values:
      value  type
@@ -647,129 +657,121 @@ m1_0     0 state
 Optimised, transformed parameters:
                Estimate Std. Error    Lower   Upper  t value  Pr(&gt;|t|)
 parent_0       99.67000    1.79200 96.04000 103.300  55.6300 1.636e-36
-k_parent       -2.31200    0.04560 -2.40400  -2.220 -50.7000 4.446e-35
-f_parent_to_m1  0.03785    0.06318 -0.09027   0.166   0.5992 5.528e-01
-k_m1           -5.25100    0.12510 -5.50500  -4.998 -41.9900 3.521e-32
+log_k_parent   -2.31200    0.04560 -2.40400  -2.220 -50.7000 4.446e-35
+log_k_m1       -5.25100    0.12510 -5.50500  -4.998 -41.9900 3.521e-32
+f_parent_ilr_1  0.03785    0.06318 -0.09027   0.166   0.5992 5.528e-01
                   Pr(&gt;t)
 parent_0       8.182e-37
-k_parent       2.223e-35
-f_parent_to_m1 2.764e-01
-k_m1           1.760e-32
+log_k_parent   2.223e-35
+log_k_m1       1.760e-32
+f_parent_ilr_1 2.764e-01
+
+Parameter correlation:
+               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
+parent_0         1.0000       0.5083  -0.1979        -0.6148
+log_k_parent     0.5083       1.0000  -0.3894        -0.6062
+log_k_m1        -0.1979      -0.3894   1.0000         0.7417
+f_parent_ilr_1  -0.6148      -0.6062   0.7417         1.0000
+
+Residual standard error: 1.054 on 36 degrees of freedom
 
 Backtransformed parameters:
                Estimate     Lower     Upper
 parent_0       99.67000 96.040000 1.033e+02
 k_parent        0.09906  0.090310 1.087e-01
-f_parent_to_m1  0.51340  0.468100 5.584e-01
 k_m1            0.00524  0.004066 6.753e-03
-
-Residual standard error: 1.054 on 36 degrees of freedom
+f_parent_to_m1  0.51340  0.468100 5.584e-01
 
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.399       4 15
-parent     6.466       2  7
-m1         4.679       2  8
+parent     6.159       1  8
+m1         4.307       0 10
+
+Resulting formation fractions:
+                ff
+parent_m1   0.5134
+parent_sink 0.4866
 
 Estimated disappearance times:
           DT50   DT90
 parent   6.997  23.24
 m1     132.282 439.43
 
-Parameter correlation:
-               parent_0 k_parent f_parent_to_m1    k_m1
-parent_0         1.0000   0.5083        -0.6148 -0.1979
-k_parent         0.5083   1.0000        -0.6062 -0.3894
-f_parent_to_m1  -0.6148  -0.6062         1.0000  0.7417
-k_m1            -0.1979  -0.3894         0.7417  1.0000
-
 Data:
- time variable observed  predicted   residual err.irls
-    0   parent    99.46  9.967e+01 -2.122e-01    3.402
-    0   parent   102.04  9.967e+01  2.368e+00    3.402
-    1   parent    93.50  9.027e+01  3.228e+00    3.402
-    1   parent    92.50  9.027e+01  2.228e+00    3.402
-    3   parent    63.23  7.405e+01 -1.082e+01    3.402
-    3   parent    68.99  7.405e+01 -5.056e+00    3.402
-    7   parent    52.32  4.982e+01  2.499e+00    3.402
-    7   parent    55.13  4.982e+01  5.309e+00    3.402
-   14   parent    27.27  2.490e+01  2.367e+00    3.402
-   14   parent    26.64  2.490e+01  1.737e+00    3.402
-   21   parent    11.50  1.245e+01 -9.477e-01    3.402
-   21   parent    11.64  1.245e+01 -8.077e-01    3.402
-   35   parent     2.85  3.110e+00 -2.600e-01    3.402
-   35   parent     2.91  3.110e+00 -2.000e-01    3.402
-   50   parent     0.69  7.037e-01 -1.375e-02    3.402
-   50   parent     0.63  7.037e-01 -7.375e-02    3.402
-   75   parent     0.05  5.913e-02 -9.134e-03    3.402
-   75   parent     0.06  5.913e-02  8.661e-04    3.402
-  100   parent       NA  4.969e-03         NA    3.402
-  100   parent       NA  4.969e-03         NA    3.402
-  120   parent       NA  6.852e-04         NA    3.402
-  120   parent       NA  6.852e-04         NA    3.402
-    0       m1     0.00 -7.105e-15  7.105e-15    2.722
-    0       m1     0.00 -7.105e-15  7.105e-15    2.722
-    1       m1     4.84  4.813e+00  2.672e-02    2.722
-    1       m1     5.64  4.813e+00  8.267e-01    2.722
-    3       m1    12.91  1.305e+01 -1.378e-01    2.722
-    3       m1    12.96  1.305e+01 -8.779e-02    2.722
-    7       m1    22.97  2.508e+01 -2.106e+00    2.722
-    7       m1    24.47  2.508e+01 -6.061e-01    2.722
-   14       m1    41.69  3.671e+01  4.983e+00    2.722
-   14       m1    33.21  3.671e+01 -3.497e+00    2.722
-   21       m1    44.37  4.165e+01  2.719e+00    2.722
-   21       m1    46.44  4.165e+01  4.789e+00    2.722
-   35       m1    41.22  4.329e+01 -2.069e+00    2.722
-   35       m1    37.95  4.329e+01 -5.339e+00    2.722
-   50       m1    41.19  4.119e+01 -3.388e-03    2.722
-   50       m1    40.01  4.119e+01 -1.183e+00    2.722
-   75       m1    40.09  3.644e+01  3.652e+00    2.722
-   75       m1    33.85  3.644e+01 -2.588e+00    2.722
-  100       m1    31.04  3.199e+01 -9.497e-01    2.722
-  100       m1    33.13  3.199e+01  1.140e+00    2.722
-  120       m1    25.15  2.881e+01 -3.659e+00    2.722
-  120       m1    33.31  2.881e+01  4.501e+00    2.722
+ time variable observed predicted   residual err.irls
+    0   parent    99.46 9.967e+01  -0.212177    3.402
+    0   parent   102.04 9.967e+01   2.367823    3.402
+    1   parent    93.50 9.027e+01   3.228474    3.402
+    1   parent    92.50 9.027e+01   2.228474    3.402
+    3   parent    63.23 7.405e+01 -10.816488    3.402
+    3   parent    68.99 7.405e+01  -5.056488    3.402
+    7   parent    52.32 4.982e+01   2.499070    3.402
+    7   parent    55.13 4.982e+01   5.309070    3.402
+   14   parent    27.27 2.490e+01   2.367112    3.402
+   14   parent    26.64 2.490e+01   1.737112    3.402
+   21   parent    11.50 1.245e+01  -0.947656    3.402
+   21   parent    11.64 1.245e+01  -0.807656    3.402
+   35   parent     2.85 3.110e+00  -0.260021    3.402
+   35   parent     2.91 3.110e+00  -0.200021    3.402
+   50   parent     0.69 7.037e-01  -0.013746    3.402
+   50   parent     0.63 7.037e-01  -0.073746    3.402
+   75   parent     0.05 5.913e-02  -0.009134    3.402
+   75   parent     0.06 5.913e-02   0.000866    3.402
+  100   parent       NA 4.969e-03         NA    3.402
+  100   parent       NA 4.969e-03         NA    3.402
+  120   parent       NA 6.852e-04         NA    3.402
+  120   parent       NA 6.852e-04         NA    3.402
+    0       m1     0.00 0.000e+00   0.000000    2.722
+    0       m1     0.00 0.000e+00   0.000000    2.722
+    1       m1     4.84 4.813e+00   0.026722    2.722
+    1       m1     5.64 4.813e+00   0.826722    2.722
+    3       m1    12.91 1.305e+01  -0.137785    2.722
+    3       m1    12.96 1.305e+01  -0.087785    2.722
+    7       m1    22.97 2.508e+01  -2.106149    2.722
+    7       m1    24.47 2.508e+01  -0.606149    2.722
+   14       m1    41.69 3.671e+01   4.982708    2.722
+   14       m1    33.21 3.671e+01  -3.497292    2.722
+   21       m1    44.37 4.165e+01   2.719498    2.722
+   21       m1    46.44 4.165e+01   4.789498    2.722
+   35       m1    41.22 4.329e+01  -2.068663    2.722
+   35       m1    37.95 4.329e+01  -5.338663    2.722
+   50       m1    41.19 4.119e+01  -0.003389    2.722
+   50       m1    40.01 4.119e+01  -1.183389    2.722
+   75       m1    40.09 3.644e+01   3.651797    2.722
+   75       m1    33.85 3.644e+01  -2.588203    2.722
+  100       m1    31.04 3.199e+01  -0.949712    2.722
+  100       m1    33.13 3.199e+01   1.140288    2.722
+  120       m1    25.15 2.881e+01  -3.658972    2.722
+  120       m1    33.31 2.881e+01   4.501028    2.722
 </div>
 <div class='input'>f.w.mean &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = &quot;mean&quot;)
 </div>
-<div class='output'>Model cost at call  1 :  24.38274 
-Model cost at call  3 :  24.38274 
-Model cost at call  5 :  24.38274 
-Model cost at call  7 :  23.62652 
-Model cost at call  8 :  23.62652 
-Model cost at call  10 :  23.62652 
-Model cost at call  13 :  9.539918 
-Model cost at call  14 :  9.539918 
-Model cost at call  16 :  9.539918 
-Model cost at call  18 :  1.339285 
-Model cost at call  19 :  1.339285 
-Model cost at call  20 :  1.339285 
-Model cost at call  24 :  1.151215 
-Model cost at call  26 :  1.151215 
-Model cost at call  29 :  1.126803 
-Model cost at call  30 :  1.126803 
-Model cost at call  31 :  1.126803 
-Model cost at call  34 :  0.9833148 
-Model cost at call  35 :  0.9833148 
-Model cost at call  40 :  0.8516604 
-Model cost at call  41 :  0.8516604 
-Model cost at call  44 :  0.8516604 
-Model cost at call  45 :  0.602075 
-Model cost at call  46 :  0.602075 
-Model cost at call  50 :  0.3871767 
-Model cost at call  51 :  0.3871767 
-Model cost at call  55 :  0.3478134 
-Model cost at call  56 :  0.3478134 
-Model cost at call  60 :  0.347807 
-Model cost at call  61 :  0.347807 
-Model cost at call  65 :  0.347807 
+<div class='output'>Model cost at call  1 :  19.84412 
+Model cost at call  3 :  19.84412 
+Model cost at call  7 :  18.69405 
+Model cost at call  8 :  18.69405 
+Model cost at call  11 :  18.69405 
+Model cost at call  12 :  5.235387 
+Model cost at call  15 :  5.235387 
+Model cost at call  17 :  0.817176 
+Model cost at call  18 :  0.8171759 
+Model cost at call  22 :  0.3509774 
+Model cost at call  23 :  0.3509774 
+Model cost at call  27 :  0.3478071 
+Model cost at call  28 :  0.3478071 
+Model cost at call  29 :  0.3478071 
+Model cost at call  32 :  0.347807 
+Model cost at call  33 :  0.347807 
+Model cost at call  36 :  0.347807 
+Model cost at call  37 :  0.347807 
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:35 2014 
-Date of summary: Fri Jun 27 09:17:35 2014 
+Date of fit:     Fri Jul 11 12:37:24 2014 
+Date of summary: Fri Jul 11 12:37:24 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -780,12 +782,19 @@ eigen
 
 Weighting: mean
 
-Starting values for optimised parameters:
-                  value   type transformed lower_bound upper_bound
-parent_0       100.0000  state 100.0000000        -Inf         Inf
-k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
-f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
-k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
+Starting values for parameters to be optimised:
+                  value   type
+parent_0       100.0000  state
+k_parent         0.1000 deparm
+k_m1             0.1001 deparm
+f_parent_to_m1   0.5000 deparm
+
+Starting values for the transformed parameters actually optimised:
+                    value lower upper
+parent_0       100.000000  -Inf   Inf
+log_k_parent    -2.302585  -Inf   Inf
+log_k_m1        -2.301586  -Inf   Inf
+f_parent_ilr_1   0.000000  -Inf   Inf
 
 Fixed parameter values:
      value  type
@@ -794,127 +803,119 @@ m1_0     0 state
 Optimised, transformed parameters:
                Estimate Std. Error    Lower    Upper t value  Pr(&gt;|t|)
 parent_0        99.7300    1.93200 95.81000 103.6000  51.630 2.332e-35
-k_parent        -2.3090    0.04837 -2.40700  -2.2110 -47.730 3.779e-34
-f_parent_to_m1   0.0354    0.06344 -0.09327   0.1641   0.558 5.803e-01
-k_m1            -5.2550    0.12070 -5.49900  -5.0100 -43.540 9.764e-33
+log_k_parent    -2.3090    0.04837 -2.40700  -2.2110 -47.730 3.779e-34
+log_k_m1        -5.2550    0.12070 -5.49900  -5.0100 -43.540 9.770e-33
+f_parent_ilr_1   0.0354    0.06344 -0.09327   0.1641   0.558 5.803e-01
                   Pr(&gt;t)
 parent_0       1.166e-35
-k_parent       1.889e-34
-f_parent_to_m1 2.901e-01
-k_m1           4.882e-33
+log_k_parent   1.890e-34
+log_k_m1       4.885e-33
+f_parent_ilr_1 2.901e-01
+
+Parameter correlation:
+               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
+parent_0         1.0000       0.5004  -0.2143        -0.6514
+log_k_parent     0.5004       1.0000  -0.4282        -0.6383
+log_k_m1        -0.2143      -0.4282   1.0000         0.7390
+f_parent_ilr_1  -0.6514      -0.6383   0.7390         1.0000
+
+Residual standard error: 0.09829 on 36 degrees of freedom
 
 Backtransformed parameters:
                 Estimate    Lower     Upper
 parent_0       99.730000 95.81000 1.036e+02
 k_parent        0.099360  0.09007 1.096e-01
-f_parent_to_m1  0.512500  0.46710 5.578e-01
 k_m1            0.005224  0.00409 6.672e-03
-
-Residual standard error: 0.09829 on 36 degrees of freedom
+f_parent_to_m1  0.512500  0.46710 5.578e-01
 
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.401       4 15
-parent     6.473       2  7
-m1         4.671       2  8
+parent     6.165       1  8
+m1         4.299       0 10
+
+Resulting formation fractions:
+                ff
+parent_m1   0.5125
+parent_sink 0.4875
 
 Estimated disappearance times:
           DT50   DT90
 parent   6.976  23.18
 m1     132.696 440.81
 
-Parameter correlation:
-               parent_0 k_parent f_parent_to_m1    k_m1
-parent_0         1.0000   0.5004        -0.6514 -0.2143
-k_parent         0.5004   1.0000        -0.6383 -0.4282
-f_parent_to_m1  -0.6514  -0.6383         1.0000  0.7390
-k_m1            -0.2143  -0.4282         0.7390  1.0000
-
 Data:
- time variable observed  predicted   residual
-    0   parent    99.46  9.973e+01 -2.706e-01
-    0   parent   102.04  9.973e+01  2.309e+00
-    1   parent    93.50  9.030e+01  3.202e+00
-    1   parent    92.50  9.030e+01  2.202e+00
-    3   parent    63.23  7.403e+01 -1.080e+01
-    3   parent    68.99  7.403e+01 -5.035e+00
-    7   parent    52.32  4.975e+01  2.572e+00
-    7   parent    55.13  4.975e+01  5.382e+00
-   14   parent    27.27  2.482e+01  2.454e+00
-   14   parent    26.64  2.482e+01  1.824e+00
-   21   parent    11.50  1.238e+01 -8.788e-01
-   21   parent    11.64  1.238e+01 -7.388e-01
-   35   parent     2.85  3.080e+00 -2.302e-01
-   35   parent     2.91  3.080e+00 -1.702e-01
-   50   parent     0.69  6.940e-01 -3.958e-03
-   50   parent     0.63  6.940e-01 -6.396e-02
-   75   parent     0.05  5.789e-02 -7.888e-03
-   75   parent     0.06  5.789e-02  2.112e-03
-  100   parent       NA  4.829e-03         NA
-  100   parent       NA  4.829e-03         NA
-  120   parent       NA  6.620e-04         NA
-  120   parent       NA  6.620e-04         NA
-    0       m1     0.00 -7.105e-15  7.105e-15
-    0       m1     0.00 -7.105e-15  7.105e-15
-    1       m1     4.84  4.821e+00  1.851e-02
-    1       m1     5.64  4.821e+00  8.185e-01
-    3       m1    12.91  1.307e+01 -1.567e-01
-    3       m1    12.96  1.307e+01 -1.067e-01
-    7       m1    22.97  2.510e+01 -2.131e+00
-    7       m1    24.47  2.510e+01 -6.311e-01
-   14       m1    41.69  3.672e+01  4.969e+00
-   14       m1    33.21  3.672e+01 -3.511e+00
-   21       m1    44.37  4.165e+01  2.722e+00
-   21       m1    46.44  4.165e+01  4.792e+00
-   35       m1    41.22  4.327e+01 -2.049e+00
-   35       m1    37.95  4.327e+01 -5.319e+00
-   50       m1    41.19  4.117e+01  1.636e-02
-   50       m1    40.01  4.117e+01 -1.164e+00
-   75       m1    40.09  3.643e+01  3.659e+00
-   75       m1    33.85  3.643e+01 -2.581e+00
-  100       m1    31.04  3.200e+01 -9.561e-01
-  100       m1    33.13  3.200e+01  1.134e+00
-  120       m1    25.15  2.882e+01 -3.674e+00
-  120       m1    33.31  2.882e+01  4.486e+00
+ time variable observed predicted   residual
+    0   parent    99.46 99.730573  -0.270573
+    0   parent   102.04 99.730573   2.309427
+    1   parent    93.50 90.298057   3.201943
+    1   parent    92.50 90.298057   2.201943
+    3   parent    63.23 74.025029 -10.795029
+    3   parent    68.99 74.025029  -5.035029
+    7   parent    52.32 49.748381   2.571619
+    7   parent    55.13 49.748381   5.381619
+   14   parent    27.27 24.815875   2.454125
+   14   parent    26.64 24.815875   1.824125
+   21   parent    11.50 12.378848  -0.878848
+   21   parent    11.64 12.378848  -0.738848
+   35   parent     2.85  3.080218  -0.230218
+   35   parent     2.91  3.080218  -0.170218
+   50   parent     0.69  0.693957  -0.003957
+   50   parent     0.63  0.693957  -0.063957
+   75   parent     0.05  0.057888  -0.007888
+   75   parent     0.06  0.057888   0.002112
+  100   parent       NA  0.004829         NA
+  100   parent       NA  0.004829         NA
+  120   parent       NA  0.000662         NA
+  120   parent       NA  0.000662         NA
+    0       m1     0.00  0.000000   0.000000
+    0       m1     0.00  0.000000   0.000000
+    1       m1     4.84  4.821488   0.018512
+    1       m1     5.64  4.821488   0.818512
+    3       m1    12.91 13.066692  -0.156692
+    3       m1    12.96 13.066692  -0.106692
+    7       m1    22.97 25.101058  -2.131058
+    7       m1    24.47 25.101058  -0.631058
+   14       m1    41.69 36.720922   4.969078
+   14       m1    33.21 36.720922  -3.510922
+   21       m1    44.37 41.648352   2.721648
+   21       m1    46.44 41.648352   4.791648
+   35       m1    41.22 43.269224  -2.049224
+   35       m1    37.95 43.269224  -5.319224
+   50       m1    41.19 41.173638   0.016362
+   50       m1    40.01 41.173638  -1.163638
+   75       m1    40.09 36.431224   3.658776
+   75       m1    33.85 36.431224  -2.581224
+  100       m1    31.04 31.996125  -0.956125
+  100       m1    33.13 31.996125   1.133875
+  120       m1    25.15 28.824129  -3.674129
+  120       m1    33.31 28.824129   4.485871
 </div>
 <div class='input'>f.w.mean.irls &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = &quot;mean&quot;,
                          reweight.method = &quot;obs&quot;)
 </div>
-<div class='output'>Model cost at call  1 :  24.38274 
-Model cost at call  3 :  24.38274 
-Model cost at call  5 :  24.38274 
-Model cost at call  7 :  23.62652 
-Model cost at call  8 :  23.62652 
-Model cost at call  10 :  23.62652 
-Model cost at call  13 :  9.539918 
-Model cost at call  14 :  9.539918 
-Model cost at call  16 :  9.539918 
-Model cost at call  18 :  1.339285 
-Model cost at call  19 :  1.339285 
-Model cost at call  20 :  1.339285 
-Model cost at call  24 :  1.151215 
-Model cost at call  26 :  1.151215 
-Model cost at call  29 :  1.126803 
-Model cost at call  30 :  1.126803 
-Model cost at call  31 :  1.126803 
-Model cost at call  34 :  0.9833148 
-Model cost at call  35 :  0.9833148 
-Model cost at call  40 :  0.8516604 
-Model cost at call  41 :  0.8516604 
-Model cost at call  44 :  0.8516604 
-Model cost at call  45 :  0.602075 
-Model cost at call  46 :  0.602075 
-Model cost at call  50 :  0.3871767 
-Model cost at call  51 :  0.3871767 
-Model cost at call  55 :  0.3478134 
-Model cost at call  56 :  0.3478134 
-Model cost at call  60 :  0.347807 
-Model cost at call  61 :  0.347807 
-Model cost at call  65 :  0.347807 
+<div class='output'>Model cost at call  1 :  19.84412 
+Model cost at call  3 :  19.84412 
+Model cost at call  7 :  18.69405 
+Model cost at call  8 :  18.69405 
+Model cost at call  11 :  18.69405 
+Model cost at call  12 :  5.235387 
+Model cost at call  15 :  5.235387 
+Model cost at call  17 :  0.817176 
+Model cost at call  18 :  0.8171759 
+Model cost at call  22 :  0.3509774 
+Model cost at call  23 :  0.3509774 
+Model cost at call  27 :  0.3478071 
+Model cost at call  28 :  0.3478071 
+Model cost at call  29 :  0.3478071 
+Model cost at call  32 :  0.347807 
+Model cost at call  33 :  0.347807 
+Model cost at call  36 :  0.347807 
+Model cost at call  37 :  0.347807 
 IRLS based on variance estimates for each observed variable
 Initial variance estimates are:
-  parent       m1 
-11.59564  7.39776 
+   parent        m1 
+11.595637  7.397759 
 Iteration 1 yields variance estimates:
    parent        m1 
 11.573623  7.407732 
@@ -926,10 +927,10 @@ Sum of squared differences to last variance estimates: 1.4e-09
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:36 2014 
-Date of summary: Fri Jun 27 09:17:36 2014 
+Date of fit:     Fri Jul 11 12:37:25 2014 
+Date of summary: Fri Jul 11 12:37:25 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -940,12 +941,19 @@ eigen
 
 Weighting: mean then iterative reweighting method obs
 
-Starting values for optimised parameters:
-                  value   type transformed lower_bound upper_bound
-parent_0       100.0000  state 100.0000000        -Inf         Inf
-k_parent         0.1000 deparm  -2.3025851        -Inf         Inf
-f_parent_to_m1   0.2000 deparm  -0.9802581        -Inf         Inf
-k_m1             0.1001 deparm  -2.3015856        -Inf         Inf
+Starting values for parameters to be optimised:
+                  value   type
+parent_0       100.0000  state
+k_parent         0.1000 deparm
+k_m1             0.1001 deparm
+f_parent_to_m1   0.5000 deparm
+
+Starting values for the transformed parameters actually optimised:
+                    value lower upper
+parent_0       100.000000  -Inf   Inf
+log_k_parent    -2.302585  -Inf   Inf
+log_k_m1        -2.301586  -Inf   Inf
+f_parent_ilr_1   0.000000  -Inf   Inf
 
 Fixed parameter values:
      value  type
@@ -954,88 +962,93 @@ m1_0     0 state
 Optimised, transformed parameters:
                Estimate Std. Error    Lower   Upper  t value  Pr(&gt;|t|)
 parent_0       99.67000    1.79200 96.04000 103.300  55.6300 1.638e-36
-k_parent       -2.31200    0.04560 -2.40400  -2.219 -50.7000 4.448e-35
-f_parent_to_m1  0.03785    0.06317 -0.09027   0.166   0.5992 5.528e-01
-k_m1           -5.25100    0.12510 -5.50500  -4.998 -41.9900 3.522e-32
+log_k_parent   -2.31200    0.04560 -2.40400  -2.219 -50.7000 4.448e-35
+log_k_m1       -5.25100    0.12510 -5.50500  -4.998 -41.9900 3.522e-32
+f_parent_ilr_1  0.03785    0.06317 -0.09027   0.166   0.5992 5.528e-01
                   Pr(&gt;t)
 parent_0       8.189e-37
-k_parent       2.224e-35
-f_parent_to_m1 2.764e-01
-k_m1           1.761e-32
+log_k_parent   2.224e-35
+log_k_m1       1.761e-32
+f_parent_ilr_1 2.764e-01
+
+Parameter correlation:
+               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
+parent_0         1.0000       0.5083  -0.1979        -0.6148
+log_k_parent     0.5083       1.0000  -0.3894        -0.6062
+log_k_m1        -0.1979      -0.3894   1.0000         0.7417
+f_parent_ilr_1  -0.6148      -0.6062   0.7417         1.0000
+
+Residual standard error: 1.054 on 36 degrees of freedom
 
 Backtransformed parameters:
                Estimate     Lower     Upper
 parent_0       99.67000 96.040000 1.033e+02
 k_parent        0.09906  0.090310 1.087e-01
-f_parent_to_m1  0.51340  0.468100 5.584e-01
 k_m1            0.00524  0.004066 6.753e-03
-
-Residual standard error: 1.054 on 36 degrees of freedom
+f_parent_to_m1  0.51340  0.468100 5.584e-01
 
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.399       4 15
-parent     6.466       2  7
-m1         4.679       2  8
+parent     6.159       1  8
+m1         4.307       0 10
+
+Resulting formation fractions:
+                ff
+parent_m1   0.5134
+parent_sink 0.4866
 
 Estimated disappearance times:
           DT50   DT90
 parent   6.997  23.24
 m1     132.282 439.43
 
-Parameter correlation:
-               parent_0 k_parent f_parent_to_m1    k_m1
-parent_0         1.0000   0.5083        -0.6148 -0.1979
-k_parent         0.5083   1.0000        -0.6062 -0.3894
-f_parent_to_m1  -0.6148  -0.6062         1.0000  0.7417
-k_m1            -0.1979  -0.3894         0.7417  1.0000
-
 Data:
- time variable observed  predicted   residual err.irls
-    0   parent    99.46  9.967e+01 -2.122e-01    3.402
-    0   parent   102.04  9.967e+01  2.368e+00    3.402
-    1   parent    93.50  9.027e+01  3.228e+00    3.402
-    1   parent    92.50  9.027e+01  2.228e+00    3.402
-    3   parent    63.23  7.405e+01 -1.082e+01    3.402
-    3   parent    68.99  7.405e+01 -5.056e+00    3.402
-    7   parent    52.32  4.982e+01  2.499e+00    3.402
-    7   parent    55.13  4.982e+01  5.309e+00    3.402
-   14   parent    27.27  2.490e+01  2.367e+00    3.402
-   14   parent    26.64  2.490e+01  1.737e+00    3.402
-   21   parent    11.50  1.245e+01 -9.476e-01    3.402
-   21   parent    11.64  1.245e+01 -8.076e-01    3.402
-   35   parent     2.85  3.110e+00 -2.600e-01    3.402
-   35   parent     2.91  3.110e+00 -2.000e-01    3.402
-   50   parent     0.69  7.037e-01 -1.374e-02    3.402
-   50   parent     0.63  7.037e-01 -7.374e-02    3.402
-   75   parent     0.05  5.913e-02 -9.134e-03    3.402
-   75   parent     0.06  5.913e-02  8.663e-04    3.402
-  100   parent       NA  4.969e-03         NA    3.402
-  100   parent       NA  4.969e-03         NA    3.402
-  120   parent       NA  6.852e-04         NA    3.402
-  120   parent       NA  6.852e-04         NA    3.402
-    0       m1     0.00 -7.105e-15  7.105e-15    2.722
-    0       m1     0.00 -7.105e-15  7.105e-15    2.722
-    1       m1     4.84  4.813e+00  2.672e-02    2.722
-    1       m1     5.64  4.813e+00  8.267e-01    2.722
-    3       m1    12.91  1.305e+01 -1.378e-01    2.722
-    3       m1    12.96  1.305e+01 -8.779e-02    2.722
-    7       m1    22.97  2.508e+01 -2.106e+00    2.722
-    7       m1    24.47  2.508e+01 -6.062e-01    2.722
-   14       m1    41.69  3.671e+01  4.983e+00    2.722
-   14       m1    33.21  3.671e+01 -3.497e+00    2.722
-   21       m1    44.37  4.165e+01  2.719e+00    2.722
-   21       m1    46.44  4.165e+01  4.789e+00    2.722
-   35       m1    41.22  4.329e+01 -2.069e+00    2.722
-   35       m1    37.95  4.329e+01 -5.339e+00    2.722
-   50       m1    41.19  4.119e+01 -3.387e-03    2.722
-   50       m1    40.01  4.119e+01 -1.183e+00    2.722
-   75       m1    40.09  3.644e+01  3.652e+00    2.722
-   75       m1    33.85  3.644e+01 -2.588e+00    2.722
-  100       m1    31.04  3.199e+01 -9.497e-01    2.722
-  100       m1    33.13  3.199e+01  1.140e+00    2.722
-  120       m1    25.15  2.881e+01 -3.659e+00    2.722
-  120       m1    33.31  2.881e+01  4.501e+00    2.722
+ time variable observed predicted   residual err.irls
+    0   parent    99.46 9.967e+01 -2.122e-01    3.402
+    0   parent   102.04 9.967e+01  2.368e+00    3.402
+    1   parent    93.50 9.027e+01  3.228e+00    3.402
+    1   parent    92.50 9.027e+01  2.228e+00    3.402
+    3   parent    63.23 7.405e+01 -1.082e+01    3.402
+    3   parent    68.99 7.405e+01 -5.056e+00    3.402
+    7   parent    52.32 4.982e+01  2.499e+00    3.402
+    7   parent    55.13 4.982e+01  5.309e+00    3.402
+   14   parent    27.27 2.490e+01  2.367e+00    3.402
+   14   parent    26.64 2.490e+01  1.737e+00    3.402
+   21   parent    11.50 1.245e+01 -9.476e-01    3.402
+   21   parent    11.64 1.245e+01 -8.076e-01    3.402
+   35   parent     2.85 3.110e+00 -2.600e-01    3.402
+   35   parent     2.91 3.110e+00 -2.000e-01    3.402
+   50   parent     0.69 7.037e-01 -1.374e-02    3.402
+   50   parent     0.63 7.037e-01 -7.374e-02    3.402
+   75   parent     0.05 5.913e-02 -9.134e-03    3.402
+   75   parent     0.06 5.913e-02  8.663e-04    3.402
+  100   parent       NA 4.969e-03         NA    3.402
+  100   parent       NA 4.969e-03         NA    3.402
+  120   parent       NA 6.852e-04         NA    3.402
+  120   parent       NA 6.852e-04         NA    3.402
+    0       m1     0.00 0.000e+00  0.000e+00    2.722
+    0       m1     0.00 0.000e+00  0.000e+00    2.722
+    1       m1     4.84 4.813e+00  2.672e-02    2.722
+    1       m1     5.64 4.813e+00  8.267e-01    2.722
+    3       m1    12.91 1.305e+01 -1.378e-01    2.722
+    3       m1    12.96 1.305e+01 -8.779e-02    2.722
+    7       m1    22.97 2.508e+01 -2.106e+00    2.722
+    7       m1    24.47 2.508e+01 -6.062e-01    2.722
+   14       m1    41.69 3.671e+01  4.983e+00    2.722
+   14       m1    33.21 3.671e+01 -3.497e+00    2.722
+   21       m1    44.37 4.165e+01  2.719e+00    2.722
+   21       m1    46.44 4.165e+01  4.789e+00    2.722
+   35       m1    41.22 4.329e+01 -2.069e+00    2.722
+   35       m1    37.95 4.329e+01 -5.339e+00    2.722
+   50       m1    41.19 4.119e+01 -3.387e-03    2.722
+   50       m1    40.01 4.119e+01 -1.183e+00    2.722
+   75       m1    40.09 3.644e+01  3.652e+00    2.722
+   75       m1    33.85 3.644e+01 -2.588e+00    2.722
+  100       m1    31.04 3.199e+01 -9.497e-01    2.722
+  100       m1    33.13 3.199e+01  1.140e+00    2.722
+  120       m1    25.15 2.881e+01 -3.659e+00    2.722
+  120       m1    33.31 2.881e+01  4.501e+00    2.722
 </div>
 <div class='input'>
 ## &lt;strong&gt;Not run&lt;/strong&gt;: 

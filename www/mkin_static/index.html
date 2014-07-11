@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. mkin 0.9-29</title>
+<title>Index. mkin 0.9-30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-29</a>
+      <a class="brand" href="#">mkin 0.9-30</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -85,7 +85,24 @@ summary(SFO.fit)
 plot(SFO.fit) 
 </code></pre>
 
-<p>For more examples have a look at the examples provided in the
+<p>A fairly complex usage example using a built-in dataset:</p>
+
+<pre><code>data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
+
+model &lt;- mkinmod(
+  parent = list(type = &quot;SFO&quot;, to = c(&quot;A1&quot;, &quot;B1&quot;, &quot;C1&quot;), sink = FALSE),
+  A1 = list(type = &quot;SFO&quot;, to = &quot;A2&quot;),
+  B1 = list(type = &quot;SFO&quot;),
+  C1 = list(type = &quot;SFO&quot;),
+  A2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
+
+fit &lt;- mkinfit(model, data, method.modFit = &quot;Port&quot;)
+
+plot(fit, show_residuals = TRUE) 
+s &lt;- summary(fit)
+</code></pre>
+
+<p>For more examples and to see results, have a look at the examples provided in the
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html"><code>mkinfit</code></a>
 documentation 
 or the package vignettes referenced from the 
@@ -112,8 +129,8 @@ by default.</li>
 internally using the <code>modFit</code> function from the <code>FME</code> package,
 which uses the least-squares Levenberg-Marquardt algorithm from
 <code>minpack.lm</code> per default.</li>
-<li>Kinetic rate constants and kinetic formation fractions are transformed 
-internally using
+<li>By default, kinetic rate constants and kinetic formation fractions are
+transformed internally using
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/transform_odeparms.html"><code>transform_odeparms</code></a>
 so their estimators can more reasonably be expected to follow
 a normal distribution. This has the side effect that no constraints

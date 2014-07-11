@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mccall81_245T. mkin 0.9-29</title>
+<title>mccall81_245T. mkin 0.9-30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-29</a>
+      <a class="brand" href="#">mkin 0.9-30</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -119,10 +119,10 @@ Model cost at call  57 :  139.1138
 </div>
 <div class='input'>  summary(fit.2, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.29 
+<div class='output'>mkin version:    0.9.30 
 R version:       3.1.0 
-Date of fit:     Fri Jun 27 09:17:31 2014 
-Date of summary: Fri Jun 27 09:17:31 2014 
+Date of fit:     Fri Jul 11 12:37:21 2014 
+Date of summary: Fri Jul 11 12:37:21 2014 
 
 Equations:
 [1] d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245                                  
@@ -134,13 +134,21 @@ eigen
 
 Weighting: none
 
-Starting values for optimised parameters:
-                    value   type transformed lower_bound upper_bound
-T245_0           100.0000  state  100.000000        -Inf         Inf
-k_T245_sink        0.1000 deparm   -2.302585        -Inf         Inf
-k_T245_phenol      0.1001 deparm   -2.301586        -Inf         Inf
-k_phenol_anisole   0.1002 deparm   -2.300587        -Inf         Inf
-k_anisole_sink     0.1003 deparm   -2.299590        -Inf         Inf
+Starting values for parameters to be optimised:
+                    value   type
+T245_0           100.0000  state
+k_T245_sink        0.1000 deparm
+k_T245_phenol      0.1001 deparm
+k_phenol_anisole   0.1002 deparm
+k_anisole_sink     0.1003 deparm
+
+Starting values for the transformed parameters actually optimised:
+                          value lower upper
+T245_0               100.000000  -Inf   Inf
+log_k_T245_sink       -2.302585  -Inf   Inf
+log_k_T245_phenol     -2.301586  -Inf   Inf
+log_k_phenol_anisole  -2.300587  -Inf   Inf
+log_k_anisole_sink    -2.299590  -Inf   Inf
 
 Fixed parameter values:
               value   type
@@ -149,18 +157,34 @@ anisole_0         0  state
 k_phenol_sink     0 deparm
 
 Optimised, transformed parameters:
-                 Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)
-T245_0           103.9000    2.35200 98.930 108.8000  44.160 1.292e-20
-k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.646e-18
-k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24
-k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.127e-03
-k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21
-                    Pr(&gt;t)
-T245_0           6.462e-21
-k_T245_sink      4.823e-18
-k_T245_phenol    5.997e-25
-k_phenol_anisole 4.063e-03
-k_anisole_sink   4.950e-21
+                     Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)
+T245_0               103.9000    2.35200 98.930 108.8000  44.160 1.292e-20
+log_k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.646e-18
+log_k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24
+log_k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.127e-03
+log_k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21
+                        Pr(&gt;t)
+T245_0               6.462e-21
+log_k_T245_sink      4.823e-18
+log_k_T245_phenol    5.997e-25
+log_k_phenol_anisole 4.063e-03
+log_k_anisole_sink   4.950e-21
+
+Parameter correlation:
+                       T245_0 log_k_T245_sink log_k_T245_phenol
+T245_0                1.00000         0.63761           -0.1742
+log_k_T245_sink       0.63761         1.00000           -0.3831
+log_k_T245_phenol    -0.17416        -0.38314            1.0000
+log_k_phenol_anisole -0.05948         0.08745           -0.3047
+log_k_anisole_sink   -0.16208        -0.60469            0.5227
+                     log_k_phenol_anisole log_k_anisole_sink
+T245_0                           -0.05948            -0.1621
+log_k_T245_sink                   0.08745            -0.6047
+log_k_T245_phenol                -0.30470             0.5227
+log_k_phenol_anisole              1.00000            -0.1774
+log_k_anisole_sink               -0.17744             1.0000
+
+Residual standard error: 2.706 on 19 degrees of freedom
 
 Backtransformed parameters:
                   Estimate     Lower     Upper
@@ -170,22 +194,14 @@ k_T245_phenol    2.701e-02  0.024320   0.02999
 k_phenol_anisole 4.051e-01  0.213600   0.76820
 k_anisole_sink   6.679e-03  0.005285   0.00844
 
-Residual standard error: 2.706 on 19 degrees of freedom
-
 Chi2 error levels in percent:
          err.min n.optim df
 All data   9.831       5 17
-T245       7.908       3  5
-phenol    99.809       1  6
-anisole    5.379       1  6
+T245       7.015       1  7
+phenol    94.429       0  7
+anisole    5.089       0  7
 
-Estimated disappearance times:
-           DT50    DT90
-T245     15.982  53.091
-phenol    1.711   5.685
-anisole 103.784 344.763
-
-Estimated formation fractions:
+Resulting formation fractions:
                    ff
 T245_sink      0.3772
 T245_phenol    0.6228
@@ -193,19 +209,11 @@ phenol_sink    0.0000
 phenol_anisole 1.0000
 anisole_sink   1.0000
 
-Parameter correlation:
-                   T245_0 k_T245_sink k_T245_phenol k_phenol_anisole
-T245_0            1.00000     0.63761       -0.1742         -0.05948
-k_T245_sink       0.63761     1.00000       -0.3831          0.08745
-k_T245_phenol    -0.17416    -0.38314        1.0000         -0.30470
-k_phenol_anisole -0.05948     0.08745       -0.3047          1.00000
-k_anisole_sink   -0.16208    -0.60469        0.5227         -0.17744
-                 k_anisole_sink
-T245_0                  -0.1621
-k_T245_sink             -0.6047
-k_T245_phenol            0.5227
-k_phenol_anisole        -0.1774
-k_anisole_sink           1.0000
+Estimated disappearance times:
+           DT50    DT90
+T245     15.982  53.091
+phenol    1.711   5.685
+anisole 103.784 344.763
 </div></pre>
   </div>
   <div class="span4">
