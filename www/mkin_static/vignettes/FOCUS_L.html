@@ -223,10 +223,10 @@ FOCUS report.</p>
 summary(m.L1.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:31 2014 
-## Date of summary: Fri Jul 11 12:37:31 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:17 2014 
+## Date of summary: Mon Jul 14 20:23:17 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -272,7 +272,7 @@ summary(m.L1.SFO)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    3.42       2  7
-## parent      3.26       1  8
+## parent      3.42       2  7
 ## 
 ## Resulting formation fractions:
 ##             ff
@@ -325,10 +325,10 @@ is checked.</p>
 summary(m.L1.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:33 2014 
-## Date of summary: Fri Jul 11 12:37:33 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:18 2014 
+## Date of summary: Mon Jul 14 20:23:18 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -373,7 +373,7 @@ summary(m.L1.FOMC, data = FALSE)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    3.62       3  6
-## parent      3.26       1  8
+## parent      3.62       3  6
 ## 
 ## Estimated disappearance times:
 ##        DT50 DT90 DT50back
@@ -417,10 +417,10 @@ FOCUS_2006_L2_mkin &lt;- mkin_wide_to_long(FOCUS_2006_L2)
 summary(m.L2.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:33 2014 
-## Date of summary: Fri Jul 11 12:37:33 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:18 2014 
+## Date of summary: Mon Jul 14 20:23:18 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -466,7 +466,7 @@ summary(m.L2.SFO)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    14.4       2  4
-## parent      13.3       1  5
+## parent      14.4       2  4
 ## 
 ## Resulting formation fractions:
 ##             ff
@@ -526,10 +526,10 @@ mkinresplot(m.L2.FOMC)
 <pre><code class="r">summary(m.L2.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:34 2014 
-## Date of summary: Fri Jul 11 12:37:34 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:19 2014 
+## Date of summary: Mon Jul 14 20:23:19 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -576,8 +576,8 @@ mkinresplot(m.L2.FOMC)
 ## 
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
-## All data    6.20       3  3
-## parent      5.21       1  5
+## All data     6.2       3  3
+## parent       6.2       3  3
 ## 
 ## Estimated disappearance times:
 ##         DT50 DT90 DT50back
@@ -611,10 +611,10 @@ plot(m.L2.DFOP)
 <pre><code class="r">summary(m.L2.DFOP, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:34 2014 
-## Date of summary: Fri Jul 11 12:37:34 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:19 2014 
+## Date of summary: Mon Jul 14 20:23:19 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - ((k1 * g * exp(-k1 * time) + k2 * (1 - g) * exp(-k2 * time)) / (g * exp(-k1 * time) + (1 - g) * exp(-k2 * time))) * parent
@@ -663,7 +663,7 @@ plot(m.L2.DFOP)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    2.53       4  2
-## parent      1.86       1  5
+## parent      2.53       4  2
 ## 
 ## Estimated disappearance times:
 ##        DT50 DT90 DT50_k1 DT50_k2
@@ -697,10 +697,10 @@ plot(m.L3.SFO)
 <pre><code class="r">summary(m.L3.SFO)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:36 2014 
-## Date of summary: Fri Jul 11 12:37:36 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:21 2014 
+## Date of summary: Mon Jul 14 20:23:21 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -746,7 +746,7 @@ plot(m.L3.SFO)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    21.2       2  6
-## parent      20.1       1  7
+## parent      21.2       2  6
 ## 
 ## Resulting formation fractions:
 ##             ff
@@ -782,10 +782,10 @@ plot(m.L3.FOMC)
 <pre><code class="r">summary(m.L3.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:36 2014 
-## Date of summary: Fri Jul 11 12:37:36 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:21 2014 
+## Date of summary: Mon Jul 14 20:23:21 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -833,7 +833,7 @@ plot(m.L3.FOMC)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    7.32       3  5
-## parent      6.49       1  7
+## parent      7.32       3  5
 ## 
 ## Estimated disappearance times:
 ##        DT50 DT90 DT50back
@@ -854,10 +854,10 @@ plot(m.L3.DFOP)
 <pre><code class="r">summary(m.L3.DFOP, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:37 2014 
-## Date of summary: Fri Jul 11 12:37:37 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:22 2014 
+## Date of summary: Mon Jul 14 20:23:22 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - ((k1 * g * exp(-k1 * time) + k2 * (1 - g) * exp(-k2 * time)) / (g * exp(-k1 * time) + (1 - g) * exp(-k2 * time))) * parent
@@ -910,7 +910,7 @@ plot(m.L3.DFOP)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    2.23       4  4
-## parent      1.83       1  7
+## parent      2.23       4  4
 ## 
 ## Estimated disappearance times:
 ##        DT50 DT90 DT50_k1 DT50_k2
@@ -944,10 +944,10 @@ plot(m.L4.SFO)
 <pre><code class="r">summary(m.L4.SFO, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:37 2014 
-## Date of summary: Fri Jul 11 12:37:37 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:22 2014 
+## Date of summary: Mon Jul 14 20:23:22 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - k_parent_sink * parent
@@ -993,7 +993,7 @@ plot(m.L4.SFO)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    3.29       2  6
-## parent      3.11       1  7
+## parent      3.29       2  6
 ## 
 ## Resulting formation fractions:
 ##             ff
@@ -1018,10 +1018,10 @@ plot(m.L4.FOMC)
 <pre><code class="r">summary(m.L4.FOMC, data = FALSE)
 </code></pre>
 
-<pre><code>## mkin version:    0.9.30 
-## R version:       3.1.0 
-## Date of fit:     Fri Jul 11 12:37:37 2014 
-## Date of summary: Fri Jul 11 12:37:37 2014 
+<pre><code>## mkin version:    0.9.31 
+## R version:       3.1.1 
+## Date of fit:     Mon Jul 14 20:23:24 2014 
+## Date of summary: Mon Jul 14 20:23:24 2014 
 ## 
 ## Equations:
 ## [1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
@@ -1069,7 +1069,7 @@ plot(m.L4.FOMC)
 ## Chi2 error levels in percent:
 ##          err.min n.optim df
 ## All data    2.03       3  5
-## parent      1.80       1  7
+## parent      2.03       3  5
 ## 
 ## Estimated disappearance times:
 ##        DT50 DT90 DT50back
