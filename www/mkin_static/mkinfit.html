@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-30</title>
+<title>mkinfit. mkin 0.9-31</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-30</a>
+      <a class="brand" href="#">mkin 0.9-31</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -55,13 +55,13 @@
       <dt>observed</dt>
       <dd>
     The observed data. It has to be in the long format as described in
-    <code>modFit</code>, i.e. the first column called "name" must contain the
+    <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>modFit</a></code>, i.e. the first column called "name" must contain the
     name of the observed variable for each data point. The second column must
     contain the times of observation, named "time".  The third column must be
     named "value" and contain the observed values. Optionally, a further column
     can contain weights for each data point. If it is not named "err", its name
     must be passed as a further argument named <code>err</code> which is then passed
-    on to <code>modFit</code>.
+    on to <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>modFit</a></code>.
   </dd>
       <dt>parms.ini</dt>
       <dd>
@@ -101,7 +101,7 @@
     If set to "eigen", the solution of the system of differential equations is
     based on the spectral decomposition of the coefficient matrix in cases that
     this is possible. If set to "deSolve", a numerical ode solver from package
-    <code>deSolve</code> is used. If set to "analytical", an analytical
+    <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/deSolve'>deSolve</a></code> is used. If set to "analytical", an analytical
     solution of the model is used. This is only implemented for simple
     degradation experiments with only one state variable, i.e. with no
     metabolites. The default is "auto", which uses "analytical" if possible,
@@ -113,12 +113,12 @@
       <dt>method.ode</dt>
       <dd>
     The solution method passed via <code><a href='mkinpredict.html'>mkinpredict</a></code> to
-    <code>ode</code> in case the solution type is "deSolve". The default
+    <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/ode'>ode</a></code> in case the solution type is "deSolve". The default
     "lsoda" is performant, but sometimes fails to converge.
   </dd>
       <dt>method.modFit</dt>
       <dd>
-    The optimisation method passed to <code>modFit</code>.  The default "Marq"
+    The optimisation method passed to <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>modFit</a></code>.  The default "Marq"
     is the Levenberg Marquardt algorithm <code><a href='http://www.inside-r.org/packages/cran/minpack.lm/docs/nls.lm'>nls.lm</a></code> from the package
     <code>minpack.lm</code> and usually needs the least number of iterations.
 
@@ -132,7 +132,7 @@
       <dt>control.modFit</dt>
       <dd>
     Additional arguments passed to the optimisation method used by
-    <code>modFit</code>.
+    <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>modFit</a></code>.
   </dd>
       <dt>transform_rates</dt>
       <dd>
@@ -165,27 +165,27 @@
       <dt>err </dt>
       <dd>either <code>NULL</code>, or the name of the column with the
     <em>error</em> estimates, used to weigh the residuals (see details of
-    <code>modCost</code>); if <code>NULL</code>, then the residuals are not weighed.
+    <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modCost'>modCost</a></code>); if <code>NULL</code>, then the residuals are not weighed.
   </dd>
       <dt>weight</dt>
       <dd>
     only if <code>err</code>=<code>NULL</code>: how to weight the residuals, one of "none",
-    "std", "mean", see details of <code>modCost</code>.
+    "std", "mean", see details of <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modCost'>modCost</a></code>.
   </dd>
       <dt>scaleVar</dt>
       <dd>
-    Will be passed to <code>modCost</code>. Default is not to scale Variables
+    Will be passed to <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modCost'>modCost</a></code>. Default is not to scale Variables
     according to the number of observations.
   </dd>
       <dt>atol</dt>
       <dd>
-    Absolute error tolerance, passed to <code>ode</code>. Default is 1e-8,
-    lower than in <code>lsoda</code>.
+    Absolute error tolerance, passed to <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/ode'>ode</a></code>. Default is 1e-8,
+    lower than in <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/lsoda'>lsoda</a></code>.
   </dd>
       <dt>rtol</dt>
       <dd>
-    Absolute error tolerance, passed to <code>ode</code>. Default is 1e-10,
-    much lower than in <code>lsoda</code>.
+    Absolute error tolerance, passed to <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/ode'>ode</a></code>. Default is 1e-10,
+    much lower than in <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/lsoda'>lsoda</a></code>.
   </dd>
       <dt>n.outtimes</dt>
       <dd>
@@ -220,7 +220,7 @@
   </dd>
       <dt>...</dt>
       <dd>
-    Further arguments that will be passed to <code>modFit</code>. 
+    Further arguments that will be passed to <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>modFit</a></code>. 
   </dd>
     </dl>
     
@@ -228,7 +228,7 @@
       <h2>Description</h2>
       
       <p>This function uses the Flexible Modelling Environment package
-  <code>FME</code> to create a function calculating the model cost, i.e. the 
+  <code><a href='http://www.inside-r.org/packages/cran/FME/docs/FME'>FME</a></code> to create a function calculating the model cost, i.e. the 
   deviation between the kinetic model and the observed data. This model cost is
   then minimised using the Levenberg-Marquardt algorithm <code><a href='http://www.inside-r.org/packages/cran/minpack.lm/docs/nls.lm'>nls.lm</a></code>, 
   using the specified initial or fixed parameters and starting values.
@@ -284,10 +284,10 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.30 
-R version:       3.1.0 
-Date of fit:     Fri Jul 11 12:37:22 2014 
-Date of summary: Fri Jul 11 12:37:22 2014 
+<div class='output'>mkin version:    0.9.31 
+R version:       3.1.1 
+Date of fit:     Mon Jul 14 20:23:07 2014 
+Date of summary: Mon Jul 14 20:23:07 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -347,8 +347,8 @@ k_m1_sink      0.005261  0.003992 6.933e-03
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.398       4 15
-parent     6.152       1  8
-m1         4.317       0 10
+parent     6.827       3  6
+m1         4.490       1  9
 
 Resulting formation fractions:
                 ff
@@ -459,10 +459,10 @@ Model cost at call  37 :  371.2134
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.30 
-R version:       3.1.0 
-Date of fit:     Fri Jul 11 12:37:23 2014 
-Date of summary: Fri Jul 11 12:37:23 2014 
+<div class='output'>mkin version:    0.9.31 
+R version:       3.1.1 
+Date of fit:     Mon Jul 14 20:23:08 2014 
+Date of summary: Mon Jul 14 20:23:08 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -522,8 +522,8 @@ f_parent_to_m1  0.514500  0.468100 5.606e-01
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.398       4 15
-parent     6.152       1  8
-m1         4.317       0 10
+parent     6.459       2  7
+m1         4.690       2  8
 
 Resulting formation fractions:
                 ff
@@ -622,10 +622,10 @@ Sum of squared differences to last variance estimates: 1.7e-09
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.30 
-R version:       3.1.0 
-Date of fit:     Fri Jul 11 12:37:24 2014 
-Date of summary: Fri Jul 11 12:37:24 2014 
+<div class='output'>mkin version:    0.9.31 
+R version:       3.1.1 
+Date of fit:     Mon Jul 14 20:23:09 2014 
+Date of summary: Mon Jul 14 20:23:09 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -685,8 +685,8 @@ f_parent_to_m1  0.51340  0.468100 5.584e-01
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.399       4 15
-parent     6.159       1  8
-m1         4.307       0 10
+parent     6.466       2  7
+m1         4.679       2  8
 
 Resulting formation fractions:
                 ff
@@ -768,10 +768,10 @@ Model cost at call  37 :  0.347807
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.30 
-R version:       3.1.0 
-Date of fit:     Fri Jul 11 12:37:24 2014 
-Date of summary: Fri Jul 11 12:37:24 2014 
+<div class='output'>mkin version:    0.9.31 
+R version:       3.1.1 
+Date of fit:     Mon Jul 14 20:23:09 2014 
+Date of summary: Mon Jul 14 20:23:09 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -831,8 +831,8 @@ f_parent_to_m1  0.512500  0.46710 5.578e-01
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.401       4 15
-parent     6.165       1  8
-m1         4.299       0 10
+parent     6.473       2  7
+m1         4.671       2  8
 
 Resulting formation fractions:
                 ff
@@ -927,10 +927,10 @@ Sum of squared differences to last variance estimates: 1.4e-09
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.30 
-R version:       3.1.0 
-Date of fit:     Fri Jul 11 12:37:25 2014 
-Date of summary: Fri Jul 11 12:37:25 2014 
+<div class='output'>mkin version:    0.9.31 
+R version:       3.1.1 
+Date of fit:     Mon Jul 14 20:23:10 2014 
+Date of summary: Mon Jul 14 20:23:10 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
@@ -990,8 +990,8 @@ f_parent_to_m1  0.51340  0.468100 5.584e-01
 Chi2 error levels in percent:
          err.min n.optim df
 All data   6.399       4 15
-parent     6.159       1  8
-m1         4.307       0 10
+parent     6.466       2  7
+m1         4.679       2  8
 
 Resulting formation fractions:
                 ff
