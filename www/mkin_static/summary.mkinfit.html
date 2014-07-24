@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>summary.mkinfit. mkin 0.9-31</title>
+<title>summary.mkinfit. mkin 0.9-32</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@harlan.com,uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-31</a>
+      <a class="brand" href="#">mkin 0.9-32</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -128,18 +128,18 @@
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>  summary(mkinfit(mkinmod(parent = list(type = &quot;SFO&quot;)), FOCUS_2006_A))
 </div>
-<div class='output'>Model cost at call  1 :  5178.93 
-Model cost at call  3 :  5178.929 
-Model cost at call  5 :  578.5964 
-Model cost at call  6 :  578.5963 
-Model cost at call  7 :  578.5963 
-Model cost at call  8 :  235.8654 
-Model cost at call  9 :  235.8654 
-Model cost at call  11 :  222.1958 
-Model cost at call  12 :  222.1958 
-Model cost at call  13 :  222.1958 
-Model cost at call  14 :  221.8206 
-Model cost at call  15 :  221.8206 
+<div class='output'>Model cost at call  1 :  5050.468 
+Model cost at call  3 :  5050.468 
+Model cost at call  5 :  556.8327 
+Model cost at call  6 :  556.8327 
+Model cost at call  7 :  556.8326 
+Model cost at call  8 :  235.1917 
+Model cost at call  9 :  235.1917 
+Model cost at call  11 :  222.1855 
+Model cost at call  12 :  222.1855 
+Model cost at call  13 :  222.1855 
+Model cost at call  14 :  221.8203 
+Model cost at call  15 :  221.8203 
 Model cost at call  17 :  221.8082 
 Model cost at call  18 :  221.8082 
 Model cost at call  19 :  221.8082 
@@ -149,27 +149,28 @@ Model cost at call  23 :  221.8078
 Model cost at call  25 :  221.8078 
 Model cost at call  26 :  221.8078 
 </div>
-<div class='output'>mkin version:    0.9.31 
+<div class='output'>mkin version:    0.9.32 
 R version:       3.1.1 
-Date of fit:     Mon Jul 14 20:32:16 2014 
-Date of summary: Mon Jul 14 20:32:16 2014 
+Date of fit:     Thu Jul 24 10:32:06 2014 
+Date of summary: Thu Jul 24 10:32:06 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent
 
-Method used for solution of differential equation system:
-analytical 
+Model predictions using solution type analytical 
+
+Fitted with method Marq using 26 model solutions performed in 0.149 s
 
 Weighting: none
 
 Starting values for parameters to be optimised:
-              value   type
-parent_0      100.0  state
-k_parent_sink   0.1 deparm
+               value   type
+parent_0      101.24  state
+k_parent_sink   0.10 deparm
 
 Starting values for the transformed parameters actually optimised:
                        value lower upper
-parent_0          100.000000  -Inf   Inf
+parent_0          101.240000  -Inf   Inf
 log_k_parent_sink  -2.302585  -Inf   Inf
 
 Fixed parameter values:
