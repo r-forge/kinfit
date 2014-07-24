@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-31</title>
+<title>transform_odeparms. mkin 0.9-32</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-31</a>
+      <a class="brand" href="#">mkin 0.9-32</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -71,7 +71,7 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
     assumption of normal distribution of the estimator. If TRUE, also 
     alpha and beta parameters of the FOMC model are log-transformed, as well 
     as k1 and k2 rate constants for the DFOP and HS models and the break point tb
-    of the HS model
+    of the HS model.
   </dd>
       <dt>transform_fractions</dt>
       <dd>
@@ -116,18 +116,18 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
 # Fit the model to the FOCUS example dataset D using defaults
 fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
-<div class='output'>Model cost at call  1 :  19007.22 
-Model cost at call  3 :  19007.22 
-Model cost at call  7 :  10654.43 
-Model cost at call  8 :  10654.43 
-Model cost at call  10 :  10654.43 
-Model cost at call  12 :  7167.609 
-Model cost at call  14 :  7167.608 
-Model cost at call  17 :  412.9611 
-Model cost at call  18 :  412.9611 
-Model cost at call  22 :  371.2211 
-Model cost at call  23 :  371.2211 
-Model cost at call  25 :  371.2211 
+<div class='output'>Model cost at call  1 :  18915.53 
+Model cost at call  3 :  18915.53 
+Model cost at call  7 :  10613.18 
+Model cost at call  8 :  10613.18 
+Model cost at call  10 :  10613.18 
+Model cost at call  12 :  6920.263 
+Model cost at call  14 :  6920.263 
+Model cost at call  17 :  414.0987 
+Model cost at call  18 :  414.0987 
+Model cost at call  22 :  371.2262 
+Model cost at call  23 :  371.2262 
+Model cost at call  25 :  371.2262 
 Model cost at call  27 :  371.2134 
 Model cost at call  28 :  371.2134 
 Model cost at call  30 :  371.2134 
@@ -135,18 +135,18 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>fit.2 &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
 </div>
-<div class='output'>Model cost at call  1 :  19007.22 
-Model cost at call  3 :  19007.22 
-Model cost at call  7 :  10654.43 
-Model cost at call  8 :  10654.43 
-Model cost at call  10 :  10654.43 
-Model cost at call  12 :  7167.609 
-Model cost at call  14 :  7167.608 
-Model cost at call  17 :  412.9611 
-Model cost at call  18 :  412.9611 
-Model cost at call  22 :  371.2211 
-Model cost at call  23 :  371.2211 
-Model cost at call  25 :  371.2211 
+<div class='output'>Model cost at call  1 :  18915.53 
+Model cost at call  3 :  18915.53 
+Model cost at call  7 :  10613.18 
+Model cost at call  8 :  10613.18 
+Model cost at call  10 :  10613.18 
+Model cost at call  12 :  6920.263 
+Model cost at call  14 :  6920.263 
+Model cost at call  17 :  414.0987 
+Model cost at call  18 :  414.0987 
+Model cost at call  22 :  371.2262 
+Model cost at call  23 :  371.2262 
+Model cost at call  25 :  371.2262 
 Model cost at call  27 :  371.2134 
 Model cost at call  28 :  371.2134 
 Model cost at call  30 :  371.2134 
@@ -154,30 +154,31 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.31 
+<div class='output'>mkin version:    0.9.32 
 R version:       3.1.1 
-Date of fit:     Mon Jul 14 20:32:17 2014 
-Date of summary: Mon Jul 14 20:32:17 2014 
+Date of fit:     Thu Jul 24 10:32:07 2014 
+Date of summary: Thu Jul 24 10:32:07 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
 [2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
 
-Method used for solution of differential equation system:
-eigen 
+Model predictions using solution type eigen 
+
+Fitted with method Marq using 32 model solutions performed in 0.393 s
 
 Weighting: none
 
 Starting values for parameters to be optimised:
                  value   type
-parent_0      100.0000  state
+parent_0      100.7500  state
 k_parent_sink   0.1000 deparm
 k_parent_m1     0.1001 deparm
 k_m1_sink       0.1002 deparm
 
 Starting values for the transformed parameters actually optimised:
                        value lower upper
-parent_0          100.000000  -Inf   Inf
+parent_0          100.750000  -Inf   Inf
 log_k_parent_sink  -2.302585  -Inf   Inf
 log_k_parent_m1    -2.301586  -Inf   Inf
 log_k_m1_sink      -2.300587  -Inf   Inf
@@ -190,20 +191,20 @@ Optimised, transformed parameters:
                   Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)
 parent_0            99.600    1.61400 96.330 102.900   61.72 4.048e-38
 log_k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.602e-31
-log_k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40
-log_k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.083e-31
+log_k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.445e-40
+log_k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.081e-31
                      Pr(&gt;t)
 parent_0          2.024e-38
 log_k_parent_sink 2.801e-31
-log_k_parent_m1   7.228e-41
-log_k_m1_sink     3.541e-31
+log_k_parent_m1   7.227e-41
+log_k_m1_sink     3.540e-31
 
 Parameter correlation:
                   parent_0 log_k_parent_sink log_k_parent_m1 log_k_m1_sink
 parent_0           1.00000           0.60752        -0.06625       -0.1701
 log_k_parent_sink  0.60752           1.00000        -0.08741       -0.6253
 log_k_parent_m1   -0.06625          -0.08741         1.00000        0.4716
-log_k_m1_sink     -0.17006          -0.62527         0.47164        1.0000
+log_k_m1_sink     -0.17006          -0.62527         0.47163        1.0000
 
 Residual standard error: 3.211 on 36 degrees of freedom
 
@@ -233,30 +234,31 @@ m1     131.761 437.70
 </div>
 <div class='input'>summary(fit.2, data=FALSE) 
 </div>
-<div class='output'>mkin version:    0.9.31 
+<div class='output'>mkin version:    0.9.32 
 R version:       3.1.1 
-Date of fit:     Mon Jul 14 20:32:17 2014 
-Date of summary: Mon Jul 14 20:32:17 2014 
+Date of fit:     Thu Jul 24 10:32:07 2014 
+Date of summary: Thu Jul 24 10:32:07 2014 
 
 Equations:
 [1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
 [2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
 
-Method used for solution of differential equation system:
-eigen 
+Model predictions using solution type eigen 
+
+Fitted with method Marq using 41 model solutions performed in 0.513 s
 
 Weighting: none
 
 Starting values for parameters to be optimised:
                  value   type
-parent_0      100.0000  state
+parent_0      100.7500  state
 k_parent_sink   0.1000 deparm
 k_parent_m1     0.1001 deparm
 k_m1_sink       0.1002 deparm
 
 Starting values for the transformed parameters actually optimised:
                  value lower upper
-parent_0      100.0000  -Inf   Inf
+parent_0      100.7500  -Inf   Inf
 k_parent_sink   0.1000     0   Inf
 k_parent_m1     0.1001     0   Inf
 k_m1_sink       0.1002     0   Inf
@@ -317,12 +319,12 @@ names(transformed) &lt;- rownames(fit$start_transformed)
 transform_odeparms(initials, SFO_SFO)
 </div>
 <div class='output'>         parent_0 log_k_parent_sink   log_k_parent_m1     log_k_m1_sink 
-       100.000000         -2.302585         -2.301586         -2.300587 
+       100.750000         -2.302585         -2.301586         -2.300587 
 </div>
 <div class='input'>backtransform_odeparms(transformed, SFO_SFO)
 </div>
 <div class='output'>     parent_0 k_parent_sink   k_parent_m1     k_m1_sink 
-     100.0000        0.1000        0.1001        0.1002 
+     100.7500        0.1000        0.1001        0.1002 
 </div>
 <div class='input'>
 # The case of formation fractions
@@ -333,50 +335,50 @@ SFO_SFO.ff &lt;- mkinmod(
 
 fit.ff &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
 </div>
-<div class='output'>Model cost at call  1 :  15186.5 
-Model cost at call  3 :  15186.5 
-Model cost at call  7 :  14312.23 
-Model cost at call  8 :  14312.23 
-Model cost at call  11 :  14312.23 
-Model cost at call  12 :  3570.653 
-Model cost at call  15 :  3570.653 
-Model cost at call  17 :  828.6878 
-Model cost at call  18 :  828.6878 
-Model cost at call  22 :  374.5359 
-Model cost at call  23 :  374.5359 
+<div class='output'>Model cost at call  1 :  15156.12 
+Model cost at call  3 :  15156.12 
+Model cost at call  7 :  14220.79 
+Model cost at call  8 :  14220.79 
+Model cost at call  11 :  14220.79 
+Model cost at call  12 :  3349.268 
+Model cost at call  15 :  3349.268 
+Model cost at call  17 :  788.6367 
+Model cost at call  18 :  788.6366 
+Model cost at call  22 :  374.0575 
+Model cost at call  23 :  374.0575 
 Model cost at call  27 :  371.2135 
 Model cost at call  28 :  371.2135 
-Model cost at call  29 :  371.2135 
 Model cost at call  32 :  371.2134 
 Model cost at call  36 :  371.2134 
 Model cost at call  37 :  371.2134 
 </div>
 <div class='input'>summary(fit.ff, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.31 
+<div class='output'>mkin version:    0.9.32 
 R version:       3.1.1 
-Date of fit:     Mon Jul 14 20:32:18 2014 
-Date of summary: Mon Jul 14 20:32:18 2014 
+Date of fit:     Thu Jul 24 10:32:08 2014 
+Date of summary: Thu Jul 24 10:32:08 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent                         
 [2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
-Method used for solution of differential equation system:
-eigen 
+Model predictions using solution type eigen 
+
+Fitted with method Marq using 37 model solutions performed in 0.504 s
 
 Weighting: none
 
 Starting values for parameters to be optimised:
                   value   type
-parent_0       100.0000  state
+parent_0       100.7500  state
 k_parent         0.1000 deparm
 k_m1             0.1001 deparm
 f_parent_to_m1   0.5000 deparm
 
 Starting values for the transformed parameters actually optimised:
                     value lower upper
-parent_0       100.000000  -Inf   Inf
+parent_0       100.750000  -Inf   Inf
 log_k_parent    -2.302585  -Inf   Inf
 log_k_m1        -2.301586  -Inf   Inf
 f_parent_ilr_1   0.000000  -Inf   Inf
@@ -446,18 +448,18 @@ SFO_SFO.ff.2 &lt;- mkinmod(
 
 fit.ff.2 &lt;- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
 </div>
-<div class='output'>Model cost at call  1 :  12443.52 
-Model cost at call  3 :  12443.52 
-Model cost at call  6 :  6607.685 
-Model cost at call  7 :  6607.685 
-Model cost at call  10 :  3082.636 
-Model cost at call  11 :  3082.636 
-Model cost at call  14 :  2601.074 
-Model cost at call  15 :  2601.074 
-Model cost at call  18 :  2571.037 
-Model cost at call  19 :  2571.037 
-Model cost at call  22 :  2569.48 
-Model cost at call  23 :  2569.48 
+<div class='output'>Model cost at call  1 :  12435.14 
+Model cost at call  3 :  12435.14 
+Model cost at call  6 :  6652.064 
+Model cost at call  7 :  6652.063 
+Model cost at call  10 :  3094.135 
+Model cost at call  11 :  3094.135 
+Model cost at call  14 :  2601.879 
+Model cost at call  15 :  2601.879 
+Model cost at call  18 :  2571.08 
+Model cost at call  19 :  2571.08 
+Model cost at call  22 :  2569.482 
+Model cost at call  23 :  2569.482 
 Model cost at call  26 :  2569.404 
 Model cost at call  27 :  2569.404 
 Model cost at call  30 :  2569.4 
@@ -467,29 +469,30 @@ Model cost at call  38 :  2569.4
 </div>
 <div class='input'>summary(fit.ff.2, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.31 
+<div class='output'>mkin version:    0.9.32 
 R version:       3.1.1 
-Date of fit:     Mon Jul 14 20:32:18 2014 
-Date of summary: Mon Jul 14 20:32:18 2014 
+Date of fit:     Thu Jul 24 10:32:09 2014 
+Date of summary: Thu Jul 24 10:32:09 2014 
 
 Equations:
 [1] d_parent = - k_parent * parent        
 [2] d_m1 = + k_parent * parent - k_m1 * m1
 
-Method used for solution of differential equation system:
-eigen 
+Model predictions using solution type eigen 
+
+Fitted with method Marq using 38 model solutions performed in 0.588 s
 
 Weighting: none
 
 Starting values for parameters to be optimised:
             value   type
-parent_0 100.0000  state
+parent_0 100.7500  state
 k_parent   0.1000 deparm
 k_m1       0.1001 deparm
 
 Starting values for the transformed parameters actually optimised:
                   value lower upper
-parent_0     100.000000  -Inf   Inf
+parent_0     100.750000  -Inf   Inf
 log_k_parent  -2.302585  -Inf   Inf
 log_k_m1      -2.301586  -Inf   Inf
 

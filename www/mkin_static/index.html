@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. mkin 0.9-31</title>
+<title>Index. mkin 0.9-32</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-31</a>
+      <a class="brand" href="#">mkin 0.9-32</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -71,21 +71,28 @@ detailed guidance and helpful tools have been developed as detailed in
 
 <h2>Usage</h2>
 
-<p>A very simple usage example would be</p>
+<p>The simplest usage example that I can think of, using model shorthand notation
+(available since mkin 0.9-32) and a built-in dataset is</p>
 
 <pre><code>library(&quot;mkin&quot;)
-example_data = data.frame(
+fit &lt;- mkinfit(&quot;SFO&quot;, FOCUS_2006_C)
+plot(fit, show_residuals = TRUE) 
+summary(fit)
+</code></pre>
+
+<p>A still very simple usage example including the definition of the same data in R
+code would be</p>
+
+<pre><code>example_data = data.frame(
   name = rep(&quot;parent&quot;, 9),
   time = c(0, 1, 3, 7, 14, 28, 63, 91, 119),
   value = c(85.1, 57.9, 29.9, 14.6, 9.7, 6.6, 4, 3.9, 0.6)
 )
-SFO &lt;- mkinmod(parent = list(type = &quot;SFO&quot;))
-SFO.fit &lt;- mkinfit(SFO, example_data)
-summary(SFO.fit)
-plot(SFO.fit) 
+fit2 &lt;- mkinfit(&quot;FOMC&quot;, example_data)
+plot(fit2, show_residuals = TRUE) 
 </code></pre>
 
-<p>A fairly complex usage example using a built-in dataset:</p>
+<p>A fairly complex usage example using another built-in dataset:</p>
 
 <pre><code>data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
 
@@ -96,16 +103,16 @@ model &lt;- mkinmod(
   C1 = list(type = &quot;SFO&quot;),
   A2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
 
-fit &lt;- mkinfit(model, data, method.modFit = &quot;Port&quot;)
+fit3 &lt;- mkinfit(model, data, method.modFit = &quot;Port&quot;)
 
-plot(fit, show_residuals = TRUE) 
-s &lt;- summary(fit)
+plot(fit3, show_residuals = TRUE) 
+summary(fit3)
+mkinparplot(fit3)
 </code></pre>
 
 <p>For more examples and to see results, have a look at the examples provided in the
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html"><code>mkinfit</code></a>
-documentation 
-or the package vignettes referenced from the 
+documentation or the package vignettes referenced from the 
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/index.html">mkin package documentation page</a></p>
 
 <h2>Features</h2>
