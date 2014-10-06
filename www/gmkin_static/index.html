@@ -49,70 +49,79 @@ ExtJS which is bundled with gWidgetsWWW2.</p>
 <h2>Installation</h2>
 
 <p>For running gmkin you need a system running a recent version of R (version
-3.0.0 or later should be OK), the gWidgesWWW2 package from github, the gmkin
-package and a web browser (Firefox and Chrome work for me) with
-JavaScript enabled.</p>
+3.0.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
+web browser (Firefox and Chrome work for me) with JavaScript enabled.</p>
 
 <p>It should be possible to run gmkin on most laptop or desktop computers running
 Linux, Mac OS X, Windows XP or Windows 7. It is frequently checked under Linux and
 Windows 7.</p>
 
+<h3>Notes on the gWidgetsWWW2 package</h3>
+
+<p>The R package gWidgetsWWW2 is not available on CRAN because it contains 
+path names with more then 100 characters in the JavaScript files which limits
+its portability.  Also, it attaches an R object called <code>app</code> to the global
+environment in R, which is not allowed by the CRAN package policy. It is not
+a widely used library for creating graphical user interfaces, is not supported 
+by a commercial company and was used for gmkin simply because it makes it
+possible to create a reasonably complex user interface by just writing R code.</p>
+
 <h3>Installing R</h3>
 
-<p>For Linux users, binary R packages should be available through the usual package repositories. 
-For more information for the most common distributions, please refer to 
-<a href="http://cran.r-project.org/bin/linux">CRAN</a>. </p>
+<p>Please refer to <a href="http://cran.r-project.org">CRAN</a> for installation instructions
+and binary packages. If you are on Windows and would like to upgrade your R 
+installation, please refer to the respective <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f">FAQ entry</a>.</p>
 
-<p><a href="http://cran.r-project.org/bin/windows">Windows</a> and <a href="http://cran.r-project.org/bin/macosx">Mac OS X</a>
-users are also referred to the respective pages on <a href="http://cran.r-project.org">CRAN</a> where
-there is more background information, notably an 
-<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html">R for Windows FAQ</a>.</p>
+<h3>Installing gmkin using an additional repository</h3>
 
-<h3>Installing the devtools package</h3>
+<p>Windows and Linux users running R 3.1.0 or later can make use of the gmkin
+package repository on r-forge. If you would like to test gmkin just once, open
+the R console and issue the commands</p>
 
-<p>Installation of gWidgetsWWW2 and gmkin directly from
-<a href="http://github.com">github</a> is facilitated by installing the R package <code>devtools</code>
-using either the Menu, or, more conveniently, using the R command</p>
-
-<pre><code class="s">install.packages(&quot;devtools&quot;)
+<pre><code class="s">setRepositories(addURLs = c(gmkin_repo = &quot;http://kinfit.r-forge.r-project.org/repo&quot;))
+install.packages(&quot;gmkin&quot;)
 </code></pre>
 
-<h3>Installing gWidgetsWWW2</h3>
+<p>This should pull the gmkin package and its dependencies, notably the
+gWidgetsWWW2 package which is not available from the CRAN archive (see above).</p>
 
-<p>The gWidgetsWWW2 package provides the glue between R code defining the
-graphical user interface (GUI) and the internal R help server which serves 
-the GUI elements in the form of JavaScript. The JavaScript library ExtJS
-is used for this, and it is bundled in the gWidgetsWWW2 package.</p>
+<h3>Keeping it current</h3>
 
-<p>Therefore, the package is a bit large. It is not available on CRAN because it
-contains very long path names in the JavaScript files which limits its portability.
-Also, it attaches an R object called <code>app</code> to the global environment in R, which
-is not allowed by the CRAN package policy.</p>
+<p>If you would like to pull in new versions of gmkin from time to time, you could
+add this repository to your startup options, e.g. by including a command like</p>
 
-<p>Installation is easy using the devtools library in R, so make sure it is installed, and 
-then run</p>
+<pre><code class="s">options(repos = c(CRAN = &quot;http://cran.rstudio.com&quot;, 
+                  gmkin_repo = &quot;http://kinfit.r-forge.r-project.org/repo&quot;))
+</code></pre>
+
+<p>to your startup options, e.g. to your <code>.Rprofile</code> file. Please consult the help
+page for this, e.g. by typing</p>
+
+<pre><code class="s">?Startup
+</code></pre>
+
+<p>You can than update your packages including gmkin by using <code>update.packages()</code>,
+please see its help files for details.</p>
+
+<p>The latest changes to gmkin are recorded in the 
+<a href="https://github.com/jranke/gmkin/blob/master/NEWS.md">NEWS</a> file,
+more details can be found in the 
+<a href="https://github.com/jranke/gmkin/commits/master">commit history</a>.</p>
+
+<h3>Installation using the devtools package</h3>
+
+<p>Users of the <code>devtools</code> package can also install gWidgetsWWW2 and gmkin directly from
+the respective github repositories:</p>
 
 <pre><code class="s">require(devtools)
-install_github(&quot;gWidgetsWWW2&quot;, &quot;jverzani&quot;, quick = TRUE)
+install_github(&quot;jverzani/gWidgetsWWW2&quot;, quick = TRUE)
+install_github(&quot;jranke/gmkin&quot;, quick = TRUE)
 </code></pre>
 
-<p>Installing gWidgetsWWW2 yields a lot of warnings concerning overly long path
-names.  Using <code>quick = TRUE</code> skips docs, multiple-architecture builds, demos,
-and vignettes, to make installation as fast and painless as possible.</p>
-
-<h3>Installing gmkin</h3>
-
-<p>Then you can install gmkin, also directly from github:</p>
-
-<pre><code class="s">require(devtools)
-install_github(&quot;gmkin&quot;, &quot;jranke&quot;, quick = TRUE)
-</code></pre>
-
-<p>The same command can be run if you want to update gmkin. See the 
-<a href="https://github.com/jranke/gmkin/blob/master/NEWS.md">NEWS</a> file 
-for a list of recent changes, or the 
-<a href="https://github.com/jranke/gmkin/commits/master">commit history</a>
-if you are interested in the details.</p>
+<p>Installing gWidgetsWWW2 in this way yields a lot of warnings concerning overly
+long path names (see Notes on gWidgetsWWW2 above).  Using <code>quick = TRUE</code> skips
+docs, multiple-architecture builds, demos, and vignettes, to make installation
+as fast and painless as possible.</p>
 
 <h2>Usage</h2>
 
