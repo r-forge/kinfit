@@ -1,0 +1,16 @@
+Package: gmkin
+Version: 0.5-3
+Depends: mkin (>= 0.9-32), gWidgetsWWW2
+License: GPL
+MD5sum: c535225cd19046c4988c6d01fbffee65
+NeedsCompilation: no
+
+Package: gWidgetsWWW2
+Version: 0.4-1
+Depends: R (>= 2.13.0), methods, Rook, RJSONIO, memoise, whisker,
+        digest
+Suggests: markdown
+License: GPL (>= 3)
+MD5sum: a84b1faaeb5efc3015eaf5bac07d2e01
+NeedsCompilation: no
+
