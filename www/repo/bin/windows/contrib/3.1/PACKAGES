@@ -1,0 +1,12 @@
+Package: gmkin
+Version: 0.5-3
+Depends: mkin (>= 0.9-32), gWidgetsWWW2
+License: GPL
+
+Package: gWidgetsWWW2
+Version: 0.4-1
+Depends: R (>= 2.13.0), methods, Rook, RJSONIO, memoise, whisker,
+        digest
+Suggests: markdown
+License: GPL (>= 3)
+
