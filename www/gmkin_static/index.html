@@ -83,7 +83,9 @@ install.packages(&quot;gmkin&quot;)
 </code></pre>
 
 <p>This should pull the gmkin package and its dependencies, notably the
-gWidgetsWWW2 package which is not available from the CRAN archive (see above).</p>
+gWidgetsWWW2 package which is not available from the CRAN archive (see above).
+Mac users that have the necessary development files installed can probably 
+install from the source files in this repository (not tested).</p>
 
 <h3>Keeping it current</h3>
 
@@ -94,11 +96,8 @@ add this repository to your startup options, e.g. by including a command like</p
                   gmkin_repo = &quot;http://kinfit.r-forge.r-project.org/repo&quot;))
 </code></pre>
 
-<p>to your startup options, e.g. to your <code>.Rprofile</code> file. Please consult the help
-page for this, e.g. by typing</p>
-
-<pre><code class="s">?Startup
-</code></pre>
+<p>to your startup options, e.g. to your <code>.Rprofile</code> file. For details, please
+consult the help page for this, e.g. by typing <code>?Startup</code> in R.</p>
 
 <p>You can than update your packages including gmkin by using <code>update.packages()</code>,
 please see its help files for details.</p>
@@ -138,7 +137,7 @@ gmkin()
 </code></pre>
 
 <p>The following screenshot is taken after loading the gmkin workspace with
-an analysis of FOCUS dataset Z. It has to be saved as an .RData file 
+an analysis of FOCUS dataset Z. It has to be saved in R as an .RData file
 first, and can then be loaded to the GUI.</p>
 
 <pre><code class="s">save(FOCUS_2006_Z_gmkin, file = &quot;FOCUS_2006_gmkin_Z.RData&quot;)
