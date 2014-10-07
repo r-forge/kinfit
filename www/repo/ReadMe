@@ -1,0 +1,27 @@
+gmkin repository
+================
+
+This repository was created as the gWidgetsWWW2 package whose development
+is taking place at http://github.com/jverzani/gWidgetsWWW2 does not currently
+comply to CRAN policies. The difficulties are (citing gWidgetsWWW2 author John
+Verzani, issue 10 on github, Nov 2013):
+
+- the extjs files are too big
+- the path names are too long
+- the use of attach is needed but problematic
+- the assignment within .GlobalEnv is frowned upon
+
+The size of the extjs files in the gWidgetsWWW2 package has meanwhile been
+reduced by excluding files that are not used by the package. The long path names
+appear not to be problematic in practice. The package attaches an R object "app" 
+in the global workspace which should not be saved and restored across sessions.
+
+The repository contains source packages under src/contrib and Windows binaries
+under bin/windows/contrib, so its URL can be specified as an additional
+repository in R (see gmkin installation instructions).
+
+Please note that no warranty or liability can be accepted for the software.
+Consult the GPL license http://www.gnu.org/licenses/#GPL for details.
+
+Johannes Ranke, October 2014
+jranke@uni-bremen.de
