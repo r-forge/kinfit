@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-32</title>
+<title>mkinfit. mkin 0.9-33</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-32</a>
+      <a class="brand" href="#">mkin 0.9-33</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -53,7 +53,7 @@
     A list of class <code><a href='mkinmod.html'>mkinmod</a></code>, containing the kinetic model to be
     fitted to the data, or one of the shorthand names ("SFO", "FOMC", "DFOP",
     "HS", "SFORB"). If a shorthand name is given, a parent only degradation
-    model is generated for the observation with the highest value in
+    model is generated for the variable with the highest value in
     <code>observed</code>.
   </dd>
       <dt>observed</dt>
@@ -89,6 +89,7 @@
     (see <code>map</code> component of <code><a href='mkinmod.html'>mkinmod</a></code>). The default is to set
     the initial value of the first model variable to the mean of the time zero
     values for the variable with the maximum observed value, and all others to 0.
+    If this variable has no time zero observations, its initial value is set to 100.
   </dd>
       <dt>fixed_parms</dt>
       <dd>
@@ -297,17 +298,17 @@ Model cost at call  34 :  31.05088
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:31:58 2014 
-Date of summary: Thu Jul 24 10:31:58 2014 
+Date of fit:     Sat Oct 11 11:06:32 2014 
+Date of summary: Sat Oct 11 11:06:32 2014 
 
 Equations:
-[1] d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
+d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Marq using 34 model solutions performed in 0.205 s
+Fitted with method Marq using 34 model solutions performed in 0.2 s
 
 Weighting: none
 
@@ -394,18 +395,18 @@ Model cost at call  32 :  371.2134
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:31:59 2014 
-Date of summary: Thu Jul 24 10:31:59 2014 
+Date of fit:     Sat Oct 11 11:06:33 2014 
+Date of summary: Sat Oct 11 11:06:33 2014 
 
 Equations:
-[1] d_parent = - k_parent_sink * parent - k_parent_m1 * parent
-[2] d_m1 = + k_parent_m1 * parent - k_m1_sink * m1            
+d_parent = - k_parent_sink * parent - k_parent_m1 * parent 
+d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Marq using 32 model solutions performed in 0.391 s
+Fitted with method Marq using 32 model solutions performed in 0.386 s
 
 Weighting: none
 
@@ -569,18 +570,18 @@ Model cost at call  37 :  371.2134
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:31:59 2014 
-Date of summary: Thu Jul 24 10:31:59 2014 
+Date of fit:     Sat Oct 11 11:06:33 2014 
+Date of summary: Sat Oct 11 11:06:33 2014 
 
 Equations:
-[1] d_parent = - k_parent * parent                         
-[2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
+d_parent = - k_parent * parent 
+d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Marq using 37 model solutions performed in 0.448 s
+Fitted with method Marq using 37 model solutions performed in 0.451 s
 
 Weighting: none
 
@@ -732,18 +733,18 @@ Sum of squared differences to last variance estimates: 1.7e-09
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:32:00 2014 
-Date of summary: Thu Jul 24 10:32:00 2014 
+Date of fit:     Sat Oct 11 11:06:34 2014 
+Date of summary: Sat Oct 11 11:06:34 2014 
 
 Equations:
-[1] d_parent = - k_parent * parent                         
-[2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
+d_parent = - k_parent * parent 
+d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Marq using 61 model solutions performed in 0.759 s
+Fitted with method Marq using 61 model solutions performed in 0.747 s
 
 Weighting: none then iterative reweighting method obs
 
@@ -878,18 +879,18 @@ Model cost at call  37 :  0.347807
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:32:01 2014 
-Date of summary: Thu Jul 24 10:32:01 2014 
+Date of fit:     Sat Oct 11 11:06:35 2014 
+Date of summary: Sat Oct 11 11:06:35 2014 
 
 Equations:
-[1] d_parent = - k_parent * parent                         
-[2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
+d_parent = - k_parent * parent 
+d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Marq using 37 model solutions performed in 0.459 s
+Fitted with method Marq using 37 model solutions performed in 0.445 s
 
 Weighting: mean
 
@@ -1037,18 +1038,18 @@ Sum of squared differences to last variance estimates: 1.4e-09
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.32 
+<div class='output'>mkin version:    0.9.33 
 R version:       3.1.1 
-Date of fit:     Thu Jul 24 10:32:02 2014 
-Date of summary: Thu Jul 24 10:32:02 2014 
+Date of fit:     Sat Oct 11 11:06:35 2014 
+Date of summary: Sat Oct 11 11:06:35 2014 
 
 Equations:
-[1] d_parent = - k_parent * parent                         
-[2] d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
+d_parent = - k_parent * parent 
+d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Marq using 56 model solutions performed in 0.685 s
+Fitted with method Marq using 56 model solutions performed in 0.693 s
 
 Weighting: mean then iterative reweighting method obs
 

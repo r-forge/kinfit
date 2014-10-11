@@ -1,3 +1,31 @@
+# CHANGES in mkin VERSION 0.9-33
+
+## NEW FEATURES
+
+- The initial value (state.ini) for the observed variable with the highest observed residue is set to 100 in case it has no time zero observation and `state.ini = "auto"`
+
+- A basic unit test for `mkinerrmin()` was written
+
+## BUG FIXES
+
+- `mkinfit()`: The internally fitted parameter for `g` was named `g_ilr` even when `transform_fractions=FALSE`
+
+- `mkinfit()`: The initial value (state.ini) for the parent compound was not set when the parent was not the (only) variable with the highest value in the observed data.
+
+- `mkinerrmin()`: When checking for degrees of freedom for metabolites, check if their time zero value is fixed instead of checking if the observed value is zero. This ensures correct calculation of degrees of freedom also in cases where the metabolite residue at time zero is greater zero.
+
+- `plot.mkinfit()`: Avoid a warning message about only using the first component of ylim that occurred when ylim was specified explicitly
+
+## MINOR CHANGES
+
+- The formatting of differential equations in the summary was improved by wrapping overly long lines
+
+- The FOCUS_Z vignette was rebuilt with the above improvement and using a width of 70 to avoid output outside of the grey area
+
+- `print.summary.mkinfit()`: Avoid a warning that occurred when gmkin showed summaries ofinitial fits without iterations
+
+- `mkinfit()`: Avoid a warning that occurred when summarising a fit that was performed with maxitmodFit = 0 as done in gmkin for configuring new fits.
+
 # CHANGES in mkin VERSION 0.9-32
 
 ## NEW FEATURES
