@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinerrmin. mkin 0.9-32</title>
+<title>mkinerrmin. mkin 0.9-33</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-32</a>
+      <a class="brand" href="#">mkin 0.9-33</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -106,7 +106,29 @@ as defined in the FOCUS kinetics report from 2006.</p>
   <a href = 'http://focus.jrc.ec.europa.eu/dk'>http://focus.jrc.ec.europa.eu/dk</a></p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>SFO_SFO = mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;),
+                  m1 = list(type = &quot;SFO&quot;),
+                  use_of_ff = &quot;max&quot;)
+
+fit_FOCUS_D = mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE)
+round(mkinerrmin(fit_FOCUS_D), 4)
+</div>
+<div class='output'>         err.min n.optim df
+All data  0.0640       4 15
+parent    0.0646       2  7
+m1        0.0469       2  8
+</div>
+<div class='input'>fit_FOCUS_E = mkinfit(SFO_SFO, FOCUS_2006_E, quiet = TRUE)
+round(mkinerrmin(fit_FOCUS_E), 4)
+</div>
+<div class='output'>         err.min n.optim df
+All data  0.1544       4 13
+parent    0.1659       2  7
+m1        0.1095       2  6
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
       <li>mkinerrmin</li>

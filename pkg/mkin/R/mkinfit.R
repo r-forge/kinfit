@@ -41,11 +41,11 @@ mkinfit <- function(mkinmod, observed,
   trace_parms = FALSE,
   ...)
 {
-  # Check mkinmod and generate a model for the variable whithe the highest value
+  # Check mkinmod and generate a model for the variable whith the highest value
   # if a suitable string is given
   parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB") 
-  presumed_parent_name = observed[which.max(observed$value), "name"]
   if (class(mkinmod) != "mkinmod") {
+    presumed_parent_name = observed[which.max(observed$value), "name"]
     if (mkinmod[[1]] %in% parent_models_available) {
       speclist <- list(list(type = mkinmod, sink = TRUE))
       names(speclist) <- presumed_parent_name
@@ -153,9 +153,15 @@ mkinfit <- function(mkinmod, observed,
   }
 
   # Set default for state.ini if appropriate
+  parent_name = names(mkinmod$spec)[[1]]
   if (state.ini[1] == "auto") {
-    state.ini = c(mean(subset(observed, time == 0 & name == presumed_parent_name)$value), 
-                  rep(0, length(mkinmod$diffs) - 1))
+    parent_time_0 = subset(observed, time == 0 & name == parent_name)$value
+    parent_time_0_mean = mean(parent_time_0, na.rm = TRUE)
+    if (is.na(parent_time_0_mean)) {
+      state.ini = c(100, rep(0, length(mkinmod$diffs) - 1))
+    } else {
+      state.ini = c(parent_time_0_mean, rep(0, length(mkinmod$diffs) - 1))
+    }
   }
 
   # Name the inital state variable values if they are not named yet
@@ -561,7 +567,7 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   if (!is.null(x$warning)) cat("\n\nWarning:", x$warning, "\n\n")
 
   cat("\nEquations:\n")
-  print(noquote(as.character(x[["diffs"]])))
+  cat(noquote(strwrap(x[["diffs"]], exdent = 11)), fill = TRUE)
   df  <- x$df
   rdf <- df[2]
 
@@ -588,13 +594,15 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   cat("\nOptimised, transformed parameters:\n")
   print(signif(x$par, digits = digits))
 
-  cat("\nParameter correlation:\n")
-  if (!is.null(x$cov.unscaled)){
-    Corr <- cov2cor(x$cov.unscaled)
-    rownames(Corr) <- colnames(Corr) <- rownames(x$par)
-    print(Corr, digits = digits, ...)
-  } else {
-    cat("Could not estimate covariance matrix; singular system:\n")
+  if (x$niter != 0) {
+    cat("\nParameter correlation:\n")
+    if (!is.null(x$cov.unscaled)){
+      Corr <- cov2cor(x$cov.unscaled)
+      rownames(Corr) <- colnames(Corr) <- rownames(x$par)
+      print(Corr, digits = digits, ...)
+    } else {
+      cat("Could not estimate covariance matrix; singular system:\n")
+    }
   }
 
   cat("\nResidual standard error:",

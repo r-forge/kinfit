@@ -38,7 +38,7 @@ mkinfit(mkinmod, observed,
     A list of class \code{\link{mkinmod}}, containing the kinetic model to be
     fitted to the data, or one of the shorthand names ("SFO", "FOMC", "DFOP",
     "HS", "SFORB"). If a shorthand name is given, a parent only degradation
-    model is generated for the observation with the highest value in
+    model is generated for the variable with the highest value in
     \code{observed}.
   }
   \item{observed}{
@@ -71,6 +71,7 @@ mkinfit(mkinmod, observed,
     (see \code{map} component of \code{\link{mkinmod}}). The default is to set
     the initial value of the first model variable to the mean of the time zero
     values for the variable with the maximum observed value, and all others to 0.
+    If this variable has no time zero observations, its initial value is set to 100.
   }
   \item{fixed_parms}{
     The names of parameters that should not be optimised but rather kept at the
