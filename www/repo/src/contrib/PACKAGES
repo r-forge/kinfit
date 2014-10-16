@@ -3,7 +3,7 @@ Version: 0.5-5
 Depends: mkin (>= 0.9-32), gWidgetsWWW2
 Suggests: knitr, rmarkdown
 License: GPL
-MD5sum: 6b5f6d6e0ae9c7d4099aaa9865908980
+MD5sum: 2a0c12e6347d04bab82747b780709fc5
 NeedsCompilation: no
 
 Package: gWidgetsWWW2
