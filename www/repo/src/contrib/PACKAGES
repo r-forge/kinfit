@@ -7,11 +7,11 @@ MD5sum: 2a0c12e6347d04bab82747b780709fc5
 NeedsCompilation: no
 
 Package: gWidgetsWWW2
-Version: 0.4-1
+Version: 0.4-2
 Depends: R (>= 2.13.0), methods, Rook, RJSONIO, memoise, whisker,
         digest
 Suggests: markdown
 License: GPL (>= 3)
-MD5sum: a84b1faaeb5efc3015eaf5bac07d2e01
+MD5sum: 061c3eb4e5ea39ebee539560db050d74
 NeedsCompilation: no
 

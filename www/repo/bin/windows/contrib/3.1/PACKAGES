@@ -5,7 +5,7 @@ Suggests: knitr, rmarkdown
 License: GPL
 
 Package: gWidgetsWWW2
-Version: 0.4-1
+Version: 0.4-2
 Depends: R (>= 2.13.0), methods, Rook, RJSONIO, memoise, whisker,
         digest
 Suggests: markdown
