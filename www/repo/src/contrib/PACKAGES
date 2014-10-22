@@ -1,9 +1,9 @@
 Package: gmkin
-Version: 0.5-5
+Version: 0.5-6
 Depends: mkin (>= 0.9-32), gWidgetsWWW2
 Suggests: knitr, rmarkdown
 License: GPL
-MD5sum: 2a0c12e6347d04bab82747b780709fc5
+MD5sum: 22515a8f76514cf56808321b6fa1db9d
 NeedsCompilation: no
 
 Package: gWidgetsWWW2
