@@ -1,0 +1,4 @@
+NEWS
+inst/web*
+vignettes/cache
+vignettes/gmkin_manual_cache
