@@ -50,7 +50,7 @@ ExtJS which is bundled with gWidgetsWWW2.</p>
 <h2>Installation</h2>
 
 <p>For running gmkin you need a system running a recent version of R (version
-3.0.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
+3.1.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
 web browser (Firefox and Chrome work for me) with JavaScript enabled.</p>
 
 <p>It should be possible to run gmkin on most laptop or desktop computers running
@@ -73,8 +73,17 @@ possible to create a reasonably complex user interface by just writing R code.</
 <h3>Installing R</h3>
 
 <p>Please refer to <a href="http://cran.r-project.org">CRAN</a> for installation instructions
-and binary packages. If you are on Windows and would like to upgrade your R 
-installation, please refer to the respective <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f">FAQ entry</a>.</p>
+and binary packages. If you are on Windows, please consult the 
+<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html">FAQ for Windows</a>, especially
+the entries 
+&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-install-R-for-Windows_003f">How do I install R for Windows?</a>&rdquo;, 
+&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-run-it_003f">How do I run it?</a>&rdquo;,
+and 
+&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-can-I-keep-workspaces-for-different-projects-in-different-directories_003f">How can I keep workspaces for different projects in different directories?</a>&rdquo;.</p>
+
+<p>If you would like to upgrade your R installation, please refer to the
+respective 
+<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f">FAQ entry</a>.</p>
 
 <h3>Installing gmkin from R-Forge</h3>
 
@@ -85,8 +94,11 @@ you can install it using the command</p>
 <pre><code class="s">install.packages(&quot;gmkin&quot;, repos = c(&quot;http://r-forge.r-project.org&quot;, getOption(&quot;repos&quot;)))
 </code></pre>
 
-<p>If you have not set your CRAN mirror yet, you may have to select one from the list that appears.
-The above command adds the R-Forge repository to your package sources for this installation only.
+<p>If you have not set your CRAN mirror yet, you may have to select one from the list that 
+appears. </p>
+
+<p>The above command adds the R-Forge repository to your package sources for this
+installation only.
 It should pull the gmkin package and its dependencies, notably the
 gWidgetsWWW2 package which is not available from the CRAN archive (see above).
 Mac users that have the necessary development files installed can probably 
