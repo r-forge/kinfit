@@ -4,9 +4,13 @@
   Function to set up a kinetic model with one or more state variables.
 }
 \description{
-  The function takes a specification, consisting of a list of the observed variables
-  in the data. Each observed variable is again represented by a list, specifying the 
-  kinetic model type and reaction or transfer to other observed compartments.
+  The function usually takes several expressions, each assigning a compound name to 
+  a list, specifying the kinetic model type and reaction or transfer to other
+  observed compartments. Instead of specifying several expressions, a list
+  of lists can be given in the speclist argument.
+
+  For the definition of model types and their parameters, the equations given
+  in the FOCUS and NAFTA guidance documents are used.
 }
 \usage{
 mkinmod(..., use_of_ff = "min", speclist = NULL)
@@ -15,7 +19,8 @@ mkinmod(..., use_of_ff = "min", speclist = NULL)
   \item{...}{
     For each observed variable, a list has to be specified as an argument, containing
     at least a component \code{type}, specifying the type of kinetics to use
-    for the variable. Currently, single first order kinetics "SFO" or
+    for the variable. Currently, single first order kinetics "SFO", 
+    indeterminate order rate equation kinetics "IORE", or
     single first order with reversible binding "SFORB" are implemented for all
     variables, while 
     "FOMC", "DFOP" and "HS" can additionally be chosen for the first
@@ -46,7 +51,24 @@ mkinmod(..., use_of_ff = "min", speclist = NULL)
     \item{map}{ A list containing named character vectors for each observed variable, specifying
       the modelling variables by which it is represented. }
     \item{use_of_ff}{ The content of \code{use_of_ff} is passed on in this list component. }
-    \item{coefmat}{ The coefficient matrix, if the system of differential equations can be represented by one. }
+    \item{coefmat}{ The coefficient matrix, if the system of differential equations can be
+      represented by one. }
+}
+\note{
+  The IORE submodel is not well tested (yet). When using this model for metabolites, 
+  you may want to read the second note in the help page to 
+  \code{\link{mkinfit}}.
+}
+\references{
+  FOCUS (2006) \dQuote{Guidance Document on Estimating Persistence and
+  Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
+  Registration} Report of the FOCUS Work Group on Degradation Kinetics,
+  EC Document Reference Sanco/10058/2005 version 2.0, 434 pp,
+  \url{http://focus.jrc.ec.europa.eu/dk} 
+
+  NAFTA Technical Working Group on Pesticides (not dated) Guidance for
+  Evaluating and Calculating Degradation Kinetics in Environmental 
+  Media
 }
 \author{
   Johannes Ranke

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinpredict. mkin 0.9-33</title>
+<title>mkinpredict. mkin 0.9-34</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-33</a>
+      <a class="brand" href="#">mkin 0.9-34</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -122,6 +122,7 @@
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>  SFO &lt;- mkinmod(degradinol = list(type = &quot;SFO&quot;))
+  # Compare solution types
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
 	      solution_type = &quot;analytical&quot;)
 </div>
@@ -142,6 +143,32 @@
 14   13   2.0241911
 15   14   1.4995577
 16   15   1.1108997
+17   16   0.8229747
+18   17   0.6096747
+19   18   0.4516581
+20   19   0.3345965
+21   20   0.2478752
+</div>
+<div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
+	      solution_type = &quot;deSolve&quot;)
+</div>
+<div class='output'>   time  degradinol
+1     0 100.0000000
+2     1  74.0818221
+3     2  54.8811636
+4     3  40.6569660
+5     4  30.1194212
+6     5  22.3130160
+7     6  16.5298888
+8     7  12.2456428
+9     8   9.0717953
+10    9   6.7205513
+11   10   4.9787068
+12   11   3.6883167
+13   12   2.7323722
+14   13   2.0241911
+15   14   1.4995577
+16   15   1.1108996
 17   16   0.8229747
 18   17   0.6096747
 19   18   0.4516581
@@ -175,33 +202,34 @@
 21   20   0.2478752
 </div>
 <div class='input'>
-  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 1:20, 
-	      solution_type = &quot;analytical&quot;)[20,]
-</div>
-<div class='output'>   time degradinol
-20   20  0.2478752
-</div>
-<div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      atol = 1e-20)[20,]
-</div>
-<div class='output'>   time degradinol
-20   19  0.3345965
-</div>
-<div class='input'>
-  # The integration method does not make a lot of difference
+
+  # Compare integration methods to analytical solution
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      atol = 1e-20, method = &quot;ode45&quot;)[20,]
+	      solution_type = &quot;analytical&quot;)[21,]
 </div>
 <div class='output'>   time degradinol
-20   19  0.3345965
+21   20  0.2478752
 </div>
 <div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
-	      atol = 1e-20, method = &quot;rk4&quot;)[20,]
+	      method = &quot;lsoda&quot;)[21,]
 </div>
 <div class='output'>   time degradinol
-20   19   0.334762
+21   20  0.2478752
 </div>
-<div class='input'>
+<div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
+	      method = &quot;ode45&quot;)[21,]
+</div>
+<div class='output'>   time degradinol
+21   20  0.2478752
+</div>
+<div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
+	      method = &quot;rk4&quot;)[21,]
+</div>
+<div class='output'>   time degradinol
+21   20  0.2480043
+</div>
+<div class='input'> # rk4 is not as precise here
+
   # The number of output times used to make a lot of difference until the
   # default for atol was adjusted
   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 
@@ -215,7 +243,8 @@
 </div>
 <div class='output'>     time degradinol
 2001   20  0.2478752
-</div></pre>
+</div>
+<div class='input'></div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2013 Johannes Ranke {{{
+# Copyright (C) 2010-2014 Johannes Ranke {{{
 # Contact: jranke@uni-bremen.de
 
 # This file is part of the R package mkin
@@ -33,38 +33,39 @@ mkinmod <- function(..., use_of_ff = "min", speclist = NULL)
     stop("The use of formation fractions 'use_of_ff' can only be 'min' or 'max'")
 
   # The returned model will be a list of character vectors, containing {{{
-  # differential equations, parameter names and a mapping from model variables
-  # to observed variables. If possible, a matrix representation of the 
-  # differential equations is included
+  # differential equations (if supported), parameter names and a mapping from
+  # model variables to observed variables. If possible, a matrix representation
+  # of the differential equations is included
   parms <- vector()
-  diffs <- vector()
-  map <- list()
   # }}}
 
-  # Do not return a coefficient matrix mat when FOMC, DFOP or HS are used for
-  # the parent compound {{{
-  if(spec[[1]]$type %in% c("FOMC", "DFOP", "HS")) {
+  # Do not return a coefficient matrix mat when FOMC, IORE, DFOP or HS is used for the parent {{{
+  if(spec[[1]]$type %in% c("FOMC", "IORE", "DFOP", "HS")) {
     mat = FALSE 
   } else mat = TRUE
   #}}}
 
   # Establish a list of differential equations as well as a map from observed {{{
   # compartments to differential equations
+  diffs <- vector()
+  map <- list()
   for (varname in obs_vars)
   {
     # Check the type component of the compartment specification {{{
     if(is.null(spec[[varname]]$type)) stop(
       "Every part of the model specification must be a list containing a type component")
-    if(!spec[[varname]]$type %in% c("SFO", "FOMC", "DFOP", "HS", "SFORB")) stop(
-      "Available types are SFO, FOMC, DFOP, HS and SFORB only")
+    if(!spec[[varname]]$type %in% c("SFO", "FOMC", "IORE", "DFOP", "HS", "SFORB")) stop(
+      "Available types are SFO, FOMC, IORE, DFOP, HS and SFORB only")
     if(spec[[varname]]$type %in% c("FOMC", "DFOP", "HS") & match(varname, obs_vars) != 1) {
         stop(paste("Types FOMC, DFOP and HS are only implemented for the first compartment,", 
                    "which is assumed to be the source compartment"))
-    } #}}}
+    }
+    #}}}
     # New (sub)compartments (boxes) needed for the model type {{{
     new_boxes <- switch(spec[[varname]]$type,
       SFO = varname,
       FOMC = varname,
+      IORE = varname,
       DFOP = varname,
       HS = varname,
       SFORB = paste(varname, c("free", "bound"), sep = "_")
@@ -85,20 +86,40 @@ mkinmod <- function(..., use_of_ff = "min", speclist = NULL)
     # Turn on sink if this is not explicitly excluded by the user by
     # specifying sink=FALSE
     if(is.null(spec[[varname]]$sink)) spec[[varname]]$sink <- TRUE
-    if(spec[[varname]]$type %in% c("SFO", "SFORB")) { # {{{ Add SFO or SFORB decline term
+    if(spec[[varname]]$type %in% c("SFO", "IORE", "SFORB")) { # {{{ Add decline term
       if (use_of_ff == "min") { # Minimum use of formation fractions
+        if(spec[[varname]]$type == "IORE" && length(spec[[varname]]$to) > 0) {
+           stop("Transformation reactions from compounds modelled with IORE\n",
+                "are only supported with formation fractions (use_of_ff = 'max')")
+        }
         if(spec[[varname]]$sink) {
-          # If sink is required, add first-order sink term
+          # If sink is required, add first-order/IORE sink term
           k_compound_sink <- paste("k", box_1, "sink", sep = "_")
+          if(spec[[varname]]$type == "IORE") {
+            k_compound_sink <- paste("k.iore", box_1, "sink", sep = "_")
+          }
           parms <- c(parms, k_compound_sink)
           decline_term <- paste(k_compound_sink, "*", box_1)
+          if(spec[[varname]]$type == "IORE") {
+            N <- paste("N", box_1, sep = "_")
+            parms <- c(parms, N)
+            decline_term <- paste0(decline_term, "^", N)
+          }
         } else { # otherwise no decline term needed here
           decline_term = "0" 
         }
       } else {
         k_compound <- paste("k", box_1, sep = "_")
+        if(spec[[varname]]$type == "IORE") {
+          k_compound <- paste("k.iore", box_1, sep = "_")
+        }
         parms <- c(parms, k_compound)
         decline_term <- paste(k_compound, "*", box_1)
+        if(spec[[varname]]$type == "IORE") {
+          N <- paste("N", box_1, sep = "_")
+          parms <- c(parms, N)
+          decline_term <- paste0(decline_term, "^", N)
+        }
       }
     } #}}}
     if(spec[[varname]]$type == "FOMC") { # {{{ Add FOMC decline term
@@ -157,9 +178,10 @@ mkinmod <- function(..., use_of_ff = "min", speclist = NULL)
       for (target in to) {
         target_box <- switch(spec[[target]]$type,
           SFO = target,
+          IORE = target,
           SFORB = paste(target, "free", sep = "_"))
-        if (use_of_ff == "min" && spec[[varname]]$type %in% c("SFO",
-          "SFORB")) {
+        if (use_of_ff == "min" && spec[[varname]]$type %in% c("SFO", "SFORB"))
+        {
           k_from_to <- paste("k", origin_box, target_box, sep = "_")
           parms <- c(parms, k_from_to)
           diffs[[origin_box]] <- paste(diffs[[origin_box]], "-", 

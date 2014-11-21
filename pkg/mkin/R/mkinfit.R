@@ -28,7 +28,7 @@ mkinfit <- function(mkinmod, observed,
   fixed_initials = names(mkinmod$diffs)[-1],
   solution_type = "auto",
   method.ode = "lsoda",
-  method.modFit = c("Marq", "Port", "SANN", "Nelder-Mead", "BFSG", "CG", "L-BFGS-B"),
+  method.modFit = c("Port", "Marq", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B"),
   maxit.modFit = "auto",
   control.modFit = list(),
   transform_rates = TRUE,
@@ -43,7 +43,7 @@ mkinfit <- function(mkinmod, observed,
 {
   # Check mkinmod and generate a model for the variable whith the highest value
   # if a suitable string is given
-  parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB") 
+  parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE") 
   if (class(mkinmod) != "mkinmod") {
     presumed_parent_name = observed[which.max(observed$value), "name"]
     if (mkinmod[[1]] %in% parent_models_available) {
@@ -60,7 +60,10 @@ mkinfit <- function(mkinmod, observed,
   method.modFit = match.arg(method.modFit)
   if (maxit.modFit != "auto") {
     if (method.modFit == "Marq") control.modFit$maxiter = maxit.modFit
-    if (method.modFit == "Port") control.modFit$iter.max = maxit.modFit
+    if (method.modFit == "Port") {
+      control.modFit$iter.max = maxit.modFit
+      control.modFit$eval.max = maxit.modFit
+    }
     if (method.modFit %in% c("SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B")) {
         control.modFit$maxit = maxit.modFit
     }
@@ -116,13 +119,15 @@ mkinfit <- function(mkinmod, observed,
   defaultpar.names <- setdiff(mkinmod$parms, names(parms.ini))
   for (parmname in defaultpar.names) {
     # Default values for rate constants, depending on the parameterisation
-    if (substr(parmname, 1, 2) == "k_") {
+    if (grepl("^k", parmname)) {
       parms.ini[parmname] = 0.1 + k_salt
       k_salt = k_salt + 1e-4
     }
     # Default values for rate constants for reversible binding
     if (grepl("free_bound$", parmname)) parms.ini[parmname] = 0.1 
     if (grepl("bound_free$", parmname)) parms.ini[parmname] = 0.02
+    # Default values for IORE exponents
+    if (grepl("^N", parmname)) parms.ini[parmname] = 1
     # Default values for the FOMC, DFOP and HS models
     if (parmname == "alpha") parms.ini[parmname] = 1
     if (parmname == "beta") parms.ini[parmname] = 10
@@ -281,7 +286,7 @@ mkinfit <- function(mkinmod, observed,
                                 atol = atol, rtol = rtol, ...)
 
         plot(0, type="n", 
-          xlim = range(observed$time), ylim = range(observed$value, na.rm=TRUE),
+          xlim = range(observed$time), ylim = c(0, max(observed$value, na.rm=TRUE)),
           xlab = "Time", ylab = "Observed")
         col_obs <- pch_obs <- 1:length(obs_vars)
         lty_obs <- rep(1, length(obs_vars))
@@ -306,6 +311,8 @@ mkinfit <- function(mkinmod, observed,
   if (!transform_rates) {
     index_k <- grep("^k_", names(lower))
     lower[index_k] <- 0
+    index_k.iore <- grep("^k.iore_", names(lower))
+    lower[index_k.iore] <- 0
     other_rate_parms <- intersect(c("alpha", "beta", "k1", "k2", "tb"), names(lower))
     lower[other_rate_parms] <- 0
   }
@@ -567,7 +574,7 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   if (!is.null(x$warning)) cat("\n\nWarning:", x$warning, "\n\n")
 
   cat("\nEquations:\n")
-  cat(noquote(strwrap(x[["diffs"]], exdent = 11)), fill = TRUE)
+  writeLines(strwrap(x[["diffs"]], exdent = 11))
   df  <- x$df
   rdf <- df[2]
 
