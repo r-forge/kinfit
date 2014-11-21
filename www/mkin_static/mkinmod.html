@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinmod. mkin 0.9-33</title>
+<title>mkinmod. mkin 0.9-34</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-33</a>
+      <a class="brand" href="#">mkin 0.9-34</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -52,7 +52,8 @@
       <dd>
     For each observed variable, a list has to be specified as an argument, containing
     at least a component <code>type</code>, specifying the type of kinetics to use
-    for the variable. Currently, single first order kinetics "SFO" or
+    for the variable. Currently, single first order kinetics "SFO", 
+    indeterminate order rate equation kinetics "IORE", or
     single first order with reversible binding "SFORB" are implemented for all
     variables, while 
     "FOMC", "DFOP" and "HS" can additionally be chosen for the first
@@ -81,9 +82,13 @@
     <div class="Description">
       <h2>Description</h2>
       
-      <p>The function takes a specification, consisting of a list of the observed variables
-  in the data. Each observed variable is again represented by a list, specifying the 
-  kinetic model type and reaction or transfer to other observed compartments.</p>
+      <p>The function usually takes several expressions, each assigning a compound name to 
+  a list, specifying the kinetic model type and reaction or transfer to other
+  observed compartments. Instead of specifying several expressions, a list
+  of lists can be given in the speclist argument.</p>
+  
+      <p>For the definition of model types and their parameters, the equations given
+  in the FOCUS and NAFTA guidance documents are used.</p>
   
     </div>
 
@@ -97,7 +102,32 @@
     map A list containing named character vectors for each observed variable, specifying
       the modelling variables by which it is represented. 
     use_of_ff The content of <code>use_of_ff</code> is passed on in this list component. 
-    coefmat The coefficient matrix, if the system of differential equations can be represented by one.</p>
+    coefmat The coefficient matrix, if the system of differential equations can be
+      represented by one.</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+      
+      <p>The IORE submodel is not well tested (yet). When using this model for metabolites, 
+  you may want to read the second note in the help page to 
+  <code><a href='mkinfit.html'>mkinfit</a></code>.</p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+      
+      <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
+  Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
+  Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
+  EC Document Reference Sanco/10058/2005 version 2.0, 434 pp,
+  <a href = 'http://focus.jrc.ec.europa.eu/dk'>http://focus.jrc.ec.europa.eu/dk</a></p>
+  
+      <p>NAFTA Technical Working Group on Pesticides (not dated) Guidance for
+  Evaluating and Calculating Degradation Kinetics in Environmental 
+  Media</p>
   
     </div>
     

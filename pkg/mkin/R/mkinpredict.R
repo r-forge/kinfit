@@ -50,6 +50,12 @@ mkinpredict <- function(mkinmod, odeparms, odeini,
       FOMC = FOMC.solution(outtimes,
           evalparse(parent.name),
           evalparse("alpha"), evalparse("beta")),
+      IORE = IORE.solution(outtimes,
+          evalparse(parent.name),
+          ifelse(mkinmod$use_of_ff == "min", 
+	    evalparse(paste("k.iore", parent.name, "sink", sep="_")),
+	    evalparse(paste("k.iore", parent.name, sep="_"))),
+            evalparse("N_parent")),
       DFOP = DFOP.solution(outtimes,
           evalparse(parent.name),
           evalparse("k1"), evalparse("k2"),
@@ -103,6 +109,10 @@ mkinpredict <- function(mkinmod, odeparms, odeini,
       rtol = rtol,
       ...
     )
+    if (sum(is.na(out)) > 0) {
+      stop("Differential equations were not integrated for all output times because\n",
+	   "NaN values occurred in output from ode()")
+      }
   }
   if (map_output) {
     # Output transformation for models with unobserved compartments like SFORB

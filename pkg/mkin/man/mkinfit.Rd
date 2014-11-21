@@ -7,8 +7,10 @@
   This function uses the Flexible Modelling Environment package
   \code{\link{FME}} to create a function calculating the model cost, i.e. the 
   deviation between the kinetic model and the observed data. This model cost is
-  then minimised using the Levenberg-Marquardt algorithm \code{\link{nls.lm}}, 
+  then minimised using the Port algorithm \code{\link{nlminb}}, 
   using the specified initial or fixed parameters and starting values.
+  Per default, parameters in the kinetic models are internally transformed in order 
+  to better satisfy the assumption of a normal distribution of their estimators.
   In each step of the optimsation, the kinetic model is solved using the
   function \code{\link{mkinpredict}}. The variance of the residuals for each
   observed variable can optionally be iteratively reweighted until convergence
@@ -21,7 +23,7 @@ mkinfit(mkinmod, observed,
   fixed_parms = NULL, fixed_initials = names(mkinmod$diffs)[-1], 
   solution_type = "auto",
   method.ode = "lsoda",
-  method.modFit = c("Marq", "Port", "SANN", "Nelder-Mead", "BFSG", "CG", "L-BFGS-B"),
+  method.modFit = c("Port", "Marq", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B"),
   maxit.modFit = "auto",
   control.modFit = list(),
   transform_rates = TRUE,
@@ -101,13 +103,17 @@ mkinfit(mkinmod, observed,
     "lsoda" is performant, but sometimes fails to converge.
   }
   \item{method.modFit}{
-    The optimisation method passed to \code{\link{modFit}}.  The default "Marq"
-    is the Levenberg Marquardt algorithm \code{\link{nls.lm}} from the package
-    \code{minpack.lm} and usually needs the least number of iterations.
+    The optimisation method passed to \code{\link{modFit}}.  
 
-    For more complex problems where local minima occur, the "Port" algorithm is
-    recommended as it is less prone to get trapped in local minima and depends
-    less on starting values for parameters.  However, it needs more iterations.
+    In order to optimally deal with problems where local minima occur, the
+    "Port" algorithm is now used per default as it is less prone to get trapped
+    in local minima and depends less on starting values for parameters than
+    the Levenberg Marquardt variant selected by "Marq".  However, "Port" needs
+    more iterations.
+
+    The former default "Marq" is the Levenberg Marquardt algorithm
+    \code{\link{nls.lm}} from the package \code{minpack.lm} and usually needs
+    the least number of iterations.
 
     The "Pseudo" algorithm is not included because it needs finite parameter bounds
     which are currently not supported.
@@ -138,10 +144,10 @@ mkinfit(mkinmod, observed,
     Boolean specifying if formation fractions constants should be transformed in the
     model specification used in the fitting for better compliance with the
     assumption of normal distribution of the estimator. The default (TRUE) is 
-    to do transformations. The g parameter of the DFOP and HS models are also 
-    transformed, as they can also be seen as compositional data. The
-    transformation used for these transformations is the \code{\link{ilr}}
-    transformation.
+    to do transformations. If TRUE, the g parameter of the DFOP and HS
+    models are also transformed, as they can also be seen as compositional
+    data. The transformation used for these transformations is the
+    \code{\link{ilr}} transformation.
   }
   \item{plot}{
     Should the observed values and the numerical solutions be plotted at each
@@ -209,6 +215,12 @@ mkinfit(mkinmod, observed,
   work of the KinGUII team at Bayer Crop Science (Walter Schmitt and Zhenglei
   Gao). A similar implemention can also be found in CAKE 2.0, which is the
   other GUI derivative of mkin, sponsored by Syngenta.
+}
+\note{
+  When using the "IORE" submodel for metabolites, fitting with 
+  "transform_rates = TRUE" (the default) often leads to failures of the
+  numerical ODE solver. In this situation it may help to switch off the
+  internal rate transformation.
 }
 \author{
   Johannes Ranke

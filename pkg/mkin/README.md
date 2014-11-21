@@ -11,7 +11,7 @@ You can install the latest released version from
 [CRAN](http://cran.r-project.org/package=mkin) from within R:
 
 ```s
-install.packages('mkin')
+install.packages("mkin")
 ```
 
 If looking for the latest features, you can install directly from 
@@ -21,7 +21,7 @@ vignettes, to make installation as fast and painless as possible.
 
 ```s
 require(devtools)
-install_github("mkin", "jranke", quick = TRUE)
+install_github("jranke/mkin", quick = TRUE)
 ```
 
 ## Background
@@ -37,7 +37,7 @@ detailed guidance and helpful tools have been developed as detailed in
 The simplest usage example that I can think of, using model shorthand notation
 (available since mkin 0.9-32) and a built-in dataset is
 
-    library("mkin")
+    library(mkin)
     fit <- mkinfit("SFO", FOCUS_2006_C)
     plot(fit, show_residuals = TRUE) 
     summary(fit)
@@ -93,8 +93,7 @@ documentation or the package vignettes referenced from the
 * Model optimisation with 
   [`mkinfit`](http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html)
   internally using the `modFit` function from the `FME` package,
-  which uses the least-squares Levenberg-Marquardt algorithm from
-  `minpack.lm` per default.
+  but using the Port routine `nlminb` per default.
 * By default, kinetic rate constants and kinetic formation fractions are
   transformed internally using
   [`transform_odeparms`](http://kinfit.r-forge.r-project.org/mkin_static/transform_odeparms.html)
@@ -119,13 +118,15 @@ documentation or the package vignettes referenced from the
   `reweight = "obs"` to your call to `mkinfit` and a separate variance 
   componenent for each of the observed variables will be optimised
   in a second stage after the primary optimisation algorithm has converged.
+* When a metabolite decline phase is not described well by SFO kinetics, 
+  either IORE kinetics or SFORB kinetics can be used for the metabolite, 
+  adding one respectively two parameters to the system.
 
 ## GUI
 
-There is a graphical user interface that I consider useful for real work.
-It is available from github in the separate package 
-[gmkin](http://github.com/jranke/gmkin).
-
+There is a graphical user interface that I consider useful for real work. Please
+refer to its [documentation page](http://kinfit.r-forge.r-project.org/gmkin_static)
+for installation instructions and a manual.
   
 ## Credits and historical remarks
 
@@ -155,7 +156,7 @@ The first `mkin` code was
 [first CRAN version](http://cran.r-project.org/src/contrib/Archive/mkin)
 on 18 May 2010.
 
-After this, Bayer has developed an R based successor to KinGUI named 
+In 2011, Bayer Crop Science started to distribute an R based successor to KinGUI named 
 [KinGUII](https://kinguii.github.io) 
 whose R code is based on `mkin`, but which added, amongst other refinements, a
 closed source graphical user interface (GUI), iteratively reweighted least
@@ -163,8 +164,8 @@ squares (IRLS) optimisation of the variance for each of the observed
 variables, and Markov Chain Monte Carlo (MCMC) simulation functionality,
 similar to what is available e.g. in the `FME` package.
 
-Somewhat in parallel, Syngenta has sponsored the development of an `mkin` (and
-KinGUII?) based GUI application called CAKE, which also adds IRLS and MCMC, is
+Somewhat in parallel, Syngenta has sponsored the development of an `mkin` and
+KinGUII based GUI application called CAKE, which also adds IRLS and MCMC, is
 more limited in the model formulation, but puts more weight on usability.
 CAKE is available for download from the [CAKE
 website](http://projects.tessella.com/cake), where you can also
