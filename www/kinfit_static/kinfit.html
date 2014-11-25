@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>kinfit. kinfit 1.1.12</title>
+<title>kinfit. kinfit 1.1.13</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content=" Johannes Ranke ">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.12</a>
+      <a class="brand" href="#">kinfit 1.1.13</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,10 +42,7 @@ Fit kinetic models to chemical degradation data
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>kinfit(kindata, kinmodels = c("SFO"), parent.0.user = NA, parent.0.fixed = FALSE, 
-  start.SFO = list(parent.0 = NA, k = NA), start.FOMC = list(parent.0 = NA, alpha = NA, 
-          beta = NA), start.DFOP = list(parent.0 = NA, k1 = NA, k2 = NA, g = NA), start.HS = list(parent.0 = NA, 
-          k1 = NA, k2 = NA, tb = NA), algorithm = "default")</pre>
+    <pre><div>kinfit(kindata, kinmodels&nbsp;=&nbsp;c("SFO"), parent.0.user&nbsp;=&nbsp;NA, parent.0.fixed&nbsp;=&nbsp;FALSE, start.SFO&nbsp;=&nbsp;list(parent.0&nbsp;=&nbsp;NA, k&nbsp;=&nbsp;NA),  start.FOMC&nbsp;=&nbsp;list(parent.0&nbsp;=&nbsp;NA, alpha&nbsp;=&nbsp;NA, beta&nbsp;=&nbsp;NA),  start.DFOP&nbsp;=&nbsp;list(parent.0&nbsp;=&nbsp;NA, k1&nbsp;=&nbsp;NA, k2&nbsp;=&nbsp;NA, g&nbsp;=&nbsp;NA), start.HS&nbsp;=&nbsp;list(parent.0&nbsp;=&nbsp;NA, k1&nbsp;=&nbsp;NA, k2&nbsp;=&nbsp;NA, tb&nbsp;=&nbsp;NA), algorithm&nbsp;=&nbsp;"default")</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -92,7 +89,7 @@ Fit kinetic models to chemical degradation data
   </dd>
       <dt>algorithm</dt>
       <dd>
-    The algorithm to use for the calls to <code><a href='http://www.inside-r.org/r-doc/stats/nls'>nls</a></code>.
+    The algorithm to use for the calls to <code><a href='http://www.inside-r.org/packages/cran/stats/docs/nls'>nls</a></code>.
   </dd>
     </dl>
     
@@ -142,7 +139,7 @@ Fit kinetic models to chemical degradation data
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>data(FOCUS_2006_A)
-(kinfits <- kinfit(FOCUS_2006_A))
+(kinfits &lt;- kinfit(FOCUS_2006_A))
 </div>
 <div class='output'>$SFO
 Nonlinear regression model
@@ -153,11 +150,11 @@ Nonlinear regression model
  residual sum-of-squares: 221.8
 
 Number of iterations to convergence: 7 
-Achieved convergence tolerance: 6.359e-06
+Achieved convergence tolerance: 6.314e-06
 
 </div>
 <div class='input'>data(FOCUS_2006_B)
-(kinfits <- kinfit(FOCUS_2006_B, kinmodels=c("SFO","FOMC")))
+(kinfits &lt;- kinfit(FOCUS_2006_B, kinmodels=c(&quot;SFO&quot;,&quot;FOMC&quot;)))
 </div>
 <div class='output'>$SFO
 Nonlinear regression model
@@ -179,7 +176,7 @@ parent.0    alpha     beta
  residual sum-of-squares: 28.58
 
 Number of iterations to convergence: 8 
-Achieved convergence tolerance: 4.184e-06
+Achieved convergence tolerance: 8.953e-06
 
 </div></pre>
   </div>

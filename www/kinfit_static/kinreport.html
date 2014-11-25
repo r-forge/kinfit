@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>kinreport. kinfit 1.1.12</title>
+<title>kinreport. kinfit 1.1.13</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content=" Johannes Ranke ">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.12</a>
+      <a class="brand" href="#">kinfit 1.1.13</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,7 +42,7 @@ Creates a report of the kinetic fits
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>kinreport(kinobject, file = NA, data = TRUE, R2 = FALSE, vcov = FALSE, endpoint.digits = 1)</pre>
+    <pre><div>kinreport(kinobject, file&nbsp;=&nbsp;NA, data&nbsp;=&nbsp;TRUE, R2&nbsp;=&nbsp;FALSE,  vcov&nbsp;=&nbsp;FALSE, endpoint.digits&nbsp;=&nbsp;1)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -102,13 +102,13 @@ to the R console as well as to a text file if a filename is specified.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>data(FOCUS_2006_A)
-kinfits <- kinfit(FOCUS_2006_A)
-kinobject <- list(
-	parent = "Compound XY",
-	type = "Degradation in the environment",
-	system = "System 1",	
+kinfits &lt;- kinfit(FOCUS_2006_A)
+kinobject &lt;- list(
+	parent = &quot;Compound XY&quot;,
+	type = &quot;Degradation in the environment&quot;,
+	system = &quot;System 1&quot;,	
 	data = FOCUS_2006_A,
-	source = "Synthetic example data from FOCUS kinetics",
+	source = &quot;Synthetic example data from FOCUS kinetics&quot;,
 	fits = kinfits,
 	results = kinresults(kinfits))	
 kinreport(kinobject)
@@ -117,9 +117,9 @@ kinreport(kinobject)
 Study type:       Degradation in the environment 
 System:           System 1 
 Source:           Synthetic example data from FOCUS kinetics 
-kinfit version:   1.1.12 
-R version:        3.0.1 
-Report generated: Thu Nov  7 00:10:21 2013 
+kinfit version:   1.1.13 
+R version:        3.1.2 
+Report generated: Tue Nov 25 09:51:39 2014 
 
 Data:
     t parent
@@ -138,7 +138,7 @@ Data:
 Nonlinear least squares fit of the SFO model
 
 Parameter estimation:	
-         Estimate Std. Error t value   Pr(>t)
+         Estimate Std. Error t value   Pr(&gt;t)
 parent.0 109.1531    4.39069   24.86 1.39e-07
 k          0.0372    0.00429    8.68 6.46e-05
 
