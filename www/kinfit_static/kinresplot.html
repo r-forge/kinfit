@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>kinresplot. kinfit 1.1.12</title>
+<title>kinresplot. kinfit 1.1.13</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content=" Johannes Ranke ">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.12</a>
+      <a class="brand" href="#">kinfit 1.1.13</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,8 +42,8 @@ Creates a plot of the residual for specified kinetic fits
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>kinresplot(kinobject, kinmodel, xlab = "Time [days]", ylab = "Residual [% of applied radioactivity]", 
-  maxabs = "auto")</pre>
+    <pre><div>kinresplot(kinobject, kinmodel,  xlab&nbsp;=&nbsp;"Time [days]", ylab&nbsp;=&nbsp;"Residual [% of applied radioactivity]",
+	     maxabs&nbsp;=&nbsp;"auto")</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -96,16 +96,16 @@ for the specified fit.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>data(FOCUS_2006_C)
-kinfits <- kinfit(FOCUS_2006_C)
-kinobject <- list(
-	parent = "Compound XY",
-	type = "Degradation in the environment",
-	system = "System 1",	
-	source = "Synthetic example data from FOCUS kinetics",
+kinfits &lt;- kinfit(FOCUS_2006_C)
+kinobject &lt;- list(
+	parent = &quot;Compound XY&quot;,
+	type = &quot;Degradation in the environment&quot;,
+	system = &quot;System 1&quot;,	
+	source = &quot;Synthetic example data from FOCUS kinetics&quot;,
 	data = FOCUS_2006_C,
 	fits = kinfits,
 	results = kinresults(kinfits))	
-## <strong>Not run</strong>: kinresplot(kinobject, "SFO")
+## &lt;strong&gt;Not run&lt;/strong&gt;: kinresplot(kinobject, &quot;SFO&quot;)
 </div></pre>
   </div>
   <div class="span4">

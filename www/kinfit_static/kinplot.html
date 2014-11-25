@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>kinplot. kinfit 1.1.12</title>
+<title>kinplot. kinfit 1.1.13</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content=" Johannes Ranke ">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.12</a>
+      <a class="brand" href="#">kinfit 1.1.13</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,8 +42,8 @@ Creates a plot of the kinetic fits
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>kinplot(kinobject, main = "", xlab = "Time [days]", ylab = "Parent [% of applied radioactivity]", 
-  ylim = c("auto", "auto"), lpos = "topright")</pre>
+    <pre><div>kinplot(kinobject, main&nbsp;=&nbsp;"", xlab&nbsp;=&nbsp;"Time [days]", ylab&nbsp;=&nbsp;"Parent [% of applied radioactivity]", 
+	ylim&nbsp;=&nbsp;c("auto", "auto"), lpos&nbsp;=&nbsp;"topright")</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -73,7 +73,7 @@ Creates a plot of the kinetic fits
       <dd> An array of length two holding the range for values on the y axis or "auto". </dd>
       <dt>lpos</dt>
       <dd> Where should the legend be placed? Will be passed on to
-		<code><a href='http://www.inside-r.org/r-doc/graphics/legend'>legend</a></code>. </dd>
+		<code><a href='http://www.inside-r.org/packages/cran/graphics/docs/legend'>legend</a></code>. </dd>
     </dl>
     
     <div class="
@@ -102,16 +102,16 @@ the fitted model.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>data(FOCUS_2006_C)
-kinfits <- kinfit(FOCUS_2006_C, kinmodels = c("SFO", "FOMC", "DFOP"))
-kinobject <- list(
-	parent = "Compound XY",
-	type = "Degradation in the environment",
-	system = "System 1",	
-	source = "Synthetic example data from FOCUS kinetics",
+kinfits &lt;- kinfit(FOCUS_2006_C, kinmodels = c(&quot;SFO&quot;, &quot;FOMC&quot;, &quot;DFOP&quot;))
+kinobject &lt;- list(
+	parent = &quot;Compound XY&quot;,
+	type = &quot;Degradation in the environment&quot;,
+	system = &quot;System 1&quot;,	
+	source = &quot;Synthetic example data from FOCUS kinetics&quot;,
 	data = FOCUS_2006_C,
 	fits = kinfits,
 	results = kinresults(kinfits))	
-## <strong>Not run</strong>: kinplot(kinobject)
+## &lt;strong&gt;Not run&lt;/strong&gt;: kinplot(kinobject)
 </div></pre>
   </div>
   <div class="span4">

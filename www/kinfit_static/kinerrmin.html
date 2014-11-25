@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>kinerrmin. kinfit 1.1.12</title>
+<title>kinerrmin. kinfit 1.1.13</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content=" Johannes Ranke ">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.12</a>
+      <a class="brand" href="#">kinfit 1.1.13</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -42,7 +42,7 @@ Calculate the minimum error to assume in order to pass the variance test
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre>kinerrmin(kinfits, kinmodel = "SFO", alpha = 0.05)</pre>
+    <pre><div>kinerrmin(kinfits, kinmodel&nbsp;=&nbsp;"SFO", alpha&nbsp;=&nbsp;0.05)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -73,7 +73,7 @@ Calculate the minimum error to assume in order to pass the variance test
     <div class="Description">
       <h2>Description</h2>
       
-      <p>This function uses <code><a href='http://www.inside-r.org/r-doc/stats/optimize'>optimize</a></code> in order to iteratively find the
+      <p>This function uses <code><a href='http://www.inside-r.org/packages/cran/stats/docs/optimize'>optimize</a></code> in order to iteratively find the
 smallest relative error still resulting in passing the chi-squared test
 as defined in the FOCUS kinetics report from 2006.</p>
   
@@ -99,7 +99,7 @@ as defined in the FOCUS kinetics report from 2006.</p>
     
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>data(FOCUS_2006_A)
-kinfits <- kinfit(FOCUS_2006_A)
+kinfits &lt;- kinfit(FOCUS_2006_A)
 kinerrmin(kinfits)
 </div>
 <div class='output'>[1] 0.08384814
