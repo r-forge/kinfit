@@ -248,6 +248,7 @@ configure_fit_handler = function(h, ...) {
           m.i <<- as.character(svalue(m.gtable))
           ftmp <<- suppressWarnings(mkinfit(m[[m.i]],
                                             override(ds[[ds.i]]$data),
+                                            method.modFit = "Marq",
                                             err = "err", 
                                             control.modFit = list(maxiter = 0)))
           ftmp$ds.index <<- ds.i
@@ -266,7 +267,7 @@ configure_fit_handler = function(h, ...) {
                                          "none", ftmp$reweight.method)
           svalue(f.gg.opts.reweight.tol) <<- ftmp$reweight.tol
           svalue(f.gg.opts.reweight.max.iter) <<- ftmp$reweight.max.iter
-          svalue(f.gg.opts.method.modFit) <<- ftmp$method.modFit
+          svalue(f.gg.opts.method.modFit) <<- "Port"
           svalue(f.gg.opts.maxit.modFit) <<- ftmp$maxit.modFit
           f.gg.parms[,] <- get_Parameters(stmp, FALSE)
           delete(f.gg.plotopts, f.gg.po.obssel)
@@ -608,7 +609,7 @@ keep_m_changes_handler <- function(h, ...) {
     spec[[obs.i]] <- list(type = svalue(m.e.type[[obs.i]]),
                           to = to_vector,
                           sink = svalue(m.e.sink[[obs.i]]))
-    if(spec[[obs.i]]$to == "") spec[[obs.i]]$to = NULL
+    if(spec[[obs.i]]$to[[1]] == "") spec[[obs.i]]$to = NULL
     names(spec)[[obs.i]] <- svalue(m.e.obs[[obs.i]])
   }
   m[[m.cur]] <<- mkinmod(use_of_ff = svalue(m.ff.gc), 
@@ -701,6 +702,7 @@ show_plot <- function(type, default = FALSE) {
                                       fixed_parms = names(deparms),
                                       fixed_initials = names(stateparms),
                                       err = "err", 
+                                      method.modFit = "Marq",
                                       control.modFit = list(maxiter = 0)))
     ftmp$ds.index <<- ds.i
     ftmp$ds <<- ds[[ds.i]]
@@ -786,6 +788,7 @@ pf <- gframe("Dataset 1, Model SFO", horizontal = TRUE,
 pf.p <- ggroup(cont = pf, horizontal = FALSE)
 ftmp <- suppressWarnings(mkinfit(m[[m.cur]], override(ds[[ds.i]]$data), 
                                  err = "err", 
+                                 method.modFit = "Marq",
                                  control.modFit = list(maxiter = 0)))
 ftmp$ds.index = ds.i
 ftmp$ds = ds[[ds.i]]
@@ -894,26 +897,29 @@ keep.fit.gb <- gbutton("Keep fit",
                           }, cont = f.gg.buttons)
 tooltip(keep.fit.gb) <- "Store the optimised model with all settings and the current dataset in the fit list"
 
-delete.fit.gb <- gbutton("Delete fit", handler = function(h, ...) {
-          if (length(f) > 0) {
-            f[[f.cur]] <<- NULL
-            s[[f.cur]] <<- NULL
-          }
-          if (length(f) > 0) {
-            names(f) <<- as.character(1:length(f))
-            names(s) <<- as.character(1:length(f))
-            update_f.df()
-            f.cur <<- "1"
-            ftmp <<- f[[f.cur]]
-            stmp <<- s[[f.cur]]
-            ds.i <<- ftmp$ds.index
-            update_plotting_and_fitting()
-          } else {
-            f.df <<- f.df.empty
-            f.cur <<- "0"
-          }
-          f.gtable[,] <<- f.df
-        }, cont = f.gg.buttons)
+delete_fit_handler <- function(h, ...) {
+  if (length(f) > 0) {
+    f[[f.cur]] <<- NULL
+    s[[f.cur]] <<- NULL
+  }
+  if (length(f) > 0) {
+    names(f) <<- as.character(1:length(f))
+    names(s) <<- as.character(1:length(f))
+    update_f.df()
+    f.cur <<- "1"
+    ftmp <<- f[[f.cur]]
+    stmp <<- s[[f.cur]]
+    ds.i <<- ftmp$ds.index
+    update_plotting_and_fitting()
+  } else {
+    f.df <<- f.df.empty
+    f.cur <<- "0"
+  }
+  f.gtable[,] <<- f.df
+}
+
+delete.fit.gb <- gbutton("Delete fit", handler = delete_fit_handler,
+                         cont = f.gg.buttons)
 tooltip(delete.fit.gb) <- "Delete the currently loaded fit from the fit list"
 
 show.initial.gb <- gbutton("Show initial", 

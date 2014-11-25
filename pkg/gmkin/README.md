@@ -11,7 +11,7 @@ ExtJS which is bundled with gWidgetsWWW2.
 ## Installation
 
 For running gmkin you need a system running a recent version of R (version
-3.0.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
+3.1.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
 web browser (Firefox and Chrome work for me) with JavaScript enabled.
 
 It should be possible to run gmkin on most laptop or desktop computers running
@@ -34,8 +34,17 @@ possible to create a reasonably complex user interface by just writing R code.
 ### Installing R
 
 Please refer to [CRAN](http://cran.r-project.org) for installation instructions
-and binary packages. If you are on Windows and would like to upgrade your R 
-installation, please refer to the respective [FAQ entry](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f).
+and binary packages. If you are on Windows, please consult the 
+[FAQ for Windows](http://cran.r-project.org/bin/windows/base/rw-FAQ.html), especially
+the entries 
+"[How do I install R for Windows?](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-install-R-for-Windows_003f)", 
+"[How do I run it?](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-run-it_003f)",
+and 
+"[How can I keep workspaces for different projects in different directories?](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-can-I-keep-workspaces-for-different-projects-in-different-directories_003f)".
+
+If you would like to upgrade your R installation, please refer to the
+respective 
+[FAQ entry](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f).
 
 ### Installing gmkin from R-Forge
 
@@ -47,8 +56,11 @@ you can install it using the command
 install.packages("gmkin", repos = c("http://r-forge.r-project.org", getOption("repos")))
 ```
 
-I you have not set your CRAN mirror yet, you may have to select one from the list.
-This adds the R-Forge repository to your package sources for this installation only.
+If you have not set your CRAN mirror yet, you may have to select one from the list that 
+appears. 
+
+The above command adds the R-Forge repository to your package sources for this
+installation only.
 It should pull the gmkin package and its dependencies, notably the
 gWidgetsWWW2 package which is not available from the CRAN archive (see above).
 Mac users that have the necessary development files installed can probably 
@@ -107,6 +119,15 @@ to work fine.
 require(gmkin)
 gmkin()
 ```
+
+You can also put these two commands into an `.Rprofile` file in the working directory
+where you start R. For some reason, the `utils` package also needs to be loaded when 
+you do this from an .Rprofile file. For your convenience, you can find such a
+file [here](Rprofile?raw=true).  On Windows, you can save this file to the
+directory where you would like to start gmkin
+by right clicking on the link to this file, choose `save target as` or similar,
+and choose `.Rprofile.` as the name. This will lead to the creation of a file
+named `.Rprofile` which will be executed when you start R within this directory.
 
 The following screenshot is taken after loading the gmkin workspace with
 an analysis of FOCUS dataset Z. It has to be saved in R as an .RData file
