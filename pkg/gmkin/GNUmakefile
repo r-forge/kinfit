@@ -64,7 +64,7 @@ check-no-vignettes: build-no-vignettes
 	mv $(TGZ) $(TGZVNR)
 
 vignettes/gmkin_manual.html: vignettes/gmkin_manual.Rmd
-	"$(RBIN)/Rscript" -e "rmarkdown::render(input = 'vignettes/gmkin_manual.Rmd')"
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/gmkin_manual.Rmd', dir = 'vignettes')"
 
 vignettes: vignettes/gmkin_manual.html
 
@@ -73,7 +73,7 @@ sd:
 
 move-sd: sd
 	rm -rf $(SDDIR)/*;\
-	cp -r inst/web/* $(SDDIR); cp gmkin_screenshot.png $(SDDIR); cd $(SDDIR) && svn add --force .
+	cp -r inst/web/* $(SDDIR); cp gmkin_screenshot.png Rprofile $(SDDIR); cd $(SDDIR) && svn add --force .
 
 r-forge: move-sd
 	git archive master > $(HOME)/gmkin.tar;\
