@@ -89,7 +89,7 @@ Fit kinetic models to chemical degradation data
   </dd>
       <dt>algorithm</dt>
       <dd>
-    The algorithm to use for the calls to <code><a href='http://www.inside-r.org/packages/cran/stats/docs/nls'>nls</a></code>.
+    The algorithm to use for the calls to <code><a href='http://www.inside-r.org/r-doc/stats/nls'>nls</a></code>.
   </dd>
     </dl>
     
@@ -99,12 +99,12 @@ Fit kinetic models to chemical degradation data
       <h2>
 Fit kinetic models to chemical degradation data
 </h2>
-      
+
     </div>
 
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>A selection of kinetic models as defined in the FOCUS kinetics report from
   2006 are fitted to a given dataframe of chemical degradation data.</p>
   
@@ -112,7 +112,7 @@ Fit kinetic models to chemical degradation data
 
     <div class="Details">
       <h2>Details</h2>
-      
+
       <p>Per default all starting parameters are <code>NA</code> and the function tries to
   find suitable starting parameters on its own.</p>
   
@@ -120,15 +120,17 @@ Fit kinetic models to chemical degradation data
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>A list of models of class <code>nls</code> representing the models that were
-  fitted successfully.</p>
+
+      <p><dl>
+  A list of models of class <code>nls</code> representing the models that were
+  fitted successfully.
+</dl></p>
   
     </div>
 
     <div class="References">
       <h2>References</h2>
-      
+
       <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
@@ -150,7 +152,7 @@ Nonlinear regression model
  residual sum-of-squares: 221.8
 
 Number of iterations to convergence: 7 
-Achieved convergence tolerance: 6.314e-06
+Achieved convergence tolerance: 6.323e-06
 
 </div>
 <div class='input'>data(FOCUS_2006_B)
@@ -172,11 +174,11 @@ Nonlinear regression model
   model: parent ~ FOMC(t, parent.0, alpha, beta)
    data: kindata
 parent.0    alpha     beta 
-   99.67    12.81   156.11 
+   99.67    12.80   156.11 
  residual sum-of-squares: 28.58
 
-Number of iterations to convergence: 8 
-Achieved convergence tolerance: 8.953e-06
+Number of iterations to convergence: 9 
+Achieved convergence tolerance: 1.846e-06
 
 </div></pre>
   </div>
