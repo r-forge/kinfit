@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-34</title>
+<title>transform_odeparms. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -87,7 +87,7 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
     
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>The transformations are intended to map parameters that should only take 
   on restricted values to the full scale of real numbers. For kinetic rate
   constants and other paramters that can only take on positive values, a
@@ -103,9 +103,11 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>A vector of transformed or backtransformed parameters with the same names
-  as the original parameters.</p>
+
+      <p><dl>
+  A vector of transformed or backtransformed parameters with the same names
+  as the original parameters.
+</dl></p>
   
     </div>
     
@@ -318,10 +320,10 @@ Model cost at call  317 :  371.2134
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:49 2014 
-Date of summary: Fri Nov 21 19:39:53 2014 
+Date of fit:     Thu Dec 18 09:06:27 2014 
+Date of summary: Thu Dec 18 09:06:31 2014 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -329,7 +331,7 @@ d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 153 model solutions performed in 1.856 s
+Fitted with method Port using 153 model solutions performed in 1.849 s
 
 Weighting: none
 
@@ -398,10 +400,10 @@ m1     131.761 437.70
 </div>
 <div class='input'>summary(fit.2, data=FALSE) 
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:53 2014 
-Date of summary: Fri Nov 21 19:39:53 2014 
+Date of fit:     Thu Dec 18 09:06:31 2014 
+Date of summary: Thu Dec 18 09:06:31 2014 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -409,7 +411,7 @@ d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 335 model solutions performed in 4.078 s
+Fitted with method Port using 335 model solutions performed in 4.103 s
 
 Weighting: none
 
@@ -579,10 +581,10 @@ Model cost at call  179 :  371.2134
 </div>
 <div class='input'>summary(fit.ff, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:55 2014 
-Date of summary: Fri Nov 21 19:39:55 2014 
+Date of fit:     Thu Dec 18 09:06:33 2014 
+Date of summary: Thu Dec 18 09:06:33 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -590,7 +592,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 197 model solutions performed in 2.416 s
+Fitted with method Port using 197 model solutions performed in 2.407 s
 
 Weighting: none
 
@@ -725,10 +727,10 @@ Model cost at call  90 :  2569.4
 </div>
 <div class='input'>summary(fit.ff.2, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:57 2014 
-Date of summary: Fri Nov 21 19:39:57 2014 
+Date of fit:     Thu Dec 18 09:06:35 2014 
+Date of summary: Thu Dec 18 09:06:35 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -736,7 +738,7 @@ d_m1 = + k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 104 model solutions performed in 1.323 s
+Fitted with method Port using 104 model solutions performed in 1.311 s
 
 Weighting: none
 

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-34</title>
+<title>mkinfit. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -247,11 +247,11 @@
     
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>This function uses the Flexible Modelling Environment package
   <code><a href='http://www.inside-r.org/packages/cran/FME/docs/FME'>FME</a></code> to create a function calculating the model cost, i.e. the 
   deviation between the kinetic model and the observed data. This model cost is
-  then minimised using the Port algorithm <code><a href='http://www.inside-r.org/packages/cran/stats/docs/nlminb'>nlminb</a></code>, 
+  then minimised using the Port algorithm <code><a href='http://www.inside-r.org/r-doc/stats/nlminb'>nlminb</a></code>, 
   using the specified initial or fixed parameters and starting values.
   Per default, parameters in the kinetic models are internally transformed in order 
   to better satisfy the assumption of a normal distribution of their estimators.
@@ -264,15 +264,17 @@
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>A list with "mkinfit" and "modFit" in the class attribute. 
-  A summary can be obtained by <code><a href='summary.mkinfit.html'>summary.mkinfit</a></code>.</p>
+
+      <p><dl>
+  A list with "mkinfit" and "modFit" in the class attribute. 
+  A summary can be obtained by <code><a href='summary.mkinfit.html'>summary.mkinfit</a></code>. 
+</dl></p>
   
     </div>
 
     <div class="Note">
       <h2>Note</h2>
-      
+
       <p>The implementation of iteratively reweighted least squares is inspired by the
   work of the KinGUII team at Bayer Crop Science (Walter Schmitt and Zhenglei
   Gao). A similar implemention can also be found in CAKE 2.0, which is the
@@ -282,7 +284,7 @@
 
     <div class="Note">
       <h2>Note</h2>
-      
+
       <p>When using the "IORE" submodel for metabolites, fitting with 
   "transform_rates = TRUE" (the default) often leads to failures of the
   numerical ODE solver. In this situation it may help to switch off the
@@ -320,17 +322,17 @@ Model cost at call  50 :  31.05088
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:19 2014 
-Date of summary: Fri Nov 21 19:39:19 2014 
+Date of fit:     Thu Dec 18 09:05:57 2014 
+Date of summary: Thu Dec 18 09:05:57 2014 
 
 Equations:
 d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 64 model solutions performed in 0.382 s
+Fitted with method Port using 64 model solutions performed in 0.365 s
 
 Weighting: none
 
@@ -459,10 +461,10 @@ Model cost at call  135 :  371.2134
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:21 2014 
-Date of summary: Fri Nov 21 19:39:21 2014 
+Date of fit:     Thu Dec 18 09:05:59 2014 
+Date of summary: Thu Dec 18 09:05:59 2014 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -470,7 +472,7 @@ d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 153 model solutions performed in 1.863 s
+Fitted with method Port using 153 model solutions performed in 1.822 s
 
 Weighting: none
 
@@ -695,10 +697,10 @@ Model cost at call  179 :  371.2134
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:23 2014 
-Date of summary: Fri Nov 21 19:39:23 2014 
+Date of fit:     Thu Dec 18 09:06:01 2014 
+Date of summary: Thu Dec 18 09:06:01 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -706,7 +708,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 197 model solutions performed in 2.393 s
+Fitted with method Port using 197 model solutions performed in 2.374 s
 
 Weighting: none
 
@@ -962,10 +964,10 @@ Sum of squared differences to last variance estimates: 1.8e-09
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:29 2014 
-Date of summary: Fri Nov 21 19:39:29 2014 
+Date of fit:     Thu Dec 18 09:06:07 2014 
+Date of summary: Thu Dec 18 09:06:07 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -973,7 +975,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 480 model solutions performed in 5.837 s
+Fitted with method Port using 480 model solutions performed in 5.818 s
 
 Weighting: none then iterative reweighting method obs
 
@@ -1140,10 +1142,10 @@ Model cost at call  137 :  0.347807
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:31 2014 
-Date of summary: Fri Nov 21 19:39:31 2014 
+Date of fit:     Thu Dec 18 09:06:09 2014 
+Date of summary: Thu Dec 18 09:06:09 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -1151,7 +1153,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 155 model solutions performed in 1.864 s
+Fitted with method Port using 155 model solutions performed in 1.891 s
 
 Weighting: mean
 
@@ -1331,10 +1333,10 @@ Sum of squared differences to last variance estimates: 1.4e-09
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:37 2014 
-Date of summary: Fri Nov 21 19:39:37 2014 
+Date of fit:     Thu Dec 18 09:06:15 2014 
+Date of summary: Thu Dec 18 09:06:15 2014 
 
 Equations:
 d_parent = - k_parent * parent
@@ -1342,7 +1344,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 448 model solutions performed in 5.436 s
+Fitted with method Port using 448 model solutions performed in 5.385 s
 
 Weighting: mean then iterative reweighting method obs
 

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mccall81_245T. mkin 0.9-34</title>
+<title>mccall81_245T. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,7 +46,7 @@
         
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>Time course of 2,4,5-trichlorophenoxyacetic acid, and the corresponding
  2,4,5-trichlorophenol and 2,4,5-trichloroanisole as recovered in diethylether
  extracts.</p>
@@ -55,18 +55,22 @@
 
     <div class="Format">
       <h2>Format</h2>
-      
+
       <p>A dataframe containing the following variables.
   <dl>
-<dt><code>name</code></dt><dd>the name of the compound observed. Note that T245 is used as 
+    <dt><code>name</code></dt><dd>the name of the compound observed. Note that T245 is used as 
                        an acronym for 2,4,5-T. T245 is a legitimate object name
                        in R, which is necessary for specifying models using
-                       <code><a href='mkinmod.html'>mkinmod</a></code>.</dd>
-<dt><code>time</code></dt><dd>a numeric vector containing sampling times in days after
-                       treatment</dd>
-<dt><code>value</code></dt><dd>a numeric vector containing concentrations in percent of applied radioactivity</dd>
-<dt><code>soil</code></dt><dd>a factor containing the name of the soil</dd>
-</dl></p>
+                       <code><a href='mkinmod.html'>mkinmod</a></code>.</dd></p>
+  
+      <p><dt><code>time</code></dt><dd>a numeric vector containing sampling times in days after
+                       treatment</dd></p>
+  
+      <p><dt><code>value</code></dt><dd>a numeric vector containing concentrations in percent of applied radioactivity</dd></p>
+  
+      <p><dt><code>soil</code></dt><dd>a factor containing the name of the soil</dd></p>
+  
+      <p></dl></p>
   
       <p></p>
   
@@ -78,7 +82,7 @@
       <h2>
   Datasets on aerobic soil metabolism of 2,4,5-T in six soils
 </h2>
-      
+
     </div>
     
     <h2 id="examples">Examples</h2>
@@ -180,10 +184,10 @@ Model cost at call  224 :  139.1138
 </div>
 <div class='input'>  summary(fit.2, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:13 2014 
-Date of summary: Fri Nov 21 19:39:13 2014 
+Date of fit:     Thu Dec 18 09:05:51 2014 
+Date of summary: Thu Dec 18 09:05:51 2014 
 
 Equations:
 d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245
@@ -193,7 +197,7 @@ d_anisole = + k_phenol_anisole * phenol - k_anisole_sink * anisole
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 246 model solutions performed in 4.201 s
+Fitted with method Port using 246 model solutions performed in 4.207 s
 
 Weighting: none
 

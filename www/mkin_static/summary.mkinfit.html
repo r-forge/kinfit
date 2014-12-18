@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>summary.mkinfit. mkin 0.9-34</title>
+<title>summary.mkinfit. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke &lt;jranke@harlan.com,uni-bremen.de&gt;
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -81,7 +81,7 @@
     
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>Lists model equations, the summary as returned by <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>summary.modFit</a></code>,
   the chi2 error levels calculated according to FOCUS guidance (2006) as far
   as defined therein, and optionally the data, consisting of observed, predicted
@@ -91,32 +91,49 @@
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>The summary function returns a list derived from
+
+      <p><dl>
+  The summary function returns a list derived from
   <code><a href='http://www.inside-r.org/packages/cran/FME/docs/modFit'>summary.modFit</a></code>, with components, among others
-  version, RversionThe mkin and R versions used
-  date.fit, date.summaryThe dates where the fit and the summary were produced
-  use_of_ffWas maximum or minimum use made of formation fractions
-  residuals, residualVariance, sigma, modVariance, dfAs in summary.modFit
-  cov.unscaled, cov.scaled, info, niter, stopmess, parAs in summary.modFit
-  bparOptimised and backtransformed parameters
-  diffs The differential equations used in the model
-  data The data (see Description above).
-  start The starting values and bounds, if applicable, for optimised parameters.
-  fixed The values of fixed parameters.
-  errmin The chi2 error levels for each observed variable.
-  bparms.ode All backtransformed ODE parameters, for use as starting parameters for
-    related models.
-  ff The estimated formation fractions derived from the fitted model.
-  distimes The DT50 and DT90 values for each observed variable.
-  SFORBIf applicable, eigenvalues of SFORB components of the model.
-  The print method is called for its side effect, i.e. printing the summary.</p>
+  <dt>version, Rversion</dt><dd>The mkin and R versions used</dd></p>
+  
+      <p><dt>date.fit, date.summary</dt><dd>The dates where the fit and the summary were produced</dd></p>
+  
+      <p><dt>use_of_ff</dt><dd>Was maximum or minimum use made of formation fractions</dd></p>
+  
+      <p><dt>residuals, residualVariance, sigma, modVariance, df</dt><dd>As in summary.modFit</dd></p>
+  
+      <p><dt>cov.unscaled, cov.scaled, info, niter, stopmess, par</dt><dd>As in summary.modFit</dd></p>
+  
+      <p><dt>bpar</dt><dd>Optimised and backtransformed parameters</dd></p>
+  
+      <p><dt>diffs </dt><dd>The differential equations used in the model</dd></p>
+  
+      <p><dt>data </dt><dd>The data (see Description above).</dd></p>
+  
+      <p><dt>start </dt><dd>The starting values and bounds, if applicable, for optimised parameters.</dd></p>
+  
+      <p><dt>fixed </dt><dd>The values of fixed parameters.</dd></p>
+  
+      <p><dt>errmin </dt><dd>The chi2 error levels for each observed variable.</dd></p>
+  
+      <p><dt>bparms.ode </dt><dd>All backtransformed ODE parameters, for use as starting parameters for
+    related models.</dd></p>
+  
+      <p><dt>ff </dt><dd>The estimated formation fractions derived from the fitted model.</dd></p>
+  
+      <p><dt>distimes </dt><dd>The DT50 and DT90 values for each observed variable.</dd></p>
+  
+      <p><dt>SFORB</dt><dd>If applicable, eigenvalues of SFORB components of the model.</dd></p>
+  
+      <p>The print method is called for its side effect, i.e. printing the summary.
+</dl></p>
   
     </div>
 
     <div class="References">
       <h2>References</h2>
-      
+
       <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
@@ -146,17 +163,17 @@ Model cost at call  23 :  221.8078
 Model cost at call  25 :  221.8078 
 Model cost at call  35 :  221.8078 
 </div>
-<div class='output'>mkin version:    0.9.34 
+<div class='output'>mkin version:    0.9.35 
 R version:       3.1.2 
-Date of fit:     Fri Nov 21 19:39:46 2014 
-Date of summary: Fri Nov 21 19:39:46 2014 
+Date of fit:     Thu Dec 18 09:06:25 2014 
+Date of summary: Thu Dec 18 09:06:25 2014 
 
 Equations:
 d_parent = - k_parent_sink * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 35 model solutions performed in 0.257 s
+Fitted with method Port using 35 model solutions performed in 0.254 s
 
 Weighting: none
 

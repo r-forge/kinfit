@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinerrmin. mkin 0.9-34</title>
+<title>mkinerrmin. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -62,13 +62,13 @@ Calculate the minimum error to assume in order to pass the variance test
       <h2>
 Calculate the minimum error to assume in order to pass the variance test
 </h2>
-      
+
     </div>
 
     <div class="Description">
       <h2>Description</h2>
-      
-      <p>This function uses <code><a href='http://www.inside-r.org/packages/cran/stats/docs/optimize'>optimize</a></code> in order to iteratively find the
+
+      <p>This function uses <code><a href='http://www.inside-r.org/r-doc/stats/optimize'>optimize</a></code> in order to iteratively find the
 smallest relative error still resulting in passing the chi-squared test
 as defined in the FOCUS kinetics report from 2006.</p>
   
@@ -76,29 +76,34 @@ as defined in the FOCUS kinetics report from 2006.</p>
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>A dataframe with the following components:
-  err.minThe relative error, expressed as a fraction.
-  n.optimThe number of optimised parameters attributed to the data series.
-  dfThe number of remaining degrees of freedom for the chi2 error level
+
+      <p><dl>
+  A dataframe with the following components:
+  <dt>err.min</dt><dd>The relative error, expressed as a fraction.</dd></p>
+  
+      <p><dt>n.optim</dt><dd>The number of optimised parameters attributed to the data series.</dd></p>
+  
+      <p><dt>df</dt><dd>The number of remaining degrees of freedom for the chi2 error level
     calculations.  Note that mean values are used for the chi2 statistic and
     therefore every time point with observed values in the series only counts
-    one time.
-  The dataframe has one row for the total dataset and one further row for
-  each observed state variable in the model.</p>
+    one time.</dd></p>
+  
+      <p>The dataframe has one row for the total dataset and one further row for
+  each observed state variable in the model.
+</dl></p>
   
     </div>
 
     <div class="Details">
       <h2>Details</h2>
-      
+
       <p>This function is used internally by <code><a href='summary.mkinfit.html'>summary.mkinfit</a></code>.</p>
   
     </div>
 
     <div class="References">
       <h2>References</h2>
-      
+
       <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,

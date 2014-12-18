@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinmod. mkin 0.9-34</title>
+<title>mkinmod. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -81,7 +81,7 @@
     
     <div class="Description">
       <h2>Description</h2>
-      
+
       <p>The function usually takes several expressions, each assigning a compound name to 
   a list, specifying the kinetic model type and reaction or transfer to other
   observed compartments. Instead of specifying several expressions, a list
@@ -94,22 +94,29 @@
 
     <div class="Value">
       <h2>Value</h2>
-      
-      <p>A list of class <code>mkinmod</code> for use with <code><a href='mkinfit.html'>mkinfit</a></code>, containing 
-    diffs A vector of string representations of differential equations,
-      one for each modelling variable. 
-    parms A vector of parameter names occurring in the differential equations. 
-    map A list containing named character vectors for each observed variable, specifying
-      the modelling variables by which it is represented. 
-    use_of_ff The content of <code>use_of_ff</code> is passed on in this list component. 
-    coefmat The coefficient matrix, if the system of differential equations can be
-      represented by one.</p>
+
+      <p><dl>
+  A list of class <code>mkinmod</code> for use with <code><a href='mkinfit.html'>mkinfit</a></code>, containing 
+    <dt>diffs</dt><dd> A vector of string representations of differential equations,
+      one for each modelling variable. </dd></p>
+  
+      <p><dt>parms</dt><dd> A vector of parameter names occurring in the differential equations. </dd></p>
+  
+      <p><dt>map</dt><dd> A list containing named character vectors for each observed variable, specifying
+      the modelling variables by which it is represented. </dd></p>
+  
+      <p><dt>use_of_ff</dt><dd> The content of <code>use_of_ff</code> is passed on in this list component. </dd></p>
+  
+      <p><dt>coefmat</dt><dd> The coefficient matrix, if the system of differential equations can be
+      represented by one. </dd></p>
+  
+      <p></dl></p>
   
     </div>
 
     <div class="Note">
       <h2>Note</h2>
-      
+
       <p>The IORE submodel is not well tested (yet). When using this model for metabolites, 
   you may want to read the second note in the help page to 
   <code><a href='mkinfit.html'>mkinfit</a></code>.</p>
@@ -118,7 +125,7 @@
 
     <div class="References">
       <h2>References</h2>
-      
+
       <p>FOCUS (2006) &#147;Guidance Document on Estimating Persistence and
   Degradation Kinetics from Environmental Fate Studies on Pesticides in EU
   Registration&#148; Report of the FOCUS Work Group on Degradation Kinetics,
