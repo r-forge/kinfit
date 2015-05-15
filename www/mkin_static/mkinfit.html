@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-34</title>
+<title>mkinfit. mkin 0.9-35</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-34</a>
+      <a class="brand" href="#">mkin 0.9-35</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -319,20 +319,21 @@ Model cost at call  39 :  31.05088
 Model cost at call  40 :  31.05088 
 Model cost at call  43 :  31.05088 
 Model cost at call  50 :  31.05088 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:09 2014 
-Date of summary: Thu Dec 18 09:52:09 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:36 2015 
+Date of summary: Fri May 15 13:29:36 2015 
 
 Equations:
 d_parent = - (alpha/beta) * ((time/beta) + 1)^-1 * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 64 model solutions performed in 0.374 s
+Fitted with method Port using 64 model solutions performed in 0.139 s
 
 Weighting: none
 
@@ -412,7 +413,7 @@ Model cost at call  25 :  1072.239
 Model cost at call  28 :  1072.236 
 Model cost at call  30 :  874.2614 
 Model cost at call  33 :  874.2611 
-Model cost at call  35 :  616.2368 
+Model cost at call  35 :  616.2367 
 Model cost at call  37 :  616.2363 
 Model cost at call  40 :  467.4371 
 Model cost at call  42 :  467.4365 
@@ -458,13 +459,14 @@ Model cost at call  123 :  371.2134
 Model cost at call  125 :  371.2134 
 Model cost at call  126 :  371.2134 
 Model cost at call  135 :  371.2134 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:11 2014 
-Date of summary: Thu Dec 18 09:52:11 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:37 2015 
+Date of summary: Fri May 15 13:29:37 2015 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -472,7 +474,7 @@ d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 153 model solutions performed in 1.857 s
+Fitted with method Port using 153 model solutions performed in 0.76 s
 
 Weighting: none
 
@@ -540,51 +542,51 @@ parent   7.023  23.33
 m1     131.761 437.70
 
 Data:
- time variable observed predicted   residual
-    0   parent    99.46 9.960e+01 -1.385e-01
-    0   parent   102.04 9.960e+01  2.442e+00
-    1   parent    93.50 9.024e+01  3.262e+00
-    1   parent    92.50 9.024e+01  2.262e+00
-    3   parent    63.23 7.407e+01 -1.084e+01
-    3   parent    68.99 7.407e+01 -5.083e+00
-    7   parent    52.32 4.991e+01  2.408e+00
-    7   parent    55.13 4.991e+01  5.218e+00
-   14   parent    27.27 2.501e+01  2.257e+00
-   14   parent    26.64 2.501e+01  1.627e+00
-   21   parent    11.50 1.253e+01 -1.035e+00
-   21   parent    11.64 1.253e+01 -8.946e-01
-   35   parent     2.85 3.148e+00 -2.979e-01
-   35   parent     2.91 3.148e+00 -2.379e-01
-   50   parent     0.69 7.162e-01 -2.624e-02
-   50   parent     0.63 7.162e-01 -8.624e-02
-   75   parent     0.05 6.074e-02 -1.074e-02
-   75   parent     0.06 6.074e-02 -7.382e-04
-  100   parent       NA 5.151e-03         NA
-  100   parent       NA 5.151e-03         NA
-  120   parent       NA 7.155e-04         NA
-  120   parent       NA 7.155e-04         NA
-    0       m1     0.00 0.000e+00  0.000e+00
-    0       m1     0.00 0.000e+00  0.000e+00
-    1       m1     4.84 4.803e+00  3.704e-02
-    1       m1     5.64 4.803e+00  8.370e-01
-    3       m1    12.91 1.302e+01 -1.140e-01
-    3       m1    12.96 1.302e+01 -6.400e-02
-    7       m1    22.97 2.504e+01 -2.075e+00
-    7       m1    24.47 2.504e+01 -5.748e-01
-   14       m1    41.69 3.669e+01  5.000e+00
-   14       m1    33.21 3.669e+01 -3.480e+00
-   21       m1    44.37 4.165e+01  2.717e+00
-   21       m1    46.44 4.165e+01  4.787e+00
-   35       m1    41.22 4.331e+01 -2.093e+00
-   35       m1    37.95 4.331e+01 -5.363e+00
-   50       m1    41.19 4.122e+01 -2.831e-02
-   50       m1    40.01 4.122e+01 -1.208e+00
-   75       m1    40.09 3.645e+01  3.643e+00
-   75       m1    33.85 3.645e+01 -2.597e+00
-  100       m1    31.04 3.198e+01 -9.416e-01
-  100       m1    33.13 3.198e+01  1.148e+00
-  120       m1    25.15 2.879e+01 -3.640e+00
-  120       m1    33.31 2.879e+01  4.520e+00
+ time variable observed  predicted   residual
+    0   parent    99.46  9.960e+01 -1.385e-01
+    0   parent   102.04  9.960e+01  2.442e+00
+    1   parent    93.50  9.024e+01  3.262e+00
+    1   parent    92.50  9.024e+01  2.262e+00
+    3   parent    63.23  7.407e+01 -1.084e+01
+    3   parent    68.99  7.407e+01 -5.083e+00
+    7   parent    52.32  4.991e+01  2.408e+00
+    7   parent    55.13  4.991e+01  5.218e+00
+   14   parent    27.27  2.501e+01  2.257e+00
+   14   parent    26.64  2.501e+01  1.627e+00
+   21   parent    11.50  1.253e+01 -1.035e+00
+   21   parent    11.64  1.253e+01 -8.946e-01
+   35   parent     2.85  3.148e+00 -2.979e-01
+   35   parent     2.91  3.148e+00 -2.379e-01
+   50   parent     0.69  7.162e-01 -2.624e-02
+   50   parent     0.63  7.162e-01 -8.624e-02
+   75   parent     0.05  6.074e-02 -1.074e-02
+   75   parent     0.06  6.074e-02 -7.382e-04
+  100   parent       NA  5.151e-03         NA
+  100   parent       NA  5.151e-03         NA
+  120   parent       NA  7.155e-04         NA
+  120   parent       NA  7.155e-04         NA
+    0       m1     0.00 -7.105e-15  7.105e-15
+    0       m1     0.00 -7.105e-15  7.105e-15
+    1       m1     4.84  4.803e+00  3.704e-02
+    1       m1     5.64  4.803e+00  8.370e-01
+    3       m1    12.91  1.302e+01 -1.140e-01
+    3       m1    12.96  1.302e+01 -6.400e-02
+    7       m1    22.97  2.504e+01 -2.075e+00
+    7       m1    24.47  2.504e+01 -5.748e-01
+   14       m1    41.69  3.669e+01  5.000e+00
+   14       m1    33.21  3.669e+01 -3.480e+00
+   21       m1    44.37  4.165e+01  2.717e+00
+   21       m1    46.44  4.165e+01  4.787e+00
+   35       m1    41.22  4.331e+01 -2.093e+00
+   35       m1    37.95  4.331e+01 -5.363e+00
+   50       m1    41.19  4.122e+01 -2.831e-02
+   50       m1    40.01  4.122e+01 -1.208e+00
+   75       m1    40.09  3.645e+01  3.643e+00
+   75       m1    33.85  3.645e+01 -2.597e+00
+  100       m1    31.04  3.198e+01 -9.416e-01
+  100       m1    33.13  3.198e+01  1.148e+00
+  120       m1    25.15  2.879e+01 -3.640e+00
+  120       m1    33.31  2.879e+01  4.520e+00
 </div>
 <div class='input'>
 # Use stepwise fitting, using optimised parameters from parent only fit, FOMC
@@ -620,34 +622,34 @@ f.noweight &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
 <div class='output'>Model cost at call  1 :  15156.12 
 Model cost at call  2 :  15156.12 
 Model cost at call  6 :  8243.641 
-Model cost at call  12 :  6290.73 
-Model cost at call  13 :  6290.701 
-Model cost at call  15 :  6290.469 
-Model cost at call  18 :  1700.759 
-Model cost at call  20 :  1700.621 
+Model cost at call  12 :  6290.728 
+Model cost at call  13 :  6290.699 
+Model cost at call  15 :  6290.467 
+Model cost at call  18 :  1700.758 
+Model cost at call  20 :  1700.62 
 Model cost at call  24 :  1190.925 
-Model cost at call  26 :  1190.925 
+Model cost at call  26 :  1190.924 
 Model cost at call  29 :  1017.418 
 Model cost at call  31 :  1017.418 
 Model cost at call  33 :  1017.417 
-Model cost at call  34 :  644.0476 
-Model cost at call  36 :  644.0474 
-Model cost at call  38 :  644.0474 
-Model cost at call  39 :  590.5006 
-Model cost at call  41 :  590.5003 
-Model cost at call  43 :  590.4997 
-Model cost at call  44 :  543.2053 
-Model cost at call  45 :  543.2049 
-Model cost at call  46 :  543.2048 
-Model cost at call  50 :  391.3477 
-Model cost at call  51 :  391.3476 
+Model cost at call  34 :  644.0474 
+Model cost at call  36 :  644.0472 
+Model cost at call  38 :  644.0471 
+Model cost at call  39 :  590.5008 
+Model cost at call  41 :  590.5006 
+Model cost at call  43 :  590.5 
+Model cost at call  44 :  543.2068 
+Model cost at call  45 :  543.2065 
+Model cost at call  46 :  543.2063 
+Model cost at call  50 :  391.3476 
+Model cost at call  51 :  391.3475 
 Model cost at call  56 :  386.4785 
-Model cost at call  58 :  386.4784 
+Model cost at call  58 :  386.4785 
 Model cost at call  60 :  386.4774 
 Model cost at call  61 :  384.0683 
 Model cost at call  63 :  384.0682 
-Model cost at call  66 :  382.7805 
-Model cost at call  68 :  382.7805 
+Model cost at call  66 :  382.7806 
+Model cost at call  68 :  382.7806 
 Model cost at call  70 :  382.7805 
 Model cost at call  71 :  378.9269 
 Model cost at call  73 :  378.9269 
@@ -658,34 +660,34 @@ Model cost at call  81 :  375.9736
 Model cost at call  83 :  375.9736 
 Model cost at call  86 :  375.3386 
 Model cost at call  88 :  375.3386 
-Model cost at call  91 :  374.5772 
+Model cost at call  91 :  374.5773 
 Model cost at call  93 :  374.5772 
 Model cost at call  95 :  374.5772 
-Model cost at call  96 :  373.548 
-Model cost at call  100 :  373.548 
-Model cost at call  102 :  373.2615 
-Model cost at call  104 :  373.2615 
-Model cost at call  107 :  372.6696 
-Model cost at call  111 :  372.6695 
-Model cost at call  114 :  372.6208 
-Model cost at call  116 :  372.6208 
-Model cost at call  119 :  372.602 
-Model cost at call  121 :  372.602 
-Model cost at call  123 :  372.602 
-Model cost at call  124 :  372.5711 
-Model cost at call  126 :  372.5711 
-Model cost at call  129 :  372.5216 
-Model cost at call  130 :  372.4439 
-Model cost at call  131 :  372.1222 
-Model cost at call  132 :  371.4214 
-Model cost at call  134 :  371.4214 
-Model cost at call  137 :  371.3321 
-Model cost at call  139 :  371.3321 
-Model cost at call  143 :  371.2317 
-Model cost at call  144 :  371.2317 
-Model cost at call  148 :  371.2204 
-Model cost at call  150 :  371.2204 
-Model cost at call  153 :  371.2166 
+Model cost at call  96 :  373.5473 
+Model cost at call  100 :  373.5473 
+Model cost at call  102 :  373.262 
+Model cost at call  104 :  373.262 
+Model cost at call  107 :  372.6715 
+Model cost at call  111 :  372.6715 
+Model cost at call  114 :  372.623 
+Model cost at call  116 :  372.623 
+Model cost at call  119 :  372.6046 
+Model cost at call  121 :  372.6046 
+Model cost at call  123 :  372.6046 
+Model cost at call  124 :  372.5737 
+Model cost at call  126 :  372.5737 
+Model cost at call  129 :  372.5246 
+Model cost at call  130 :  372.4499 
+Model cost at call  131 :  372.1358 
+Model cost at call  132 :  371.4297 
+Model cost at call  134 :  371.4297 
+Model cost at call  137 :  371.3272 
+Model cost at call  139 :  371.3272 
+Model cost at call  143 :  371.2308 
+Model cost at call  144 :  371.2308 
+Model cost at call  148 :  371.2209 
+Model cost at call  150 :  371.2209 
+Model cost at call  153 :  371.2171 
 Model cost at call  154 :  371.2134 
 Model cost at call  155 :  371.2134 
 Model cost at call  157 :  371.2134 
@@ -694,13 +696,15 @@ Model cost at call  161 :  371.2134
 Model cost at call  164 :  371.2134 
 Model cost at call  170 :  371.2134 
 Model cost at call  179 :  371.2134 
+Model cost at call  194 :  371.2134 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(f.noweight)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:14 2014 
-Date of summary: Thu Dec 18 09:52:14 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:38 2015 
+Date of summary: Fri May 15 13:29:38 2015 
 
 Equations:
 d_parent = - k_parent * parent
@@ -708,7 +712,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 197 model solutions performed in 2.385 s
+Fitted with method Port using 197 model solutions performed in 0.98 s
 
 Weighting: none
 
@@ -798,8 +802,8 @@ Data:
   100   parent       NA 5.151e-03         NA
   120   parent       NA 7.155e-04         NA
   120   parent       NA 7.155e-04         NA
-    0       m1     0.00 0.000e+00  0.000e+00
-    0       m1     0.00 0.000e+00  0.000e+00
+    0       m1     0.00 1.421e-14 -1.421e-14
+    0       m1     0.00 1.421e-14 -1.421e-14
     1       m1     4.84 4.803e+00  3.704e-02
     1       m1     5.64 4.803e+00  8.370e-01
     3       m1    12.91 1.302e+01 -1.140e-01
@@ -826,34 +830,34 @@ Data:
 <div class='output'>Model cost at call  1 :  15156.12 
 Model cost at call  2 :  15156.12 
 Model cost at call  6 :  8243.641 
-Model cost at call  12 :  6290.73 
-Model cost at call  13 :  6290.701 
-Model cost at call  15 :  6290.469 
-Model cost at call  18 :  1700.759 
-Model cost at call  20 :  1700.621 
+Model cost at call  12 :  6290.728 
+Model cost at call  13 :  6290.699 
+Model cost at call  15 :  6290.467 
+Model cost at call  18 :  1700.758 
+Model cost at call  20 :  1700.62 
 Model cost at call  24 :  1190.925 
-Model cost at call  26 :  1190.925 
+Model cost at call  26 :  1190.924 
 Model cost at call  29 :  1017.418 
 Model cost at call  31 :  1017.418 
 Model cost at call  33 :  1017.417 
-Model cost at call  34 :  644.0476 
-Model cost at call  36 :  644.0474 
-Model cost at call  38 :  644.0474 
-Model cost at call  39 :  590.5006 
-Model cost at call  41 :  590.5003 
-Model cost at call  43 :  590.4997 
-Model cost at call  44 :  543.2053 
-Model cost at call  45 :  543.2049 
-Model cost at call  46 :  543.2048 
-Model cost at call  50 :  391.3477 
-Model cost at call  51 :  391.3476 
+Model cost at call  34 :  644.0474 
+Model cost at call  36 :  644.0472 
+Model cost at call  38 :  644.0471 
+Model cost at call  39 :  590.5008 
+Model cost at call  41 :  590.5006 
+Model cost at call  43 :  590.5 
+Model cost at call  44 :  543.2068 
+Model cost at call  45 :  543.2065 
+Model cost at call  46 :  543.2063 
+Model cost at call  50 :  391.3476 
+Model cost at call  51 :  391.3475 
 Model cost at call  56 :  386.4785 
-Model cost at call  58 :  386.4784 
+Model cost at call  58 :  386.4785 
 Model cost at call  60 :  386.4774 
 Model cost at call  61 :  384.0683 
 Model cost at call  63 :  384.0682 
-Model cost at call  66 :  382.7805 
-Model cost at call  68 :  382.7805 
+Model cost at call  66 :  382.7806 
+Model cost at call  68 :  382.7806 
 Model cost at call  70 :  382.7805 
 Model cost at call  71 :  378.9269 
 Model cost at call  73 :  378.9269 
@@ -864,34 +868,34 @@ Model cost at call  81 :  375.9736
 Model cost at call  83 :  375.9736 
 Model cost at call  86 :  375.3386 
 Model cost at call  88 :  375.3386 
-Model cost at call  91 :  374.5772 
+Model cost at call  91 :  374.5773 
 Model cost at call  93 :  374.5772 
 Model cost at call  95 :  374.5772 
-Model cost at call  96 :  373.548 
-Model cost at call  100 :  373.548 
-Model cost at call  102 :  373.2615 
-Model cost at call  104 :  373.2615 
-Model cost at call  107 :  372.6696 
-Model cost at call  111 :  372.6695 
-Model cost at call  114 :  372.6208 
-Model cost at call  116 :  372.6208 
-Model cost at call  119 :  372.602 
-Model cost at call  121 :  372.602 
-Model cost at call  123 :  372.602 
-Model cost at call  124 :  372.5711 
-Model cost at call  126 :  372.5711 
-Model cost at call  129 :  372.5216 
-Model cost at call  130 :  372.4439 
-Model cost at call  131 :  372.1222 
-Model cost at call  132 :  371.4214 
-Model cost at call  134 :  371.4214 
-Model cost at call  137 :  371.3321 
-Model cost at call  139 :  371.3321 
-Model cost at call  143 :  371.2317 
-Model cost at call  144 :  371.2317 
-Model cost at call  148 :  371.2204 
-Model cost at call  150 :  371.2204 
-Model cost at call  153 :  371.2166 
+Model cost at call  96 :  373.5473 
+Model cost at call  100 :  373.5473 
+Model cost at call  102 :  373.262 
+Model cost at call  104 :  373.262 
+Model cost at call  107 :  372.6715 
+Model cost at call  111 :  372.6715 
+Model cost at call  114 :  372.623 
+Model cost at call  116 :  372.623 
+Model cost at call  119 :  372.6046 
+Model cost at call  121 :  372.6046 
+Model cost at call  123 :  372.6046 
+Model cost at call  124 :  372.5737 
+Model cost at call  126 :  372.5737 
+Model cost at call  129 :  372.5246 
+Model cost at call  130 :  372.4499 
+Model cost at call  131 :  372.1358 
+Model cost at call  132 :  371.4297 
+Model cost at call  134 :  371.4297 
+Model cost at call  137 :  371.3272 
+Model cost at call  139 :  371.3272 
+Model cost at call  143 :  371.2308 
+Model cost at call  144 :  371.2308 
+Model cost at call  148 :  371.2209 
+Model cost at call  150 :  371.2209 
+Model cost at call  153 :  371.2171 
 Model cost at call  154 :  371.2134 
 Model cost at call  155 :  371.2134 
 Model cost at call  157 :  371.2134 
@@ -900,15 +904,16 @@ Model cost at call  161 :  371.2134
 Model cost at call  164 :  371.2134 
 Model cost at call  170 :  371.2134 
 Model cost at call  179 :  371.2134 
+Model cost at call  194 :  371.2134 
 IRLS based on variance estimates for each observed variable
 Initial variance estimates are:
    parent        m1 
-11.552580  7.421227 
+11.552580  7.421226 
 Model cost at call  198 :  40 
 Model cost at call  200 :  40 
 Model cost at call  206 :  39.99562 
 Model cost at call  207 :  39.99562 
-Model cost at call  213 :  39.99549 
+Model cost at call  213 :  39.99551 
 Model cost at call  215 :  39.99528 
 Model cost at call  217 :  39.99528 
 Model cost at call  219 :  39.99528 
@@ -961,13 +966,14 @@ Iteration 2 yields variance estimates:
    parent        m1 
 11.573411  7.407843 
 Sum of squared differences to last variance estimates: 1.8e-09 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(f.irls)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:20 2014 
-Date of summary: Thu Dec 18 09:52:20 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:40 2015 
+Date of summary: Fri May 15 13:29:40 2015 
 
 Equations:
 d_parent = - k_parent * parent
@@ -975,7 +981,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 480 model solutions performed in 5.835 s
+Fitted with method Port using 480 model solutions performed in 2.397 s
 
 Weighting: none then iterative reweighting method obs
 
@@ -1065,8 +1071,8 @@ Data:
   100   parent       NA 4.969e-03         NA    3.402
   120   parent       NA 6.852e-04         NA    3.402
   120   parent       NA 6.852e-04         NA    3.402
-    0       m1     0.00 0.000e+00  0.000e+00    2.722
-    0       m1     0.00 0.000e+00  0.000e+00    2.722
+    0       m1     0.00 7.105e-15 -7.105e-15    2.722
+    0       m1     0.00 7.105e-15 -7.105e-15    2.722
     1       m1     4.84 4.813e+00  2.672e-02    2.722
     1       m1     5.64 4.813e+00  8.267e-01    2.722
     3       m1    12.91 1.305e+01 -1.378e-01    2.722
@@ -1093,27 +1099,27 @@ Data:
 <div class='output'>Model cost at call  1 :  19.80132 
 Model cost at call  2 :  19.80132 
 Model cost at call  6 :  10.68776 
-Model cost at call  12 :  7.143549 
-Model cost at call  13 :  7.143548 
-Model cost at call  15 :  7.14353 
-Model cost at call  18 :  2.189023 
-Model cost at call  20 :  2.189018 
-Model cost at call  23 :  1.587265 
-Model cost at call  25 :  1.587264 
-Model cost at call  26 :  1.587264 
+Model cost at call  12 :  7.143546 
+Model cost at call  13 :  7.143545 
+Model cost at call  15 :  7.143528 
+Model cost at call  18 :  2.189024 
+Model cost at call  20 :  2.189019 
+Model cost at call  23 :  1.587264 
+Model cost at call  25 :  1.587263 
+Model cost at call  26 :  1.587263 
 Model cost at call  28 :  1.036798 
 Model cost at call  29 :  1.036798 
-Model cost at call  30 :  1.036798 
-Model cost at call  34 :  0.4939924 
-Model cost at call  35 :  0.4939924 
-Model cost at call  38 :  0.4939923 
-Model cost at call  39 :  0.4018534 
-Model cost at call  43 :  0.4018533 
-Model cost at call  45 :  0.3797862 
-Model cost at call  51 :  0.366976 
-Model cost at call  55 :  0.366976 
-Model cost at call  56 :  0.3585636 
-Model cost at call  57 :  0.3533259 
+Model cost at call  30 :  1.036797 
+Model cost at call  34 :  0.4939927 
+Model cost at call  35 :  0.4939927 
+Model cost at call  38 :  0.4939926 
+Model cost at call  39 :  0.4018531 
+Model cost at call  43 :  0.401853 
+Model cost at call  45 :  0.3797861 
+Model cost at call  51 :  0.3669763 
+Model cost at call  55 :  0.3669762 
+Model cost at call  56 :  0.3585638 
+Model cost at call  57 :  0.3533258 
 Model cost at call  62 :  0.3502505 
 Model cost at call  64 :  0.3502505 
 Model cost at call  66 :  0.3502505 
@@ -1139,13 +1145,14 @@ Model cost at call  125 :  0.347807
 Model cost at call  126 :  0.347807 
 Model cost at call  128 :  0.347807 
 Model cost at call  137 :  0.347807 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(f.w.mean)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:22 2014 
-Date of summary: Thu Dec 18 09:52:22 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:41 2015 
+Date of summary: Fri May 15 13:29:41 2015 
 
 Equations:
 d_parent = - k_parent * parent
@@ -1153,7 +1160,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 155 model solutions performed in 1.899 s
+Fitted with method Port using 155 model solutions performed in 0.771 s
 
 Weighting: mean
 
@@ -1221,50 +1228,50 @@ m1     132.696 440.81
 
 Data:
  time variable observed predicted   residual
-    0   parent    99.46 9.973e+01 -2.706e-01
-    0   parent   102.04 9.973e+01  2.309e+00
-    1   parent    93.50 9.030e+01  3.202e+00
-    1   parent    92.50 9.030e+01  2.202e+00
-    3   parent    63.23 7.403e+01 -1.080e+01
-    3   parent    68.99 7.403e+01 -5.035e+00
-    7   parent    52.32 4.975e+01  2.572e+00
-    7   parent    55.13 4.975e+01  5.382e+00
-   14   parent    27.27 2.482e+01  2.454e+00
-   14   parent    26.64 2.482e+01  1.824e+00
-   21   parent    11.50 1.238e+01 -8.788e-01
-   21   parent    11.64 1.238e+01 -7.388e-01
-   35   parent     2.85 3.080e+00 -2.302e-01
-   35   parent     2.91 3.080e+00 -1.702e-01
-   50   parent     0.69 6.940e-01 -3.958e-03
-   50   parent     0.63 6.940e-01 -6.396e-02
-   75   parent     0.05 5.789e-02 -7.888e-03
-   75   parent     0.06 5.789e-02  2.112e-03
-  100   parent       NA 4.829e-03         NA
-  100   parent       NA 4.829e-03         NA
-  120   parent       NA 6.620e-04         NA
-  120   parent       NA 6.620e-04         NA
-    0       m1     0.00 7.105e-15 -7.105e-15
-    0       m1     0.00 7.105e-15 -7.105e-15
-    1       m1     4.84 4.821e+00  1.851e-02
-    1       m1     5.64 4.821e+00  8.185e-01
-    3       m1    12.91 1.307e+01 -1.567e-01
-    3       m1    12.96 1.307e+01 -1.067e-01
-    7       m1    22.97 2.510e+01 -2.131e+00
-    7       m1    24.47 2.510e+01 -6.311e-01
-   14       m1    41.69 3.672e+01  4.969e+00
-   14       m1    33.21 3.672e+01 -3.511e+00
-   21       m1    44.37 4.165e+01  2.722e+00
-   21       m1    46.44 4.165e+01  4.792e+00
-   35       m1    41.22 4.327e+01 -2.049e+00
-   35       m1    37.95 4.327e+01 -5.319e+00
-   50       m1    41.19 4.117e+01  1.636e-02
-   50       m1    40.01 4.117e+01 -1.164e+00
-   75       m1    40.09 3.643e+01  3.659e+00
-   75       m1    33.85 3.643e+01 -2.581e+00
-  100       m1    31.04 3.200e+01 -9.561e-01
-  100       m1    33.13 3.200e+01  1.134e+00
-  120       m1    25.15 2.882e+01 -3.674e+00
-  120       m1    33.31 2.882e+01  4.486e+00
+    0   parent    99.46 99.730570  -0.270570
+    0   parent   102.04 99.730570   2.309430
+    1   parent    93.50 90.298055   3.201945
+    1   parent    92.50 90.298055   2.201945
+    3   parent    63.23 74.025028 -10.795028
+    3   parent    68.99 74.025028  -5.035028
+    7   parent    52.32 49.748382   2.571618
+    7   parent    55.13 49.748382   5.381618
+   14   parent    27.27 24.815876   2.454124
+   14   parent    26.64 24.815876   1.824124
+   21   parent    11.50 12.378849  -0.878849
+   21   parent    11.64 12.378849  -0.738849
+   35   parent     2.85  3.080219  -0.230219
+   35   parent     2.91  3.080219  -0.170219
+   50   parent     0.69  0.693958  -0.003958
+   50   parent     0.63  0.693958  -0.063958
+   75   parent     0.05  0.057888  -0.007888
+   75   parent     0.06  0.057888   0.002112
+  100   parent       NA  0.004829         NA
+  100   parent       NA  0.004829         NA
+  120   parent       NA  0.000662         NA
+  120   parent       NA  0.000662         NA
+    0       m1     0.00  0.000000   0.000000
+    0       m1     0.00  0.000000   0.000000
+    1       m1     4.84  4.821488   0.018512
+    1       m1     5.64  4.821488   0.818512
+    3       m1    12.91 13.066692  -0.156692
+    3       m1    12.96 13.066692  -0.106692
+    7       m1    22.97 25.101058  -2.131058
+    7       m1    24.47 25.101058  -0.631058
+   14       m1    41.69 36.720923   4.969077
+   14       m1    33.21 36.720923  -3.510923
+   21       m1    44.37 41.648353   2.721647
+   21       m1    46.44 41.648353   4.791647
+   35       m1    41.22 43.269225  -2.049225
+   35       m1    37.95 43.269225  -5.319225
+   50       m1    41.19 41.173639   0.016361
+   50       m1    40.01 41.173639  -1.163639
+   75       m1    40.09 36.431224   3.658776
+   75       m1    33.85 36.431224  -2.581224
+  100       m1    31.04 31.996124  -0.956124
+  100       m1    33.13 31.996124   1.133876
+  120       m1    25.15 28.824128  -3.674128
+  120       m1    33.31 28.824128   4.485872
 </div>
 <div class='input'>f.w.mean.irls &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = &quot;mean&quot;,
                          reweight.method = &quot;obs&quot;)
@@ -1272,27 +1279,27 @@ Data:
 <div class='output'>Model cost at call  1 :  19.80132 
 Model cost at call  2 :  19.80132 
 Model cost at call  6 :  10.68776 
-Model cost at call  12 :  7.143549 
-Model cost at call  13 :  7.143548 
-Model cost at call  15 :  7.14353 
-Model cost at call  18 :  2.189023 
-Model cost at call  20 :  2.189018 
-Model cost at call  23 :  1.587265 
-Model cost at call  25 :  1.587264 
-Model cost at call  26 :  1.587264 
+Model cost at call  12 :  7.143546 
+Model cost at call  13 :  7.143545 
+Model cost at call  15 :  7.143528 
+Model cost at call  18 :  2.189024 
+Model cost at call  20 :  2.189019 
+Model cost at call  23 :  1.587264 
+Model cost at call  25 :  1.587263 
+Model cost at call  26 :  1.587263 
 Model cost at call  28 :  1.036798 
 Model cost at call  29 :  1.036798 
-Model cost at call  30 :  1.036798 
-Model cost at call  34 :  0.4939924 
-Model cost at call  35 :  0.4939924 
-Model cost at call  38 :  0.4939923 
-Model cost at call  39 :  0.4018534 
-Model cost at call  43 :  0.4018533 
-Model cost at call  45 :  0.3797862 
-Model cost at call  51 :  0.366976 
-Model cost at call  55 :  0.366976 
-Model cost at call  56 :  0.3585636 
-Model cost at call  57 :  0.3533259 
+Model cost at call  30 :  1.036797 
+Model cost at call  34 :  0.4939927 
+Model cost at call  35 :  0.4939927 
+Model cost at call  38 :  0.4939926 
+Model cost at call  39 :  0.4018531 
+Model cost at call  43 :  0.401853 
+Model cost at call  45 :  0.3797861 
+Model cost at call  51 :  0.3669763 
+Model cost at call  55 :  0.3669762 
+Model cost at call  56 :  0.3585638 
+Model cost at call  57 :  0.3533258 
 Model cost at call  62 :  0.3502505 
 Model cost at call  64 :  0.3502505 
 Model cost at call  66 :  0.3502505 
@@ -1330,13 +1337,14 @@ Iteration 2 yields variance estimates:
    parent        m1 
 11.573412  7.407843 
 Sum of squared differences to last variance estimates: 1.4e-09 
+Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(f.w.mean.irls)
 </div>
-<div class='output'>mkin version:    0.9.34 
-R version:       3.1.2 
-Date of fit:     Thu Dec 18 09:52:28 2014 
-Date of summary: Thu Dec 18 09:52:28 2014 
+<div class='output'>mkin version:    0.9.35 
+R version:       3.2.0 
+Date of fit:     Fri May 15 13:29:44 2015 
+Date of summary: Fri May 15 13:29:44 2015 
 
 Equations:
 d_parent = - k_parent * parent
@@ -1344,7 +1352,7 @@ d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
 
 Model predictions using solution type eigen 
 
-Fitted with method Port using 448 model solutions performed in 5.723 s
+Fitted with method Port using 448 model solutions performed in 2.213 s
 
 Weighting: mean then iterative reweighting method obs
 
@@ -1434,8 +1442,8 @@ Data:
   100   parent       NA 4.969e-03         NA    3.402
   120   parent       NA 6.852e-04         NA    3.402
   120   parent       NA 6.852e-04         NA    3.402
-    0       m1     0.00 0.000e+00  0.000e+00    2.722
-    0       m1     0.00 0.000e+00  0.000e+00    2.722
+    0       m1     0.00 7.105e-15 -7.105e-15    2.722
+    0       m1     0.00 7.105e-15 -7.105e-15    2.722
     1       m1     4.84 4.813e+00  2.672e-02    2.722
     1       m1     5.64 4.813e+00  8.267e-01    2.722
     3       m1    12.91 1.305e+01 -1.378e-01    2.722
@@ -1448,7 +1456,7 @@ Data:
    21       m1    46.44 4.165e+01  4.790e+00    2.722
    35       m1    41.22 4.329e+01 -2.069e+00    2.722
    35       m1    37.95 4.329e+01 -5.339e+00    2.722
-   50       m1    41.19 4.119e+01 -3.381e-03    2.722
+   50       m1    41.19 4.119e+01 -3.380e-03    2.722
    50       m1    40.01 4.119e+01 -1.183e+00    2.722
    75       m1    40.09 3.644e+01  3.652e+00    2.722
    75       m1    33.85 3.644e+01 -2.588e+00    2.722

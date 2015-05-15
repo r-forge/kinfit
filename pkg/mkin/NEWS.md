@@ -1,3 +1,23 @@
+# CHANGES in mkin VERSION 0.9-35
+
+## MAJOR CHANGES
+
+- Switch from RUnit to testthat for testing
+
+## BUG FIXES
+
+- `mkinparplot()`: Avoid warnings that occurred when not all confidence intervals were available in the summary of the fit
+- `print.summary.mkinfit()`: Fix printing the summary for the case that the number of iterations is not available
+- NAMESPACE: export S3 methods plot.mkinfit, summary.mkinfit and print.summary.mkinfit to satisfy R CMD check on R-devel
+- `mkinparplot()`: Avoid warning in R CMD check about undeclared global variable `Lower`
+
+## NEW FEATURES
+
+- `mkinfit()`: Report successful termination when quiet = FALSE. This is helpful for more difficult problems fitted with reweight.method = obs, as no progress is often indicated during the reweighting.
+- A first test using results established in the expertise written for the German Federal Environmental Agency (UBA) was added.
+- Add synthetic datasets generated for expertise written for the German Federal Environmental Agency UBA
+- Add tests based on these datasets
+
 # CHANGES in mkin VERSION 0.9-34
 
 ## NEW FEATURES
