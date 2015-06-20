@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2014 Johannes Ranke
+# Copyright (C) 2010-2015 Johannes Ranke
 # Some lines in this code are copyright (C) 2013 Eurofins Regulatory AG
 # Contact: jranke@uni-bremen.de
 
@@ -19,6 +19,7 @@
 
 mkinpredict <- function(mkinmod, odeparms, odeini, 
 			outtimes, solution_type = "deSolve", 
+      use_compiled = "auto",
 			method.ode = "lsoda", atol = 1e-8, rtol = 1e-10,
 			map_output = TRUE, ...) {
 
@@ -53,8 +54,8 @@ mkinpredict <- function(mkinmod, odeparms, odeini,
       IORE = IORE.solution(outtimes,
           evalparse(parent.name),
           ifelse(mkinmod$use_of_ff == "min", 
-	    evalparse(paste("k.iore", parent.name, "sink", sep="_")),
-	    evalparse(paste("k.iore", parent.name, sep="_"))),
+	    evalparse(paste("k__iore", parent.name, "sink", sep="_")),
+	    evalparse(paste("k__iore", parent.name, sep="_"))),
             evalparse("N_parent")),
       DFOP = DFOP.solution(outtimes,
           evalparse(parent.name),
@@ -87,28 +88,43 @@ mkinpredict <- function(mkinmod, odeparms, odeini,
     names(out) <- c("time", mod_vars)
   } 
   if (solution_type == "deSolve") {
-    mkindiff <- function(t, state, parms) {
+    if (!is.null(mkinmod$cf) & use_compiled[1] != FALSE) {
+      out <- ode(
+        y = odeini,
+        times = outtimes,
+        func = "func",
+        initfunc = "initpar",
+        dllname = getDynLib(mkinmod$cf)[["name"]],
+        parms = odeparms[mkinmod$parms], # Order matters when using compiled models
+        method = method.ode,
+        atol = atol,
+        rtol = rtol,
+        ...
+      )
+    } else {
+      mkindiff <- function(t, state, parms) {
 
-      time <- t
-      diffs <- vector()
-      for (box in names(mkinmod$diffs))
-      {
-        diffname <- paste("d", box, sep="_")      
-        diffs[diffname] <- with(as.list(c(time, state, parms)),
-          eval(parse(text=mkinmod$diffs[[box]])))
+        time <- t
+        diffs <- vector()
+        for (box in names(mkinmod$diffs))
+        {
+          diffname <- paste("d", box, sep="_")      
+          diffs[diffname] <- with(as.list(c(time, state, parms)),
+            eval(parse(text=mkinmod$diffs[[box]])))
+        }
+        return(list(c(diffs)))
       }
-      return(list(c(diffs)))
+      out <- ode(
+        y = odeini,
+        times = outtimes,
+        func = mkindiff, 
+        parms = odeparms,
+        method = method.ode,
+        atol = atol,
+        rtol = rtol,
+        ...
+      )
     } 
-    out <- ode(
-      y = odeini,
-      times = outtimes,
-      func = mkindiff, 
-      parms = odeparms,
-      method = method.ode,
-      atol = atol,
-      rtol = rtol,
-      ...
-    )
     if (sum(is.na(out)) > 0) {
       stop("Differential equations were not integrated for all output times because\n",
 	   "NaN values occurred in output from ode()")

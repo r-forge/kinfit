@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinsub. mkin 0.9-35</title>
+<title>mkinsub. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -87,12 +87,15 @@
 SFO_SFO &lt;- mkinmod(
   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;),
   m1 = list(type = &quot;SFO&quot;))
-
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'>
 # The same model using mkinsub
 SFO_SFO.2 &lt;- mkinmod(
   parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;),
   m1 = mkinsub(&quot;SFO&quot;))
-</div></pre>
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong></pre>
   </div>
   <div class="span4">
     <!-- <ul>

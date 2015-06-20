@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinpredict. mkin 0.9-35</title>
+<title>mkinpredict. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -45,7 +45,7 @@
   <div class="span8">
     <h2>Usage</h2>
     <pre><div>mkinpredict(mkinmod, odeparms, odeini, outtimes, solution_type&nbsp;=&nbsp;"deSolve",
-	      method.ode&nbsp;=&nbsp;"lsoda", atol&nbsp;=&nbsp;1e-08, rtol&nbsp;=&nbsp;1e-10, map_output&nbsp;=&nbsp;TRUE, ...)</div></pre>
+	      use_compiled&nbsp;=&nbsp;"auto", method.ode&nbsp;=&nbsp;"lsoda", atol&nbsp;=&nbsp;1e-08, rtol&nbsp;=&nbsp;1e-10, map_output&nbsp;=&nbsp;TRUE, ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -82,6 +82,11 @@
     The solution method passed via <code><a href='mkinpredict.html'>mkinpredict</a></code> to
     <code><a href='http://www.inside-r.org/packages/cran/deSolve/docs/ode'>ode</a></code> in case the solution type is "deSolve". The default
     "lsoda" is performant, but sometimes fails to converge.
+  </dd>
+      <dt>use_compiled</dt>
+      <dd>
+    If set to <code>FALSE</code>, no compiled version of the <code><a href='mkinmod.html'>mkinmod</a></code> 
+    model is used, even if is present. 
   </dd>
       <dt>atol</dt>
       <dd>
@@ -178,6 +183,32 @@
 21   20   0.2478752
 </div>
 <div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
+	      solution_type = &quot;deSolve&quot;, use_compiled = FALSE)
+</div>
+<div class='output'>   time  degradinol
+1     0 100.0000000
+2     1  74.0818221
+3     2  54.8811636
+4     3  40.6569660
+5     4  30.1194212
+6     5  22.3130160
+7     6  16.5298888
+8     7  12.2456428
+9     8   9.0717953
+10    9   6.7205513
+11   10   4.9787068
+12   11   3.6883167
+13   12   2.7323722
+14   13   2.0241911
+15   14   1.4995577
+16   15   1.1108996
+17   16   0.8229747
+18   17   0.6096747
+19   18   0.4516581
+20   19   0.3345965
+21   20   0.2478752
+</div>
+<div class='input'>  mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20, 
 	      solution_type = &quot;eigen&quot;)
 </div>
 <div class='output'>   time  degradinol
@@ -246,7 +277,45 @@
 <div class='output'>     time degradinol
 2001   20  0.2478752
 </div>
-<div class='input'></div></pre>
+<div class='input'>
+  # Check compiled model versions - they are faster than the eigenvalue based solutions!
+  SFO_SFO = mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;),
+                    m1 = list(type = &quot;SFO&quot;))
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'>  system.time(
+    print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
+                c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
+                solution_type = &quot;eigen&quot;)[201,]))
+</div>
+<div class='output'>    time   parent       m1
+201   20 4.978707 27.46227
+</div>
+<div class='output'>   user  system elapsed 
+  0.012   0.016   0.005 
+</div>
+<div class='input'>  system.time(
+    print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
+                c(parent = 100, m1 = 0), seq(0, 20, by = 0.1), 
+                solution_type = &quot;deSolve&quot;)[201,]))
+</div>
+<div class='output'>    time   parent       m1
+201   20 4.978707 27.46227
+</div>
+<div class='output'>   user  system elapsed 
+  0.004   0.012   0.002 
+</div>
+<div class='input'>  system.time(
+    print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
+                c(parent = 100, m1 = 0), seq(0, 20, by = 0.1), 
+                solution_type = &quot;deSolve&quot;, use_compiled = FALSE)[201,]))
+</div>
+<div class='output'>    time   parent       m1
+201   20 4.978707 27.46227
+</div>
+<div class='output'>   user  system elapsed 
+  0.040   0.004   0.036 
+</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

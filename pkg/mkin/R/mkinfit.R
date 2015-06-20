@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2014 Johannes Ranke
+# Copyright (C) 2010-2015 Johannes Ranke
 # Portions of this code are copyright (C) 2013 Eurofins Regulatory AG
 # Contact: jranke@uni-bremen.de
 # The summary function is an adapted and extended version of summary.modFit
@@ -26,8 +26,9 @@ mkinfit <- function(mkinmod, observed,
   state.ini = "auto", 
   fixed_parms = NULL,
   fixed_initials = names(mkinmod$diffs)[-1],
-  solution_type = "auto",
+  solution_type = c("auto", "analytical", "eigen", "deSolve"),
   method.ode = "lsoda",
+  use_compiled = "auto",
   method.modFit = c("Port", "Marq", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B"),
   maxit.modFit = "auto",
   control.modFit = list(),
@@ -88,7 +89,7 @@ mkinfit <- function(mkinmod, observed,
          " not used in the model")
   }
 
-  # Warn that the sum of formation fractions may exceed one they are not
+  # Warn that the sum of formation fractions may exceed one if they are not
   # fitted in the transformed way
   if (mkinmod$use_of_ff == "max" & transform_fractions == FALSE) {
     warning("The sum of formation fractions may exceed one if you do not use ",
@@ -111,7 +112,7 @@ mkinfit <- function(mkinmod, observed,
       stop("Fixing formation fractions is not supported when using the ilr ",
            "transformation.")
     }
- }
+  }
 
   # Set initial parameter values, including a small increment (salt)
   # to avoid linear dependencies (singular matrix) in Eigenvalue based solutions
@@ -207,8 +208,9 @@ mkinfit <- function(mkinmod, observed,
   # Decide if the solution of the model can be based on a simple analytical
   # formula, the spectral decomposition of the matrix (fundamental system)
   # or a numeric ode solver from the deSolve package
-  if (!solution_type %in% c("auto", "analytical", "eigen", "deSolve"))
-     stop("solution_type must be auto, analytical, eigen or de Solve")
+  # Prefer deSolve over eigen if a compiled model is present and use_compiled
+  # is not set to FALSE
+  solution_type = match.arg(solution_type)
   if (solution_type == "analytical" && length(mkinmod$spec) > 1)
      stop("Analytical solution not implemented for models with metabolites.")
   if (solution_type == "eigen" && !is.matrix(mkinmod$coefmat))
@@ -217,33 +219,40 @@ mkinfit <- function(mkinmod, observed,
     if (length(mkinmod$spec) == 1) {
       solution_type = "analytical"
     } else {
-      if (is.matrix(mkinmod$coefmat)) {
-        solution_type = "eigen"
-        if (max(observed$value, na.rm = TRUE) < 0.1) {
-          stop("The combination of small observed values (all < 0.1) and solution_type = eigen is error-prone")
-        }
-      } else {
+      if (!is.null(mkinmod$cf) & use_compiled[1] != FALSE) {
         solution_type = "deSolve"
+      } else {
+        if (is.matrix(mkinmod$coefmat)) {
+          solution_type = "eigen"
+          if (max(observed$value, na.rm = TRUE) < 0.1) {
+            stop("The combination of small observed values (all < 0.1) and solution_type = eigen is error-prone")
+          }
+        } else {
+          solution_type = "deSolve"
+        }
       }
     }
   }
 
+  # Define outtimes for model solution.
+  # Include time points at which observed data are available
+  # Make sure we include time 0, so initial values for state variables are for time 0
+  outtimes = sort(unique(c(observed$time, seq(min(observed$time),
+                                              max(observed$time),
+                                              length.out = n.outtimes))))
+
+
   cost.old <- 1e100 # The first model cost should be smaller than this value
   calls <- 0 # Counter for number of model solutions
   out_predicted <- NA
-  # Define the model cost function
+
+  # Define the model cost function for optimisation, including (back)transformations
   cost <- function(P)
   {
     assign("calls", calls+1, inherits=TRUE) # Increase the model solution counter
 
     # Trace parameter values if requested
     if(trace_parms) cat(P, "\n")
-
-    # Time points at which observed data are available
-    # Make sure we include time 0, so initial values for state variables are for time 0
-    outtimes = sort(unique(c(observed$time, seq(min(observed$time),
-                                                max(observed$time),
-                                                length.out = n.outtimes))))
 
     if(length(state.ini.optim) > 0) {
       odeini <- c(P[1:length(state.ini.optim)], state.ini.fixed)
@@ -263,6 +272,7 @@ mkinfit <- function(mkinmod, observed,
     out <- mkinpredict(mkinmod, parms, 
                        odeini, outtimes, 
                        solution_type = solution_type, 
+                       use_compiled = use_compiled,
                        method.ode = method.ode,
                        atol = atol, rtol = rtol, ...)
 
@@ -282,6 +292,7 @@ mkinfit <- function(mkinmod, observed,
         out_plot <- mkinpredict(mkinmod, parms,
                                 odeini, outtimes_plot, 
                                 solution_type = solution_type, 
+                                use_compiled = use_compiled,
                                 method.ode = method.ode,
                                 atol = atol, rtol = rtol, ...)
 
@@ -305,14 +316,43 @@ mkinfit <- function(mkinmod, observed,
     return(mC)
   }
 
+  # Define the model cost function for the t-test, without parameter transformation
+  cost_notrans <- function(P)
+  {
+    if(length(state.ini.optim) > 0) {
+      odeini <- c(P[1:length(state.ini.optim)], state.ini.fixed)
+      names(odeini) <- c(state.ini.optim.boxnames, state.ini.fixed.boxnames)
+    } else {
+      odeini <- state.ini.fixed
+      names(odeini) <- state.ini.fixed.boxnames
+    }
+
+    odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], parms.fixed)
+
+    # Solve the system with current transformed parameter values
+    out <- mkinpredict(mkinmod, odeparms, 
+                       odeini, outtimes, 
+                       solution_type = solution_type, 
+                       use_compiled = use_compiled,
+                       method.ode = method.ode,
+                       atol = atol, rtol = rtol, ...)
+
+    mC <- modCost(out, observed, y = "value",
+      err = err, weight = weight, scaleVar = scaleVar)
+
+    return(mC)
+  }
+
+  # Define lower and upper bounds other than -Inf and Inf for parameters
+  # for which no internal transformation is requested in the call to mkinfit.
   lower <- rep(-Inf, length(c(state.ini.optim, transparms.optim)))
   upper <- rep(Inf, length(c(state.ini.optim, transparms.optim)))
   names(lower) <- names(upper) <- c(names(state.ini.optim), names(transparms.optim))
   if (!transform_rates) {
     index_k <- grep("^k_", names(lower))
     lower[index_k] <- 0
-    index_k.iore <- grep("^k.iore_", names(lower))
-    lower[index_k.iore] <- 0
+    index_k__iore <- grep("^k__iore_", names(lower))
+    lower[index_k__iore] <- 0
     other_rate_parms <- intersect(c("alpha", "beta", "k1", "k2", "tb"), names(lower))
     lower[other_rate_parms] <- 0
   }
@@ -423,6 +463,17 @@ mkinfit <- function(mkinmod, observed,
   bparms.fixed = c(state.ini.fixed, parms.fixed)
   bparms.all = c(bparms.optim, parms.fixed)
 
+  # Attach the cost functions to the fit for post-hoc parameter uncertainty analysis
+  fit$cost <- cost
+  fit$cost_notrans <- cost_notrans
+
+  # Estimate the Hessian for the model cost without parameter transformations
+  # to make it possible to obtain the usual t-test
+  # Code ported from FME::modFit
+  Jac_notrans <- gradient(function(p, ...) cost_notrans(p)$residuals$res, 
+                          bparms.optim, centered = TRUE)
+  fit$hessian_notrans <- 2 * t(Jac_notrans) %*% Jac_notrans
+
   # Collect initial parameter values in three dataframes
   fit$start <- data.frame(value = c(state.ini.optim, 
                                     parms.optim))
@@ -481,29 +532,36 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
   p      <- length(param)
   mod_vars <- names(object$mkinmod$diffs)
   covar  <- try(solve(0.5*object$hessian), silent = TRUE)   # unscaled covariance
+  covar_notrans  <- try(solve(0.5*object$hessian_notrans), silent = TRUE)   # unscaled covariance
   rdf    <- object$df.residual
   resvar <- object$ssr / rdf
   if (!is.numeric(covar)) {
     covar <- NULL
-    se <- lci <- uci <- tval <- pval1 <- pval2 <- rep(NA, p)
+    se <- lci <- uci <- rep(NA, p)
   } else {
     rownames(covar) <- colnames(covar) <- pnames
     se     <- sqrt(diag(covar) * resvar)
     lci    <- param + qt(alpha/2, rdf) * se
     uci    <- param + qt(1-alpha/2, rdf) * se
-    tval   <- param/se
-    pval1   <- 2 * pt(abs(tval), rdf, lower.tail = FALSE)
-    pval2   <- pt(abs(tval), rdf, lower.tail = FALSE)
+  }
+
+  if (!is.numeric(covar_notrans)) {
+    covar_notrans <- NULL
+    se_notrans <- tval <- pval <- rep(NA, p)
+  } else {
+    rownames(covar_notrans) <- colnames(covar_notrans) <- bpnames
+    se_notrans     <- sqrt(diag(covar_notrans) * resvar)
+    tval   <- object$bparms.optim/se_notrans
+    pval   <- pt(abs(tval), rdf, lower.tail = FALSE)
   }
 
   names(se) <- pnames
   modVariance <- object$ssr / length(object$residuals)
 
-  param <- cbind(param, se, lci, uci, tval, pval1, pval2)
-  dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper",
-                                    "t value", "Pr(>|t|)", "Pr(>t)"))
+  param <- cbind(param, se, lci, uci)
+  dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper"))
 
-  bparam <- cbind(Estimate = object$bparms.optim, Lower = NA, Upper = NA)
+  bparam <- cbind(Estimate = object$bparms.optim, se_notrans, "t value" = tval, "Pr(>t)" = pval, Lower = NA, Upper = NA)
 
   # Transform boundaries of CI for one parameter at a time,
   # with the exception of sets of formation fractions (single fractions are OK).
@@ -609,7 +667,7 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   if(length(x$fixed$value) == 0) cat("None\n")
   else print(x$fixed)
   
-  cat("\nOptimised, transformed parameters:\n")
+  cat("\nOptimised, transformed parameters with symmetric confidence intervals:\n")
   print(signif(x$par, digits = digits))
 
   if (x$calls > 0) {
@@ -626,8 +684,11 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   cat("\nResidual standard error:",
       format(signif(x$sigma, digits)), "on", rdf, "degrees of freedom\n")
 
-  cat("\nBacktransformed parameters:\n")
-  print(signif(x$bpar, digits = digits))
+  cat("\nBacktransformed parameters:\n",
+      "  Confidence intervals for internally transformed parameters are asymmetric.\n",
+      "  t-test (unrealistically) based on the assumption of normal distribution\n",
+      "  for estimators of untransformed parameters.\n", sep = "")
+  print(signif(x$bpar[, c(1, 3, 4, 5, 6)], digits = digits))
 
   cat("\nChi2 error levels in percent:\n")
   x$errmin$err.min <- 100 * x$errmin$err.min
