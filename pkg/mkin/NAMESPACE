@@ -4,10 +4,11 @@ S3method(plot, mkinfit)
 S3method(summary, mkinfit)
 S3method(print, summary.mkinfit)
 
-# Import all packages listed as Imports or Depends
+# Import packages listed as Imports or Depends
 import(
   FME,
   deSolve,
   minpack.lm,
-  rootSolve
+  rootSolve,
+  inline
 )

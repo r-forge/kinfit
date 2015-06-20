@@ -26,13 +26,20 @@ pkgfiles = NEWS \
 	   tests/* \
 	   tests/testthat* \
 	   TODO \
-	   vignettes/*
+	   vignettes/*.Rmd \
+	   vignettes/*.Rnw
 
-all: NEWS check clean
+
+
+
+all: check clean
 
 # convert markdown to R's NEWS format (from knitr package)
 NEWS: NEWS.md
 	sed -e 's/^-/ -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 >NEWS
+
+README.md: README.Rmd
+	"$(RBIN)/Rscript" -e 'require(knitr); knit("README.Rmd")'
 
 $(TGZ): $(pkgfiles)
 	cd ..;\
@@ -60,7 +67,7 @@ check: build
 
 check-no-vignettes: build-no-vignettes
 	mv $(TGZVNR) $(TGZ)
-	"$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ)
+	"$(RBIN)/R" CMD check --as-cran --no-tests --no-build-vignettes --no-vignettes $(TGZ)
 	mv $(TGZ) $(TGZVNR)
 
 clean: 
@@ -74,13 +81,19 @@ test: install-no-vignettes
 vignettes/mkin.pdf: vignettes/mkin.Rnw
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/mkin.Rnw', dir = 'vignettes')"
 
+vignettes/FOCUS_D.html: vignettes/FOCUS_D.Rmd
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/FOCUS_D.Rmd', dir = 'vignettes')"
+
 vignettes/FOCUS_L.html: vignettes/FOCUS_L.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/FOCUS_L.Rmd', dir = 'vignettes')"
 
 vignettes/FOCUS_Z.pdf: vignettes/FOCUS_Z.Rnw
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/FOCUS_Z.Rnw', dir = 'vignettes')"
 
-vignettes: vignettes/mkin.pdf vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf
+vignettes/compiled_models.html: vignettes/compiled_models.Rmd
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/compiled_models.Rmd', dir = 'vignettes')"
+
+vignettes: vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
 
 sd:
 	"$(RBIN)/Rscript" -e "library(staticdocs); build_site()"

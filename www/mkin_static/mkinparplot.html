@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinparplot. mkin 0.9-35</title>
+<title>mkinparplot. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -77,128 +77,111 @@
   T245 = list(type = &quot;SFO&quot;, to = c(&quot;phenol&quot;), sink = FALSE),
   phenol = list(type = &quot;SFO&quot;, to = c(&quot;anisole&quot;)),
   anisole = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
-fit &lt;- mkinfit(model, subset(mccall81_245T, soil == &quot;Commerce&quot;))
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'>fit &lt;- mkinfit(model, subset(mccall81_245T, soil == &quot;Commerce&quot;))
 </div>
 <div class='output'>Model cost at call  1 :  10647.29 
 Model cost at call  2 :  10647.29 
 Model cost at call  4 :  10647.29 
-Model cost at call  7 :  5638.002 
-Model cost at call  9 :  5637.998 
-Model cost at call  13 :  2729.284 
-Model cost at call  20 :  1581.735 
-Model cost at call  21 :  1581.734 
-Model cost at call  24 :  1581.734 
-Model cost at call  25 :  1581.734 
-Model cost at call  27 :  941.6034 
-Model cost at call  29 :  941.6007 
-Model cost at call  33 :  612.6042 
-Model cost at call  35 :  612.6039 
-Model cost at call  36 :  612.6036 
-Model cost at call  39 :  453.957 
-Model cost at call  41 :  453.957 
-Model cost at call  42 :  453.9568 
-Model cost at call  46 :  406.1148 
-Model cost at call  48 :  406.1147 
-Model cost at call  50 :  406.1145 
-Model cost at call  52 :  394.4048 
-Model cost at call  54 :  394.4046 
-Model cost at call  58 :  354.5363 
-Model cost at call  60 :  354.5362 
-Model cost at call  64 :  322.6603 
-Model cost at call  66 :  322.6603 
-Model cost at call  70 :  296.1527 
-Model cost at call  71 :  296.1526 
-Model cost at call  75 :  296.1524 
-Model cost at call  77 :  258.5065 
-Model cost at call  78 :  258.5065 
-Model cost at call  79 :  258.5063 
-Model cost at call  82 :  258.5063 
-Model cost at call  84 :  245.9358 
-Model cost at call  86 :  245.9356 
-Model cost at call  90 :  234.8669 
-Model cost at call  91 :  234.8669 
-Model cost at call  92 :  234.8669 
-Model cost at call  96 :  226.3165 
-Model cost at call  98 :  226.3165 
-Model cost at call  101 :  226.3165 
-Model cost at call  102 :  217.5601 
-Model cost at call  104 :  217.5601 
-Model cost at call  106 :  217.56 
-Model cost at call  107 :  217.56 
-Model cost at call  108 :  209.432 
-Model cost at call  110 :  209.4319 
-Model cost at call  115 :  205.8629 
-Model cost at call  117 :  205.8628 
-Model cost at call  121 :  200.0418 
-Model cost at call  123 :  200.0418 
-Model cost at call  126 :  200.0418 
-Model cost at call  127 :  192.5181 
-Model cost at call  129 :  192.518 
-Model cost at call  132 :  192.518 
-Model cost at call  134 :  188.1636 
-Model cost at call  136 :  188.1636 
-Model cost at call  138 :  188.1636 
-Model cost at call  140 :  187.7649 
-Model cost at call  142 :  187.7649 
-Model cost at call  146 :  183.5972 
-Model cost at call  148 :  183.5972 
-Model cost at call  150 :  183.5972 
-Model cost at call  151 :  183.5971 
-Model cost at call  152 :  181.452 
-Model cost at call  154 :  181.4519 
-Model cost at call  156 :  181.4519 
-Model cost at call  158 :  179.4522 
-Model cost at call  160 :  179.4522 
-Model cost at call  165 :  178.2003 
-Model cost at call  167 :  178.2002 
-Model cost at call  171 :  177.4293 
-Model cost at call  173 :  177.4293 
-Model cost at call  175 :  177.4293 
-Model cost at call  177 :  176.3423 
-Model cost at call  179 :  176.3423 
-Model cost at call  181 :  176.3423 
-Model cost at call  183 :  175.6951 
-Model cost at call  187 :  175.6951 
-Model cost at call  190 :  175.139 
-Model cost at call  192 :  175.1389 
-Model cost at call  196 :  173.7018 
-Model cost at call  198 :  173.7018 
-Model cost at call  201 :  173.7018 
-Model cost at call  202 :  172.6967 
-Model cost at call  204 :  172.6967 
-Model cost at call  208 :  172.1033 
-Model cost at call  210 :  172.1033 
-Model cost at call  214 :  171.217 
-Model cost at call  215 :  170.5925 
-Model cost at call  216 :  169.7494 
-Model cost at call  218 :  169.7494 
-Model cost at call  221 :  169.7493 
-Model cost at call  222 :  167.3864 
-Model cost at call  226 :  167.3864 
-Model cost at call  227 :  167.3863 
-Model cost at call  228 :  165.6133 
-Model cost at call  229 :  164.6878 
-Model cost at call  233 :  164.6878 
-Model cost at call  235 :  163.5809 
-Model cost at call  237 :  163.5809 
-Model cost at call  242 :  162.4088 
-Model cost at call  245 :  162.4088 
-Model cost at call  247 :  162.4088 
-Model cost at call  248 :  162.2439 
-Model cost at call  249 :  162.2439 
-Model cost at call  254 :  162.1633 
-Model cost at call  255 :  162.1633 
-Model cost at call  260 :  162.1633 
-Model cost at call  261 :  162.1633 
-Model cost at call  262 :  162.1633 
-Model cost at call  263 :  162.1633 
-Model cost at call  267 :  162.1629 
-Model cost at call  269 :  162.1629 
+Model cost at call  7 :  5637.796 
+Model cost at call  9 :  5637.791 
+Model cost at call  13 :  2729.093 
+Model cost at call  20 :  1580.394 
+Model cost at call  21 :  1580.393 
+Model cost at call  24 :  1580.393 
+Model cost at call  25 :  1580.393 
+Model cost at call  27 :  939.3049 
+Model cost at call  29 :  939.3023 
+Model cost at call  33 :  612.6433 
+Model cost at call  35 :  612.6431 
+Model cost at call  36 :  612.6427 
+Model cost at call  39 :  453.3887 
+Model cost at call  41 :  453.3887 
+Model cost at call  42 :  453.3885 
+Model cost at call  46 :  406.6873 
+Model cost at call  48 :  406.6872 
+Model cost at call  50 :  406.6871 
+Model cost at call  52 :  392.3432 
+Model cost at call  54 :  392.343 
+Model cost at call  58 :  355.1079 
+Model cost at call  60 :  355.1079 
+Model cost at call  64 :  322.6717 
+Model cost at call  66 :  322.6716 
+Model cost at call  70 :  292.548 
+Model cost at call  71 :  292.5479 
+Model cost at call  75 :  292.5477 
+Model cost at call  76 :  291.4962 
+Model cost at call  77 :  291.4961 
+Model cost at call  80 :  291.4959 
+Model cost at call  81 :  291.4958 
+Model cost at call  82 :  271.6607 
+Model cost at call  84 :  271.6603 
+Model cost at call  88 :  240.68 
+Model cost at call  89 :  240.6798 
+Model cost at call  94 :  224.8335 
+Model cost at call  95 :  224.8334 
+Model cost at call  98 :  224.8333 
+Model cost at call  99 :  224.8331 
+Model cost at call  101 :  202.3616 
+Model cost at call  103 :  202.3614 
+Model cost at call  107 :  200.1694 
+Model cost at call  108 :  200.1693 
+Model cost at call  109 :  200.1693 
+Model cost at call  113 :  188.9232 
+Model cost at call  115 :  188.9232 
+Model cost at call  119 :  183.0685 
+Model cost at call  121 :  183.0685 
+Model cost at call  124 :  183.0685 
+Model cost at call  125 :  177.8086 
+Model cost at call  127 :  177.8086 
+Model cost at call  132 :  175.5995 
+Model cost at call  134 :  175.5994 
+Model cost at call  138 :  173.1605 
+Model cost at call  142 :  173.1605 
+Model cost at call  145 :  172.5936 
+Model cost at call  147 :  172.5936 
+Model cost at call  149 :  172.5936 
+Model cost at call  152 :  172.3595 
+Model cost at call  154 :  172.3595 
+Model cost at call  158 :  172.1692 
+Model cost at call  160 :  172.1692 
+Model cost at call  164 :  171.9099 
+Model cost at call  166 :  171.9099 
+Model cost at call  170 :  171.5234 
+Model cost at call  172 :  171.5234 
+Model cost at call  176 :  170.9358 
+Model cost at call  177 :  170.1567 
+Model cost at call  178 :  167.1483 
+Model cost at call  179 :  164.3567 
+Model cost at call  181 :  164.3567 
+Model cost at call  182 :  164.3566 
+Model cost at call  186 :  162.5463 
+Model cost at call  188 :  162.5463 
+Model cost at call  189 :  162.5463 
+Model cost at call  191 :  162.5462 
+Model cost at call  193 :  162.2675 
+Model cost at call  194 :  162.2675 
+Model cost at call  199 :  162.2083 
+Model cost at call  200 :  162.2083 
+Model cost at call  205 :  162.1673 
+Model cost at call  207 :  162.1673 
+Model cost at call  211 :  162.1629 
+Model cost at call  212 :  162.1629 
+Model cost at call  213 :  162.1629 
+Model cost at call  217 :  162.1629 
+Model cost at call  219 :  162.1629 
+Model cost at call  220 :  162.1629 
+Model cost at call  232 :  162.1629 
+Model cost at call  235 :  162.1629 
+Model cost at call  240 :  162.1629 
+Model cost at call  243 :  162.1629 
+Model cost at call  245 :  162.1629 
+Model cost at call  255 :  162.1629 
+Model cost at call  256 :  162.1629 
+Model cost at call  260 :  162.1629 
 Model cost at call  274 :  162.1629 
-Model cost at call  275 :  162.1629 
-Model cost at call  285 :  162.1629 
-Model cost at call  296 :  162.1629 
-Model cost at call  314 :  162.1629 
+Model cost at call  283 :  162.1629 
 Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: mkinparplot(fit)

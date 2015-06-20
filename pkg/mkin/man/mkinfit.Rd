@@ -21,8 +21,9 @@ mkinfit(mkinmod, observed,
   parms.ini = "auto",
   state.ini = "auto",
   fixed_parms = NULL, fixed_initials = names(mkinmod$diffs)[-1], 
-  solution_type = "auto",
+  solution_type = c("auto", "analytical", "eigen", "deSolve"),
   method.ode = "lsoda",
+  use_compiled = "auto",
   method.modFit = c("Port", "Marq", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B"),
   maxit.modFit = "auto",
   control.modFit = list(),
@@ -101,6 +102,11 @@ mkinfit(mkinmod, observed,
     The solution method passed via \code{\link{mkinpredict}} to
     \code{\link{ode}} in case the solution type is "deSolve". The default
     "lsoda" is performant, but sometimes fails to converge.
+  }
+  \item{use_compiled}{
+    If set to \code{FALSE}, no compiled version of the \code{\link{mkinmod}} 
+    model is used, in the calls to \code{\link{mkinpredict}} even if
+    a compiled verion is present. 
   }
   \item{method.modFit}{
     The optimisation method passed to \code{\link{modFit}}.  
@@ -227,45 +233,55 @@ mkinfit(mkinmod, observed,
 }
 \examples{
 # Use shorthand notation for parent only degradation
-fit <- mkinfit("FOMC", FOCUS_2006_C)
+fit <- mkinfit("FOMC", FOCUS_2006_C, quiet = TRUE)
 summary(fit)
 
 # One parent compound, one metabolite, both single first order.
+# Use mkinsub for convenience in model formulation. Pathway to sink included per default.
 SFO_SFO <- mkinmod(
-  parent = list(type = "SFO", to = "m1", sink = TRUE),
-  m1 = list(type = "SFO"))
+  parent = mkinsub("SFO", "m1"),
+  m1 = mkinsub("SFO"))
 # Fit the model to the FOCUS example dataset D using defaults
-fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
-summary(fit)
+print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D, 
+                           solution_type = "eigen", quiet = TRUE)))
+coef(fit)
+endpoints(fit)
+\dontrun{
+# deSolve is slower when the gcc compiler is not available
+print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D, 
+                           solution_type = "deSolve")))
+coef(fit.deSolve)
+endpoints(fit.deSolve)
+}
 
 # Use stepwise fitting, using optimised parameters from parent only fit, FOMC
 \dontrun{
-FOMC <- mkinmod(parent = list(type = "FOMC"))
 FOMC_SFO <- mkinmod(
-  parent = list(type = "FOMC", to = "m1", sink = TRUE),
-  m1 = list(type = "SFO"))
+  parent = mkinsub("FOMC", "m1"),
+  m1 = mkinsub("SFO"))
 # Fit the model to the FOCUS example dataset D using defaults
 fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D)
 # Use starting parameters from parent only FOMC fit
-fit.FOMC = mkinfit(FOMC, FOCUS_2006_D, plot=TRUE)
+fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, plot=TRUE)
 fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, 
   parms.ini = fit.FOMC$bparms.ode, plot=TRUE)
 
 # Use stepwise fitting, using optimised parameters from parent only fit, SFORB
-SFORB <- mkinmod(parent = list(type = "SFORB"))
 SFORB_SFO <- mkinmod(
   parent = list(type = "SFORB", to = "m1", sink = TRUE),
   m1 = list(type = "SFO"))
 # Fit the model to the FOCUS example dataset D using defaults
 fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D)
+fit.SFORB_SFO.deSolve <- mkinfit(SFORB_SFO, FOCUS_2006_D, solution_type = "deSolve")
 # Use starting parameters from parent only SFORB fit (not really needed in this case)
-fit.SFORB = mkinfit(SFORB, FOCUS_2006_D)
+fit.SFORB = mkinfit("SFORB", FOCUS_2006_D)
 fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode)
 }
 
+\dontrun{
 # Weighted fits, including IRLS
-SFO_SFO.ff <- mkinmod(parent = list(type = "SFO", to = "m1"),
-                      m1 = list(type = "SFO"), use_of_ff = "max")
+SFO_SFO.ff <- mkinmod(parent = mkinsub("SFO", "m1"),
+                      m1 = mkinsub("SFO"), use_of_ff = "max")
 f.noweight <- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
 summary(f.noweight)
 f.irls <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, reweight.method = "obs")
@@ -275,6 +291,7 @@ summary(f.w.mean)
 f.w.mean.irls <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = "mean",
                          reweight.method = "obs")
 summary(f.w.mean.irls)
+}
 
 \dontrun{
 # Manual weighting
@@ -288,5 +305,4 @@ f.w.man.irls <- mkinfit(SFO_SFO.ff, dw, err = "err.man",
 summary(f.w.man.irls)
 }
 }
-\keyword{ models }
 \keyword{ optimize }

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mccall81_245T. mkin 0.9-35</title>
+<title>mccall81_245T. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -89,7 +89,9 @@
     <pre class="examples"><div class='input'>  SFO_SFO_SFO &lt;- mkinmod(T245 = list(type = &quot;SFO&quot;, to = &quot;phenol&quot;),
                          phenol = list(type = &quot;SFO&quot;, to = &quot;anisole&quot;),
                          anisole = list(type = &quot;SFO&quot;))
-  ## &lt;strong&gt;Not run&lt;/strong&gt;: fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'>  ## &lt;strong&gt;Not run&lt;/strong&gt;: fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
 #   summary(fit.1, data = FALSE)## &lt;strong&gt;End(Not run)&lt;/strong&gt;
   # No covariance matrix and k_phenol_sink is really small, therefore fix it to zero
   fit.2 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;),
@@ -99,79 +101,79 @@
 <div class='output'>Model cost at call  1 :  13224.35 
 Model cost at call  2 :  13224.35 
 Model cost at call  7 :  8335.263 
-Model cost at call  14 :  3081.28 
-Model cost at call  16 :  3081.279 
-Model cost at call  17 :  3081.273 
-Model cost at call  21 :  1341.303 
-Model cost at call  23 :  1341.303 
-Model cost at call  27 :  402.2556 
-Model cost at call  30 :  402.2556 
-Model cost at call  34 :  312.7877 
-Model cost at call  35 :  312.7877 
-Model cost at call  36 :  312.7877 
-Model cost at call  37 :  312.7873 
-Model cost at call  41 :  280.5826 
-Model cost at call  44 :  280.5826 
-Model cost at call  47 :  258.2931 
-Model cost at call  50 :  258.293 
-Model cost at call  53 :  221.2864 
-Model cost at call  54 :  221.2863 
-Model cost at call  56 :  221.2863 
-Model cost at call  59 :  197.2466 
-Model cost at call  61 :  197.246 
-Model cost at call  66 :  175.5154 
-Model cost at call  69 :  175.5154 
-Model cost at call  72 :  167.4803 
-Model cost at call  75 :  167.4803 
-Model cost at call  77 :  167.4803 
-Model cost at call  78 :  164.9721 
-Model cost at call  81 :  164.972 
-Model cost at call  84 :  160.6184 
-Model cost at call  87 :  160.6184 
-Model cost at call  89 :  160.6183 
-Model cost at call  90 :  157.6565 
-Model cost at call  92 :  157.6565 
-Model cost at call  95 :  157.6565 
-Model cost at call  97 :  156.9626 
-Model cost at call  100 :  156.9625 
-Model cost at call  103 :  156.1797 
-Model cost at call  106 :  156.1797 
-Model cost at call  109 :  154.6626 
-Model cost at call  111 :  154.6626 
-Model cost at call  112 :  154.6626 
-Model cost at call  114 :  154.6625 
-Model cost at call  115 :  152.9621 
-Model cost at call  118 :  152.9621 
-Model cost at call  121 :  151.2991 
-Model cost at call  123 :  151.2991 
-Model cost at call  124 :  151.2991 
-Model cost at call  127 :  150.4294 
-Model cost at call  130 :  150.4294 
-Model cost at call  133 :  149.6508 
-Model cost at call  134 :  148.765 
-Model cost at call  135 :  148.0307 
-Model cost at call  137 :  148.0307 
-Model cost at call  141 :  144.8708 
-Model cost at call  143 :  144.8708 
-Model cost at call  144 :  144.8708 
-Model cost at call  147 :  142.1916 
-Model cost at call  148 :  140.8962 
-Model cost at call  150 :  140.8962 
-Model cost at call  153 :  140.8961 
-Model cost at call  155 :  140.0912 
-Model cost at call  157 :  140.0912 
-Model cost at call  158 :  140.0912 
-Model cost at call  159 :  140.0911 
-Model cost at call  161 :  139.4593 
-Model cost at call  162 :  139.1585 
-Model cost at call  164 :  139.1585 
-Model cost at call  167 :  139.1585 
-Model cost at call  172 :  139.156 
-Model cost at call  175 :  139.156 
-Model cost at call  178 :  139.1175 
-Model cost at call  180 :  139.1175 
-Model cost at call  184 :  139.1164 
-Model cost at call  185 :  139.1152 
+Model cost at call  14 :  3081.254 
+Model cost at call  16 :  3081.253 
+Model cost at call  17 :  3081.247 
+Model cost at call  21 :  1341.296 
+Model cost at call  23 :  1341.295 
+Model cost at call  27 :  402.2563 
+Model cost at call  30 :  402.2562 
+Model cost at call  34 :  312.787 
+Model cost at call  35 :  312.787 
+Model cost at call  36 :  312.7869 
+Model cost at call  37 :  312.7865 
+Model cost at call  41 :  280.582 
+Model cost at call  44 :  280.582 
+Model cost at call  47 :  258.2926 
+Model cost at call  50 :  258.2925 
+Model cost at call  53 :  221.2869 
+Model cost at call  54 :  221.2868 
+Model cost at call  56 :  221.2868 
+Model cost at call  59 :  197.2475 
+Model cost at call  61 :  197.2469 
+Model cost at call  66 :  175.517 
+Model cost at call  69 :  175.517 
+Model cost at call  72 :  167.4815 
+Model cost at call  75 :  167.4815 
+Model cost at call  77 :  167.4814 
+Model cost at call  78 :  164.97 
+Model cost at call  81 :  164.97 
+Model cost at call  84 :  160.6193 
+Model cost at call  87 :  160.6193 
+Model cost at call  89 :  160.6193 
+Model cost at call  90 :  157.6572 
+Model cost at call  92 :  157.6572 
+Model cost at call  95 :  157.6572 
+Model cost at call  97 :  156.9634 
+Model cost at call  100 :  156.9633 
+Model cost at call  103 :  156.1816 
+Model cost at call  106 :  156.1816 
+Model cost at call  109 :  154.6646 
+Model cost at call  111 :  154.6646 
+Model cost at call  112 :  154.6646 
+Model cost at call  114 :  154.6646 
+Model cost at call  115 :  152.9643 
+Model cost at call  118 :  152.9643 
+Model cost at call  121 :  151.301 
+Model cost at call  123 :  151.3009 
+Model cost at call  124 :  151.3009 
+Model cost at call  127 :  150.4312 
+Model cost at call  130 :  150.4312 
+Model cost at call  133 :  149.6526 
+Model cost at call  134 :  148.7701 
+Model cost at call  135 :  148.0421 
+Model cost at call  137 :  148.0421 
+Model cost at call  141 :  144.8879 
+Model cost at call  143 :  144.8879 
+Model cost at call  144 :  144.8879 
+Model cost at call  147 :  142.2172 
+Model cost at call  148 :  140.9145 
+Model cost at call  150 :  140.9145 
+Model cost at call  153 :  140.9145 
+Model cost at call  155 :  140.1039 
+Model cost at call  157 :  140.1039 
+Model cost at call  158 :  140.1039 
+Model cost at call  159 :  140.1039 
+Model cost at call  161 :  139.465 
+Model cost at call  162 :  139.1594 
+Model cost at call  164 :  139.1594 
+Model cost at call  167 :  139.1594 
+Model cost at call  172 :  139.1562 
+Model cost at call  175 :  139.1562 
+Model cost at call  178 :  139.1176 
+Model cost at call  180 :  139.1176 
+Model cost at call  184 :  139.1165 
+Model cost at call  185 :  139.1153 
 Model cost at call  186 :  139.1139 
 Model cost at call  189 :  139.1139 
 Model cost at call  194 :  139.1138 
@@ -181,15 +183,18 @@ Model cost at call  202 :  139.1138
 Model cost at call  203 :  139.1138 
 Model cost at call  213 :  139.1138 
 Model cost at call  224 :  139.1138 
+Model cost at call  237 :  139.1138 
+Model cost at call  240 :  139.1138 
 Model cost at call  243 :  139.1138 
+Model cost at call  244 :  139.1138 
 Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>  summary(fit.2, data = FALSE)
 </div>
-<div class='output'>mkin version:    0.9.35 
-R version:       3.2.0 
-Date of fit:     Fri May 15 15:04:44 2015 
-Date of summary: Fri May 15 15:04:44 2015 
+<div class='output'>mkin version:    0.9.36 
+R version:       3.2.1 
+Date of fit:     Sun Jun 21 01:47:47 2015 
+Date of summary: Sun Jun 21 01:47:47 2015 
 
 Equations:
 d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245
@@ -197,9 +202,9 @@ d_phenol = + k_T245_phenol * T245 - k_phenol_sink * phenol -
            k_phenol_anisole * phenol
 d_anisole = + k_phenol_anisole * phenol - k_anisole_sink * anisole
 
-Model predictions using solution type eigen 
+Model predictions using solution type deSolve 
 
-Fitted with method Port using 246 model solutions performed in 2.415 s
+Fitted with method Port using 246 model solutions performed in 1.421 s
 
 Weighting: none
 
@@ -225,25 +230,19 @@ phenol_0          0  state
 anisole_0         0  state
 k_phenol_sink     0 deparm
 
-Optimised, transformed parameters:
-                     Estimate Std. Error  Lower    Upper t value  Pr(&gt;|t|)
-T245_0               103.9000    2.35200 98.930 108.8000  44.160 1.292e-20
-log_k_T245_sink       -4.1130    0.13250 -4.390  -3.8350 -31.030 9.645e-18
-log_k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070 -72.200 1.199e-24
-log_k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637  -2.955 8.126e-03
-log_k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750 -44.790 9.901e-21
-                        Pr(&gt;t)
-T245_0               6.462e-21
-log_k_T245_sink      4.823e-18
-log_k_T245_phenol    5.997e-25
-log_k_phenol_anisole 4.063e-03
-log_k_anisole_sink   4.950e-21
+Optimised, transformed parameters with symmetric confidence intervals:
+                     Estimate Std. Error  Lower    Upper
+T245_0               103.9000    2.35200 98.930 108.8000
+log_k_T245_sink       -4.1130    0.13250 -4.390  -3.8350
+log_k_T245_phenol     -3.6120    0.05002 -3.716  -3.5070
+log_k_phenol_anisole  -0.9037    0.30580 -1.544  -0.2637
+log_k_anisole_sink    -5.0090    0.11180 -5.243  -4.7750
 
 Parameter correlation:
                        T245_0 log_k_T245_sink log_k_T245_phenol
 T245_0                1.00000         0.63761           -0.1742
 log_k_T245_sink       0.63761         1.00000           -0.3831
-log_k_T245_phenol    -0.17416        -0.38314            1.0000
+log_k_T245_phenol    -0.17416        -0.38313            1.0000
 log_k_phenol_anisole -0.05948         0.08745           -0.3047
 log_k_anisole_sink   -0.16208        -0.60469            0.5227
                      log_k_phenol_anisole log_k_anisole_sink
@@ -256,12 +255,15 @@ log_k_anisole_sink               -0.17744             1.0000
 Residual standard error: 2.706 on 19 degrees of freedom
 
 Backtransformed parameters:
-                  Estimate     Lower     Upper
-T245_0           1.039e+02 98.930000 108.80000
-k_T245_sink      1.636e-02  0.012400   0.02159
-k_T245_phenol    2.701e-02  0.024320   0.02999
-k_phenol_anisole 4.051e-01  0.213600   0.76820
-k_anisole_sink   6.679e-03  0.005285   0.00844
+  Confidence intervals for internally transformed parameters are asymmetric.
+  t-test (unrealistically) based on the assumption of normal distribution
+  for estimators of untransformed parameters.
+                  Estimate t value    Pr(&gt;t)     Lower     Upper
+T245_0           1.039e+02  44.160 6.462e-21 98.930000 108.80000
+k_T245_sink      1.636e-02   7.545 1.978e-07  0.012400   0.02159
+k_T245_phenol    2.701e-02  19.990 1.607e-14  0.024320   0.02999
+k_phenol_anisole 4.051e-01   3.270 2.014e-03  0.213600   0.76820
+k_anisole_sink   6.679e-03   8.942 1.544e-08  0.005285   0.00844
 
 Chi2 error levels in percent:
          err.min n.optim df

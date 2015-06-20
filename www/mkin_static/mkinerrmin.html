@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinerrmin. mkin 0.9-35</title>
+<title>mkinerrmin. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -116,7 +116,9 @@ as defined in the FOCUS kinetics report from 2006.</p>
     <pre class="examples"><div class='input'>SFO_SFO = mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;),
                   m1 = list(type = &quot;SFO&quot;),
                   use_of_ff = &quot;max&quot;)
-
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'>
 fit_FOCUS_D = mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE)
 round(mkinerrmin(fit_FOCUS_D), 4)
 </div>

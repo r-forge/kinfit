@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-35</title>
+<title>transform_odeparms. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -22,7 +22,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -115,55 +115,57 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
     <pre class="examples"><div class='input'>SFO_SFO &lt;- mkinmod(
   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
   m1 = list(type = &quot;SFO&quot;))
-# Fit the model to the FOCUS example dataset D using defaults
+</div>
+<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<div class='input'># Fit the model to the FOCUS example dataset D using defaults
 fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
 <div class='output'>Model cost at call  1 :  18915.53 
 Model cost at call  2 :  18915.53 
 Model cost at call  6 :  11424.02 
-Model cost at call  10 :  11423.99 
-Model cost at call  12 :  4094.394 
-Model cost at call  16 :  4094.393 
+Model cost at call  10 :  11424 
+Model cost at call  12 :  4094.396 
+Model cost at call  16 :  4094.396 
 Model cost at call  19 :  1340.595 
 Model cost at call  20 :  1340.593 
 Model cost at call  25 :  1072.239 
 Model cost at call  28 :  1072.236 
 Model cost at call  30 :  874.2614 
 Model cost at call  33 :  874.2611 
-Model cost at call  35 :  616.2367 
-Model cost at call  37 :  616.2363 
-Model cost at call  40 :  467.4371 
-Model cost at call  42 :  467.4365 
-Model cost at call  46 :  398.2896 
-Model cost at call  48 :  398.2896 
-Model cost at call  49 :  398.2895 
-Model cost at call  51 :  395.07 
-Model cost at call  54 :  395.0699 
-Model cost at call  56 :  378.3296 
-Model cost at call  59 :  378.3296 
-Model cost at call  62 :  376.9811 
-Model cost at call  64 :  376.981 
+Model cost at call  35 :  616.2379 
+Model cost at call  37 :  616.2374 
+Model cost at call  40 :  467.4388 
+Model cost at call  42 :  467.4382 
+Model cost at call  46 :  398.2914 
+Model cost at call  48 :  398.2914 
+Model cost at call  49 :  398.2913 
+Model cost at call  51 :  395.0712 
+Model cost at call  54 :  395.0711 
+Model cost at call  56 :  378.3298 
+Model cost at call  59 :  378.3298 
+Model cost at call  62 :  376.9812 
+Model cost at call  64 :  376.9811 
 Model cost at call  67 :  375.2085 
 Model cost at call  69 :  375.2085 
-Model cost at call  70 :  375.2084 
-Model cost at call  71 :  375.2084 
+Model cost at call  70 :  375.2085 
+Model cost at call  71 :  375.2085 
 Model cost at call  72 :  374.5723 
 Model cost at call  74 :  374.5723 
 Model cost at call  77 :  374.0075 
 Model cost at call  79 :  374.0075 
 Model cost at call  80 :  374.0075 
-Model cost at call  82 :  373.1712 
-Model cost at call  84 :  373.1712 
-Model cost at call  87 :  372.6446 
-Model cost at call  88 :  372.1615 
-Model cost at call  90 :  372.1615 
-Model cost at call  91 :  372.1615 
+Model cost at call  82 :  373.1711 
+Model cost at call  84 :  373.1711 
+Model cost at call  87 :  372.6445 
+Model cost at call  88 :  372.1614 
+Model cost at call  90 :  372.1614 
+Model cost at call  91 :  372.1614 
 Model cost at call  94 :  371.6464 
 Model cost at call  99 :  371.4299 
 Model cost at call  101 :  371.4299 
-Model cost at call  104 :  371.4071 
-Model cost at call  106 :  371.4071 
-Model cost at call  107 :  371.4071 
+Model cost at call  104 :  371.407 
+Model cost at call  106 :  371.407 
+Model cost at call  107 :  371.407 
 Model cost at call  109 :  371.2524 
 Model cost at call  113 :  371.2524 
 Model cost at call  114 :  371.2136 
@@ -176,171 +178,24 @@ Model cost at call  123 :  371.2134
 Model cost at call  125 :  371.2134 
 Model cost at call  126 :  371.2134 
 Model cost at call  135 :  371.2134 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>fit.2 &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
-</div>
-<div class='output'>Model cost at call  1 :  18915.53 
-Model cost at call  2 :  18915.53 
-Model cost at call  7 :  10205.88 
-Model cost at call  10 :  10205.05 
-Model cost at call  13 :  8136.611 
-Model cost at call  18 :  2504.356 
-Model cost at call  20 :  2504.354 
-Model cost at call  22 :  2504.289 
-Model cost at call  25 :  1747.541 
-Model cost at call  27 :  1745.94 
-Model cost at call  29 :  1745.43 
-Model cost at call  30 :  1341.03 
-Model cost at call  34 :  1341.029 
-Model cost at call  35 :  1032.645 
-Model cost at call  39 :  1032.645 
-Model cost at call  40 :  919.9446 
-Model cost at call  42 :  919.9445 
-Model cost at call  44 :  919.9442 
-Model cost at call  45 :  903.8222 
-Model cost at call  47 :  903.8219 
-Model cost at call  49 :  903.8218 
-Model cost at call  50 :  780.8642 
-Model cost at call  52 :  780.8641 
-Model cost at call  54 :  780.864 
-Model cost at call  55 :  734.2999 
-Model cost at call  57 :  734.2992 
-Model cost at call  60 :  717.8443 
-Model cost at call  67 :  676.3893 
-Model cost at call  68 :  676.3892 
-Model cost at call  69 :  676.3891 
-Model cost at call  71 :  676.387 
-Model cost at call  72 :  642.2724 
-Model cost at call  73 :  642.2723 
-Model cost at call  76 :  642.2723 
-Model cost at call  77 :  604.7091 
-Model cost at call  78 :  604.7089 
-Model cost at call  82 :  560.1217 
-Model cost at call  83 :  560.1217 
-Model cost at call  86 :  560.1217 
-Model cost at call  87 :  521.6817 
-Model cost at call  88 :  521.6817 
-Model cost at call  91 :  521.6816 
-Model cost at call  92 :  453.6171 
-Model cost at call  93 :  453.6171 
-Model cost at call  96 :  453.6171 
-Model cost at call  98 :  422.856 
-Model cost at call  102 :  422.8559 
-Model cost at call  106 :  413.9175 
-Model cost at call  108 :  413.9154 
-Model cost at call  111 :  407.7988 
-Model cost at call  113 :  407.7987 
-Model cost at call  115 :  407.7987 
-Model cost at call  116 :  403.4577 
-Model cost at call  118 :  403.4577 
-Model cost at call  120 :  403.4577 
-Model cost at call  121 :  396.9161 
-Model cost at call  123 :  396.9161 
-Model cost at call  126 :  391.9633 
-Model cost at call  128 :  391.9633 
-Model cost at call  130 :  391.9633 
-Model cost at call  131 :  390.4131 
-Model cost at call  133 :  390.4131 
-Model cost at call  135 :  390.4131 
-Model cost at call  137 :  384.2025 
-Model cost at call  139 :  384.2023 
-Model cost at call  145 :  383.0399 
-Model cost at call  147 :  383.0399 
-Model cost at call  150 :  382.1148 
-Model cost at call  152 :  382.1148 
-Model cost at call  154 :  382.1148 
-Model cost at call  155 :  381.197 
-Model cost at call  157 :  381.197 
-Model cost at call  160 :  380.3709 
-Model cost at call  162 :  380.3709 
-Model cost at call  164 :  380.3709 
-Model cost at call  165 :  379.7165 
-Model cost at call  167 :  379.7165 
-Model cost at call  170 :  378.8642 
-Model cost at call  174 :  378.8642 
-Model cost at call  175 :  378.2031 
-Model cost at call  178 :  378.2028 
-Model cost at call  184 :  377.278 
-Model cost at call  186 :  377.2779 
-Model cost at call  189 :  377.1383 
-Model cost at call  193 :  377.1383 
-Model cost at call  194 :  377.0729 
-Model cost at call  198 :  377.0729 
-Model cost at call  199 :  377.0072 
-Model cost at call  201 :  377.0072 
-Model cost at call  204 :  376.9708 
-Model cost at call  206 :  376.9708 
-Model cost at call  210 :  376.9036 
-Model cost at call  212 :  376.9036 
-Model cost at call  213 :  376.9036 
-Model cost at call  217 :  376.8913 
-Model cost at call  219 :  376.8913 
-Model cost at call  222 :  376.8887 
-Model cost at call  223 :  376.8861 
-Model cost at call  225 :  376.8861 
-Model cost at call  226 :  376.8861 
-Model cost at call  228 :  376.8861 
-Model cost at call  229 :  376.885 
-Model cost at call  231 :  376.885 
-Model cost at call  234 :  376.885 
-Model cost at call  235 :  376.8817 
-Model cost at call  239 :  376.8817 
-Model cost at call  240 :  376.8794 
-Model cost at call  241 :  376.877 
-Model cost at call  242 :  376.8701 
-Model cost at call  243 :  376.8597 
-Model cost at call  245 :  376.8597 
-Model cost at call  247 :  376.8597 
-Model cost at call  254 :  376.8594 
-Model cost at call  258 :  376.8594 
-Model cost at call  259 :  376.8581 
-Model cost at call  263 :  376.8581 
-Model cost at call  265 :  376.8569 
-Model cost at call  266 :  376.8554 
-Model cost at call  270 :  376.8554 
-Model cost at call  272 :  376.8548 
-Model cost at call  275 :  376.8548 
-Model cost at call  278 :  376.853 
-Model cost at call  281 :  376.853 
-Model cost at call  283 :  376.8512 
-Model cost at call  286 :  376.8512 
-Model cost at call  289 :  376.8512 
-Model cost at call  290 :  376.8483 
-Model cost at call  291 :  376.8439 
-Model cost at call  292 :  376.8237 
-Model cost at call  293 :  376.743 
-Model cost at call  294 :  376.4269 
-Model cost at call  295 :  375.2659 
-Model cost at call  296 :  372.2856 
-Model cost at call  298 :  372.2856 
-Model cost at call  302 :  371.5715 
-Model cost at call  305 :  371.5715 
-Model cost at call  307 :  371.2254 
-Model cost at call  309 :  371.2254 
-Model cost at call  312 :  371.2134 
-Model cost at call  314 :  371.2134 
-Model cost at call  317 :  371.2134 
-Model cost at call  318 :  371.2134 
-Model cost at call  322 :  371.2134 
-Model cost at call  326 :  371.2134 
-Model cost at call  335 :  371.2134 
+Model cost at call  147 :  371.2134 
+Model cost at call  152 :  371.2134 
 Optimisation by method Port successfully terminated.
 </div>
 <div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>mkin version:    0.9.35 
-R version:       3.2.0 
-Date of fit:     Fri May 15 15:05:08 2015 
-Date of summary: Fri May 15 15:05:11 2015 
+<div class='output'>mkin version:    0.9.36 
+R version:       3.2.1 
+Date of fit:     Sun Jun 21 01:47:57 2015 
+Date of summary: Sun Jun 21 01:47:57 2015 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
 d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
-Model predictions using solution type eigen 
+Model predictions using solution type deSolve 
 
-Fitted with method Port using 153 model solutions performed in 1.11 s
+Fitted with method Port using 153 model solutions performed in 0.641 s
 
 Weighting: none
 
@@ -362,33 +217,31 @@ Fixed parameter values:
      value  type
 m1_0     0 state
 
-Optimised, transformed parameters:
-                  Estimate Std. Error  Lower   Upper t value  Pr(&gt;|t|)
-parent_0            99.600    1.61400 96.330 102.900   61.72 4.048e-38
-log_k_parent_sink   -3.038    0.07826 -3.197  -2.879  -38.82 5.601e-31
-log_k_parent_m1     -2.980    0.04124 -3.064  -2.897  -72.27 1.446e-40
-log_k_m1_sink       -5.248    0.13610 -5.523  -4.972  -38.56 7.087e-31
-                     Pr(&gt;t)
-parent_0          2.024e-38
-log_k_parent_sink 2.800e-31
-log_k_parent_m1   7.228e-41
-log_k_m1_sink     3.543e-31
+Optimised, transformed parameters with symmetric confidence intervals:
+                  Estimate Std. Error  Lower   Upper
+parent_0            99.600    1.61400 96.330 102.900
+log_k_parent_sink   -3.038    0.07826 -3.197  -2.879
+log_k_parent_m1     -2.980    0.04124 -3.064  -2.897
+log_k_m1_sink       -5.248    0.13610 -5.523  -4.972
 
 Parameter correlation:
                   parent_0 log_k_parent_sink log_k_parent_m1 log_k_m1_sink
 parent_0           1.00000            0.6075        -0.06625       -0.1701
 log_k_parent_sink  0.60752            1.0000        -0.08740       -0.6253
 log_k_parent_m1   -0.06625           -0.0874         1.00000        0.4716
-log_k_m1_sink     -0.17006           -0.6253         0.47164        1.0000
+log_k_m1_sink     -0.17006           -0.6253         0.47163        1.0000
 
 Residual standard error: 3.211 on 36 degrees of freedom
 
 Backtransformed parameters:
-               Estimate     Lower     Upper
-parent_0      99.600000 96.330000 1.029e+02
-k_parent_sink  0.047920  0.040890 5.616e-02
-k_parent_m1    0.050780  0.046700 5.521e-02
-k_m1_sink      0.005261  0.003992 6.933e-03
+  Confidence intervals for internally transformed parameters are asymmetric.
+  t-test (unrealistically) based on the assumption of normal distribution
+  for estimators of untransformed parameters.
+               Estimate t value    Pr(&gt;t)     Lower     Upper
+parent_0      99.600000  61.720 2.024e-38 96.330000 1.029e+02
+k_parent_sink  0.047920  12.780 3.050e-15  0.040890 5.616e-02
+k_parent_m1    0.050780  24.250 3.407e-24  0.046700 5.521e-02
+k_m1_sink      0.005261   7.349 5.758e-09  0.003992 6.933e-03
 
 Chi2 error levels in percent:
          err.min n.optim df
@@ -407,87 +260,13 @@ Estimated disappearance times:
 parent   7.023  23.33
 m1     131.761 437.70
 </div>
-<div class='input'>summary(fit.2, data=FALSE) 
-</div>
-<div class='output'>mkin version:    0.9.35 
-R version:       3.2.0 
-Date of fit:     Fri May 15 15:05:11 2015 
-Date of summary: Fri May 15 15:05:11 2015 
+<div class='input'>
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# fit.2 &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
+# summary(fit.2, data=FALSE) 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
 
-Equations:
-d_parent = - k_parent_sink * parent - k_parent_m1 * parent
-d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
-
-Model predictions using solution type eigen 
-
-Fitted with method Port using 353 model solutions performed in 2.513 s
-
-Weighting: none
-
-Starting values for parameters to be optimised:
-                 value   type
-parent_0      100.7500  state
-k_parent_sink   0.1000 deparm
-k_parent_m1     0.1001 deparm
-k_m1_sink       0.1002 deparm
-
-Starting values for the transformed parameters actually optimised:
-                 value lower upper
-parent_0      100.7500  -Inf   Inf
-k_parent_sink   0.1000     0   Inf
-k_parent_m1     0.1001     0   Inf
-k_m1_sink       0.1002     0   Inf
-
-Fixed parameter values:
-     value  type
-m1_0     0 state
-
-Optimised, transformed parameters:
-               Estimate Std. Error     Lower     Upper t value  Pr(&gt;|t|)
-parent_0      99.600000  1.6140000 96.330000 1.029e+02  61.720 4.048e-38
-k_parent_sink  0.047920  0.0037500  0.040310 5.553e-02  12.780 6.100e-15
-k_parent_m1    0.050780  0.0020940  0.046530 5.502e-02  24.250 6.813e-24
-k_m1_sink      0.005261  0.0007159  0.003809 6.713e-03   7.349 1.152e-08
-                 Pr(&gt;t)
-parent_0      2.024e-38
-k_parent_sink 3.050e-15
-k_parent_m1   3.407e-24
-k_m1_sink     5.758e-09
-
-Parameter correlation:
-              parent_0 k_parent_sink k_parent_m1 k_m1_sink
-parent_0       1.00000        0.6075    -0.06625   -0.1701
-k_parent_sink  0.60752        1.0000    -0.08740   -0.6253
-k_parent_m1   -0.06625       -0.0874     1.00000    0.4716
-k_m1_sink     -0.17006       -0.6253     0.47164    1.0000
-
-Residual standard error: 3.211 on 36 degrees of freedom
-
-Backtransformed parameters:
-               Estimate     Lower     Upper
-parent_0      99.600000 96.330000 1.029e+02
-k_parent_sink  0.047920  0.040310 5.553e-02
-k_parent_m1    0.050780  0.046530 5.502e-02
-k_m1_sink      0.005261  0.003809 6.713e-03
-
-Chi2 error levels in percent:
-         err.min n.optim df
-All data   6.398       4 15
-parent     6.827       3  6
-m1         4.490       1  9
-
-Resulting formation fractions:
-                ff
-parent_sink 0.4855
-parent_m1   0.5145
-m1_sink     1.0000
-
-Estimated disappearance times:
-          DT50   DT90
-parent   7.023  23.33
-m1     131.761 437.70
-</div>
-<div class='input'>initials &lt;- fit$start$value
+initials &lt;- fit$start$value
 names(initials) &lt;- rownames(fit$start)
 transformed &lt;- fit$start_transformed$value
 names(transformed) &lt;- rownames(fit$start_transformed)
@@ -502,303 +281,29 @@ transform_odeparms(initials, SFO_SFO)
      100.7500        0.1000        0.1001        0.1002 
 </div>
 <div class='input'>
-# The case of formation fractions
-SFO_SFO.ff &lt;- mkinmod(
-  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
-  m1 = list(type = &quot;SFO&quot;),
-  use_of_ff = &quot;max&quot;)
-
-fit.ff &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
-</div>
-<div class='output'>Model cost at call  1 :  15156.12 
-Model cost at call  2 :  15156.12 
-Model cost at call  6 :  8243.641 
-Model cost at call  12 :  6290.728 
-Model cost at call  13 :  6290.699 
-Model cost at call  15 :  6290.467 
-Model cost at call  18 :  1700.758 
-Model cost at call  20 :  1700.62 
-Model cost at call  24 :  1190.925 
-Model cost at call  26 :  1190.924 
-Model cost at call  29 :  1017.418 
-Model cost at call  31 :  1017.418 
-Model cost at call  33 :  1017.417 
-Model cost at call  34 :  644.0474 
-Model cost at call  36 :  644.0472 
-Model cost at call  38 :  644.0471 
-Model cost at call  39 :  590.5008 
-Model cost at call  41 :  590.5006 
-Model cost at call  43 :  590.5 
-Model cost at call  44 :  543.2068 
-Model cost at call  45 :  543.2065 
-Model cost at call  46 :  543.2063 
-Model cost at call  50 :  391.3476 
-Model cost at call  51 :  391.3475 
-Model cost at call  56 :  386.4785 
-Model cost at call  58 :  386.4785 
-Model cost at call  60 :  386.4774 
-Model cost at call  61 :  384.0683 
-Model cost at call  63 :  384.0682 
-Model cost at call  66 :  382.7806 
-Model cost at call  68 :  382.7806 
-Model cost at call  70 :  382.7805 
-Model cost at call  71 :  378.9269 
-Model cost at call  73 :  378.9269 
-Model cost at call  75 :  378.9269 
-Model cost at call  76 :  377.4844 
-Model cost at call  78 :  377.4843 
-Model cost at call  81 :  375.9736 
-Model cost at call  83 :  375.9736 
-Model cost at call  86 :  375.3386 
-Model cost at call  88 :  375.3386 
-Model cost at call  91 :  374.5773 
-Model cost at call  93 :  374.5772 
-Model cost at call  95 :  374.5772 
-Model cost at call  96 :  373.5473 
-Model cost at call  100 :  373.5473 
-Model cost at call  102 :  373.262 
-Model cost at call  104 :  373.262 
-Model cost at call  107 :  372.6715 
-Model cost at call  111 :  372.6715 
-Model cost at call  114 :  372.623 
-Model cost at call  116 :  372.623 
-Model cost at call  119 :  372.6046 
-Model cost at call  121 :  372.6046 
-Model cost at call  123 :  372.6046 
-Model cost at call  124 :  372.5737 
-Model cost at call  126 :  372.5737 
-Model cost at call  129 :  372.5246 
-Model cost at call  130 :  372.4499 
-Model cost at call  131 :  372.1358 
-Model cost at call  132 :  371.4297 
-Model cost at call  134 :  371.4297 
-Model cost at call  137 :  371.3272 
-Model cost at call  139 :  371.3272 
-Model cost at call  143 :  371.2308 
-Model cost at call  144 :  371.2308 
-Model cost at call  148 :  371.2209 
-Model cost at call  150 :  371.2209 
-Model cost at call  153 :  371.2171 
-Model cost at call  154 :  371.2134 
-Model cost at call  155 :  371.2134 
-Model cost at call  157 :  371.2134 
-Model cost at call  160 :  371.2134 
-Model cost at call  161 :  371.2134 
-Model cost at call  164 :  371.2134 
-Model cost at call  170 :  371.2134 
-Model cost at call  179 :  371.2134 
-Model cost at call  194 :  371.2134 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>summary(fit.ff, data = FALSE)
-</div>
-<div class='output'>mkin version:    0.9.35 
-R version:       3.2.0 
-Date of fit:     Fri May 15 15:05:12 2015 
-Date of summary: Fri May 15 15:05:12 2015 
-
-Equations:
-d_parent = - k_parent * parent
-d_m1 = + f_parent_to_m1 * k_parent * parent - k_m1 * m1
-
-Model predictions using solution type eigen 
-
-Fitted with method Port using 197 model solutions performed in 1.387 s
-
-Weighting: none
-
-Starting values for parameters to be optimised:
-                  value   type
-parent_0       100.7500  state
-k_parent         0.1000 deparm
-k_m1             0.1001 deparm
-f_parent_to_m1   0.5000 deparm
-
-Starting values for the transformed parameters actually optimised:
-                    value lower upper
-parent_0       100.750000  -Inf   Inf
-log_k_parent    -2.302585  -Inf   Inf
-log_k_m1        -2.301586  -Inf   Inf
-f_parent_ilr_1   0.000000  -Inf   Inf
-
-Fixed parameter values:
-     value  type
-m1_0     0 state
-
-Optimised, transformed parameters:
-               Estimate Std. Error   Lower    Upper  t value  Pr(&gt;|t|)
-parent_0       99.60000    1.61400 96.3300 102.9000  61.7200 4.048e-38
-log_k_parent   -2.31600    0.04187 -2.4010  -2.2310 -55.3100 2.019e-36
-log_k_m1       -5.24800    0.13610 -5.5230  -4.9720 -38.5600 7.087e-31
-f_parent_ilr_1  0.04096    0.06477 -0.0904   0.1723   0.6323 5.312e-01
-                  Pr(&gt;t)
-parent_0       2.024e-38
-log_k_parent   1.010e-36
-log_k_m1       3.543e-31
-f_parent_ilr_1 2.656e-01
-
-Parameter correlation:
-               parent_0 log_k_parent log_k_m1 f_parent_ilr_1
-parent_0         1.0000       0.5178  -0.1701        -0.5489
-log_k_parent     0.5178       1.0000  -0.3285        -0.5451
-log_k_m1        -0.1701      -0.3285   1.0000         0.7466
-f_parent_ilr_1  -0.5489      -0.5451   0.7466         1.0000
-
-Residual standard error: 3.211 on 36 degrees of freedom
-
-Backtransformed parameters:
-                Estimate     Lower     Upper
-parent_0       99.600000 96.330000 1.029e+02
-k_parent        0.098700  0.090660 1.074e-01
-k_m1            0.005261  0.003992 6.933e-03
-f_parent_to_m1  0.514500  0.468100 5.606e-01
-
-Chi2 error levels in percent:
-         err.min n.optim df
-All data   6.398       4 15
-parent     6.459       2  7
-m1         4.690       2  8
-
-Resulting formation fractions:
-                ff
-parent_m1   0.5145
-parent_sink 0.4855
-
-Estimated disappearance times:
-          DT50   DT90
-parent   7.023  23.33
-m1     131.761 437.70
-</div>
-<div class='input'>initials &lt;- c(&quot;f_parent_to_m1&quot; = 0.5)
-transformed &lt;- transform_odeparms(initials, SFO_SFO.ff)
-backtransform_odeparms(transformed, SFO_SFO.ff)
-</div>
-<div class='output'>f_parent_to_m1 
-           0.5 
-</div>
-<div class='input'>
-# And without sink
-SFO_SFO.ff.2 &lt;- mkinmod(
-  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = FALSE),
-  m1 = list(type = &quot;SFO&quot;),
-  use_of_ff = &quot;max&quot;)
-
-
-fit.ff.2 &lt;- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
-</div>
-<div class='output'>Model cost at call  1 :  12435.14 
-Model cost at call  2 :  12435.14 
-Model cost at call  5 :  8276.29 
-Model cost at call  6 :  8276.278 
-Model cost at call  7 :  8275.66 
-Model cost at call  9 :  5256.996 
-Model cost at call  11 :  5256.993 
-Model cost at call  12 :  5256.986 
-Model cost at call  14 :  4469.741 
-Model cost at call  18 :  4462.939 
-Model cost at call  21 :  4462.938 
-Model cost at call  22 :  4376.059 
-Model cost at call  24 :  4376.059 
-Model cost at call  27 :  4366.955 
-Model cost at call  29 :  4366.955 
-Model cost at call  31 :  4365.277 
-Model cost at call  33 :  4365.277 
-Model cost at call  35 :  4351.872 
-Model cost at call  37 :  4351.871 
-Model cost at call  39 :  4338.099 
-Model cost at call  41 :  4338.099 
-Model cost at call  43 :  4297.03 
-Model cost at call  44 :  4218.528 
-Model cost at call  45 :  3940.135 
-Model cost at call  46 :  3689.462 
-Model cost at call  48 :  3689.462 
-Model cost at call  49 :  3689.452 
-Model cost at call  50 :  3038.751 
-Model cost at call  53 :  3038.749 
-Model cost at call  54 :  2638.382 
-Model cost at call  57 :  2638.381 
-Model cost at call  59 :  2589.051 
-Model cost at call  60 :  2589.049 
-Model cost at call  63 :  2577.168 
-Model cost at call  66 :  2577.168 
-Model cost at call  67 :  2573.129 
-Model cost at call  68 :  2573.129 
-Model cost at call  69 :  2573.128 
-Model cost at call  71 :  2569.863 
-Model cost at call  73 :  2569.863 
-Model cost at call  74 :  2569.863 
-Model cost at call  75 :  2569.402 
-Model cost at call  76 :  2569.402 
-Model cost at call  79 :  2569.4 
-Model cost at call  80 :  2569.4 
-Model cost at call  81 :  2569.4 
-Model cost at call  84 :  2569.4 
-Model cost at call  91 :  2569.4 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>summary(fit.ff.2, data = FALSE)
-</div>
-<div class='output'>mkin version:    0.9.35 
-R version:       3.2.0 
-Date of fit:     Fri May 15 15:05:13 2015 
-Date of summary: Fri May 15 15:05:13 2015 
-
-Equations:
-d_parent = - k_parent * parent
-d_m1 = + k_parent * parent - k_m1 * m1
-
-Model predictions using solution type eigen 
-
-Fitted with method Port using 105 model solutions performed in 0.734 s
-
-Weighting: none
-
-Starting values for parameters to be optimised:
-            value   type
-parent_0 100.7500  state
-k_parent   0.1000 deparm
-k_m1       0.1001 deparm
-
-Starting values for the transformed parameters actually optimised:
-                  value lower upper
-parent_0     100.750000  -Inf   Inf
-log_k_parent  -2.302585  -Inf   Inf
-log_k_m1      -2.301586  -Inf   Inf
-
-Fixed parameter values:
-     value  type
-m1_0     0 state
-
-Optimised, transformed parameters:
-             Estimate Std. Error Lower  Upper t value  Pr(&gt;|t|)    Pr(&gt;t)
-parent_0       84.790    2.96500 78.78 90.800   28.60 7.877e-27 3.939e-27
-log_k_parent   -2.756    0.08088 -2.92 -2.593  -34.08 1.511e-29 7.554e-30
-log_k_m1       -4.214    0.11150 -4.44 -3.988  -37.79 3.673e-31 1.836e-31
-
-Parameter correlation:
-             parent_0 log_k_parent log_k_m1
-parent_0       1.0000      0.11059  0.46156
-log_k_parent   0.1106      1.00000  0.06274
-log_k_m1       0.4616      0.06274  1.00000
-
-Residual standard error: 8.333 on 37 degrees of freedom
-
-Backtransformed parameters:
-         Estimate    Lower    Upper
-parent_0 84.79000 78.78000 90.80000
-k_parent  0.06352  0.05392  0.07483
-k_m1      0.01478  0.01179  0.01853
-
-Chi2 error levels in percent:
-         err.min n.optim df
-All data   19.66       3 16
-parent     17.56       2  7
-m1         18.71       1  9
-
-Estimated disappearance times:
-        DT50   DT90
-parent 10.91  36.25
-m1     46.89 155.75
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# # The case of formation fractions
+# SFO_SFO.ff &lt;- mkinmod(
+#   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
+#   m1 = list(type = &quot;SFO&quot;),
+#   use_of_ff = &quot;max&quot;)
+# 
+# fit.ff &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D)
+# summary(fit.ff, data = FALSE)
+# initials &lt;- c(&quot;f_parent_to_m1&quot; = 0.5)
+# transformed &lt;- transform_odeparms(initials, SFO_SFO.ff)
+# backtransform_odeparms(transformed, SFO_SFO.ff)
+# 
+# # And without sink
+# SFO_SFO.ff.2 &lt;- mkinmod(
+#   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = FALSE),
+#   m1 = list(type = &quot;SFO&quot;),
+#   use_of_ff = &quot;max&quot;)
+# 
+# 
+# fit.ff.2 &lt;- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
+# summary(fit.ff.2, data = FALSE)
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
 </div></pre>
   </div>
   <div class="span4">

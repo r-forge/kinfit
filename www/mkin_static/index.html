@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. mkin 0.9-35</title>
+<title>Index. mkin 0.9-36</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -20,7 +20,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-35</a>
+      <a class="brand" href="#">mkin 0.9-36</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -49,7 +49,7 @@ if several compartments are involved.</p>
 <p>You can install the latest released version from 
 <a href="http://cran.r-project.org/package=mkin">CRAN</a> from within R:</p>
 
-<pre><code class="s">install.packages(&quot;mkin&quot;)
+<pre><code class="r">install.packages(&quot;mkin&quot;)
 </code></pre>
 
 <p>If looking for the latest features, you can install directly from 
@@ -57,7 +57,7 @@ if several compartments are involved.</p>
 Using <code>quick = TRUE</code> skips docs, multiple-architecture builds, demos, and
 vignettes, to make installation as fast and painless as possible.</p>
 
-<pre><code class="s">require(devtools)
+<pre><code class="r">require(devtools)
 install_github(&quot;jranke/mkin&quot;, quick = TRUE)
 </code></pre>
 
@@ -74,41 +74,54 @@ detailed guidance and helpful tools have been developed as detailed in
 <p>The simplest usage example that I can think of, using model shorthand notation
 (available since mkin 0.9-32) and a built-in dataset is</p>
 
-<pre><code>library(mkin)
-fit &lt;- mkinfit(&quot;SFO&quot;, FOCUS_2006_C)
+<pre><code class="r">library(mkin)
+fit &lt;- mkinfit(&quot;SFO&quot;, FOCUS_2006_C, quiet = TRUE)
 plot(fit, show_residuals = TRUE) 
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"/> </p>
+
+<pre><code class="r"># Output not shown in this README to avoid distraction
 summary(fit)
 </code></pre>
 
 <p>A still very simple usage example including the definition of the same data in R
 code would be</p>
 
-<pre><code>example_data = data.frame(
+<pre><code class="r">example_data = data.frame(
   name = rep(&quot;parent&quot;, 9),
   time = c(0, 1, 3, 7, 14, 28, 63, 91, 119),
   value = c(85.1, 57.9, 29.9, 14.6, 9.7, 6.6, 4, 3.9, 0.6)
 )
-fit2 &lt;- mkinfit(&quot;FOMC&quot;, example_data)
+fit2 &lt;- mkinfit(&quot;FOMC&quot;, example_data, quiet = TRUE)
 plot(fit2, show_residuals = TRUE) 
 </code></pre>
 
+<p><img src="figure/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"/> </p>
+
 <p>A fairly complex usage example using another built-in dataset:</p>
 
-<pre><code>data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
+<pre><code class="r">data &lt;- mkin_wide_to_long(schaefer07_complex_case, time = &quot;time&quot;)
 
 model &lt;- mkinmod(
-  parent = list(type = &quot;SFO&quot;, to = c(&quot;A1&quot;, &quot;B1&quot;, &quot;C1&quot;), sink = FALSE),
-  A1 = list(type = &quot;SFO&quot;, to = &quot;A2&quot;),
-  B1 = list(type = &quot;SFO&quot;),
-  C1 = list(type = &quot;SFO&quot;),
-  A2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
+  parent = mkinsub(&quot;SFO&quot;, c(&quot;A1&quot;, &quot;B1&quot;, &quot;C1&quot;), sink = FALSE),
+  A1 = mkinsub(&quot;SFO&quot;, &quot;A2&quot;),
+  B1 = mkinsub(&quot;SFO&quot;),
+  C1 = mkinsub(&quot;SFO&quot;),
+  A2 = mkinsub(&quot;SFO&quot;), use_of_ff = &quot;max&quot;)
 
-fit3 &lt;- mkinfit(model, data, method.modFit = &quot;Port&quot;)
+fit3 &lt;- mkinfit(model, data, method.modFit = &quot;Port&quot;, quiet = TRUE)
 
 plot(fit3, show_residuals = TRUE) 
-summary(fit3)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"/> </p>
+
+<pre><code class="r">#summary(fit3) # Commented out to avoid distraction from README content
 mkinparplot(fit3)
 </code></pre>
+
+<p><img src="figure/unnamed-chunk-7-2.png" alt="plot of chunk unnamed-chunk-7"/> </p>
 
 <p>For more examples and to see results, have a look at the examples provided in the
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html"><code>mkinfit</code></a>
@@ -130,7 +143,14 @@ parent only degradation, an eigenvalue based solution if only simple
 first-order (SFO) or SFORB kinetics are used in the model, or
 using a numeric solver from the <code>deSolve</code> package (default is <code>lsoda</code>).
 These have decreasing efficiency, and are automatically chosen 
-by default.</li>
+by default. </li>
+<li>As of mkin 0.9-36, model solution for models with more than one observed
+variable is based on the inline package.  This is even faster than eigenvalue
+based solution, at least in the example shown in the
+<a href="http://rawgit.com/jranke/mkin/master/vignettes/compiled_models.html">vignette <code>compiled_models</code></a>.
+The autogeneration of C code was
+inspired by the <a href="https://github.com/karlines/ccSolve"><code>ccSolve</code></a> package. Thanks
+to Karline Soetaert for her work on that.</li>
 <li>Model optimisation with 
 <a href="http://kinfit.r-forge.r-project.org/mkin_static/mkinfit.html"><code>mkinfit</code></a>
 internally using the <code>modFit</code> function from the <code>FME</code> package,
@@ -149,6 +169,8 @@ standard errors are also backtransformed to the correct scale, and will
 not include meaningless values like negative rate constants or 
 formation fractions adding up to more than 1, which can not occur in 
 a single experiment with a single defined radiolabel position.</li>
+<li>The usual one-sided t-test for significant difference from zero is nevertheless
+shown based on estimators for the untransformed parameters.</li>
 <li>Summary and plotting functions. The <code>summary</code> of an <code>mkinfit</code> object is in
 fact a full report that should give enough information to be able to
 approximately reproduce the fit with other tools.</li>
@@ -169,6 +191,10 @@ adding one respectively two parameters to the system.</li>
 <p>There is a graphical user interface that I consider useful for real work. Please
 refer to its <a href="http://kinfit.r-forge.r-project.org/gmkin_static">documentation page</a>
 for installation instructions and a manual.</p>
+
+<h2>News</h2>
+
+<p>Yes, there is a <img src="NEWS.md" alt="Changelog"/>.</p>
 
 <h2>Credits and historical remarks</h2>
 
@@ -356,6 +382,8 @@ Generally, the source code of the latest CRAN version should be available there.
   <div class="span3 offset1">
     <h2>Vignettes</h2>
     <ul>
+      <li><a href="vignettes/compiled_models.html">Performance benefit by using compiled model definitions in mkin</a></li>
+      <li><a href="vignettes/FOCUS_D.html">Simple Evaluation of FOCUS Example Dataset D</a></li>
       <li><a href="vignettes/FOCUS_L.html">Example evaluation of FOCUS Laboratory Data L1 to L3</a></li>
       <li><a href="vignettes/FOCUS_Z.pdf">Example evaluation of FOCUS dataset Z</a></li>
       <li><a href="vignettes/mkin.pdf">Routines for fitting kinetic models with one or more state variables to chemical degradation data</a></li>
@@ -363,9 +391,9 @@ Generally, the source code of the latest CRAN version should be available there.
         
     <h2>Dependencies</h2>
     <ul>
-      <li><strong>Depends</strong>: minpack.lm, rootSolve</li>
+      <li><strong>Depends</strong>: minpack.lm, rootSolve, inline</li>
       <li><strong>Imports</strong>: FME, deSolve</li>
-      <li><strong>Suggests</strong>: knitr, testthat</li>
+      <li><strong>Suggests</strong>: knitr, testthat, microbenchmark</li>
       
     </ul>
     <h2>Authors</h2>

@@ -66,9 +66,13 @@ SFO_SFO <- mkinmod(
   m1 = list(type = "SFO"))
 # Fit the model to the FOCUS example dataset D using defaults
 fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
-fit.2 <- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
 summary(fit, data=FALSE) # See transformed and backtransformed parameters
+
+\dontrun{
+fit.2 <- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
 summary(fit.2, data=FALSE) 
+}
+
 initials <- fit$start$value
 names(initials) <- rownames(fit$start)
 transformed <- fit$start_transformed$value
@@ -76,6 +80,7 @@ names(transformed) <- rownames(fit$start_transformed)
 transform_odeparms(initials, SFO_SFO)
 backtransform_odeparms(transformed, SFO_SFO)
 
+\dontrun{
 # The case of formation fractions
 SFO_SFO.ff <- mkinmod(
   parent = list(type = "SFO", to = "m1", sink = TRUE),
@@ -97,5 +102,6 @@ SFO_SFO.ff.2 <- mkinmod(
 
 fit.ff.2 <- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
 summary(fit.ff.2, data = FALSE)
+}
 }
 \keyword{ manip }
