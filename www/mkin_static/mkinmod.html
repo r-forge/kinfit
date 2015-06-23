@@ -44,7 +44,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>mkinmod(..., use_of_ff&nbsp;=&nbsp;"min", speclist&nbsp;=&nbsp;NULL, quiet&nbsp;=&nbsp;FALSE)</div></pre>
+    <pre><div>mkinmod(..., use_of_ff&nbsp;=&nbsp;"min", speclist&nbsp;=&nbsp;NULL, quiet&nbsp;=&nbsp;FALSE, verbose&nbsp;=&nbsp;FALSE)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -80,6 +80,11 @@
       <dt>quiet</dt>
       <dd>
     Should messages be suppressed?
+  </dd>
+      <dt>verbose</dt>
+      <dd>
+    If <code>TRUE</code>, passed to <code><a href='http://www.inside-r.org/packages/cran/inline/docs/cfunction'>cfunction</a></code> if applicable to give
+    detailed information about the C function being built.
   </dd>
     </dl>
     
@@ -146,19 +151,49 @@
     <pre class="examples"><div class='input'># Specify the SFO model (this is not needed any more, as we can now mkinfit(&quot;SFO&quot;, ...)
 SFO &lt;- mkinmod(parent = list(type = &quot;SFO&quot;))
 
-# One parent compound, one metabolite, both single first order.
+# One parent compound, one metabolite, both single first order
 SFO_SFO &lt;- mkinmod(
   parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;),
   m1 = mkinsub(&quot;SFO&quot;))
 </div>
-<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
 <div class='input'>
 # The above model used to be specified like this, before the advent of mkinsub()
 SFO_SFO &lt;- mkinmod(
   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;),
   m1 = list(type = &quot;SFO&quot;))
 </div>
-<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
+<div class='input'>
+# Show details of creating the C function
+SFO_SFO &lt;- mkinmod(
+  parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;),
+  m1 = mkinsub(&quot;SFO&quot;), verbose = TRUE)
+</div>
+<div class='output'>Compilation argument:
+ /usr/lib/R/bin/R CMD SHLIB file2e554d278c3.c 2&gt; file2e554d278c3.c.err.txt 
+Program source:
+  1: #include &lt;R.h&gt;
+  2: 
+  3: 
+  4: static double parms [3];
+  5: #define k_parent_sink parms[0]
+  6: #define k_parent_m1 parms[1]
+  7: #define k_m1_sink parms[2]
+  8: 
+  9: void initpar(void (* odeparms)(int *, double *)) {
+ 10:     int N = 3;
+ 11:     odeparms(&amp;N, parms);
+ 12: }
+ 13: 
+ 14: 
+ 15: void func ( int * n, double * t, double * y, double * f, double * rpar, int * ipar ) {
+ 16: 
+ 17: f[0] = - k_parent_sink * y[0] - k_parent_m1 * y[0];
+ 18: f[1] = + k_parent_m1 * y[0] - k_m1_sink * y[1];
+ 19: }
+</div>
+<strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
 <div class='input'>
 # If we have several parallel metabolites 
 # (compare tests/testthat/test_synthetic_data_for_UBA_2014.R)

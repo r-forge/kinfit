@@ -90,9 +90,11 @@
                          phenol = list(type = &quot;SFO&quot;, to = &quot;anisole&quot;),
                          anisole = list(type = &quot;SFO&quot;))
 </div>
-<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
-<div class='input'>  ## &lt;strong&gt;Not run&lt;/strong&gt;: fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
-#   summary(fit.1, data = FALSE)## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+<strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
+<div class='input'>  ## &lt;strong&gt;Not run&lt;/strong&gt;: 
+#     fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
+#     summary(fit.1, data = FALSE)
+#   ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
   # No covariance matrix and k_phenol_sink is really small, therefore fix it to zero
   fit.2 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;),
                  parms.ini = c(k_phenol_sink = 0),
@@ -193,8 +195,8 @@ Optimisation by method Port successfully terminated.
 </div>
 <div class='output'>mkin version:    0.9.37 
 R version:       3.2.1 
-Date of fit:     Mon Jun 22 23:00:58 2015 
-Date of summary: Mon Jun 22 23:00:58 2015 
+Date of fit:     Tue Jun 23 11:41:31 2015 
+Date of summary: Tue Jun 23 11:41:31 2015 
 
 Equations:
 d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245
@@ -204,7 +206,7 @@ d_anisole = + k_phenol_anisole * phenol - k_anisole_sink * anisole
 
 Model predictions using solution type deSolve 
 
-Fitted with method Port using 246 model solutions performed in 1.445 s
+Fitted with method Port using 246 model solutions performed in 1.338 s
 
 Weighting: none
 
