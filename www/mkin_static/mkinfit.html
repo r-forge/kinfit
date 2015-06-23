@@ -305,15 +305,15 @@ summary(fit)
 </div>
 <div class='output'>mkin version:    0.9.37 
 R version:       3.2.1 
-Date of fit:     Mon Jun 22 23:01:00 2015 
-Date of summary: Mon Jun 22 23:01:00 2015 
+Date of fit:     Tue Jun 23 11:41:33 2015 
+Date of summary: Tue Jun 23 11:41:33 2015 
 
 Equations:
 d_parent = - (alpha/beta) * 1/((time/beta) + 1) * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 64 model solutions performed in 0.17 s
+Fitted with method Port using 64 model solutions performed in 0.136 s
 
 Weighting: none
 
@@ -383,13 +383,13 @@ SFO_SFO &lt;- mkinmod(
   parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;),
   m1 = mkinsub(&quot;SFO&quot;))
 </div>
-<strong class='message'>Compiling differential equation model from auto-generated C code...</strong>
+<strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
 <div class='input'># Fit the model to the FOCUS example dataset D using defaults
 print(system.time(fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, 
                            solution_type = &quot;eigen&quot;, quiet = TRUE)))
 </div>
 <div class='output'>   user  system elapsed 
-  1.152   1.204   0.880 
+  1.108   1.216   0.863 
 </div>
 <div class='input'>coef(fit)
 </div>
@@ -412,7 +412,7 @@ m1     131.760712 437.69961
 
 </div>
 <div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
-# # deSolve is slower when the gcc compiler is not available
+# # deSolve is slower when no C compiler (gcc) was available during model generation
 # print(system.time(fit.deSolve &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, 
 #                            solution_type = &quot;deSolve&quot;)))
 # coef(fit.deSolve)
