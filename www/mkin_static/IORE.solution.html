@@ -102,20 +102,22 @@
   fit.iore &lt;- mkinfit(&quot;IORE&quot;, FOCUS_2006_C, quiet = TRUE)
   fit.iore.deS &lt;- mkinfit(&quot;IORE&quot;, FOCUS_2006_C, solution_type = &quot;deSolve&quot;, quiet = TRUE)
 
-  data.frame(coef(fit.fomc), coef(fit.iore), coef(fit.iore.deS), row.names = paste(&quot;model par&quot;, 1:3))
+  print(data.frame(coef(fit.fomc), coef(fit.iore), coef(fit.iore.deS), 
+                   row.names = paste(&quot;model par&quot;, 1:3)))
 </div>
 <div class='output'>            coef.fit.fomc. coef.fit.iore. coef.fit.iore.deS.
 model par 1    85.87489063      85.874891          85.874890
 model par 2     0.05192238      -4.826631          -4.826631
 model par 3     0.65096665       1.949403           1.949403
 </div>
-<div class='input'>  print(rbind(fomc = endpoints(m.fomc)$distimes, iore = endpoints(m.iore)$distimes, 
-              iore.deS = endpoints(m.iore)$distimes))
+<div class='input'>  print(rbind(fomc = endpoints(fit.fomc)$distimes, iore = endpoints(fit.iore)$distimes, 
+              iore.deS = endpoints(fit.iore)$distimes))
 </div>
-<strong class='error'>Error in print(rbind(fomc = endpoints(m.fomc)$distimes, iore = endpoints(m.iore)$distimes, : Fehler bei der Auswertung des Argumentes &#39;x&#39; bei der Methodenauswahl
-für Funktion &#39;print&#39;: Fehler in endpoints(m.fomc) : Objekt &#39;m.fomc&#39; nicht gefunden
-Ruft auf: rbind -&gt; endpoints
-</strong></pre>
+<div class='output'>             DT50    DT90 DT50back
+fomc     1.785233 15.1479 4.559973
+iore     1.785233 15.1479 4.559973
+iore.deS 1.785233 15.1479 4.559973
+</div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
