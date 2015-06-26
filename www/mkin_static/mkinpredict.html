@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinpredict. mkin 0.9-38</title>
+<title>mkinpredict. mkin 0.9-39</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -16,13 +16,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-38</a>
+      <a class="brand" href="#">mkin 0.9-39</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -292,7 +304,7 @@
 201   20 4.978707 27.46227
 </div>
 <div class='output'>   user  system elapsed 
-  0.004   0.024   0.004 
+  0.000   0.028   0.004 
 </div>
 <div class='input'>  system.time(
     print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
@@ -303,7 +315,7 @@
 201   20 4.978707 27.46227
 </div>
 <div class='output'>   user  system elapsed 
-  0.016   0.004   0.003 
+  0.008   0.008   0.002 
 </div>
 <div class='input'>  system.time(
     print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
@@ -314,7 +326,7 @@
 201   20 4.978707 27.46227
 </div>
 <div class='output'>   user  system elapsed 
-  0.040   0.024   0.037 
+  0.036   0.000   0.036 
 </div></pre>
   </div>
   <div class="span4">

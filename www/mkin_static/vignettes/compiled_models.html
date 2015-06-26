@@ -10,7 +10,7 @@
 
 <meta name="author" content="Johannes Ranke" />
 
-<meta name="date" content="2015-06-23" />
+<meta name="date" content="2015-06-26" />
 
 <title>Performance benefit by using compiled model definitions in mkin</title>
 
@@ -65,7 +65,7 @@ img {
 <div id="header">
 <h1 class="title">Performance benefit by using compiled model definitions in mkin</h1>
 <h4 class="author"><em>Johannes Ranke</em></h4>
-<h4 class="date"><em>2015-06-23</em></h4>
+<h4 class="date"><em>2015-06-26</em></h4>
 </div>
 
 <div id="TOC">
@@ -98,19 +98,19 @@ mb.1 &lt;- microbenchmark(
 smb.1 &lt;- summary(mb.1)[-1]
 rownames(smb.1) &lt;- c(&quot;deSolve, not compiled&quot;, &quot;Eigenvalue based&quot;, &quot;deSolve, compiled&quot;)
 print(smb.1)</code></pre>
-<pre><code>##                             min        lq      mean    median        uq
-## deSolve, not compiled 6555.9044 6654.5464 6693.6732 6753.1885 6762.5577
-## Eigenvalue based       941.4496  949.4094  972.3045  957.3693  987.7320
-## deSolve, compiled      743.6684  756.3411  761.1512  769.0139  769.8926
+<pre><code>##                             min        lq      mean    median       uq
+## deSolve, not compiled 6849.2627 6855.3514 6932.8323 6861.4400 6974.617
+## Eigenvalue based       951.6624  953.1401 1014.0226  954.6178 1045.203
+## deSolve, compiled      761.9766  764.0074  767.7762  766.0381  770.676
 ##                             max neval
-## deSolve, not compiled 6771.9268     3
-## Eigenvalue based      1018.0946     3
-## deSolve, compiled      770.7713     3</code></pre>
-<p>We see that using the compiled model is by a factor of 8.8 faster than using the R version with the default ode solver, and it is even faster than the Eigenvalue based solution implemented in R which does not need iterative solution of the ODEs:</p>
+## deSolve, not compiled 7087.7941     3
+## Eigenvalue based      1135.7876     3
+## deSolve, compiled      775.3138     3</code></pre>
+<p>We see that using the compiled model is by a factor of 9 faster than using the R version with the default ode solver, and it is even faster than the Eigenvalue based solution implemented in R which does not need iterative solution of the ODEs:</p>
 <pre class="r"><code>smb.1[&quot;median&quot;]/smb.1[&quot;deSolve, compiled&quot;, &quot;median&quot;]</code></pre>
 <pre><code>##                         median
-## deSolve, not compiled 8.781621
-## Eigenvalue based      1.244931
+## deSolve, not compiled 8.957048
+## Eigenvalue based      1.246175
 ## deSolve, compiled     1.000000</code></pre>
 </div>
 <div id="benchmark-for-a-model-that-can-not-be-solved-with-eigenvalues" class="section level2">
@@ -127,18 +127,18 @@ print(smb.1)</code></pre>
 smb.2 &lt;- summary(mb.2)[-1]
 rownames(smb.2) &lt;- c(&quot;deSolve, not compiled&quot;, &quot;deSolve, compiled&quot;)
 print(smb.2)</code></pre>
-<pre><code>##                             min        lq      mean    median        uq
-## deSolve, not compiled 14.202106 14.342265 14.430352 14.482424 14.544475
-## deSolve, compiled      1.363102  1.367979  1.377016  1.372857  1.383973
+<pre><code>##                             min        lq     mean    median        uq
+## deSolve, not compiled 14.397509 14.506791 14.57727 14.616073 14.667152
+## deSolve, compiled      1.367575  1.370761  1.40424  1.373947  1.422572
 ##                             max neval
-## deSolve, not compiled 14.606526     3
-## deSolve, compiled      1.395088     3</code></pre>
+## deSolve, not compiled 14.718230     3
+## deSolve, compiled      1.471197     3</code></pre>
 <pre class="r"><code>smb.2[&quot;median&quot;]/smb.2[&quot;deSolve, compiled&quot;, &quot;median&quot;]</code></pre>
 <pre><code>##                         median
-## deSolve, not compiled 10.54912
+## deSolve, not compiled 10.63802
 ## deSolve, compiled      1.00000</code></pre>
-<p>Here we get a performance benefit of a factor of 10.5 using the version of the differential equation model compiled from C code using the inline package!</p>
-<p>This vignette was built with mkin 0.9.38 on</p>
+<p>Here we get a performance benefit of a factor of 10.6 using the version of the differential equation model compiled from C code using the inline package!</p>
+<p>This vignette was built with mkin 0.9.39 on</p>
 <pre><code>## R version 3.2.1 (2015-06-18)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Debian GNU/Linux 8 (jessie)</code></pre>

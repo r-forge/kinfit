@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinmod. mkin 0.9-38</title>
+<title>mkinmod. mkin 0.9-39</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -16,13 +16,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-38</a>
+      <a class="brand" href="#">mkin 0.9-39</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -171,7 +183,7 @@ SFO_SFO &lt;- mkinmod(
   m1 = mkinsub(&quot;SFO&quot;), verbose = TRUE)
 </div>
 <div class='output'>Compilation argument:
- /usr/lib/R/bin/R CMD SHLIB file22671c6373fc.c 2&gt; file22671c6373fc.c.err.txt 
+ /usr/lib/R/bin/R CMD SHLIB fileb53425b28c3.c 2&gt; fileb53425b28c3.c.err.txt 
 Program source:
   1: #include &lt;R.h&gt;
   2: 
