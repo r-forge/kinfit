@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plot.mkinfit. mkin 0.9-38</title>
+<title>plot.mkinfit. mkin 0.9-39</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -16,13 +16,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-38</a>
+      <a class="brand" href="#">mkin 0.9-39</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -140,14 +152,12 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># One parent compound, one metabolite, both single first order.
-SFO_SFO &lt;- mkinmod(
-  parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
-  m1 = list(type = &quot;SFO&quot;))
+    <pre class="examples"><div class='input'># One parent compound, one metabolite, both single first order, path from
+# parent to sink included
+SFO_SFO &lt;- mkinmod(parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;), m1 = mkinsub(&quot;SFO&quot;))
 </div>
 <strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
-<div class='input'># Fit the model to the FOCUS example dataset D using defaults
-fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
+<div class='input'>fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
 </div>
 <div class='output'>Model cost at call  1 :  18915.53 
 Model cost at call  2 :  18915.53 
@@ -211,8 +221,9 @@ Model cost at call  147 :  371.2134
 Model cost at call  152 :  371.2134 
 Optimisation by method Port successfully terminated.
 </div>
-<div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: plot(fit)
-</div></pre>
+<div class='input'>plot(fit)
+</div>
+<p><img src='plot.mkinfit-6.png' alt='' width='540' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>

@@ -16,13 +16,13 @@ RFDIR ?= $(RFSVN)/pkg/mkin
 SDDIR ?= $(RFSVN)/www/mkin_static
 
 # Vignettes are listed in the build target
-pkgfiles = NEWS \
+pkgfiles = \
 	.Rbuildignore \
 	data/* \
 	DESCRIPTION \
-	inst/staticdocs/README \
 	man/* \
 	NAMESPACE \
+	NEWS.md \
 	R/* \
 	README.md \
 	tests/* \
@@ -31,16 +31,12 @@ pkgfiles = NEWS \
 
 all: build
 
-# convert markdown to R's NEWS format (from knitr package)
-NEWS: NEWS.md
-	sed -e 's/^-/ -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 >NEWS
-
 README.md: README.Rmd
 	"$(RBIN)/Rscript" -e 'require(knitr); knit("README.Rmd")'
 
-$(TGZ): $(pkgfiles) vignettes/*.html vignettes/*.pdf
+$(TGZ): $(pkgfiles)
 	cd ..;\
-		"$(RBIN)/R" CMD build $(PKGSRC)
+		"$(RBIN)/R" CMD build $(PKGSRC) 2>&1 | tee $(PKGNAME)/build.log
 
 $(TGZVNR): $(pkgfiles)
 	cd ..;\
@@ -55,11 +51,11 @@ build-no-vignettes: $(TGZVNR)
 install: build
 	"$(RBIN)/R" CMD INSTALL $(TGZ)
 
-install-no-vignettes: build-no-vignettes
+quickinstall: build-no-vignettes
 	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
 
 check: build
-	"$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ)
+	"$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee check.log
 
 quickcheck: build-no-vignettes
 	mv $(TGZVNR) $(TGZ)
@@ -76,9 +72,9 @@ clean:
 	$(RM) -r vignettes/*.syntex.gz
 	$(RM) Rplots.pdf
 
-test: install-no-vignettes
+test: quickinstall
 	cd tests;\
-		"$(RBIN)/Rscript" testthat.R
+		"$(RBIN)/Rscript" testthat.R 2>&1 | tee ../test.log
 
 vignettes/%.pdf: vignettes/header.tex vignettes/references.bib vignettes/%.Rnw
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rnw', dir = 'vignettes')"
@@ -86,17 +82,17 @@ vignettes/%.pdf: vignettes/header.tex vignettes/references.bib vignettes/%.Rnw
 vignettes/%.html: vignettes/mkin_vignettes.css vignettes/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
 
-vignettes: install-no-vignettes vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
+vignettes: vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
 
-sd:
-	"$(RBIN)/Rscript" -e "library(staticdocs); build_site()"
-	$(RM) Rplots.pdf
+sd: install
+	rm -rf $(SDDIR)/*
+	cp -r figure $(SDDIR)
+	@echo Now execute
+	@echo "\n  library(staticdocs); build_site(site_path = '$(SDDIR)')\n"
+	$(RBIN)/R
 
-move-sd:
-	rm -rf $(SDDIR)/*;\
-	cp -r inst/web/* $(SDDIR); cp -r figure $(SDDIR); cd $(SDDIR) && svn add --force .
-
-r-forge: sd move-sd
+r-forge: sd
+	cd $(SDDIR) && svn add --force .
 	git archive master > $(HOME)/mkin.tar;\
 	cd $(RFDIR) && rm -r `ls` && tar -xf $(HOME)/mkin.tar;\
 	svn add --force .; svn rm --force `svn status | grep "\!" | cut -d " " -f 8`; cd $(RFSVN) && svn commit -m 'sync with git'

@@ -1,6 +1,4 @@
-NEWS
 README.html
-inst/web*
 vignettes/.build.timestamp
 vignettes/*.aux
 vignettes/*.bbl
@@ -22,3 +20,4 @@ vignettes/figure/
 vignettes/*_cache/
 vignettes/*_files/
 mkin.Rcheck
+install.log
