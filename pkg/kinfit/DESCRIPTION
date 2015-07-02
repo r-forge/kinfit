@@ -6,14 +6,14 @@ Date: 2015-07-02
 Authors@R: c(person("Johannes", "Ranke", role = c("aut", "cre", "cph"), 
                     email = "jranke@uni-bremen.de"),
              person("Katrin", "Lindenberger", role = "ctb"))
-Description: Simple calculation routines based on the FOCUS Kinetics 
- Report (2006). Only kinetic models for parent only datasets are 
+Description: 'kinfit' provides simple calculation routines based on the FOCUS
+ Kinetics Report (2006). Only kinetic models for parent only datasets are 
  included (no metabolite formation/decline or multicompartment kinetics).
  Please note that no warranty is implied for correctness of results or
  fitness for a particular purpose.
- This package is not actively developed at the moment. Please check the mkin
- package for an actively maintained package for kinetic evaluations of
- degradation data
+ This package is maintained, but not actively developed at the moment. Please
+ check the mkin package for an actively developed package for kinetic
+ evaluations of degradation data.
 Imports: graphics, stats, utils
 License: GPL
 LazyLoad: yes
