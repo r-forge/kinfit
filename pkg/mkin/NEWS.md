@@ -1,6 +1,6 @@
 # NEWS for package 'mkin'
 
-## CHANGES in mkin VERSION 0.9-39
+## CHANGES in mkin VERSION 0.9-39 (2015-06-26)
 
 ### MAJOR CHANGES
 
