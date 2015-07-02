@@ -18,17 +18,17 @@ SDDIR ?= $(RFSVN)/www/kinfit_static
 .PHONY: help
 
 pkgfiles = data/* \
-	   DESCRIPTION \
-	   inst/staticdocs/README \
-	   man/* \
-	   NAMESPACE \
-	   R/* \
-	   tests \
-           vignettes/header.tex \
-           vignettes/examples.Rnw \
-           vignettes/kinfit.Rnw \
-           vignettes/KinGUI/* \
-	   vignettes/references.bib
+	DESCRIPTION \
+	inst/staticdocs/README \
+	man/* \
+	NAMESPACE \
+	R/* \
+	tests \
+	vignettes/header.tex \
+	vignettes/examples.Rnw \
+	vignettes/kinfit.Rnw \
+	vignettes/KinGUI/* \
+	vignettes/references.bib
 
 all: check clean
 
@@ -70,11 +70,7 @@ vignettes/examples.pdf: vignettes/examples.Rnw
 vignettes: vignettes/examples.pdf vignettes/kinfit.pdf
 
 sd:
-	"$(RBIN)/Rscript" -e "library(staticdocs); build_site()"
-
-move-sd: sd
-	rm -f $(SDDIR)/{*.html,css/*.css,img/*.png,js/*.js,vignettes/*.pdf,vignettes/*.html};\
-	cp -r inst/web/* $(SDDIR); cd $(SDDIR) && svn add --force .
+	"$(RBIN)/Rscript" -e "library(staticdocs); build_site(site_path = '$(SDDIR)')"
 
 clean: 
 	$(RM) -r $(PKGNAME).Rcheck/
