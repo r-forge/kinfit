@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. kinfit 1.1.13</title>
+<title>Index. kinfit 1.1.14</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">kinfit 1.1.13</a>
+      <a class="brand" href="#">kinfit 1.1.14</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -37,14 +49,16 @@
       
       <div class="row">
   <div class="span8">
-    Simple calculation routines based on the FOCUS Kinetics
-Report (2006). Only kinetic models for parent only datasets are
-included (no metabolite formation/decline or multicompartment kinetics).
+    
+The FOCUS Kinetics Report first published in 2006 describes mathematical
+models and recommends statistical methods for the evaluation of
+chemical degradation data. This package implements fitting the kinetic
+models suitable for observations of the decline of a single chemical
+compound (no metabolite formation/decline or multicompartment kinetics).
 Please note that no warranty is implied for correctness of results or
-fitness for a particular purpose.
-This package is not actively developed at the moment. Please check the mkin
-package for an actively maintained package for kinetic evaluations of
-degradation data
+fitness for a particular purpose.  'kinfit' is maintained, but not
+actively developed at the moment. Please check the mkin package for an
+actively developed package for kinetic evaluations of degradation data.
 
     <h2>Help topics</h2>
 
@@ -54,47 +68,47 @@ degradation data
     <ul class="index">
         
       <li>
-        <code><a href="DFOP.html">DFOP</a></code><br />
+        <code><a href="DFOP.html">DFOP</a></code><br />Double First-Order in Parallel kinetics
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_A.html">FOCUS_2006_A</a></code><br />
+        <code><a href="FOCUS_2006_A.html">FOCUS_2006_A</a></code><br />Dataset A from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_B.html">FOCUS_2006_B</a></code><br />
+        <code><a href="FOCUS_2006_B.html">FOCUS_2006_B</a></code><br />Dataset B from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_C.html">FOCUS_2006_C</a></code><br />
+        <code><a href="FOCUS_2006_C.html">FOCUS_2006_C</a></code><br />Dataset C from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_D.html">FOCUS_2006_D</a></code><br />
+        <code><a href="FOCUS_2006_D.html">FOCUS_2006_D</a></code><br />Dataset D from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_DFOP_ref_A_to_B.html">FOCUS_2006_DFOP_ref_A_to_B</a></code><br />
+        <code><a href="FOCUS_2006_DFOP_ref_A_to_B.html">FOCUS_2006_DFOP_ref_A_to_B</a></code><br />Results of fitting the DFOP model to Datasets A to B of FOCUS (2006)
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_E.html">FOCUS_2006_E</a></code><br />
+        <code><a href="FOCUS_2006_E.html">FOCUS_2006_E</a></code><br />Dataset E from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_F.html">FOCUS_2006_F</a></code><br />
+        <code><a href="FOCUS_2006_F.html">FOCUS_2006_F</a></code><br />Water sediment study dataset F from the FOCUS Kinetics report from 2006
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_FOMC_ref_A_to_F.html">FOCUS_2006_FOMC_ref_A_to_F</a></code><br />
+        <code><a href="FOCUS_2006_FOMC_ref_A_to_F.html">FOCUS_2006_FOMC_ref_A_to_F</a></code><br />Results of fitting the FOMC model to Datasets A to F of FOCUS (2006)
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_HS_ref_A_to_F.html">FOCUS_2006_HS_ref_A_to_F</a></code><br />
+        <code><a href="FOCUS_2006_HS_ref_A_to_F.html">FOCUS_2006_HS_ref_A_to_F</a></code><br />Results of fitting the HS model to Datasets A to F of FOCUS (2006)
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_SFO_ref_A_to_F.html">FOCUS_2006_SFO_ref_A_to_F</a></code><br />
+        <code><a href="FOCUS_2006_SFO_ref_A_to_F.html">FOCUS_2006_SFO_ref_A_to_F</a></code><br />Results of fitting the SFO model to Datasets A to F of FOCUS (2006)
 </li>
             
       <li>
@@ -104,39 +118,39 @@ degradation data
         <code><a href="HS.html">HS</a></code><br /> Hockey-Stick kinetics </li>
             
       <li>
-        <code><a href="kinerrmin.html">kinerrmin</a></code><br />
+        <code><a href="kinerrmin.html">kinerrmin</a></code><br />Calculate the minimum error to assume in order to pass the variance test
 </li>
             
       <li>
-        <code><a href="kinfit.html">kinfit</a></code><br />
+        <code><a href="kinfit.html">kinfit</a></code><br />Fit kinetic models to chemical degradation data
 </li>
             
       <li>
-        <code><a href="kinobject.html">kinobject</a></code><br />
+        <code><a href="kinobject.html">kinobject</a></code><br />Creates list representing a kinetic experiment or trial
 </li>
             
       <li>
-        <code><a href="kinobjects.html">kinobjects</a></code><br />
+        <code><a href="kinobjects.html">kinobjects</a></code><br />Creates list of objects, each representing a kinetic experiment or trial
 </li>
             
       <li>
-        <code><a href="kinplot.html">kinplot</a></code><br />
+        <code><a href="kinplot.html">kinplot</a></code><br />Creates a plot of the kinetic fits
 </li>
             
       <li>
-        <code><a href="kinreport.html">kinreport</a></code><br />
+        <code><a href="kinreport.html">kinreport</a></code><br />Creates a report of the kinetic fits
 </li>
             
       <li>
-        <code><a href="kinresplot.html">kinresplot</a></code><br />
+        <code><a href="kinresplot.html">kinresplot</a></code><br />Creates a plot of the residual for specified kinetic fits
 </li>
             
       <li>
-        <code><a href="kinresults.html">kinresults</a></code><br />
+        <code><a href="kinresults.html">kinresults</a></code><br />Function to collect useful results for a set of fitted kinetic models
 </li>
             
       <li>
-        <code><a href="kinwrite.KinGUI.html">kinwrite.KinGUI</a></code><br />
+        <code><a href="kinwrite.KinGUI.html">kinwrite.KinGUI</a></code><br />Function to write KinGUI input files from kinetic data
 </li>
             
       <li>
@@ -151,7 +165,15 @@ degradation data
       <li><a href="vignettes/examples.pdf">Examples for kinetic evaluations using kinfit</a></li>
       <li><a href="vignettes/kinfit.pdf">Routines for fitting kinetic models to chemical degradation data</a></li>
     </ul>
-            <h2>Authors</h2>
+        
+    <h2>Dependencies</h2>
+    <ul>
+      
+      <li><strong>Imports</strong>: graphics, stats, utils</li>
+      
+      
+    </ul>
+    <h2>Authors</h2>
     <ul>
       <li><a href="mailto:jranke@uni-bremen.de">Johannes Ranke</a> [aut, cre, cph]</li>
       <li>Katrin Lindenberger [ctb]</li>
