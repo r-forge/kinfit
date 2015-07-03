@@ -19,7 +19,6 @@ SDDIR ?= $(RFSVN)/www/kinfit_static
 
 pkgfiles = data/* \
 	DESCRIPTION \
-	inst/staticdocs/README \
 	man/* \
 	NAMESPACE \
 	R/* \
