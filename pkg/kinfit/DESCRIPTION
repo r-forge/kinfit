@@ -2,7 +2,7 @@ Package: kinfit
 Type: Package
 Title: Routines for Fitting Kinetic Models to Chemical Degradation Data
 Version: 1.1.14
-Date: 2015-07-02
+Date: 2015-07-03
 Authors@R: c(person("Johannes", "Ranke", role = c("aut", "cre", "cph"), 
                     email = "jranke@uni-bremen.de"),
              person("Katrin", "Lindenberger", role = "ctb"))
@@ -11,10 +11,10 @@ Description:
   models and recommends statistical methods for the evaluation of 
   chemical degradation data. This package implements fitting the kinetic
   models suitable for observations of the decline of a single chemical 
-  compound (no metabolite formation/decline or multicompartment kinetics).
+  compound (no metabolite formation/decline or multi-compartment kinetics).
   Please note that no warranty is implied for correctness of results or
   fitness for a particular purpose.  'kinfit' is maintained, but not
-  actively developed at the moment. Please check the mkin package for an
+  actively developed at the moment. Please check the 'mkin' package for an
   actively developed package for kinetic evaluations of degradation data.
 Imports: graphics, stats, utils
 License: GPL
