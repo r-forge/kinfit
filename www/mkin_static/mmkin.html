@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mmkin. mkin 0.9-39</title>
+<title>mmkin. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -99,14 +99,14 @@
       <h2>Value</h2>
 
       <p><dl>
-  A matrix of "mkinfit" objects that can be indexed using the 
-  model and dataset names as row and column indices.
+  A matrix of <code><a href='mkinfit.html'>mkinfit</a></code> objects that can be indexed using the model
+  and dataset names as row and column indices.
 </dl></p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+    <pre class="examples"><div class='input'>## Not run: 
 # m_synth_SFO_lin &lt;- mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;M1&quot;),
 #                            M1 = list(type = &quot;SFO&quot;, to = &quot;M2&quot;),
 #                            M2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
@@ -125,7 +125,7 @@
 # time_1
 # 
 # endpoints(fits[[&quot;SFO_lin&quot;, 2]])
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">
@@ -136,6 +136,10 @@
       <li> optimize </li>
     </ul> -->
       
+    <h2>See also</h2>
+    
+  <code><a href='Extract.mmkin.html'>[.mmkin</a></code> for subsetting, <code><a href='plot.mmkin.html'>plot.mmkin</a></code> for plotting.
+
     
     <h2>Author</h2>
     

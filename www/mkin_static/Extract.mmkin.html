@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>[.mmkin. mkin 0.9-39</title>
+<title>[.mmkin. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -88,105 +88,10 @@
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>  # Only use one core so we pass R CMD check
-  fits &lt;- mmkin(c(&quot;SFO&quot;, &quot;FOMC&quot;), list(B = FOCUS_2006_B, C = FOCUS_2006_C), cores = 1)
-</div>
-<div class='output'>Model cost at call  1 :  228.1293 
-Model cost at call  2 :  228.1292 
-Model cost at call  5 :  31.13166 
-Model cost at call  8 :  30.78886 
-Model cost at call  9 :  30.66961 
-Model cost at call  12 :  30.65566 
-Model cost at call  13 :  30.65566 
-Model cost at call  14 :  30.65566 
-Model cost at call  15 :  30.65564 
-Model cost at call  17 :  30.65564 
-Model cost at call  19 :  30.65564 
-Model cost at call  29 :  30.65564 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  602.7207 
-Model cost at call  3 :  602.7207 
-Model cost at call  6 :  302.0592 
-Model cost at call  7 :  302.0589 
-Model cost at call  8 :  302.0522 
-Model cost at call  9 :  302.0492 
-Model cost at call  10 :  227.0723 
-Model cost at call  12 :  227.0723 
-Model cost at call  14 :  149.9584 
-Model cost at call  16 :  149.9584 
-Model cost at call  19 :  145.6208 
-Model cost at call  20 :  145.6208 
-Model cost at call  21 :  145.6206 
-Model cost at call  22 :  145.6206 
-Model cost at call  23 :  90.71176 
-Model cost at call  24 :  90.71171 
-Model cost at call  27 :  82.77031 
-Model cost at call  30 :  82.7703 
-Model cost at call  31 :  69.35839 
-Model cost at call  34 :  69.35838 
-Model cost at call  35 :  60.80129 
-Model cost at call  38 :  60.80128 
-Model cost at call  39 :  50.01305 
-Model cost at call  40 :  41.26377 
-Model cost at call  41 :  41.26376 
-Model cost at call  44 :  35.68518 
-Model cost at call  45 :  35.68518 
-Model cost at call  48 :  31.35382 
-Model cost at call  52 :  29.74925 
-Model cost at call  53 :  29.74924 
-Model cost at call  56 :  29.04847 
-Model cost at call  60 :  28.70242 
-Model cost at call  64 :  28.60629 
-Model cost at call  68 :  28.58512 
-Model cost at call  72 :  28.58297 
-Model cost at call  76 :  28.58291 
-Model cost at call  78 :  28.58291 
-Model cost at call  83 :  28.58291 
-Model cost at call  84 :  28.58291 
-Model cost at call  87 :  28.58291 
-Model cost at call  88 :  28.58291 
-Model cost at call  90 :  28.58291 
-Model cost at call  97 :  28.58291 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  2388.077 
-Model cost at call  3 :  2388.077 
-Model cost at call  4 :  247.1962 
-Model cost at call  7 :  200.6791 
-Model cost at call  10 :  197.7231 
-Model cost at call  11 :  197.0872 
-Model cost at call  14 :  196.535 
-Model cost at call  15 :  196.535 
-Model cost at call  16 :  196.535 
-Model cost at call  17 :  196.5334 
-Model cost at call  20 :  196.5334 
-Model cost at call  25 :  196.5334 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  3928.833 
-Model cost at call  3 :  3928.833 
-Model cost at call  5 :  83.72602 
-Model cost at call  7 :  83.72537 
-Model cost at call  9 :  38.22444 
-Model cost at call  11 :  38.22444 
-Model cost at call  13 :  38.22443 
-Model cost at call  15 :  33.7817 
-Model cost at call  16 :  33.7817 
-Model cost at call  17 :  33.78169 
-Model cost at call  19 :  31.53032 
-Model cost at call  20 :  31.53032 
-Model cost at call  23 :  31.18382 
-Model cost at call  25 :  31.18382 
-Model cost at call  27 :  31.06767 
-Model cost at call  31 :  31.05289 
-Model cost at call  34 :  31.05289 
-Model cost at call  35 :  31.05096 
-Model cost at call  36 :  31.05096 
-Model cost at call  39 :  31.05088 
-Model cost at call  40 :  31.05088 
-Model cost at call  43 :  31.05088 
-Model cost at call  50 :  31.05088 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>  fits[&quot;FOMC&quot;, ]
+    <pre class="examples"><div class='input'>  # Only use one core, to pass R CMD check --as-cran
+  fits &lt;- mmkin(c(&quot;SFO&quot;, &quot;FOMC&quot;), list(B = FOCUS_2006_B, C = FOCUS_2006_C), 
+                cores = 1, quiet = TRUE)
+  fits[&quot;FOMC&quot;, ]
 </div>
 <div class='output'>      dataset
 model  B       C      
@@ -276,7 +181,7 @@ $calls
 
 $time
    user  system elapsed 
-  0.244   0.000   0.243 
+   0.26    0.00    0.26 
 
 $mkinmod
 $diffs
@@ -485,7 +390,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0x440f6c8&gt;
+&lt;environment: 0x13665d0&gt;
 
 $cost_notrans
 function (P) 
@@ -507,7 +412,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0x440f6c8&gt;
+&lt;environment: 0x13665d0&gt;
 
 $hessian_notrans
            parent_0     alpha       beta
@@ -573,7 +478,7 @@ $bparms.state
 99.66619 
 
 $date
-[1] &quot;Fri Jun 26 16:34:25 2015&quot;
+[1] &quot;Mon Jul 20 23:24:34 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 
@@ -658,7 +563,7 @@ $calls
 
 $time
    user  system elapsed 
-  0.068   0.000   0.071 
+  0.116   0.004   0.118 
 
 $mkinmod
 $diffs
@@ -871,7 +776,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0x45bf678&gt;
+&lt;environment: 0x386dbb0&gt;
 
 $cost_notrans
 function (P) 
@@ -893,7 +798,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0x45bf678&gt;
+&lt;environment: 0x386dbb0&gt;
 
 $hessian_notrans
                   parent_0 k_parent_sink
@@ -956,7 +861,7 @@ $bparms.state
 99.17407 
 
 $date
-[1] &quot;Fri Jun 26 16:34:25 2015&quot;
+[1] &quot;Mon Jul 20 23:24:34 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 
@@ -1034,7 +939,7 @@ $calls
 
 $time
    user  system elapsed 
-  0.068   0.000   0.071 
+  0.116   0.004   0.118 
 
 $mkinmod
 $diffs
@@ -1247,7 +1152,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0x45bf678&gt;
+&lt;environment: 0x386dbb0&gt;
 
 $cost_notrans
 function (P) 
@@ -1269,7 +1174,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0x45bf678&gt;
+&lt;environment: 0x386dbb0&gt;
 
 $hessian_notrans
                   parent_0 k_parent_sink
@@ -1332,7 +1237,7 @@ $bparms.state
 99.17407 
 
 $date
-[1] &quot;Fri Jun 26 16:34:25 2015&quot;
+[1] &quot;Mon Jul 20 23:24:34 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 

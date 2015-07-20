@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plot.mmkin. mkin 0.9-39</title>
+<title>plot.mmkin. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -62,7 +62,7 @@
     <dl>
       <dt>x</dt>
       <dd>
-    An object of class {code<a href='mmkin.html'>mmkin</a>, with either one row or one column.
+    An object of class <code><a href='mmkin.html'>mmkin</a></code>, with either one row or one column.
 </dd>
       <dt>main</dt>
       <dd>
@@ -115,199 +115,13 @@
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>  # Only use one core not to offend CRAN checks
   fits &lt;- mmkin(c(&quot;FOMC&quot;, &quot;HS&quot;), list(&quot;FOCUS B&quot; = FOCUS_2006_B, &quot;FOCUS C&quot; = FOCUS_2006_C), 
-                cores = 1)
+                cores = 1, quiet = TRUE)
+  plot(fits[, &quot;FOCUS C&quot;])
 </div>
-<div class='output'>Model cost at call  1 :  602.7207 
-Model cost at call  3 :  602.7207 
-Model cost at call  6 :  302.0592 
-Model cost at call  7 :  302.0589 
-Model cost at call  8 :  302.0522 
-Model cost at call  9 :  302.0492 
-Model cost at call  10 :  227.0723 
-Model cost at call  12 :  227.0723 
-Model cost at call  14 :  149.9584 
-Model cost at call  16 :  149.9584 
-Model cost at call  19 :  145.6208 
-Model cost at call  20 :  145.6208 
-Model cost at call  21 :  145.6206 
-Model cost at call  22 :  145.6206 
-Model cost at call  23 :  90.71176 
-Model cost at call  24 :  90.71171 
-Model cost at call  27 :  82.77031 
-Model cost at call  30 :  82.7703 
-Model cost at call  31 :  69.35839 
-Model cost at call  34 :  69.35838 
-Model cost at call  35 :  60.80129 
-Model cost at call  38 :  60.80128 
-Model cost at call  39 :  50.01305 
-Model cost at call  40 :  41.26377 
-Model cost at call  41 :  41.26376 
-Model cost at call  44 :  35.68518 
-Model cost at call  45 :  35.68518 
-Model cost at call  48 :  31.35382 
-Model cost at call  52 :  29.74925 
-Model cost at call  53 :  29.74924 
-Model cost at call  56 :  29.04847 
-Model cost at call  60 :  28.70242 
-Model cost at call  64 :  28.60629 
-Model cost at call  68 :  28.58512 
-Model cost at call  72 :  28.58297 
-Model cost at call  76 :  28.58291 
-Model cost at call  78 :  28.58291 
-Model cost at call  83 :  28.58291 
-Model cost at call  84 :  28.58291 
-Model cost at call  87 :  28.58291 
-Model cost at call  88 :  28.58291 
-Model cost at call  90 :  28.58291 
-Model cost at call  97 :  28.58291 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  3875.028 
-Model cost at call  3 :  3875.028 
-Model cost at call  4 :  3875.028 
-Model cost at call  6 :  1661.251 
-Model cost at call  7 :  1661.249 
-Model cost at call  8 :  1661.098 
-Model cost at call  11 :  372.8557 
-Model cost at call  12 :  372.8555 
-Model cost at call  13 :  372.8554 
-Model cost at call  16 :  36.94778 
-Model cost at call  17 :  36.94775 
-Model cost at call  23 :  31.10985 
-Model cost at call  25 :  31.10985 
-Model cost at call  28 :  30.83038 
-Model cost at call  30 :  30.83037 
-Model cost at call  33 :  30.68494 
-Model cost at call  35 :  30.68493 
-Model cost at call  38 :  30.32508 
-Model cost at call  41 :  30.32508 
-Model cost at call  43 :  30.20475 
-Model cost at call  44 :  30.0399 
-Model cost at call  47 :  30.0399 
-Model cost at call  49 :  29.95714 
-Model cost at call  50 :  29.95713 
-Model cost at call  52 :  29.95713 
-Model cost at call  54 :  29.86629 
-Model cost at call  56 :  29.86629 
-Model cost at call  58 :  29.86629 
-Model cost at call  59 :  29.77885 
-Model cost at call  60 :  29.77885 
-Model cost at call  62 :  29.77885 
-Model cost at call  65 :  29.73275 
-Model cost at call  69 :  29.73275 
-Model cost at call  72 :  29.71706 
-Model cost at call  73 :  29.71706 
-Model cost at call  77 :  29.71261 
-Model cost at call  79 :  29.71261 
-Model cost at call  82 :  29.70861 
-Model cost at call  83 :  29.70107 
-Model cost at call  84 :  29.68288 
-Model cost at call  85 :  29.68288 
-Model cost at call  89 :  29.64696 
-Model cost at call  94 :  29.62146 
-Model cost at call  99 :  29.60895 
-Model cost at call  100 :  29.60895 
-Model cost at call  101 :  29.60895 
-Model cost at call  102 :  29.60895 
-Model cost at call  103 :  29.60895 
-Model cost at call  104 :  29.60839 
-Model cost at call  106 :  29.60839 
-Model cost at call  107 :  29.60839 
-Model cost at call  108 :  29.60839 
-Model cost at call  109 :  29.60758 
-Model cost at call  110 :  29.60758 
-Model cost at call  114 :  29.60758 
-Model cost at call  116 :  29.60758 
-Model cost at call  117 :  29.60758 
-Model cost at call  121 :  29.60758 
-Model cost at call  123 :  29.60758 
-Model cost at call  132 :  29.60758 
-Model cost at call  148 :  29.60758 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  3928.833 
-Model cost at call  3 :  3928.833 
-Model cost at call  5 :  83.72602 
-Model cost at call  7 :  83.72537 
-Model cost at call  9 :  38.22444 
-Model cost at call  11 :  38.22444 
-Model cost at call  13 :  38.22443 
-Model cost at call  15 :  33.7817 
-Model cost at call  16 :  33.7817 
-Model cost at call  17 :  33.78169 
-Model cost at call  19 :  31.53032 
-Model cost at call  20 :  31.53032 
-Model cost at call  23 :  31.18382 
-Model cost at call  25 :  31.18382 
-Model cost at call  27 :  31.06767 
-Model cost at call  31 :  31.05289 
-Model cost at call  34 :  31.05289 
-Model cost at call  35 :  31.05096 
-Model cost at call  36 :  31.05096 
-Model cost at call  39 :  31.05088 
-Model cost at call  40 :  31.05088 
-Model cost at call  43 :  31.05088 
-Model cost at call  50 :  31.05088 
-Optimisation by method Port successfully terminated.
-Model cost at call  1 :  6542.198 
-Model cost at call  3 :  6542.197 
-Model cost at call  6 :  369.0936 
-Model cost at call  11 :  327.1017 
-Model cost at call  12 :  327.1016 
-Model cost at call  13 :  327.1013 
-Model cost at call  16 :  108.6556 
-Model cost at call  17 :  108.6556 
-Model cost at call  18 :  108.6555 
-Model cost at call  19 :  108.6549 
-Model cost at call  21 :  59.4668 
-Model cost at call  22 :  59.4668 
-Model cost at call  23 :  59.46677 
-Model cost at call  25 :  59.46675 
-Model cost at call  26 :  18.44727 
-Model cost at call  27 :  18.44726 
-Model cost at call  32 :  15.86677 
-Model cost at call  36 :  15.86677 
-Model cost at call  39 :  15.59975 
-Model cost at call  41 :  15.59974 
-Model cost at call  44 :  15.33663 
-Model cost at call  46 :  15.33663 
-Model cost at call  48 :  15.33663 
-Model cost at call  49 :  15.03723 
-Model cost at call  51 :  15.03723 
-Model cost at call  54 :  14.69861 
-Model cost at call  56 :  14.69861 
-Model cost at call  59 :  14.27362 
-Model cost at call  61 :  14.27362 
-Model cost at call  64 :  14.04491 
-Model cost at call  68 :  14.04491 
-Model cost at call  69 :  13.89029 
-Model cost at call  71 :  13.89029 
-Model cost at call  73 :  13.89029 
-Model cost at call  74 :  13.73465 
-Model cost at call  76 :  13.73465 
-Model cost at call  78 :  13.73465 
-Model cost at call  79 :  13.6732 
-Model cost at call  80 :  13.64234 
-Model cost at call  85 :  13.5973 
-Model cost at call  87 :  13.5973 
-Model cost at call  90 :  13.58875 
-Model cost at call  91 :  13.58875 
-Model cost at call  92 :  13.58875 
-Model cost at call  93 :  13.58875 
-Model cost at call  94 :  13.58875 
-Model cost at call  95 :  13.58577 
-Model cost at call  98 :  13.58577 
-Model cost at call  100 :  13.58577 
-Model cost at call  102 :  13.58577 
-Model cost at call  103 :  13.58577 
-Model cost at call  109 :  13.58577 
-Model cost at call  118 :  13.58577 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>  plot(fits[, &quot;FOCUS C&quot;])
-</div>
-<p><img src='plot.mmkin-4.png' alt='' width='540' height='400' /></p>
+<p><img src='plot.mmkin-2.png' alt='' width='540' height='400' /></p>
 <div class='input'>  plot(fits[&quot;FOMC&quot;, ])
 </div>
-<p><img src='plot.mmkin-6.png' alt='' width='540' height='400' /></p></pre>
+<p><img src='plot.mmkin-4.png' alt='' width='540' height='400' /></p></pre>
   </div>
   <div class="span4">
     <!-- <ul>
