@@ -1,7 +1,7 @@
 \name{plot.mkinfit}
 \alias{plot.mkinfit}
 \title{
-  Plot the observed data and the fitted model of an mkinfit object.
+  Plot the observed data and the fitted model of an mkinfit object
 }
 \description{
   Solves the differential equations with the optimised and fixed parameters
@@ -83,7 +83,7 @@
 # One parent compound, one metabolite, both single first order, path from
 # parent to sink included
 SFO_SFO <- mkinmod(parent = mkinsub("SFO", "m1"), m1 = mkinsub("SFO"))
-fit <- mkinfit(SFO_SFO, FOCUS_2006_D)
+fit <- mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE)
 plot(fit)
 }
 \author{

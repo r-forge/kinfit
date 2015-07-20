@@ -31,9 +31,6 @@ pkgfiles = \
 
 all: build
 
-README.md: README.Rmd
-	"$(RBIN)/Rscript" -e 'require(knitr); knit("README.Rmd")'
-
 $(TGZ): $(pkgfiles)
 	cd ..;\
 		"$(RBIN)/R" CMD build $(PKGSRC) 2>&1 | tee $(PKGNAME)/build.log
@@ -64,12 +61,16 @@ quickcheck: build-no-vignettes
 
 clean:
 	$(RM) -r $(PKGNAME).Rcheck/
+	$(RM) -r vignettes/*.bbl
+	$(RM) -r vignettes/*.blg
 	$(RM) -r vignettes/*.fls
 	$(RM) -r vignettes/*.fdb_latexmk
+	$(RM) -r vignettes/cache
+	$(RM) -r vignettes/figure
 	$(RM) -r vignettes/*_cache
 	$(RM) -r vignettes/*_files
 	$(RM) -r vignettes/*-concordance.tex
-	$(RM) -r vignettes/*.syntex.gz
+	$(RM) -r vignettes/*.synctex.gz
 	$(RM) Rplots.pdf
 
 test: quickinstall
@@ -86,10 +87,13 @@ vignettes: vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vign
 
 sd: install
 	rm -rf $(SDDIR)/*
-	cp -r figure $(SDDIR)
 	@echo Now execute
 	@echo "\n  library(staticdocs); build_site(site_path = '$(SDDIR)')\n"
 	$(RBIN)/R
+
+sd2: install
+	rm -rf $(SDDIR)/*
+	xvfb-run $(RBIN)/R -e "library(staticdocs); build_site(site_path = '$(SDDIR)')"
 
 r-forge: sd
 	cd $(SDDIR) && svn add --force .
