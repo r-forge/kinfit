@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mccall81_245T. mkin 0.9-39</title>
+<title>mccall81_245T. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -88,13 +88,12 @@
   
     </div>
 
-    <div class="
-  Datasets on aerobic soil metabolism of 2,4,5-T in six soils
-">
-      <h2>
-  Datasets on aerobic soil metabolism of 2,4,5-T in six soils
-</h2>
+    <div class="Source">
+      <h2>Source</h2>
 
+      <p>McCall P, Vrona SA, Kelley SS (1981) Fate of uniformly carbon-14 ring labeled 2,4,5-Trichlorophenoxyacetic acid and 2,4-dichlorophenoxyacetic acid. J Agric Chem 29, 100-107
+  <a href = 'http://dx.doi.org/10.1021/jf00103a026'>http://dx.doi.org/10.1021/jf00103a026</a></p>
+  
     </div>
     
     <h2 id="examples">Examples</h2>
@@ -103,112 +102,20 @@
                          anisole = list(type = &quot;SFO&quot;))
 </div>
 <strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
-<div class='input'>  ## &lt;strong&gt;Not run&lt;/strong&gt;: 
+<div class='input'>  ## Not run: 
 #     fit.1 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;))
 #     summary(fit.1, data = FALSE)
-#   ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+#   ## End(Not run)
   # No covariance matrix and k_phenol_sink is really small, therefore fix it to zero
   fit.2 &lt;- mkinfit(SFO_SFO_SFO, subset(mccall81_245T, soil == &quot;Commerce&quot;),
                  parms.ini = c(k_phenol_sink = 0),
-                 fixed_parms = &quot;k_phenol_sink&quot;)
+                 fixed_parms = &quot;k_phenol_sink&quot;, quiet = TRUE)
+  summary(fit.2, data = FALSE)
 </div>
-<div class='output'>Model cost at call  1 :  13224.35 
-Model cost at call  2 :  13224.35 
-Model cost at call  7 :  8335.263 
-Model cost at call  14 :  3081.254 
-Model cost at call  16 :  3081.253 
-Model cost at call  17 :  3081.247 
-Model cost at call  21 :  1341.296 
-Model cost at call  23 :  1341.295 
-Model cost at call  27 :  402.2563 
-Model cost at call  30 :  402.2562 
-Model cost at call  34 :  312.787 
-Model cost at call  35 :  312.787 
-Model cost at call  36 :  312.7869 
-Model cost at call  37 :  312.7865 
-Model cost at call  41 :  280.582 
-Model cost at call  44 :  280.582 
-Model cost at call  47 :  258.2926 
-Model cost at call  50 :  258.2925 
-Model cost at call  53 :  221.2869 
-Model cost at call  54 :  221.2868 
-Model cost at call  56 :  221.2868 
-Model cost at call  59 :  197.2475 
-Model cost at call  61 :  197.2469 
-Model cost at call  66 :  175.517 
-Model cost at call  69 :  175.517 
-Model cost at call  72 :  167.4815 
-Model cost at call  75 :  167.4815 
-Model cost at call  77 :  167.4814 
-Model cost at call  78 :  164.97 
-Model cost at call  81 :  164.97 
-Model cost at call  84 :  160.6193 
-Model cost at call  87 :  160.6193 
-Model cost at call  89 :  160.6193 
-Model cost at call  90 :  157.6572 
-Model cost at call  92 :  157.6572 
-Model cost at call  95 :  157.6572 
-Model cost at call  97 :  156.9634 
-Model cost at call  100 :  156.9633 
-Model cost at call  103 :  156.1816 
-Model cost at call  106 :  156.1816 
-Model cost at call  109 :  154.6646 
-Model cost at call  111 :  154.6646 
-Model cost at call  112 :  154.6646 
-Model cost at call  114 :  154.6646 
-Model cost at call  115 :  152.9643 
-Model cost at call  118 :  152.9643 
-Model cost at call  121 :  151.301 
-Model cost at call  123 :  151.3009 
-Model cost at call  124 :  151.3009 
-Model cost at call  127 :  150.4312 
-Model cost at call  130 :  150.4312 
-Model cost at call  133 :  149.6526 
-Model cost at call  134 :  148.7701 
-Model cost at call  135 :  148.0421 
-Model cost at call  137 :  148.0421 
-Model cost at call  141 :  144.8879 
-Model cost at call  143 :  144.8879 
-Model cost at call  144 :  144.8879 
-Model cost at call  147 :  142.2172 
-Model cost at call  148 :  140.9145 
-Model cost at call  150 :  140.9145 
-Model cost at call  153 :  140.9145 
-Model cost at call  155 :  140.1039 
-Model cost at call  157 :  140.1039 
-Model cost at call  158 :  140.1039 
-Model cost at call  159 :  140.1039 
-Model cost at call  161 :  139.465 
-Model cost at call  162 :  139.1594 
-Model cost at call  164 :  139.1594 
-Model cost at call  167 :  139.1594 
-Model cost at call  172 :  139.1562 
-Model cost at call  175 :  139.1562 
-Model cost at call  178 :  139.1176 
-Model cost at call  180 :  139.1176 
-Model cost at call  184 :  139.1165 
-Model cost at call  185 :  139.1153 
-Model cost at call  186 :  139.1139 
-Model cost at call  189 :  139.1139 
-Model cost at call  194 :  139.1138 
-Model cost at call  196 :  139.1138 
-Model cost at call  197 :  139.1138 
-Model cost at call  202 :  139.1138 
-Model cost at call  203 :  139.1138 
-Model cost at call  213 :  139.1138 
-Model cost at call  224 :  139.1138 
-Model cost at call  237 :  139.1138 
-Model cost at call  240 :  139.1138 
-Model cost at call  243 :  139.1138 
-Model cost at call  244 :  139.1138 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>  summary(fit.2, data = FALSE)
-</div>
-<div class='output'>mkin version:    0.9.39 
+<div class='output'>mkin version:    0.9.40 
 R version:       3.2.1 
-Date of fit:     Fri Jun 26 16:34:31 2015 
-Date of summary: Fri Jun 26 16:34:31 2015 
+Date of fit:     Mon Jul 20 23:24:41 2015 
+Date of summary: Mon Jul 20 23:24:41 2015 
 
 Equations:
 d_T245 = - k_T245_sink * T245 - k_T245_phenol * T245
@@ -217,7 +124,7 @@ d_anisole = + k_phenol_anisole * phenol - k_anisole_sink * anisole
 
 Model predictions using solution type deSolve 
 
-Fitted with method Port using 246 model solutions performed in 1.353 s
+Fitted with method Port using 246 model solutions performed in 1.392 s
 
 Weighting: none
 

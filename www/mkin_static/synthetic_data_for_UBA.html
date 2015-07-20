@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>synthetic_data_for_UBA_2014. mkin 0.9-39</title>
+<title>synthetic_data_for_UBA_2014. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -96,17 +96,19 @@
   
     </div>
 
-    <div class="
-  Synthetic datasets for one parent compound with two metabolites
-">
-      <h2>
-  Synthetic datasets for one parent compound with two metabolites
-</h2>
+    <div class="Source">
+      <h2>Source</h2>
 
+      <p>Ranke (2014) Prüfung und Validierung von Modellierungssoftware als Alternative
+  zu ModelMaker 4.0, Umweltbundesamt Projektnummer 27452</p>
+  
+      <p>Rocke, David M. und Lorenzato, Stefan (1995) A two-component model for
+  measurement error in analytical chemistry. Technometrics 37(2), 176-184.</p>
+  
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+    <pre class="examples"><div class='input'>## Not run: 
 # m_synth_SFO_lin &lt;- mkinmod(parent = list(type = &quot;SFO&quot;, to = &quot;M1&quot;),
 #                            M1 = list(type = &quot;SFO&quot;, to = &quot;M2&quot;),
 #                            M2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
@@ -127,7 +129,7 @@
 #                             M2 = list(type = &quot;SFO&quot;), use_of_ff = &quot;max&quot;)
 # 
 # mkinfit(m_synth_SFO_lin, synthetic_data_for_UBA_2014[[1]]$data)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">

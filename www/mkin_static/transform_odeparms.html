@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transform_odeparms. mkin 0.9-39</title>
+<title>transform_odeparms. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -130,76 +130,13 @@ backtransform_odeparms(transparms, mkinmod,  transform_rates&nbsp;=&nbsp;TRUE, t
 </div>
 <strong class='message'>Successfully compiled differential equation model from auto-generated C code.</strong>
 <div class='input'># Fit the model to the FOCUS example dataset D using defaults
-fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D)
+fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE)
+summary(fit, data=FALSE) # See transformed and backtransformed parameters
 </div>
-<div class='output'>Model cost at call  1 :  18915.53 
-Model cost at call  2 :  18915.53 
-Model cost at call  6 :  11424.02 
-Model cost at call  10 :  11424 
-Model cost at call  12 :  4094.396 
-Model cost at call  16 :  4094.396 
-Model cost at call  19 :  1340.595 
-Model cost at call  20 :  1340.593 
-Model cost at call  25 :  1072.239 
-Model cost at call  28 :  1072.236 
-Model cost at call  30 :  874.2614 
-Model cost at call  33 :  874.2611 
-Model cost at call  35 :  616.2379 
-Model cost at call  37 :  616.2374 
-Model cost at call  40 :  467.4388 
-Model cost at call  42 :  467.4382 
-Model cost at call  46 :  398.2914 
-Model cost at call  48 :  398.2914 
-Model cost at call  49 :  398.2913 
-Model cost at call  51 :  395.0712 
-Model cost at call  54 :  395.0711 
-Model cost at call  56 :  378.3298 
-Model cost at call  59 :  378.3298 
-Model cost at call  62 :  376.9812 
-Model cost at call  64 :  376.9811 
-Model cost at call  67 :  375.2085 
-Model cost at call  69 :  375.2085 
-Model cost at call  70 :  375.2085 
-Model cost at call  71 :  375.2085 
-Model cost at call  72 :  374.5723 
-Model cost at call  74 :  374.5723 
-Model cost at call  77 :  374.0075 
-Model cost at call  79 :  374.0075 
-Model cost at call  80 :  374.0075 
-Model cost at call  82 :  373.1711 
-Model cost at call  84 :  373.1711 
-Model cost at call  87 :  372.6445 
-Model cost at call  88 :  372.1614 
-Model cost at call  90 :  372.1614 
-Model cost at call  91 :  372.1614 
-Model cost at call  94 :  371.6464 
-Model cost at call  99 :  371.4299 
-Model cost at call  101 :  371.4299 
-Model cost at call  104 :  371.407 
-Model cost at call  106 :  371.407 
-Model cost at call  107 :  371.407 
-Model cost at call  109 :  371.2524 
-Model cost at call  113 :  371.2524 
-Model cost at call  114 :  371.2136 
-Model cost at call  115 :  371.2136 
-Model cost at call  116 :  371.2136 
-Model cost at call  119 :  371.2134 
-Model cost at call  120 :  371.2134 
-Model cost at call  122 :  371.2134 
-Model cost at call  123 :  371.2134 
-Model cost at call  125 :  371.2134 
-Model cost at call  126 :  371.2134 
-Model cost at call  135 :  371.2134 
-Model cost at call  147 :  371.2134 
-Model cost at call  152 :  371.2134 
-Optimisation by method Port successfully terminated.
-</div>
-<div class='input'>summary(fit, data=FALSE) # See transformed and backtransformed parameters
-</div>
-<div class='output'>mkin version:    0.9.39 
+<div class='output'>mkin version:    0.9.40 
 R version:       3.2.1 
-Date of fit:     Fri Jun 26 16:34:43 2015 
-Date of summary: Fri Jun 26 16:34:43 2015 
+Date of fit:     Mon Jul 20 23:24:55 2015 
+Date of summary: Mon Jul 20 23:24:55 2015 
 
 Equations:
 d_parent = - k_parent_sink * parent - k_parent_m1 * parent
@@ -207,7 +144,7 @@ d_m1 = + k_parent_m1 * parent - k_m1_sink * m1
 
 Model predictions using solution type deSolve 
 
-Fitted with method Port using 153 model solutions performed in 0.595 s
+Fitted with method Port using 153 model solutions performed in 0.628 s
 
 Weighting: none
 
@@ -273,10 +210,10 @@ parent   7.023  23.33
 m1     131.761 437.70
 </div>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # fit.2 &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, transform_rates = FALSE)
 # summary(fit.2, data=FALSE) 
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 
 initials &lt;- fit$start$value
 names(initials) &lt;- rownames(fit$start)
@@ -293,7 +230,7 @@ transform_odeparms(initials, SFO_SFO)
      100.7500        0.1000        0.1001        0.1002 
 </div>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # # The case of formation fractions
 # SFO_SFO.ff &lt;- mkinmod(
 #   parent = list(type = &quot;SFO&quot;, to = &quot;m1&quot;, sink = TRUE),
@@ -315,7 +252,7 @@ transform_odeparms(initials, SFO_SFO)
 # 
 # fit.ff.2 &lt;- mkinfit(SFO_SFO.ff.2, FOCUS_2006_D)
 # summary(fit.ff.2, data = FALSE)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">

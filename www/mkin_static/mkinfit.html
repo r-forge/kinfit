@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-39</title>
+<title>mkinfit. mkin 0.9-40</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-39</a>
+      <a class="brand" href="#">mkin 0.9-40</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -315,17 +315,17 @@
 fit &lt;- mkinfit(&quot;FOMC&quot;, FOCUS_2006_C, quiet = TRUE)
 summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.39 
+<div class='output'>mkin version:    0.9.40 
 R version:       3.2.1 
-Date of fit:     Fri Jun 26 16:34:33 2015 
-Date of summary: Fri Jun 26 16:34:33 2015 
+Date of fit:     Mon Jul 20 23:24:43 2015 
+Date of summary: Mon Jul 20 23:24:43 2015 
 
 Equations:
 d_parent = - (alpha/beta) * 1/((time/beta) + 1) * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 64 model solutions performed in 0.135 s
+Fitted with method Port using 64 model solutions performed in 0.204 s
 
 Weighting: none
 
@@ -401,7 +401,7 @@ print(system.time(fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D,
                            solution_type = &quot;eigen&quot;, quiet = TRUE)))
 </div>
 <div class='output'>   user  system elapsed 
-  1.144   1.184   0.865 
+  1.188   1.244   0.946 
 </div>
 <div class='input'>coef(fit)
 </div>
@@ -423,16 +423,16 @@ parent   7.022929  23.32967
 m1     131.760712 437.69961
 
 </div>
-<div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+<div class='input'>## Not run: 
 # # deSolve is slower when no C compiler (gcc) was available during model generation
 # print(system.time(fit.deSolve &lt;- mkinfit(SFO_SFO, FOCUS_2006_D, 
 #                            solution_type = &quot;deSolve&quot;)))
 # coef(fit.deSolve)
 # endpoints(fit.deSolve)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 
 # Use stepwise fitting, using optimised parameters from parent only fit, FOMC
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # FOMC_SFO &lt;- mkinmod(
 #   parent = mkinsub(&quot;FOMC&quot;, &quot;m1&quot;),
 #   m1 = mkinsub(&quot;SFO&quot;))
@@ -453,9 +453,9 @@ m1     131.760712 437.69961
 # # Use starting parameters from parent only SFORB fit (not really needed in this case)
 # fit.SFORB = mkinfit(&quot;SFORB&quot;, FOCUS_2006_D)
 # fit.SFORB_SFO &lt;- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # # Weighted fits, including IRLS
 # SFO_SFO.ff &lt;- mkinmod(parent = mkinsub(&quot;SFO&quot;, &quot;m1&quot;),
 #                       m1 = mkinsub(&quot;SFO&quot;), use_of_ff = &quot;max&quot;)
@@ -468,9 +468,9 @@ m1     131.760712 437.69961
 # f.w.mean.irls &lt;- mkinfit(SFO_SFO.ff, FOCUS_2006_D, weight = &quot;mean&quot;,
 #                          reweight.method = &quot;obs&quot;)
 # summary(f.w.mean.irls)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # # Manual weighting
 # dw &lt;- FOCUS_2006_D
 # errors &lt;- c(parent = 2, m1 = 1)
@@ -480,7 +480,7 @@ m1     131.760712 437.69961
 # f.w.man.irls &lt;- mkinfit(SFO_SFO.ff, dw, err = &quot;err.man&quot;,
 #                        reweight.method = &quot;obs&quot;)
 # summary(f.w.man.irls)
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">
@@ -491,6 +491,14 @@ m1     131.760712 437.69961
       <li> optimize </li>
     </ul> -->
       
+    <h2>See also</h2>
+    
+  Plotting methods <code><a href='plot.mkinfit.html'>plot.mkinfit</a></code> and
+  <code><a href='mkinparplot.html'>mkinparplot</a></code>. 
+
+  Fitting of several models to several datasets in a single call to 
+  <code><a href='mmkin.html'>mmkin</a></code>. 
+
     
     <h2>Author</h2>
     
