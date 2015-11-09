@@ -46,6 +46,11 @@ at the package vignettes
 [`FOCUS L`](http://kinfit.r-forge.r-project.org/mkin_static/vignettes/FOCUS_L.html) and
 [`FOCUS D`](http://kinfit.r-forge.r-project.org/mkin_static/vignettes/FOCUS_D.html).
 
+## Documentation
+
+The [HTML documentation](http://kinfit.r-forge.r-project.org/mkin_static) is
+maintained at the R-Forge project site.
+
 ## Features
 
 * Highly flexible model specification using
@@ -111,7 +116,7 @@ for installation instructions and a manual.
   
 ## News
 
-Yes, there is a ChangeLog, for the latest [CRAN release](http://cran.r-project.org/web/packages/mkin/NEWS.html)
+Yes, there is a ChangeLog, for the latest [CRAN release](http://cran.r-project.org/web/packages/mkin/news.html)
 and one for the [github master branch](https://github.com/jranke/mkin/blob/master/NEWS.md).
 
 ## Credits and historical remarks
@@ -126,7 +131,8 @@ modelling of pesticides by Adrian Gurney during my time at Harlan Laboratories
 Ltd (formerly RCC Ltd). `mkin` greatly profits from and largely follows
 the work done by the 
 [FOCUS Degradation Kinetics Workgroup](http://focus.jrc.ec.europa.eu/dk),
-as detailed in their guidance document from 2006, slightly updated in 2011.
+as detailed in their guidance document from 2006, slightly updated in 2011 and
+2014.
 
 Also, it was inspired by the first version of KinGUI developed by
 BayerCropScience, which is based on the MatLab runtime environment.
@@ -172,3 +178,4 @@ new features in separate branches now. If you prefer subversion, project
 members for the 
 [r-forge project](http://r-forge.r-project.org/R/?group_id=615) are welcome as well.
 Generally, the source code of the latest CRAN version should be available there.
+You can also browse the source code at [cgit.jrwb.de/mkin](http://cgit.jrwb.de/mkin).

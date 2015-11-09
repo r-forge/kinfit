@@ -23,19 +23,19 @@ pkgfiles = \
 	man/* \
 	NAMESPACE \
 	NEWS.md \
+	README.html \
 	R/* \
-	README.md \
 	tests/* \
 	tests/testthat* \
 	TODO
 
 all: build
 
-$(TGZ): $(pkgfiles)
+$(TGZ): $(pkgfiles) vignettes
 	cd ..;\
 		"$(RBIN)/R" CMD build $(PKGSRC) 2>&1 | tee $(PKGNAME)/build.log
 
-$(TGZVNR): $(pkgfiles)
+$(TGZVNR): $(pkgfiles) vignettes
 	cd ..;\
 		"$(RBIN)/R" CMD build $(PKGSRC) --no-build-vignettes;\
 		cd $(PKGSRC);\
@@ -52,7 +52,7 @@ quickinstall: build-no-vignettes
 	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
 
 check: build
-	"$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee check.log
+	"$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ)
 
 quickcheck: build-no-vignettes
 	mv $(TGZVNR) $(TGZ)
@@ -60,7 +60,6 @@ quickcheck: build-no-vignettes
 	mv $(TGZ) $(TGZVNR)
 
 clean:
-	$(RM) -r $(PKGNAME).Rcheck/
 	$(RM) -r vignettes/*.bbl
 	$(RM) -r vignettes/*.blg
 	$(RM) -r vignettes/*.fls
@@ -77,6 +76,9 @@ test: quickinstall
 	cd tests;\
 		"$(RBIN)/Rscript" testthat.R 2>&1 | tee ../test.log
 
+README.html: README.md
+	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(mathjax = NULL))"
+
 vignettes/%.pdf: vignettes/header.tex vignettes/references.bib vignettes/%.Rnw
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rnw', dir = 'vignettes')"
 
@@ -85,17 +87,14 @@ vignettes/%.html: vignettes/mkin_vignettes.css vignettes/%.Rmd
 
 vignettes: vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
 
-sd: install
-	rm -rf $(SDDIR)/*
+sd:
 	@echo Now execute
-	@echo "\n  library(staticdocs); build_site(site_path = '$(SDDIR)')\n"
+	@echo "\n  staticdocs::build_site()\n"
 	$(RBIN)/R
 
-sd2: install
-	rm -rf $(SDDIR)/*
-	xvfb-run $(RBIN)/R -e "library(staticdocs); build_site(site_path = '$(SDDIR)')"
-
 r-forge: sd
+	rm -rf $(SDDIR)/*
+	cp -a inst/web/* $(SDDIR)
 	cd $(SDDIR) && svn add --force .
 	git archive master > $(HOME)/mkin.tar;\
 	cd $(RFDIR) && rm -r `ls` && tar -xf $(HOME)/mkin.tar;\
