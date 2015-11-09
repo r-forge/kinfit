@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. gmkin 0.5-10.9000</title>
+<title>Index. gmkin 0.6-01</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">gmkin 0.5-10.9000</a>
+      <a class="brand" href="#">gmkin 0.6-01</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -59,28 +59,20 @@ fitting kinetic models to chemical degradation data based on R package
 John Verzani. The GUI elements are created by the JavaScript library
 ExtJS which is bundled with gWidgetsWWW2.</p>
 
-<h2>Installation</h2>
+<p><img src="gmkin_screenshot.png" alt="gmkin screenshot"/></p>
+
+<h2>System requirements</h2>
 
 <p>For running gmkin you need a system running a recent version of R (version
-3.1.0 or later should be OK), the gWidgesWWW2 package, the gmkin package and a
-web browser (Firefox and Chrome work for me) with JavaScript enabled.</p>
+3.1.0 or later), the gWidgesWWW2 package, the gmkin package and a web browser
+(Firefox/Iceweasel and Chrome work for me) with JavaScript enabled.</p>
 
 <p>It should be possible to run gmkin on most laptop or desktop computers running
 Linux, Mac OS X, Windows XP or Windows 7. It is frequently checked under Linux and
 Windows 7.</p>
 
 <p>To view the complete set of widgets in the browser window without resizing
-anything, it needs a resolution of 1380x900 pixels.</p>
-
-<h3>Notes on the gWidgetsWWW2 package</h3>
-
-<p>The R package gWidgetsWWW2 is not available on CRAN because it contains 
-path names with more then 100 characters in the JavaScript files which limits
-its portability.  Also, it attaches some R objects to the search path, which is, 
-in its current form, not fully in line with the CRAN package policy. It is not
-a widely used library for creating graphical user interfaces, is not supported 
-by a commercial company and was used for gmkin simply because it makes it
-possible to create a reasonably complex user interface by just writing R code.</p>
+anything, it needs a screen space of 1366x740 pixels.</p>
 
 <h3>Installing R</h3>
 
@@ -89,19 +81,17 @@ and binary packages. If you are on Windows, please consult the
 <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html">FAQ for Windows</a>, especially
 the entries 
 &ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-install-R-for-Windows_003f">How do I install R for Windows?</a>&rdquo;, 
-&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-run-it_003f">How do I run it?</a>&rdquo;,
-and 
-&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-can-I-keep-workspaces-for-different-projects-in-different-directories_003f">How can I keep workspaces for different projects in different directories?</a>&rdquo;.</p>
+&ldquo;<a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-run-it_003f">How do I run it?</a>&rdquo;.</p>
 
 <p>If you would like to upgrade your R installation, please refer to the
 respective 
 <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f">FAQ entry</a>.</p>
 
-<h3>Installing gmkin from R-Forge</h3>
+<h3>Installing gmkin and gWidgetsWWW2</h3>
 
 <p>Windows and Linux users running R 3.1.0 or later can make use of the 
 package repository on R-Forge. For installing or upgrading to the latest released
-version you can use the command</p>
+version, please start R and paste the command</p>
 
 <pre><code class="s">install.packages(&quot;gmkin&quot;, repos = c(&quot;http://r-forge.r-project.org&quot;, getOption(&quot;repos&quot;)))
 </code></pre>
@@ -110,9 +100,8 @@ version you can use the command</p>
 appears. </p>
 
 <p>The above command temporarily adds the R-Forge repository to your package
-sources.
-It should pull the gmkin package and its dependencies, notably the
-gWidgetsWWW2 package which is not available from the CRAN archive (see above).
+sources.  It should pull the gmkin package and its dependencies, notably the
+gWidgetsWWW2 package which is not available from the CRAN archive (see below).
 Mac users that have the necessary development files installed can probably 
 install from the source files in this repository (not tested).</p>
 
@@ -125,6 +114,56 @@ to revert such changes to your R startup options.</p>
 <a href="https://github.com/jranke/gmkin/blob/master/NEWS.md">NEWS</a> file,
 more details can be found in the 
 <a href="https://github.com/jranke/gmkin/commits/master">commit history</a>.</p>
+
+<h2>Usage</h2>
+
+<p>Without further preparation, you can start the GUI by starting R and pasting the following
+commands into the R terminal (R console on Windows):</p>
+
+<pre><code class="s">require(gmkin)
+gmkin()
+</code></pre>
+
+<p>You may also want to adapt the browser that R starts (using e.g.
+<code>options(browser=&quot;/usr/bin/firefox&quot;)</code> on linux, or setting the default browser
+on Windows).</p>
+
+<h2>Documentation</h2>
+
+<p>For a complete overview of the functionality of the gmkin graphical user
+interface please refer to the 
+<a href="http://kinfit.r-forge.r-project.org/gmkin_static/vignettes/gmkin_manual.html">manual</a>
+available at the gmkin <a href="http://kinfit.r-forge.r-project.org/gmkin_static">documentation website</a>.</p>
+
+<p>In case you would like to see the documentation of the underlying mkin package, please 
+refer to its 
+<a href="http://kinfit.r-forge.r-project.org/mkin_static">documentation website</a>.</p>
+
+<h2>Status and known issues</h2>
+
+<ul>
+<li>gmkin was developed in the hope that it will be useful. However, no warranty can be 
+given that it will meet your expectations. There may be bugs, so please be
+careful, check your results for plausibility and use your own expertise to judge
+yourself.</li>
+<li>Starting the GUI takes some time. If the GUI does not come up after 10-15
+seconds, close your browser and start gmkin again using the command &#39;gmkin()&#39;.
+Once the GUI is started, it is reasonably responsive.</li>
+<li>Please check the <a href="https://github.com/jranke/gmkin/issues">issues</a> reported on github</li>
+<li>The R console starting the graphical user interface is not secured against manipulations
+from local users on multiuser systems 
+(see <a href="https://github.com/jverzani/gWidgetsWWW2/issues/22">gWidgetsWWW2 issue</a>).</li>
+</ul>
+
+<h3>Notes on the gWidgetsWWW2 package</h3>
+
+<p>The R package gWidgetsWWW2 is not available on CRAN because it contains 
+path names with more then 100 characters in the JavaScript files which limits
+its portability.  Also, it attaches some R objects to the search path, which is, 
+in its current form, not fully in line with the CRAN package policy. It is not
+a widely used library for creating graphical user interfaces and is not supported 
+by a commercial company. However it makes it possible to create a reasonably
+complex user interface by just writing R code, and is therefore used by gmkin.</p>
 
 <h3>Installation using the devtools package</h3>
 
@@ -141,58 +180,28 @@ long path names (see Notes on gWidgetsWWW2 above).  Using <code>quick = TRUE</co
 docs, multiple-architecture builds, demos, and vignettes, to make installation
 as fast and painless as possible.</p>
 
-<h2>Usage</h2>
+<h2>Simplifying the start of gmkin under Windows</h2>
 
-<p>You start the GUI from your R terminal with latest mkin installed as shown below. 
-You may also want to adapt the browser that R starts (using
-<code>options(browser=&quot;/usr/bin/firefox&quot;)</code> on linux, or setting the default browser
-on Windows from the browser itself). Development was done with firefox. I also
-did some testing with Chrome on Windows. Chrome sometimes hung when loading
-the GUI and therefore ExtJS the first time, but when the GUI is loaded it appears
-to work fine.</p>
+<p>You can put the commands </p>
 
 <pre><code class="s">require(gmkin)
+require(utils)
 gmkin()
 </code></pre>
 
-<p>You can also put these two commands into an <code>.Rprofile</code> file in the working directory
-where you start R. For some reason, the <code>utils</code> package also needs to be loaded when 
-you do this from an .Rprofile file. For your convenience, you can find such a
-file [here](Rprofile?raw=true).  On Windows, you can save this file to the
-directory where you would like to start gmkin
-by right clicking on the link to this file, choose <code>save target as</code> or similar,
-and choose <code>.Rprofile.</code> as the name. This will lead to the creation of a file
-named <code>.Rprofile</code> which will be executed when you start R within this directory.</p>
-
-<p>The following screenshot is taken after loading the gmkin workspace with
-an analysis of FOCUS dataset Z. It has to be saved in R as an .RData file
-first, and can then be loaded to the GUI.</p>
-
-<pre><code class="s">save(FOCUS_2006_Z_gmkin, file = &quot;FOCUS_2006_gmkin_Z.RData&quot;)
-</code></pre>
-
-<p><img src="gmkin_screenshot.png" alt="gmkin screenshot"/></p>
-
-<p>For a complete overview of the functionality of the gmkin graphical user
-interface please refer to the 
-<a href="http://kinfit.r-forge.r-project.org/gmkin_static/vignettes/gmkin_manual.html">manual</a>
-available at the gmkin <a href="http://kinfit.r-forge.r-project.org/gmkin_static">documentation website</a>.</p>
-
-<h2>Status and known issues</h2>
-
-<ul>
-<li>gmkin was developed in the hope that it will be useful. However, no warranty can be 
-given that it will meet your expectations. There may be bugs, so please be
-careful, check your results for plausibility and use your own expertise to judge
-yourself.</li>
-<li>Please check the <a href="https://github.com/jranke/gmkin/issues">issues</a> reported on github</li>
-<li>The R console starting the graphical user interface is not secured against manipulations
-from local users on multiuser systems 
-(see <a href="https://github.com/jverzani/gWidgetsWWW2/issues/22">gWidgetsWWW2 issue</a>).</li>
-<li>Starting the GUI takes some time. Once it is started, it is reasonably responsive.</li>
-<li>The fit list was not always updated when using Firefox version 28 on Windows. This
-works with Firefox starting from version 29 and with Chrome.</li>
-</ul>
+<p>into an <code>.Rprofile</code> file in the working directory where you would like to work
+with gmkin and create a shortcut to start R and gmkin in this directory. For
+your convenience, you can find such a file
+<a href="http://raw.githubusercontent.com/jranke/gmkin/master/Rprofile">here</a>.
+On Windows, you can save this file to the directory where you would like to
+start gmkin by right clicking on the link to this file, choose &#39;save target as&#39;
+or similar, and choose <code>.Rprofile.</code> as the name (yes, there are two dots, one in the beginning,
+one in the end). This will lead to the creation of a file named <code>.Rprofile</code>
+which will be executed when you start R within this directory, e.g. by creating
+a shortcut that starts R in this directory (see <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-install-R-for-Windows_003f">How do I install R for
+Windows?</a>,
+and <a href="http://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-run-it_003f">How do I run
+it?</a>).</p>
 
 
     <h2>Help topics</h2>
@@ -203,15 +212,22 @@ works with Firefox starting from version 29 and with Chrome.</li>
     <ul class="index">
         
       <li>
-        <code><a href="FOCUS_2006_gmkin.html">FOCUS_2006_gmkin</a></code><br />  Example gmkin workspace for Datasets C and D from the FOCUS Kinetics report
+        <code><a href="FOCUS_2006.html">FOCUS_2006</a></code><br />  Example gmkin workspace for Datasets C and D from the FOCUS Kinetics report
 </li>
             
       <li>
-        <code><a href="FOCUS_2006_Z_gmkin.html">FOCUS_2006_Z_gmkin</a></code><br />  Example gmkin workspace for Dataset Z from the FOCUS Kinetics report
+        <code><a href="FOCUS_2006_Z.html">FOCUS_2006_Z</a></code><br />  Example gmkin workspace for Dataset Z from the FOCUS Kinetics report
 </li>
             
       <li>
         <code><a href="gmkin.html">gmkin</a></code><br />  Start a graphical user interface (GUI) based on the </li>
+            
+      <li>
+        <code><a href="gmkinws.html">gmkinws</a></code><br />A workspace class for gmkin</li>
+            
+      <li>
+        <code><a href="UBA_model_gallery.html">UBA_model_gallery</a></code><br />  A collection of some standard kinetic models
+</li>
     
     </ul>
   </div>
@@ -219,13 +235,13 @@ works with Firefox starting from version 29 and with Chrome.</li>
   <div class="span3 offset1">
     <h2>Vignettes</h2>
     <ul>
-      <li><a href="vignettes/gmkin_manual.html">Manual for gmkin</a></li>
+      <li><a href="vignettes/gmkin_manual.pdf">Manual for gmkin</a></li>
     </ul>
         
     <h2>Dependencies</h2>
     <ul>
       <li><strong>Depends</strong>: mkin, gWidgetsWWW2</li>
-      
+      <li><strong>Imports</strong>: R6, markdown, plyr</li>
       <li><strong>Suggests</strong>: knitr, rmarkdown</li>
       
     </ul>

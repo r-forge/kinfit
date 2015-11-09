@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>gmkin. gmkin 0.5-10.9000</title>
+<title>gmkin. gmkin 0.6-01</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">gmkin 0.5-10.9000</a>
+      <a class="brand" href="#">gmkin 0.6-01</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -56,8 +56,22 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>gmkin()</div></pre>
-        
+    <pre><div>gmkin(script_name, show.log&nbsp;=&nbsp;FALSE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>script_name</dt>
+      <dd>
+    During development, a script name with a local working version
+    of gmkin can be passed. Defaults to the location of the gmkin.R script
+    shipped with the package.
+  </dd>
+      <dt>show.log</dt>
+      <dd>
+    During development, it may be useful to see the log of the Rook apps.
+  </dd>
+    </dl>
+    
     <div class="Description">
       <h2>Description</h2>
 
@@ -71,11 +85,27 @@
       <h2>Value</h2>
 
       <p><dl>
-  The function is called for its side effect, namely starting the GUI in a browser.
+  The function is called for its side effect, namely starting the GUI in a browser. 
+  For the curious, the desperate or the adventurous, the gmkin app (a GWidgetsApp object) is returned.
 </dl></p>
   
     </div>
-      </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>  ## Not run: gmkin() # Start the gmkin GUI
+  ## Not run: 
+#     g &lt;- gmkin()
+# 
+#     # Only for debugging or other advanced usage:
+#     session &lt;- gmkin:::get_current_session(g)
+#     session$p.df
+#     session$ds.df
+#     session$ds.cur
+#     session$m.cur
+#     session$ws
+#   ## End(Not run) 
+</div></pre>
+  </div>
   <div class="span4">
     <!-- <ul>
       <li>gmkin</li>
