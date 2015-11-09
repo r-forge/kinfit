@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>mkinfit. mkin 0.9-40.900</title>
+<title>mkinfit. mkin 0.9-41</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-40.900</a>
+      <a class="brand" href="#">mkin 0.9-41</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -315,17 +315,17 @@
 fit &lt;- mkinfit(&quot;FOMC&quot;, FOCUS_2006_C, quiet = TRUE)
 summary(fit)
 </div>
-<div class='output'>mkin version:    0.9.40.900 
-R version:       3.2.1 
-Date of fit:     Wed Jul 22 22:42:14 2015 
-Date of summary: Wed Jul 22 22:42:14 2015 
+<div class='output'>mkin version:    0.9.41 
+R version:       3.2.2 
+Date of fit:     Mon Nov  9 09:06:03 2015 
+Date of summary: Mon Nov  9 09:06:03 2015 
 
 Equations:
 d_parent = - (alpha/beta) * 1/((time/beta) + 1) * parent
 
 Model predictions using solution type analytical 
 
-Fitted with method Port using 64 model solutions performed in 0.182 s
+Fitted with method Port using 64 model solutions performed in 0.18 s
 
 Weighting: none
 
@@ -359,9 +359,9 @@ log_beta   -0.3624    0.9547   1.0000
 Residual standard error: 2.275 on 6 degrees of freedom
 
 Backtransformed parameters:
-  Confidence intervals for internally transformed parameters are asymmetric.
-  t-test (unrealistically) based on the assumption of normal distribution
-  for estimators of untransformed parameters.
+Confidence intervals for internally transformed parameters are asymmetric.
+t-test (unrealistically) based on the assumption of normal distribution
+for estimators of untransformed parameters.
          Estimate t value    Pr(&gt;t)   Lower  Upper
 parent_0   85.870  38.230 1.069e-08 80.3800 91.370
 alpha       1.053   6.231 3.953e-04  0.7112  1.560
@@ -401,7 +401,7 @@ print(system.time(fit &lt;- mkinfit(SFO_SFO, FOCUS_2006_D,
                            solution_type = &quot;eigen&quot;, quiet = TRUE)))
 </div>
 <div class='output'>   user  system elapsed 
-  1.236   1.292   0.991 
+  1.180   1.196   0.889 
 </div>
 <div class='input'>coef(fit)
 </div>

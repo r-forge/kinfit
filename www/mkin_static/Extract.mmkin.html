@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>[.mmkin. mkin 0.9-40.900</title>
+<title>[.mmkin. mkin 0.9-41</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="
   Johannes Ranke
@@ -34,7 +34,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">mkin 0.9-40.900</a>
+      <a class="brand" href="#">mkin 0.9-41</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -181,37 +181,14 @@ $calls
 
 $time
    user  system elapsed 
-  0.416   0.000   0.414 
+  0.260   0.000   0.262 
 
 $mkinmod
-$diffs
-                                                    parent 
-&quot;d_parent = - (alpha/beta) * 1/((time/beta) + 1) * parent&quot; 
-
-$parms
-[1] &quot;alpha&quot; &quot;beta&quot; 
-
-$map
-$map$parent
-    FOMC 
-&quot;parent&quot; 
-
-
-$spec
-$spec$parent
-$spec$parent$type
-[1] &quot;FOMC&quot;
-
-$spec$parent$sink
-[1] TRUE
-
-
-
-$use_of_ff
-[1] &quot;min&quot;
-
-attr(,&quot;class&quot;)
-[1] &quot;mkinmod&quot;
+&lt;mkinmod&gt; model generated with
+Use of formation fractions $use_of_ff: min 
+Specification $spec:
+$parent
+$type: FOMC
 
 $observed
     name time value
@@ -390,7 +367,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0xc7db50&gt;
+&lt;environment: 0x2a98780&gt;
 
 $cost_notrans
 function (P) 
@@ -412,7 +389,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0xc7db50&gt;
+&lt;environment: 0x2a98780&gt;
 
 $hessian_notrans
            parent_0     alpha       beta
@@ -478,7 +455,7 @@ $bparms.state
 99.66619 
 
 $date
-[1] &quot;Wed Jul 22 22:42:04 2015&quot;
+[1] &quot;Mon Nov  9 09:05:53 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 
@@ -563,41 +540,15 @@ $calls
 
 $time
    user  system elapsed 
-  0.168   0.000   0.171 
+  0.088   0.000   0.086 
 
 $mkinmod
-$diffs
-                               parent 
-&quot;d_parent = - k_parent_sink * parent&quot; 
-
-$parms
-[1] &quot;k_parent_sink&quot;
-
-$map
-$map$parent
-     SFO 
-&quot;parent&quot; 
-
-
-$spec
-$spec$parent
-$spec$parent$type
-[1] &quot;SFO&quot;
-
-$spec$parent$sink
-[1] TRUE
-
-
-
-$use_of_ff
-[1] &quot;min&quot;
-
-$coefmat
-       parent           
-parent &quot;- k_parent_sink&quot;
-
-attr(,&quot;class&quot;)
-[1] &quot;mkinmod&quot;
+&lt;mkinmod&gt; model generated with
+Use of formation fractions $use_of_ff: min 
+Specification $spec:
+$parent
+$type: SFO
+Coefficient matrix $coefmat available
 
 $observed
     name time value
@@ -776,7 +727,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0x334f458&gt;
+&lt;environment: 0x2ca6db8&gt;
 
 $cost_notrans
 function (P) 
@@ -798,7 +749,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0x334f458&gt;
+&lt;environment: 0x2ca6db8&gt;
 
 $hessian_notrans
                   parent_0 k_parent_sink
@@ -861,7 +812,7 @@ $bparms.state
 99.17407 
 
 $date
-[1] &quot;Wed Jul 22 22:42:03 2015&quot;
+[1] &quot;Mon Nov  9 09:05:53 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 
@@ -939,41 +890,15 @@ $calls
 
 $time
    user  system elapsed 
-  0.168   0.000   0.171 
+  0.088   0.000   0.086 
 
 $mkinmod
-$diffs
-                               parent 
-&quot;d_parent = - k_parent_sink * parent&quot; 
-
-$parms
-[1] &quot;k_parent_sink&quot;
-
-$map
-$map$parent
-     SFO 
-&quot;parent&quot; 
-
-
-$spec
-$spec$parent
-$spec$parent$type
-[1] &quot;SFO&quot;
-
-$spec$parent$sink
-[1] TRUE
-
-
-
-$use_of_ff
-[1] &quot;min&quot;
-
-$coefmat
-       parent           
-parent &quot;- k_parent_sink&quot;
-
-attr(,&quot;class&quot;)
-[1] &quot;mkinmod&quot;
+&lt;mkinmod&gt; model generated with
+Use of formation fractions $use_of_ff: min 
+Specification $spec:
+$parent
+$type: SFO
+Coefficient matrix $coefmat available
 
 $observed
     name time value
@@ -1152,7 +1077,7 @@ function (P)
     }
     return(mC)
 }
-&lt;environment: 0x334f458&gt;
+&lt;environment: 0x2ca6db8&gt;
 
 $cost_notrans
 function (P) 
@@ -1174,7 +1099,7 @@ function (P)
         scaleVar = scaleVar)
     return(mC)
 }
-&lt;environment: 0x334f458&gt;
+&lt;environment: 0x2ca6db8&gt;
 
 $hessian_notrans
                   parent_0 k_parent_sink
@@ -1237,7 +1162,7 @@ $bparms.state
 99.17407 
 
 $date
-[1] &quot;Wed Jul 22 22:42:03 2015&quot;
+[1] &quot;Mon Nov  9 09:05:53 2015&quot;
 
 attr(,&quot;class&quot;)
 [1] &quot;mkinfit&quot; &quot;modFit&quot; 
