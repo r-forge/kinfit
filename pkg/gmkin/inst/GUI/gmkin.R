@@ -891,9 +891,12 @@ show_m_spec()
 f.config  <- gframe("", horizontal = FALSE, cont = center, 
                     label = "Configuration")
 # Handler functions {{{2
-run_confirm_message <- paste("The progress of the fit is shown in the R console.",
-                            "To cancel, switch to the window of the R console and press Esc (on Windows)",
-                            "or Ctrl-C (on Linux/Unix). Proceed to start the fit?")
+run_confirm_message <- paste("The progress of the fit is shown in the R console. ",
+                             if (interactive()) { paste("You can cancel",
+                               "the optimisation by switching to the window running R",
+                               "and pressing Ctrl-C (in terminals) or Escape (in",
+                               "the Windows R GUI). " ) } else "",
+                             "Proceed to start the fit?", sep = "")
 run_fit_handler <- function(h, ...) { #{{{3
   gconfirm(run_confirm_message, handler = function(h, ...) 
     {
@@ -913,6 +916,13 @@ run_fit_handler <- function(h, ...) { #{{{3
         err = NULL
       }
       reweight.method <- svalue(f.gg.opts.reweight.method)
+      if (svalue(f.gg.opts.plot)) {
+        if (.Platform$OS.type == "windows") {
+          # When on windows, check for an active windows device. If not present,
+          # open one
+          if (attr(dev.cur(), "names") != "windows") windows()
+        }
+      }
       if (reweight.method == "none") reweight.method = NULL
       ftmp <<- mkinfit(m.cur, override(ds.cur$data),
                        state.ini = iniparms,
@@ -971,6 +981,35 @@ keep_fit_handler <- function(h, ...) { # {{{3
   update_f.df()
   update_plot_obssel()
   p.modified <<- TRUE
+}
+export_csv_handler <- function(h, ...) { # {{{3
+  csv_file <- paste(ftmp$ds$title, "_", ftmp$mkinmod$name, ".csv", sep = "")
+
+  solution_type = ftmp$solution_type
+  parms.all <- c(ftmp$bparms.optim, ftmp$bparms.fixed)
+
+  ininames <- c(
+    rownames(subset(ftmp$start, type == "state")),
+    rownames(subset(ftmp$fixed, type == "state")))
+  odeini <- parms.all[ininames]
+
+  # Order initial state variables
+  names(odeini) <- sub("_0", "", names(odeini))
+  odeini <- odeini[names(ftmp$mkinmod$diffs)]
+
+  xlim = range(ftmp$data$time)
+  outtimes <- seq(xlim[1], xlim[2], length.out=200)
+
+  odenames <- c(
+    rownames(subset(ftmp$start, type == "deparm")),
+    rownames(subset(ftmp$fixed, type == "deparm")))
+  odeparms <- parms.all[odenames]
+
+  out <- mkinpredict(ftmp$mkinmod, odeparms, odeini, outtimes, 
+          solution_type = solution_type, atol = ftmp$atol, rtol = ftmp$rtol)
+
+  write.csv(out, csv_file)
+  svalue(sb) <- paste("Wrote model predictions to", file.path(getwd(), csv_file))
 }
 get_Parameters <- function(stmp, optimised) # {{{3
 {
@@ -1032,8 +1071,8 @@ f.gg.opts.g <- ggroup(cont = f.config)
 # First group {{{4
 f.gg.opts.1 <- gformlayout(cont = f.gg.opts.g)
 solution_types <- c("auto", "analytical", "eigen", "deSolve")
-f.gg.opts.plot <- gcheckbox("Plot during the fit",
-                         cont = f.gg.opts.1, checked = FALSE)
+f.gg.opts.plot <- gcheckbox("Plot during the fit", 
+                            cont = f.gg.opts.1, checked = FALSE)
 f.gg.opts.st <- gcombobox(solution_types, selected = 1,
                           label = "solution_type", width = 160,
                           cont = f.gg.opts.1)
@@ -1130,6 +1169,8 @@ f.delete <- gbutton("Delete fit", cont = r.buttons,
 f.keep <- gbutton("Keep fit", cont = r.buttons, handler = keep_fit_handler)
 tooltip(f.keep) <- "Store the optimised model with all settings and the current dataset in the fit list"
 f.keep$call_Ext("disable")
+f.csv <- gbutton("Export csv", cont = r.buttons, handler = export_csv_handler)
+tooltip(f.csv) <- "Save model predictions in a text file as comma separated values for plotting"
 # Result name {{{2
 r.line.name <- ggroup(cont = r.viewer, horizontal = TRUE)
 r.name  <- gedit("", label = "<b>Result name</b>",
