@@ -1,6 +1,12 @@
 # NEWS for package 'mkin'
 
-## mkin 0.9-41
+## mkin 0.9.41.9000
+
+### Minor changes
+
+- Add plots to `compiled_models` vignette
+
+## mkin 0.9-41 (2015-11-09)
 
 ### Minor changes
 
