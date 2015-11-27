@@ -1,5 +1,23 @@
 # NEWS for package 'gmkin'
 
+## gmkin 0.6-3 (2015-11-28)
+
+- Various small layout and GUI logic improvements based on the suggestions by Stefan Meinecke (Umweltbundesamt Germany). Thanks!
+
+### Minor changes
+
+- Removed the 'Add' and 'Remove' buttons from the data editor, as adding rows leads to a corrupt state of the GUI
+
+- The button 'Keep changes' now asks if the currently selected model should be overwritten if the name was not changed
+
+### Bug fixes
+
+- In the model editor, the combobox for the 'to' field did not accept to be empty after holding a selection
+
+- Some graphical errors in the model gallery were fixed
+
+- Importing data in wide format corrupted the array of observed variables as `mkin_wide_to_long` returns 'name' as a factor
+
 ## gmkin 0.6-2 (2015-11-10)
 
 - Make it possible to export model predictions as CSV
