@@ -201,6 +201,7 @@ p.switcher <- function(h, ...) {
     p.loaded <<- p.cur
     project_switched <- TRUE
     p.modified <<- FALSE
+    svalue(p.gtable) <<- p.cur
   }
   if (p.modified) {
     gconfirm("When you switch projects, you loose any unsaved changes. Proceed to switch?",
@@ -313,12 +314,14 @@ update_f_conf <- function() { # {{{3
 }
 update_f_results <- function() { # {{{3
   svalue(r.name) <- ftmp$name
-  r.parameters[] <- cbind(rownames(stmp$bpar), stmp$bpar[, c(1, 4, 5, 6)])
+  r.parameters[] <- cbind(Parameter = rownames(stmp$bpar), stmp$bpar[, c(1, 4, 5, 6)])
   err.min <- 100 * stmp$errmin$err.min
-  r.frames.chi2.gt[] <- cbind(rownames(stmp$errmin), signif(err.min, 3),
-                              stmp$errmin[, c(2, 3)])
+  r.frames.chi2.gt[] <- cbind(Variable = rownames(stmp$errmin), 
+                              Error = signif(err.min, 3),
+                              n.opt = stmp$errmin$n.optim,
+                              df = stmp$errmin$df)
   if (is.null(stmp$ff)) r.frames.ff.gt[] <- ff.df.empty
-  else r.frames.ff.gt[] <- cbind(names(stmp$ff), round(stmp$ff, 4))
+  else r.frames.ff.gt[] <- cbind(Path = names(stmp$ff), ff = round(stmp$ff, 4))
   distimes <- format(stmp$distimes, digits = 3)
   delete(r.frames.distimes, r.frames.distimes.gt)
   delete(r.frames, r.frames.distimes)
@@ -583,7 +586,6 @@ delete_dataset_handler <- function(h, ...) {
 
 keep_ds_changes_handler <- function(h, ...) {
   ds.i <- svalue(ds.gtable, index = TRUE)
-  if (is.null(ds.i)) ds.i <- 1
 
   editor_title <- svalue(ds.title.ge)
   editor_ds <- mkinds$new(
@@ -592,16 +594,16 @@ keep_ds_changes_handler <- function(h, ...) {
     time_unit = svalue(ds.e.stu),
     unit = svalue(ds.e.obu))
 
-  if (ws$ds[[ds.i]]$title == editor_title) {
-    gconfirm(paste("Do you want to overwrite dataset", editor_title, "?"), parent = w,
-             handler = function(h, ...) {
-               ws$ds[[ds.i]] <<- editor_ds
-               ds.cur <<- editor_ds
-               update_ds.df()
-               svalue(p.observed) <- paste(ws$observed, collapse = ", ")
-               p.modified <<- TRUE
-               update_ds_editor()
-             })
+  if (!is.null(ds.i) && !is.na(ds.i) && ws$ds[[ds.i]]$title == editor_title) {
+      gconfirm(paste("Do you want to overwrite dataset", editor_title, "?"), parent = w,
+               handler = function(h, ...) {
+                 ws$ds[[ds.i]] <<- editor_ds
+                 ds.cur <<- editor_ds
+                 update_ds.df()
+                 svalue(p.observed) <- paste(ws$observed, collapse = ", ")
+                 p.modified <<- TRUE
+                 update_ds_editor()
+               })
   } else {
     ws$add_ds(list(editor_ds))
     ds.cur <<- editor_ds
@@ -683,6 +685,7 @@ new_ds_from_csv_handler <- function(h, ...) {
     if (is.null(ds.cur$data$err)) ds.cur$data$err <<- 1
     update_ds.df()
     update_ds_editor()
+    svalue(right) <- 2
   } else {
     galert("Uploading failed", parent = "w")
   }
@@ -736,9 +739,10 @@ upload_dataset.gf <- gfile(text = "Upload text file", cont = ds.editor,
 # Import options {{{3
 ds.e.import <- ggroup(cont = ds.editor, horizontal = FALSE)
 visible(ds.e.import) <- FALSE
-ds.e.preview <- ggroup(cont = ds.e.import, width = 400,  height = 150,
-                      ext.args = list(layout = list(type="vbox", align = "center")))
-ds.e.up.text <- ghtml("<pre></pre>", cont = ds.e.preview, width = 380, height = 150)
+ds.e.preview <- ggroup(cont = ds.e.import, 
+                      # width = 540,  height = 150,
+                       ext.args = list(layout = list(type="vbox", align = "center")))
+ds.e.up.text <- ghtml("<pre></pre>", cont = ds.e.preview, width = 530, height = 150)
 
 ds.e.up.import.line <- ggroup(cont = ds.e.import)
 ds.e.up.import <- gbutton("Import using options specified below", cont = ds.e.up.import.line,
@@ -816,8 +820,7 @@ keep_m_changes_handler <- function(h, ...) {
   m.cur$name <<- svalue(m.name.ge) 
 
   m.i <- svalue(m.gtable, index = TRUE)
-  if (is.null(m.i)) m.i <- 1
-  if (ws$m[[m.i]]$name == m.cur$name) {
+  if (!is.null(m.i) && !is.na(m.i) && ws$m[[m.i]]$name == m.cur$name) {
     gconfirm(paste("Do you want to overwrite model", m.cur$name, "?"), parent = w,
       handler = function(h, ...) {
         ws$m[[m.i]] <- m.cur
