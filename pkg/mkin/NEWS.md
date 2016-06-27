@@ -1,6 +1,46 @@
 # NEWS for package 'mkin'
 
-## mkin 0.9.42
+## mkin 0.9.42-9000
+
+### Major changes
+
+- The title was changed to `Kinetic evaluations of chemical degradation data`
+
+- `plot.mkinfit`: Add the possibility to show fits (and residual plots if requested) separately for the observed variables
+
+- `plot.mkinfit`: Add the possibility to show the chi2 error levels in the plot, similar to the way they are shown in `plot.mmkin`
+
+- `plot_sep`: Add this function as a convenience wrapper for plotting observed variables of mkinfit objects separately, with chi2 error values and residual plots.
+
+- Vignettes: The main vignette `mkin` was converted to R markdown and updated, vignette `FOCUS_L` was also updated to use current improved functionality.
+
+- The function `add_err` was added to the package, making it easy to generate simulated data using an error model based on the normal distribution
+
+### Minor changes
+
+- Remove an outdated reference to the inline package in the `compiled_models` vignette
+
+- `mkinfit`: Do not error out in cases where the fit converges, but the Jacobian for the untransformed model cost can not be estimated. Give a warning instead and return NA for the t-test results.
+
+- `summary.mkinfit`: Give a warning message when the covariance matrix can not be obtained.
+
+- A test has been added to containing a corresponding edge case to check that the warnings are correctly issued and the fit does not terminate.
+
+- `plot.mmkin`: Round the chi2 error value to three significant digits, instead of two decimal digits.
+
+- `mkinfit`: Return the `err` values used on weighted fits as a column named `err`. Also include these inverse weights when the column `value` in the observed data is used, which is returned as `observed` in the data component of the mkinfit object.
+
+### Bug fixes
+
+- `endpoints`: When the name of a substance degrading to a metabolite (e.g. a parent compound) used in the model formulation ended in the letter `f`, some rate parameters could be listed as formation fractions with mixed up names. These would also appear in the summary.
+
+- `mkinfit`: Check for all observed variables when checking if the user tried to fix formation fractions when fitting them using ilr transformation.
+
+- `plot.mmkin`: Set the plot margins correctly, also in the case of a single fit to be plotted, so the main title is placed in a reasonable way.
+
+- `plot.mkinfit`: Correct default values for `col_obs`, `pch_obs` and `lty_obs` for the case that `obs_vars` is specified.
+
+## mkin 0.9.42 (2016-03-25)
 
 ### Major changes
 

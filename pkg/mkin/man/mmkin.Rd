@@ -45,24 +45,36 @@ mmkin(models, datasets,
 }
 \examples{
 \dontrun{
-m_synth_SFO_lin <- mkinmod(parent = list(type = "SFO", to = "M1"),
-                           M1 = list(type = "SFO", to = "M2"),
-                           M2 = list(type = "SFO"), use_of_ff = "max")
+m_synth_SFO_lin <- mkinmod(parent = mkinsub("SFO", "M1"),
+                           M1 = mkinsub("SFO", "M2"),
+                           M2 = mkinsub("SFO"), use_of_ff = "max")
 
-m_synth_FOMC_lin <- mkinmod(parent = list(type = "FOMC", to = "M1"),
-                           M1 = list(type = "SFO", to = "M2"),
-                           M2 = list(type = "SFO"), use_of_ff = "max")
+m_synth_FOMC_lin <- mkinmod(parent = mkinsub("FOMC", "M1"),
+                            M1 = mkinsub("SFO", "M2"),
+                            M2 = mkinsub("SFO"), use_of_ff = "max")
 
 models <- list(SFO_lin = m_synth_SFO_lin, FOMC_lin = m_synth_FOMC_lin)
 datasets <- lapply(synthetic_data_for_UBA_2014[1:3], function(x) x$data)
+names(datasets) <- paste("Dataset", 1:3)
 
-time_default <- system.time(fits <- mmkin(models, datasets))
+time_default <- system.time(fits.0 <- mmkin(models, datasets))
 time_1 <- system.time(fits.1 <- mmkin(models, datasets, cores = 1))
 
 time_default
 time_1
 
 endpoints(fits[["SFO_lin", 2]])
+
+# Plot.mkinfit handles rows or columns of mmkin result objects
+plot(fits.0[1, ])
+plot(fits.0[1, ], obs_var = c("M1", "M2"))
+plot(fits.0[, 1])
+# Use double brackets to extract a single mkinfit object, which will be plotted
+# by plot.mkinfit
+plot(fits.0[[1, 1]], sep_obs = TRUE, show_residuals = TRUE, show_errmin = TRUE)
+# Plotting with mmkin (single brackets, extracting an mmkin object) does not
+# allow to plot the observed variables separately
+plot(fits.0[1, 1])
 }
 }
 \keyword{ optimize }
