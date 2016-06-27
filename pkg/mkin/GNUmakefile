@@ -11,7 +11,7 @@ TGZVNR  := ../$(PKGSRC)_$(PKGVERS)-vignettes-not-rebuilt.tar.gz
 RBIN ?= $(shell dirname "`which R`")
 
 # Specify package and static documentation directories for subversion on r-forge
-RFSVN ?= $(HOME)/svn/kinfit.r-forge
+RFSVN ?= $(HOME)/svn/kinfit
 RFDIR ?= $(RFSVN)/pkg/mkin
 SDDIR ?= $(RFSVN)/www/mkin_static
 
@@ -35,7 +35,7 @@ $(TGZ): $(pkgfiles) vignettes
 	cd ..;\
 		"$(RBIN)/R" CMD build $(PKGSRC) 2>&1 | tee $(PKGNAME)/build.log
 
-$(TGZVNR): $(pkgfiles) vignettes
+$(TGZVNR): $(pkgfiles) 
 	cd ..;\
 		"$(RBIN)/R" CMD build $(PKGSRC) --no-build-vignettes;\
 		cd $(PKGSRC);\
@@ -85,7 +85,7 @@ vignettes/%.pdf: vignettes/header.tex vignettes/references.bib vignettes/%.Rnw
 vignettes/%.html: vignettes/mkin_vignettes.css vignettes/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
 
-vignettes: vignettes/mkin.pdf vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
+vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
 
 sd:
 	@echo Now execute
