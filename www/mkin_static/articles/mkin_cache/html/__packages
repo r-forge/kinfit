@@ -1,0 +1,12 @@
+base
+knitr
+minpack.lm
+rootSolve
+inline
+mkin
+colorout
+setwidth
+nvimcom
+rmarkdown
+microbenchmark
+ggplot2

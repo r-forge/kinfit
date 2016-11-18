@@ -5,8 +5,8 @@ Function to calculate endpoints for further use from kinetic models fitted with 
 }
 \description{
 This function calculates DT50 and DT90 values as well as formation fractions from kinetic models
-fitted with mkinfit. If the SFORB model was specified for one of the parents or metabolites, 
-the Eigenvalues are returned. These are equivalent to the rate constantes of the DFOP model, but 
+fitted with mkinfit. If the SFORB model was specified for one of the parents or metabolites,
+the Eigenvalues are returned. These are equivalent to the rate constantes of the DFOP model, but
 with the advantage that the SFORB model can also be used for metabolites.
 }
 \usage{
@@ -22,6 +22,10 @@ endpoints(fit)
 }
 \value{
   A list with the components mentioned above.
+}
+\examples{
+  fit <- mkinfit("FOMC", FOCUS_2006_C, quiet = TRUE)
+  endpoints(fit)  
 }
 \author{
   Johannes Ranke

@@ -1,6 +1,6 @@
 # mkin
 
-[![](http://www.r-pkg.org/badges/version/mkin)](http://cran.r-project.org/package=mkin)
+[![](http://www.r-pkg.org/badges/version/mkin)](https://cran.r-project.org/package=mkin)
 
 The R package **mkin** provides calculation routines for the analysis of
 chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
@@ -10,7 +10,7 @@ if several compartments are involved.
 ## Installation
 
 You can install the latest released version from 
-[CRAN](http://cran.r-project.org/package=mkin) from within R:
+[CRAN](https://cran.r-project.org/package=mkin) from within R:
 
 ```r
 install.packages("mkin")
@@ -36,8 +36,8 @@ at the package vignettes
 
 ## Documentation
 
-The [HTML documentation](http://kinfit.r-forge.r-project.org/mkin_static) is
-maintained at the R-Forge project site.
+The [HTML documentation](http://jranke.github.io/mkin) is
+maintained at the github project site.
 
 ## Features
 
@@ -98,14 +98,14 @@ for installation instructions and a manual.
   
 ## News
 
-Yes, there is a ChangeLog, for the latest [CRAN release](http://cran.r-project.org/web/packages/mkin/news.html)
+Yes, there is a ChangeLog, for the latest [CRAN release](https://cran.r-project.org/package=mkin/news.html)
 and one for the [github master branch](https://github.com/jranke/mkin/blob/master/NEWS.md).
 
 ## Credits and historical remarks
 
 `mkin` would not be possible without the underlying software stack consisting
-of R and the packages [deSolve](http://cran.r-project.org/package=deSolve)
-and [FME](http://cran.r-project.org/package=FME), to say the least.
+of R and the packages [deSolve](https://cran.r-project.org/package=deSolve)
+and [FME](https://cran.r-project.org/package=FME), to say the least.
 
 It could not have been written without me being introduced to regulatory fate
 modelling of pesticides by Adrian Gurney during my time at Harlan Laboratories
@@ -113,7 +113,7 @@ Ltd (formerly RCC Ltd). `mkin` greatly profits from and largely follows
 the work done by the 
 [FOCUS Degradation Kinetics Workgroup](http://focus.jrc.ec.europa.eu/dk),
 as detailed in their guidance document from 2006, slightly updated in 2011 and
-2014.
+in 2014.
 
 Also, it was inspired by the first version of KinGUI developed by
 BayerCropScience, which is based on the MatLab runtime environment.
@@ -121,12 +121,12 @@ BayerCropScience, which is based on the MatLab runtime environment.
 The companion package 
 [kinfit](http://kinfit.r-forge.r-project.org/kinfit_static/index.html) (now deprecated) was 
 [started in 2008](https://r-forge.r-project.org/scm/viewvc.php?view=rev&root=kinfit&revision=2) and 
-[first published](http://cran.r-project.org/src/contrib/Archive/kinfit/) on
+[first published](https://cran.r-project.org/src/contrib/Archive/kinfit/) on
 CRAN on 01 May 2010.
 
 The first `mkin` code was 
 [published on 11 May 2010](https://r-forge.r-project.org/scm/viewvc.php?view=rev&root=kinfit&revision=8) and the 
-[first CRAN version](http://cran.r-project.org/src/contrib/Archive/mkin)
+[first CRAN version](https://cran.r-project.org/src/contrib/Archive/mkin)
 on 18 May 2010.
 
 In 2011, Bayer Crop Science started to distribute an R based successor to KinGUI named 
@@ -140,7 +140,7 @@ Somewhat in parallel, Syngenta has sponsored the development of an `mkin` and
 KinGUII based GUI application called CAKE, which also adds IRLS and MCMC, is
 more limited in the model formulation, but puts more weight on usability.
 CAKE is available for download from the [CAKE
-website](http://projects.tessella.com/cake), where you can also
+website](http://showcase.tessella.com/products/cake), where you can also
 find a zip archive of the R scripts derived from `mkin`, published under the GPL
 license.
 
