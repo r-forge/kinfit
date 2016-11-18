@@ -1,0 +1,81 @@
+title: mkin
+
+template:
+  bootswatch: spacelab
+
+reference:
+  - title: Main functions
+    desc:  Essential functionality
+    contents:
+      - mkinmod
+      - mkinfit
+      - mmkin
+  - title: Show results
+    desc: Functions working with mkinfit objects
+    contents:
+      - plot.mkinfit
+      - summary.mkinfit
+      - mkinresplot
+      -  mkinparplot
+      -  endpoints
+      -  mkinerrmin
+  - title: Work with mmkin objects
+    desc: Functions working with aggregated results
+    contents:
+      - "[.mmkin"
+      - plot.mmkin
+  - title: Datasets and known results
+    contents:
+      - FOCUS_2006_A
+      - FOCUS_2006_SFO_ref_A_to_F
+      - FOCUS_2006_FOMC_ref_A_to_F
+      - FOCUS_2006_HS_ref_A_to_F
+      - FOCUS_2006_DFOP_ref_A_to_B
+      - mccall81_245T
+      - schaefer07_complex_case
+      - synthetic_data_for_UBA_2014
+      - mkinds
+      - print.mkinds
+  - title: Helper functions
+    contents:
+      - mkin_wide_to_long
+      - mkin_long_to_wide
+      - mkinsub
+      - print.mkinmod
+      - mkinpredict
+      - transform_odeparms
+      - ilr
+      - geometric_mean
+  - title: Analytical solutions
+    desc: Parent only model solutions
+    contents:
+      - SFO.solution
+      - FOMC.solution
+      - DFOP.solution
+      - SFORB.solution
+      - HS.solution
+      - IORE.solution
+  - title: Generate synthetic datasets
+    contents:
+      - add_err
+  - title: Deprecated functions
+    desc: Functions that have been superseeded
+    contents:
+      - mkinplot
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Function reference
+      href: reference/index.html
+    - text: Articles
+      menu:
+      - text: Introduction to mkin
+        href: articles/mkin.html
+      - text: Example evaluation of FOCUS Example Dataset D
+        href: articles/FOCUS_D.html
+      - text: Example evaluation of FOCUS Laboratory Data L1 to L3
+        href: articles/FOCUS_L.html
+      - text: Performance benefit by using compiled model definitions in mkin
+        href: articles/compiled_models.html

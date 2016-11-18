@@ -86,16 +86,14 @@ vignettes/%.html: vignettes/mkin_vignettes.css vignettes/%.Rmd
 
 vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
 
-sd:
-	@echo Now execute
-	@echo "\n  staticdocs::build_site()\n"
-	$(RBIN)/R
+pd:
+	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
 	git add -A
-	git commit -m 'Static documentation rebuilt by staticdocs::build_site()' -e
+	git commit -m 'Static documentation rebuilt by pkgdown::build_site(run_dont_run = TRUE)' -e
 
-r-forge: sd
+r-forge: pd
 	rm -rf $(SDDIR)/*
-	cp -a inst/web/* $(SDDIR)
+	cp -a docs/* $(SDDIR)
 	cd $(SDDIR) && svn add --force .
 	git archive master > $(HOME)/mkin.tar;\
 	cd $(RFDIR) && rm -r `ls` && tar -xf $(HOME)/mkin.tar;\
@@ -107,6 +105,9 @@ winbuilder: build
 	curl -T $(TGZ) ftp://anonymous@win-builder.r-project.org/R-release/
 	@echo "Uploading to R-devel on win-builder"
 	curl -T $(TGZ) ftp://anonymous@win-builder.r-project.org/R-devel/
+
+drat: build
+	"$(RBIN)/Rscript" -e "drat::insertPackage('$(TGZ)', commit = TRUE)"
 
 submit:
 	@echo "\nHow about make test, make check, make winbuilder"
