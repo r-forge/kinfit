@@ -9,6 +9,7 @@
 ^docs/*
 ^vignettes/.build.timestamp$
 ^vignettes/*_cache$
+^vignettes/*cache$
 ^vignettes/*_files$
 ^vignettes/*.aux$
 ^vignettes/*.bbl$
@@ -24,3 +25,4 @@
 ^vignettes/FOCUS_Z.tex$
 ^vignettes/mkin.tex$
 ^_pkgdown.yml$
+^mkin_.*\.tar\.gz
