@@ -3,6 +3,7 @@ PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGDIR  := $(PWD)
 TGZ     := $(PKGNAME)_$(PKGVERS).tar.gz
 TGZVNR  := $(PKGNAME)_$(PKGVERS)-vignettes-not-rebuilt.tar.gz
+WINBIN  := $(PKGNAME)_$(PKGVERS).zip
 
 # Specify the directory holding R binaries. To use an alternate R build (say a
 # pre-prelease version) use `make RBIN=/path/to/other/R/` or `export RBIN=...`
@@ -41,6 +42,13 @@ build: $(TGZ)
 
 build-no-vignettes: $(TGZVNR)
 
+$(WINBIN): build
+	@echo "Building windows binary package..."
+	"$(RBIN)/R" CMD INSTALL $(TGZ) --build
+	@echo "DONE."
+
+winbin: $(WINBIN)
+
 install: build
 	"$(RBIN)/R" CMD INSTALL $(TGZ)
 
@@ -57,7 +65,7 @@ check-no-vignettes: build-no-vignettes
 	mv $(TGZ) $(TGZVNR)
 
 README.html: README.md
-	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document')"
+	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(self_contained = TRUE))"
 
 vignettes/gmkin_manual.html: vignettes/gmkin_manual.Rmd vignettes/img/*
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/gmkin_manual.Rmd', dir = 'vignettes')"
@@ -66,18 +74,23 @@ manual: vignettes/gmkin_manual.html
 
 vignettes: vignettes/gmkin_manual.html
 
-sd:
-	rm -rf $(SDDIR)/*
-	cp gmkin_screenshot.png Rprofile $(SDDIR)
-	"$(RBIN)/Rscript" -e "library(staticdocs); build_site(site_path = '$(SDDIR)')"
-	cd $(SDDIR) && svn add --force .
+pd:
+	"$(RBIN)/Rscript" -e "pkgdown::build_site()"
 	git add -A
-	#git commit -m 'Vignettes rebuilt by staticdocs::build_site() for static documentation on r-forge' -e
+	git commit -m 'Static documentation rebuilt by pkgdown' -e
 
-r-forge: sd
+drat: build
+	"$(RBIN)/Rscript" -e "drat::insertPackage('$(TGZ)', commit = TRUE)"
+
+dratwin: winbin
+	"$(RBIN)/Rscript" -e "drat::insertPackage('$(WINBIN)', 'e:/git/drat/', commit = TRUE)"
+
+r-forge: pd
 	git archive master > $(PKGDIR)/gmkin.tar;\
 	cd $(RFDIR) && rm -r `ls` && tar -xf $(PKGDIR)/gmkin.tar;\
-	svn add --force .; cd $(RFSVN) && svn commit -m 'update gmkin from github repository'
+	rm -r $(SDDIR)/*;\
+	cp -a docs/* $(SDDIR);\
+	svn add --force .; svn rm --force `svn status | grep "\!" | cut -d " " -f 8`; cd $(RFSVN) && svn commit -m 'sync with git'
 
 clean: 
 	$(RM) -r $(PKGNAME).Rcheck/
