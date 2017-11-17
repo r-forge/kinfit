@@ -13,6 +13,7 @@ RBIN ?= $(shell dirname "`which R`")
 # Specify package and static documentation directories for subversion on r-forge
 RFSVN ?= $(HOME)/svn/kinfit
 RFDIR ?= $(RFSVN)/pkg/mkin
+SDDIR ?= $(RFSVN)/www/mkin_static
 
 # Vignettes are listed in the build target
 pkgfiles = \
@@ -33,10 +34,10 @@ all: build
 $(TGZ): $(pkgfiles) vignettes
 	"$(RBIN)/R" CMD build . 2>&1 | tee build.log
 
-$(TGZVNR): $(pkgfiles) 
+$(TGZVNR): $(pkgfiles)
 	"$(RBIN)/R" CMD build . --no-build-vignettes;\
 	mv $(TGZ) $(TGZVNR)
-                
+
 build: $(TGZ)
 
 build-no-vignettes: $(TGZVNR)
@@ -56,31 +57,20 @@ quickcheck: build-no-vignettes
 	mv $(TGZ) $(TGZVNR)
 
 clean:
-	$(RM) -r vignettes/*.bbl
-	$(RM) -r vignettes/*.blg
-	$(RM) -r vignettes/*.fls
-	$(RM) -r vignettes/*.fdb_latexmk
-	$(RM) -r vignettes/cache
-	$(RM) -r vignettes/figure
 	$(RM) -r vignettes/*_cache
 	$(RM) -r vignettes/*_files
-	$(RM) -r vignettes/*-concordance.tex
-	$(RM) -r vignettes/*.synctex.gz
 	$(RM) Rplots.pdf
 
 test: quickinstall
-	"$(RBIN)/Rscript" -e 'library(devtools); devtools::test(".")' 2>&1 | tee test.log
+	"$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
 
 README.html: README.md
 	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(mathjax = NULL))"
 
-vignettes/%.pdf: vignettes/header.tex vignettes/references.bib vignettes/%.Rnw
-	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rnw', dir = 'vignettes')"
-
-vignettes/%.html: vignettes/mkin_vignettes.css vignettes/%.Rmd
+vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
 
-vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.pdf vignettes/compiled_models.html
+vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.html vignettes/compiled_models.html
 
 pd:
 	"$(RBIN)/Rscript" -e "pkgdown::build_news()"
@@ -94,9 +84,11 @@ pd_articles:
 	git add -A
 	git commit -m 'Static documentation articles rebuilt by pkgdown::build_articles()' -e
 
-r-forge: 
+r-forge:
 	git archive master > $(HOME)/mkin.tar;\
 	cd $(RFDIR) && rm -r `ls` && tar -xf $(HOME)/mkin.tar;\
+	rm -r $(SDDIR)/*;\
+	cp -a docs/* $(SDDIR);\
 	svn add --force .; svn rm --force `svn status | grep "\!" | cut -d " " -f 8`; cd $(RFSVN) && svn commit -m 'sync with git'
 
 winbuilder: build

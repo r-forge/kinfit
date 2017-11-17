@@ -105,8 +105,7 @@ plot.mkinfit <- function(x, fit = x,
     # Set ylim to sensible default, or to the specified value
     if (ylim[[1]] == "default") {
       ylim_row = c(0, max(c(subset(fit$data, variable %in% row_obs_vars)$observed,
-                        subset(fit$data, variable %in% row_obs_vars)$fitted),
-                      na.rm = TRUE))
+                          unlist(out[row_obs_vars])), na.rm = TRUE))
     } else {
       ylim_row = ylim
     }
@@ -186,11 +185,15 @@ plot.mkinfit <- function(x, fit = x,
     # Show residuals if requested
     if (show_residuals) {
       residuals <- subset(fit$data, variable %in% row_obs_vars, residual)
-      if (maxabs == "auto") maxabs = max(abs(residuals), na.rm = TRUE)
+      if (maxabs == "auto") {
+        maxabs_row = max(abs(residuals), na.rm = TRUE)
+      } else {
+        maxabs_row = maxabs
+      }
       if (!sep_obs) par(mar = c(5, 4, 0, 2) + 0.1)
       plot(0, type="n",
         xlim = xlim,
-        ylim = c(-1.2 * maxabs, 1.2 * maxabs),
+        ylim = c(-1.2 * maxabs_row, 1.2 * maxabs_row),
         xlab = xlab, ylab = "Residuals")
       for(obs_var in row_obs_vars){
         residuals_plot <- subset(fit$data, variable == obs_var, c("time", "residual"))

@@ -22,7 +22,7 @@ reference:
   - title: Work with mmkin objects
     desc: Functions working with aggregated results
     contents:
-      - "[.mmkin"
+      - "`[.mmkin`"
       - plot.mmkin
   - title: Datasets and known results
     contents:
@@ -38,14 +38,15 @@ reference:
       - print.mkinds
   - title: Helper functions
     contents:
+      - geometric_mean
+      - mkinsub
+      - max_twa_parent
+      - mkinpredict
       - mkin_wide_to_long
       - mkin_long_to_wide
-      - mkinsub
       - print.mkinmod
-      - mkinpredict
       - transform_odeparms
       - ilr
-      - geometric_mean
   - title: Analytical solutions
     desc: Parent only model solutions
     contents:
@@ -77,7 +78,11 @@ navbar:
         href: articles/FOCUS_D.html
       - text: Example evaluation of FOCUS Laboratory Data L1 to L3
         href: articles/FOCUS_L.html
+      - text: Example evaluation of FOCUS Example Dataset Z
+        href: articles/FOCUS_Z.html
       - text: Performance benefit by using compiled model definitions in mkin
         href: articles/compiled_models.html
+      - text: Calculation of time weighted average concentrations with mkin
+        href: articles/twa.html
     - text: News
       href: news/index.html
