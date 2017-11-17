@@ -1,3 +1,43 @@
+# mkin 0.9.46.3 (2017-11-16)
+
+- `README.md`, `vignettes/mkin.Rmd`: URLs were updated
+
+- `synthetic_data_for_UBA`: Add the code used to generate the data in the interest of reproducibility
+
+# mkin 0.9.46.2 (2017-10-10)
+
+- Converted the vignette FOCUS_Z from tex/pdf to markdown/html
+
+- `DESCRIPTION`: Add ORCID
+
+# mkin 0.9.46.1 (2017-09-14)
+
+- `plot.mkinfit`: Fix scaling of residual plots for the case of separate plots for each observed variable
+
+- `plot.mkinfit`: Use all data points of the fitted curve for y axis scaling  for the case of separate plots for each observed variable
+
+- Documentation updates
+
+# mkin 0.9.46 (2017-07-24)
+
+- Remove `test_FOMC_ill-defined.R` as it is too platform dependent
+
+# mkin 0.9.45.2 (2017-07-24)
+
+- Rename `twa` to `max_twa_parent` to avoid conflict with `twa` from my `pfm` package
+
+- Update URLs in documentation
+
+- Limit test code to one core to pass on windows
+
+- Switch from `microbenchmark` to `rbenchmark` as the former is not supported on all platforms
+
+# mkin 0.9.45.1 (2016-12-20)
+
+## New features
+
+- A `twa` function, calculating maximum time weighted average concentrations for the parent (SFO, FOMC and DFOP).
+
 # mkin 0.9.45 (2016-12-08)
 
 ## Minor changes
