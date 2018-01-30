@@ -1,9 +1,10 @@
 ## ---- include = FALSE----------------------------------------------------
 require(knitr)
+options(digits = 5)
 opts_chunk$set(engine='R', tidy = FALSE)
 
 ## ---- echo = TRUE, fig = TRUE, fig.width = 8, fig.height = 7-------------
-library(mkin, quiet = TRUE)
+library(mkin, quietly = TRUE)
 LOD = 0.5
 FOCUS_2006_Z = data.frame(
   t = c(0, 0.04, 0.125, 0.29, 0.54, 1, 2, 3, 4, 7, 10, 14, 21,
