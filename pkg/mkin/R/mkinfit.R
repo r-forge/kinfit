@@ -36,7 +36,7 @@ mkinfit <- function(mkinmod, observed,
   transform_rates = TRUE,
   transform_fractions = TRUE,
   plot = FALSE, quiet = FALSE,
-  err = NULL, 
+  err = NULL,
   weight = c("none", "std", "mean", "tc"),
   tc = c(sigma_low = 0.5, rsd_high = 0.07),
   scaleVar = FALSE,
@@ -439,7 +439,7 @@ mkinfit <- function(mkinmod, observed,
         if (reweight.method == "tc") {
           sr_old <- tc_fitted
           observed[err] <- predict(tc_fit)
-                                        
+
         }
         fit <- modFit(cost, fit$par, method = method.modFit,
                       control = control.modFit, lower = lower, upper = upper, ...)
@@ -483,13 +483,22 @@ mkinfit <- function(mkinmod, observed,
       if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
     }
   }
-  if (method.modFit %in% c("Port", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B")) {
+  if (method.modFit == "Port") {
+    if (fit$convergence != 0) {
+      fit$warning = paste0("Optimisation by method ", method.modFit,
+                           " did not converge:\n",
+                           if(is.character(fit$counts)) fit$counts # FME bug
+                           else fit$message)
+      warning(fit$warning)
+    } else {
+      if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
+    }
+  }
+  if (method.modFit %in% c("SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B")) {
     if (fit$convergence != 0) {
       fit$warning = paste0("Optimisation by method ", method.modFit,
                            " did not converge.\n",
-                           "Convergence code is ", fit$convergence,
-                           ifelse(is.null(fit$message), "",
-                                  paste0("\nMessage is ", fit$message)))
+                           "Convergence code returned by optim() is", fit$convergence)
       warning(fit$warning)
     } else {
       if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
@@ -597,6 +606,8 @@ mkinfit <- function(mkinmod, observed,
   names(fit$bparms.state) <- gsub("_0$", "", names(fit$bparms.state))
 
   fit$date <- date()
+  fit$version <- as.character(utils::packageVersion("mkin"))
+  fit$Rversion <- paste(R.version$major, R.version$minor, sep=".")
 
   class(fit) <- c("mkinfit", "modFit")
   return(fit)
@@ -694,6 +705,11 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
     par = param,
     bpar = bparam)
 
+  if (!is.null(object$version)) {
+    ans$fit_version <- object$version
+    ans$fit_Rversion <- object$Rversion
+  }
+
   ans$diffs <- object$mkinmod$diffs
   if(data) ans$data <- object$data
   ans$start <- object$start
@@ -715,8 +731,14 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
 
 # Expanded from print.summary.modFit
 print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("mkin version:   ", x$version, "\n")
-  cat("R version:      ", x$Rversion, "\n")
+  if (is.null(x$fit_version)) {
+    cat("mkin version:   ", x$version, "\n")
+    cat("R version:      ", x$Rversion, "\n")
+  } else {
+    cat("mkin version used for fitting:   ", x$fit_version, "\n")
+    cat("R version used for fitting:      ", x$fit_Rversion, "\n")
+  }
+
   cat("Date of fit:    ", x$date.fit, "\n")
   cat("Date of summary:", x$date.summary, "\n")
 
