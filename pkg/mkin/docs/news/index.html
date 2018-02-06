@@ -103,13 +103,16 @@
     </div>
 
     <div class="contents">
-    <div id="mkin-0-9-47-1-2017-01-30" class="section level1">
+    <div id="mkin-0-9-47-1-2017-02-06" class="section level1">
 <h1 class="hasAnchor">
-<a href="#mkin-0-9-47-1-2017-01-30" class="anchor"></a>mkin 0.9.47.1 (2017-01-30)</h1>
+<a href="#mkin-0-9-47-1-2017-02-06" class="anchor"></a>mkin 0.9.47.1 (2017-02-06)</h1>
 <ul>
+<li><p>Skip some test on CRAN and winbuilder to avoid timeouts</p></li>
 <li><p>‘test_data_from_UBA_2014’: Added this list of datasets containing experimental data used in the expertise from 2014</p></li>
 <li><p>‘mkinfit’: Added the iterative reweighting method ‘tc’ using the two-component error model from Rocke and Lorenzato. NA values in the data are not returned any more.</p></li>
+<li><p>‘mkinfit’: Work around a bug in the current FME version that prevented the convergence message to be returned in the case of non-convergence.</p></li>
 <li><p>‘summary.mkinfit’: Improved output regarding weighting method. No predictions are returned for NA values in the model (see above).</p></li>
+<li><p>‘summary.mkinfit’: Show versions of mkin and R used for fitting (not the ones used for the summary) if the fit was generated with mkin &gt;= 0.9.47.1</p></li>
 </ul>
 </div>
     <div id="mkin-0-9-46-3-2017-11-16" class="section level1">
@@ -587,7 +590,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#mkin-0-9-47-1-2017-01-30">0.9.47.1</a></li>
+        <li><a href="#mkin-0-9-47-1-2017-02-06">0.9.47.1</a></li>
         <li><a href="#mkin-0-9-46-3-2017-11-16">0.9.46.3</a></li>
         <li><a href="#mkin-0-9-46-2-2017-10-10">0.9.46.2</a></li>
         <li><a href="#mkin-0-9-46-1-2017-09-14">0.9.46.1</a></li>

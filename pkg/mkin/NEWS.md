@@ -1,10 +1,16 @@
-# mkin 0.9.47.1 (2017-01-30)
+# mkin 0.9.47.1 (2017-02-06)
+
+- Skip some test on CRAN and winbuilder to avoid timeouts
 
 - 'test_data_from_UBA_2014': Added this list of datasets containing experimental data used in the expertise from 2014
 
 - 'mkinfit': Added the iterative reweighting method 'tc' using the two-component error model from Rocke and Lorenzato. NA values in the data are not returned any more.
 
+- 'mkinfit': Work around a bug in the current FME version that prevented the convergence message to be returned in the case of non-convergence.
+
 - 'summary.mkinfit': Improved output regarding weighting method. No predictions are returned for NA values in the model (see above).
+
+- 'summary.mkinfit': Show versions of mkin and R used for fitting (not the ones used for the summary) if the fit was generated with mkin >= 0.9.47.1
 
 # mkin 0.9.46.3 (2017-11-16)
 
