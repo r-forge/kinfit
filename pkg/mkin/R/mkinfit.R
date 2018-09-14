@@ -37,7 +37,7 @@ mkinfit <- function(mkinmod, observed,
   transform_fractions = TRUE,
   plot = FALSE, quiet = FALSE,
   err = NULL,
-  weight = c("none", "std", "mean", "tc"),
+  weight = c("none", "manual", "std", "mean", "tc"),
   tc = c(sigma_low = 0.5, rsd_high = 0.07),
   scaleVar = FALSE,
   atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
@@ -145,7 +145,7 @@ mkinfit <- function(mkinmod, observed,
     if (grepl("free_bound$", parmname)) parms.ini[parmname] = 0.1
     if (grepl("bound_free$", parmname)) parms.ini[parmname] = 0.02
     # Default values for IORE exponents
-    if (grepl("^N", parmname)) parms.ini[parmname] = 1
+    if (grepl("^N", parmname)) parms.ini[parmname] = 1.1
     # Default values for the FOMC, DFOP and HS models
     if (parmname == "alpha") parms.ini[parmname] = 1
     if (parmname == "beta") parms.ini[parmname] = 10
@@ -259,7 +259,7 @@ mkinfit <- function(mkinmod, observed,
 
   weight.ini <- weight <- match.arg(weight)
   if (weight.ini == "tc") {
-     observed$err = sigma_rl(observed$value, tc["sigma_low"], tc["rsd_high"])
+     observed$err = sigma_twocomp(observed$value, tc["sigma_low"], tc["rsd_high"])
      err <- "err"
   } else {
     if (!is.null(err)) weight.ini = "manual"
@@ -389,6 +389,9 @@ mkinfit <- function(mkinmod, observed,
     upper[other_fraction_parms] <- 1
   }
 
+  # Show parameter names if tracing is requested
+  if(trace_parms) cat(names(c(state.ini.optim, transparms.optim)), "\n")
+
   # Do the fit and take the time
   fit_time <- system.time({
     fit <- modFit(cost, c(state.ini.optim, transparms.optim),
@@ -412,10 +415,26 @@ mkinfit <- function(mkinmod, observed,
         # We need unweighted residuals to update the weighting
         cost_tmp <- cost(fit$par)
 
-        tc_fit <- nls(abs(res.unweighted) ~ sigma_rl(obs, sigma_low, rsd_high),
-          start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
-          data = cost_tmp$residuals,
-          algorithm = "port")
+        # We need to supress warnings as we may have ties
+        p_tmp <- suppressWarnings(cor.test(abs(cost_tmp$residuals$res.unweighted),
+                          cost_tmp$residuals$obs, method = "kendall")$p.value)
+
+        if (p_tmp > 0.1) {
+          stop("No correlation of absolute residuals with observed values found.\n",
+               "Try without reweighting or with reweight.method = 'obs'.")
+        }
+
+        tc_fit <- try(
+          nls(abs(res.unweighted) ~ sigma_twocomp(obs, sigma_low, rsd_high),
+            start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
+            data = cost_tmp$residuals,
+            lower = 0,
+            algorithm = "port"))
+
+        if (inherits(tc_fit, "try-error")) {
+          stop("Estimation of the two error model components failed for the initial fit.\n",
+               "Try without reweighting or with reweight.method = 'obs'.")
+        }
 
         tc_fitted <- coef(tc_fit)
         if(!quiet) {
@@ -450,10 +469,16 @@ mkinfit <- function(mkinmod, observed,
         if (reweight.method == "tc") {
           cost_tmp <- cost(fit$par)
 
-          tc_fit <- nls(abs(res.unweighted) ~ sigma_rl(obs, sigma_low, rsd_high),
+          tc_fit <- try(nls(abs(res.unweighted) ~ sigma_twocomp(obs, sigma_low, rsd_high),
             start = as.list(tc_fitted),
             data = cost_tmp$residuals,
-            algorithm = "port")
+            lower = 0,
+            algorithm = "port"))
+
+          if (inherits(tc_fit, "try-error")) {
+            stop("Estimation of the two error model components failed during reweighting.\n",
+                 "Try without reweighting or with reweight.method = 'obs'.")
+          }
 
           tc_fitted <- coef(tc_fit)
           sr_new <- tc_fitted

@@ -1,11 +1,11 @@
 * using log directory ‘/home/jranke/git/mkin/mkin.Rcheck’
-* using R version 3.4.3 (2017-11-30)
+* using R version 3.5.1 (2018-07-02)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: UTF-8
 * using options ‘--no-tests --as-cran’
 * checking for file ‘mkin/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘mkin’ version ‘0.9.47.1’
+* this is package ‘mkin’ version ‘0.9.47.5’
 * package encoding: UTF-8
 * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
 Maintainer: ‘Johannes Ranke <jranke@uni-bremen.de>’
@@ -17,29 +17,13 @@ Maintainer: ‘Johannes Ranke <jranke@uni-bremen.de>’
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
+* checking serialization versions ... OK
 * checking whether package ‘mkin’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking ‘build’ directory ... OK
 * checking DESCRIPTION meta-information ... OK
-* checking top-level files ... WARNING
-Conversion of ‘README.md’ failed:
-pandoc: Could not fetch https://www.r-pkg.org/badges/version/mkin
-HttpExceptionRequest Request {
-  host                 = "www.r-pkg.org"
-  port                 = 443
-  secure               = True
-  requestHeaders       = []
-  path                 = "/badges/version/mkin"
-  queryString          = ""
-  method               = "GET"
-  proxy                = Nothing
-  rawBody              = False
-  redirectCount        = 10
-  responseTimeout      = ResponseTimeoutDefault
-  requestVersion       = HTTP/1.1
-}
- (InternalException (HandshakeFailed Error_EOF))
+* checking top-level files ... OK
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -69,7 +53,6 @@ HttpExceptionRequest Request {
 * checking contents of ‘data’ directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
-* checking sizes of PDF files under ‘inst/doc’ ... OK
 * checking installed files from ‘inst/doc’ ... OK
 * checking files in ‘vignettes’ ... OK
 * checking examples ... OK
@@ -81,9 +64,5 @@ HttpExceptionRequest Request {
 * checking PDF version of manual ... OK
 * DONE
 
-Status: 1 WARNING
-See
-  ‘/home/jranke/git/mkin/mkin.Rcheck/00check.log’
-for details.
-
+Status: OK
 

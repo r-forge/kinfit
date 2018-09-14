@@ -3,6 +3,7 @@ PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename $(PWD))
 TGZ     := $(PKGSRC)_$(PKGVERS).tar.gz
 TGZVNR  := $(PKGSRC)_$(PKGVERS)-vignettes-not-rebuilt.tar.gz
+WINBIN  := $(PKGSRC)_$(PKGVERS).zip
 
 # Specify the directory holding R binaries. To use an alternate R build (say a
 # pre-prelease version) use `make RBIN=/path/to/other/R/` or `export RBIN=...`
@@ -23,7 +24,6 @@ pkgfiles = \
 	man/* \
 	NAMESPACE \
 	NEWS.md \
-	README.html \
 	R/* \
 	tests/* \
 	tests/testthat* \
@@ -60,10 +60,11 @@ clean:
 	$(RM) -r vignettes/*_cache
 	$(RM) -r vignettes/*_files
 	$(RM) -r vignettes/*.R
+	$(RM) -r vignettes/web_only/*.R
 	$(RM) Rplots.pdf
 
-test: quickinstall
-	NOT_CRAN=true "$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
+test: install
+	"$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
 
 README.html: README.md
 	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(mathjax = NULL))"
@@ -71,17 +72,17 @@ README.html: README.md
 vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
 
-vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/FOCUS_Z.html vignettes/compiled_models.html
+vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html
+
+vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.Rmd
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.Rmd', dir = 'vignettes/web_only')"
+
+articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html
 
 pd:
-	"$(RBIN)/Rscript" -e "pkgdown::build_site()"
+	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
 	git add -A
-	git commit -m 'Static documentation except articles rebuilt by pkgdown' -e
-
-pd_articles:
-	"$(RBIN)/Rscript" -e "pkgdown::build_articles()"
-	git add -A
-	git commit -m 'Static documentation articles rebuilt by pkgdown::build_articles()' -e
+	git commit -m 'Static documentation rebuilt by pkgdown' -e
 
 r-forge:
 	git archive master > $(HOME)/git/mkin/mkin.tar;\
@@ -99,6 +100,17 @@ winbuilder: build
 
 drat: build
 	"$(RBIN)/Rscript" -e "drat::insertPackage('$(TGZ)', commit = TRUE)"
+
+$(WINBIN): build
+	@echo "Building windows binary package..."
+	"$(RBIN)/R" CMD INSTALL $(TGZ) --build
+	@echo "DONE."
+
+winbin: $(WINBIN)
+
+dratwin: winbin
+	"$(RBIN)/Rscript" -e "drat::insertPackage('$(WINBIN)', '~/git/drat/', commit = TRUE)"
+
 
 submit:
 	@echo "\nHow about make test, make check, make pd, make winbuilder"
