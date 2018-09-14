@@ -1,4 +1,4 @@
-# Copyright (C) 2016,2017 Johannes Ranke
+# Copyright (C) 2016,2017,2018 Johannes Ranke
 # Contact: jranke@uni-bremen.de
 
 # This file is part of the R package mkin
@@ -18,15 +18,13 @@
 
 context("Calculation of maximum time weighted average concentrations (TWAs)")
 
-twa_models <- c("SFO", "FOMC", "DFOP")
-fits <- mmkin(twa_models, list(FOCUS_D = FOCUS_2006_D), 
-              quiet = TRUE, cores = 1)
-
-SFO_SFO <- mkinmod(parent = list(type = "SFO", to = "m1"),
-                   m1 = list(type = "SFO"), quiet = TRUE)
-fit.m1 <- mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE)
 
 test_that("Time weighted average concentrations are correct", {
+  skip_on_cran()
+  twa_models <- c("SFO", "FOMC", "DFOP")
+  fits <- mmkin(twa_models, list(FOCUS_D = FOCUS_2006_D), 
+                quiet = TRUE, cores = 1)
+
   outtimes_7 <- seq(0, 7, length.out = 10000)
   for (model in twa_models) {
     fit <- fits[[model, 1]]

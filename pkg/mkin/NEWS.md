@@ -1,6 +1,26 @@
+# mkin 0.9.47.5 (2018-09-14)
+
+- Make the two-component error model stop in cases where it is inadequate to avoid nls crashes on windows
+
+- Move two vignettes to a location where they will not be built on CRAN (to avoid more NOTES from long execution times)
+
+- Exclude more example code from testing on CRAN to avoid NOTES from long execution times
+
+# mkin 0.9.47.3
+
+- 'mkinfit': Improve fitting the error model for reweight.method = 'tc'. Add 'manual' to possible arguments for 'weight'
+
+- Test that FOCUS_2006_C can be evaluated with DFOP and reweight.method = 'tc'
+
+# mkin 0.9.47.2 (2018-07-19)
+
+- 'sigma_twocomp': Rename 'sigma_rl' to 'sigma_twocomp' as the Rocke and Lorenzato model assumes lognormal distribution for large y. Correct references to the Rocke and Lorenzato model accordingly.
+
+- 'mkinfit': Use 1.1 as starting value for N parameter of IORE models to obtain convergence in more difficult cases. Show parameter names when 'trace_parms' is 'TRUE'.
+
 # mkin 0.9.47.1 (2018-02-06)
 
-- Skip some test on CRAN and winbuilder to avoid timeouts
+- Skip some tests on CRAN and winbuilder to avoid timeouts
 
 - 'test_data_from_UBA_2014': Added this list of datasets containing experimental data used in the expertise from 2014
 
