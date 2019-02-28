@@ -1,8 +1,8 @@
 Package: mkin
 Type: Package
 Title: Kinetic Evaluation of Chemical Degradation Data
-Version: 0.9.47.5
-Date: 2018-09-14
+Version: 0.9.48.1
+Date: 2019-02-27
 Authors@R: c(person("Johannes", "Ranke", role = c("aut", "cre", "cph"),
                     email = "jranke@uni-bremen.de",
                     comment = c(ORCID = "0000-0003-4371-6538")),
@@ -18,8 +18,9 @@ Description: Calculation routines based on the FOCUS Kinetics Report (2006,
   warranty is implied for correctness of results or fitness for a particular
   purpose.
 Imports: stats, graphics, methods, FME, deSolve, R6, minpack.lm, rootSolve,
-  inline, parallel
-Suggests: knitr, rbenchmark, tikzDevice, testthat
+  inline, parallel, plyr
+Suggests: knitr, rbenchmark, tikzDevice, testthat, rmarkdown, covr, vdiffr
+Remotes: r-lib/vdiffr
 License: GPL
 LazyLoad: yes
 LazyData: yes
@@ -27,4 +28,4 @@ Encoding: UTF-8
 VignetteBuilder: knitr
 BugReports: http://github.com/jranke/mkin/issues
 URL: https://cgit.jrwb.de/mkin/about
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

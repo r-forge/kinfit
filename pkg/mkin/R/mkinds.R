@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Johannes Ranke
+# Copyright (C) 2015,2018,2019 Johannes Ranke
 # Contact: jranke@uni-bremen.de
 
 # This file is part of the R package mkin
@@ -16,21 +16,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <http://www.gnu.org/licenses/>
 
-#' A dataset class for mkin
-#'
-#' @docType class
-#' @importFrom R6 R6Class
-#' @export
-#' @format An \code{\link{R6Class}} generator object.
-#' @field title A full title for the dataset
-#' @field sampling times The sampling times
-#' @field time_unit The time unit
-#' @field observed Names of the observed compounds
-#' @field unit The unit of the observations
-#' @field replicates The number of replicates
-#' @field data A dataframe with at least the columns name, time and value
-#'   in order to be compatible with mkinfit
-#' @example inst/examples/mkinds.R
 mkinds <- R6Class("mkinds",
   public = list(
     title = NULL,
@@ -43,13 +28,16 @@ mkinds <- R6Class("mkinds",
 
     initialize = function(title = "", data, time_unit = NA, unit = NA) {
 
-      self$title = title
-      self$sampling_times = sort(unique(data$time))
-      self$time_unit = time_unit
-      self$observed = unique(data$name)
-      self$unit = unit
-      self$replicates = max(by(data, list(data$name, data$time), nrow))
-      self$data = data
+      self$title <- title
+      self$sampling_times <- sort(unique(data$time))
+      self$time_unit <- time_unit
+      self$observed <- unique(data$name)
+      self$unit <- unit
+      self$replicates <- max(by(data, list(data$name, data$time), nrow))
+      if (is.null(data$override)) data$override <- NA
+      if (is.null(data$err)) data$err <- 1
+      self$data <- data
+
     }
   )
 )
@@ -60,6 +48,6 @@ print.mkinds <- function(x, ...) {
   cat("Observed compounds $observed: ", paste(x$observed, collapse = ", "), "\n")
   cat("Sampling times $sampling_times: ", paste(x$sampling_times, collapse = ", "), "\n")
   cat("With a maximum of ", x$replicates, " replicates\n")
-  if (!is.na(x$time_unit)) cat("Time units: ", x$time_units, "\n")
-  if (!is.na(x$unit)) cat("Observation units: ", x$units, "\n")
+  if (!is.na(x$time_unit)) cat("Time unit: ", x$time_unit, "\n")
+  if (!is.na(x$unit)) cat("Observation unit: ", x$unit, "\n")
 }

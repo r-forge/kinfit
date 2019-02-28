@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2018 Johannes Ranke
+# Copyright (C) 2010-2019 Johannes Ranke
 # Portions of this code are copyright (C) 2013 Eurofins Regulatory AG
 # Contact: jranke@uni-bremen.de
 # The summary function is an adapted and extended version of summary.modFit
@@ -48,7 +48,7 @@ mkinfit <- function(mkinmod, observed,
 {
   # Check mkinmod and generate a model for the variable whith the highest value
   # if a suitable string is given
-  parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE")
+  parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE", "logistic")
   if (class(mkinmod) != "mkinmod") {
     presumed_parent_name = observed[which.max(observed$value), "name"]
     if (mkinmod[[1]] %in% parent_models_available) {
@@ -99,10 +99,10 @@ mkinfit <- function(mkinmod, observed,
   # Define starting values for parameters where not specified by the user
   if (parms.ini[[1]] == "auto") parms.ini = vector()
 
-  # Prevent inital parameter specifications that are not in the model
+  # Warn for inital parameter specifications that are not in the model
   wrongpar.names <- setdiff(names(parms.ini), mkinmod$parms)
   if (length(wrongpar.names) > 0) {
-    stop("Initial parameter(s) ", paste(wrongpar.names, collapse = ", "),
+    warning("Initial parameter(s) ", paste(wrongpar.names, collapse = ", "),
          " not used in the model")
   }
 
@@ -153,6 +153,9 @@ mkinfit <- function(mkinmod, observed,
     if (parmname == "k2") parms.ini[parmname] = 0.01
     if (parmname == "tb") parms.ini[parmname] = 5
     if (parmname == "g") parms.ini[parmname] = 0.5
+    if (parmname == "kmax") parms.ini[parmname] = 0.1
+    if (parmname == "k0") parms.ini[parmname] = 0.0001
+    if (parmname == "r") parms.ini[parmname] = 0.2
   }
   # Default values for formation fractions in case they are present
   for (box in mod_vars) {
@@ -371,12 +374,16 @@ mkinfit <- function(mkinmod, observed,
   lower <- rep(-Inf, length(c(state.ini.optim, transparms.optim)))
   upper <- rep(Inf, length(c(state.ini.optim, transparms.optim)))
   names(lower) <- names(upper) <- c(names(state.ini.optim), names(transparms.optim))
+
+  # IORE exponentes are not transformed, but need a lower bound of zero
+  index_N <- grep("^N", names(lower))
+  lower[index_N] <- 0
   if (!transform_rates) {
     index_k <- grep("^k_", names(lower))
     lower[index_k] <- 0
     index_k__iore <- grep("^k__iore_", names(lower))
     lower[index_k__iore] <- 0
-    other_rate_parms <- intersect(c("alpha", "beta", "k1", "k2", "tb"), names(lower))
+    other_rate_parms <- intersect(c("alpha", "beta", "k1", "k2", "tb", "r"), names(lower))
     lower[other_rate_parms] <- 0
   }
 
@@ -405,6 +412,7 @@ mkinfit <- function(mkinmod, observed,
       if (! reweight.method %in% c("obs", "tc")) stop("Only reweighting methods 'obs' and 'tc' are implemented")
 
       if (reweight.method  == "obs") {
+        tc_fit <- NA
         if(!quiet) {
           cat("IRLS based on variance estimates for each observed variable\n")
           cat("Initial variance estimates are:\n")
@@ -412,35 +420,20 @@ mkinfit <- function(mkinmod, observed,
         }
       }
       if (reweight.method  == "tc") {
-        # We need unweighted residuals to update the weighting
-        cost_tmp <- cost(fit$par)
+        tc_fit <- .fit_error_model_mad_obs(cost(fit$par)$residuals, tc, 0)
 
-        # We need to supress warnings as we may have ties
-        p_tmp <- suppressWarnings(cor.test(abs(cost_tmp$residuals$res.unweighted),
-                          cost_tmp$residuals$obs, method = "kendall")$p.value)
-
-        if (p_tmp > 0.1) {
-          stop("No correlation of absolute residuals with observed values found.\n",
-               "Try without reweighting or with reweight.method = 'obs'.")
-        }
-
-        tc_fit <- try(
-          nls(abs(res.unweighted) ~ sigma_twocomp(obs, sigma_low, rsd_high),
-            start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
-            data = cost_tmp$residuals,
-            lower = 0,
-            algorithm = "port"))
-
-        if (inherits(tc_fit, "try-error")) {
-          stop("Estimation of the two error model components failed for the initial fit.\n",
-               "Try without reweighting or with reweight.method = 'obs'.")
-        }
-
-        tc_fitted <- coef(tc_fit)
-        if(!quiet) {
-          cat("IRLS based on variance estimates according to the Rocke and Lorenzato model\n")
-          cat("Initial variance components are:\n")
-          print(signif(tc_fitted))
+        if (is.character(tc_fit)) {
+          if (!quiet) {
+            cat(tc_fit, ".\n", "No reweighting will be performed.")
+          }
+          tc_fitted <- c(sigma_low = NA, rsd_high = NA)
+        } else {
+          tc_fitted <- coef(tc_fit)
+          if(!quiet) {
+            cat("IRLS based on variance estimates according to the two component error model\n")
+            cat("Initial variance components are:\n")
+            print(signif(tc_fitted))
+          }
         }
       }
       reweight.diff = 1
@@ -448,7 +441,9 @@ mkinfit <- function(mkinmod, observed,
       if (!is.null(err)) observed$err.ini <- observed[[err]]
       err = "err.irls"
 
-      while (reweight.diff > reweight.tol & n.iter < reweight.max.iter) {
+      while (reweight.diff > reweight.tol &
+             n.iter < reweight.max.iter &
+             !is.character(tc_fit)) {
         n.iter <- n.iter + 1
         # Store squared residual predictors used for weighting in sr_old and define new weights
         if (reweight.method == "obs") {
@@ -457,7 +452,12 @@ mkinfit <- function(mkinmod, observed,
         }
         if (reweight.method == "tc") {
           sr_old <- tc_fitted
-          observed[err] <- predict(tc_fit)
+
+          tmp_predicted <- mkin_wide_to_long(out_predicted, time = "time")
+          tmp_data <- suppressMessages(join(observed, tmp_predicted, by = c("time", "name")))
+
+          #observed[err] <- predict(tc_fit, newdata = data.frame(mod = tmp_data[[4]]))
+          observed[err] <- predict(tc_fit, newdata = data.frame(obs = observed$value))
 
         }
         fit <- modFit(cost, fit$par, method = method.modFit,
@@ -467,21 +467,17 @@ mkinfit <- function(mkinmod, observed,
           sr_new <- fit$var_ms_unweighted
         }
         if (reweight.method == "tc") {
-          cost_tmp <- cost(fit$par)
+          tc_fit <- .fit_error_model_mad_obs(cost(fit$par)$residuals, tc_fitted, n.iter)
 
-          tc_fit <- try(nls(abs(res.unweighted) ~ sigma_twocomp(obs, sigma_low, rsd_high),
-            start = as.list(tc_fitted),
-            data = cost_tmp$residuals,
-            lower = 0,
-            algorithm = "port"))
-
-          if (inherits(tc_fit, "try-error")) {
-            stop("Estimation of the two error model components failed during reweighting.\n",
-                 "Try without reweighting or with reweight.method = 'obs'.")
+          if (is.character(tc_fit)) {
+            if (!quiet) {
+              cat(tc_fit, ".\n")
+            }
+            break
+          } else {
+            tc_fitted <- coef(tc_fit)
+            sr_new <- tc_fitted
           }
-
-          tc_fitted <- coef(tc_fit)
-          sr_new <- tc_fitted
         }
 
         reweight.diff = sum((sr_new - sr_old)^2)
@@ -530,10 +526,13 @@ mkinfit <- function(mkinmod, observed,
     }
   }
 
-  # Return number of iterations for SANN method
+  # Return number of iterations for SANN method and alert user to check if
+  # the approximation to the optimum is sufficient
   if (method.modFit == "SANN") {
     fit$iter = maxit.modFit
-    if(!quiet) cat("Termination of the SANN algorithm does not imply convergence.\n")
+    fit$warning <- paste0("Termination of the SANN algorithm does not imply convergence.\n",
+      "Make sure the approximation of the optimum is adequate.")
+    warning(fit$warning)
   }
 
   # We need to return some more data for summary and plotting
@@ -744,6 +743,16 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
 
   ans$errmin <- mkinerrmin(object, alpha = 0.05)
 
+  if (object$calls > 0) {
+    if (!is.null(ans$cov.unscaled)){
+      Corr <- cov2cor(ans$cov.unscaled)
+      rownames(Corr) <- colnames(Corr) <- rownames(ans$par)
+      ans$Corr <- Corr
+    } else {
+      warning("Could not estimate covariance matrix; singular system.")
+    }
+  }
+
   ans$bparms.ode <- object$bparms.ode
   ep <- endpoints(object)
   if (length(ep$ff) != 0)
@@ -815,13 +824,9 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   if (x$calls > 0) {
     cat("\nParameter correlation:\n")
     if (!is.null(x$cov.unscaled)){
-      Corr <- cov2cor(x$cov.unscaled)
-      rownames(Corr) <- colnames(Corr) <- rownames(x$par)
-      print(Corr, digits = digits, ...)
+      print(x$Corr, digits = digits, ...)
     } else {
-      msg <- "Could not estimate covariance matrix; singular system:\n"
-      warning(msg)
-      cat(msg)
+      cat("Could not estimate covariance matrix; singular system.")
     }
   }
 
@@ -869,4 +874,54 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
 
   invisible(x)
 }
+
+# Fit the median absolute deviation against the observed values,
+# using the current error model for weighting
+.fit_error_model_mad_obs <- function(tmp_res, tc, iteration) {
+  mad_agg <- aggregate(tmp_res$res.unweighted,
+                       by = list(name = tmp_res$name, time = tmp_res$x),
+                       FUN = function(x) mad(x, center = 0))
+  names(mad_agg) <- c("name", "time", "mad")
+  error_data <- suppressMessages(
+    join(data.frame(name = tmp_res$name,
+                    time = tmp_res$x,
+                    obs = tmp_res$obs),
+         mad_agg))
+  error_data_complete <- na.omit(error_data)
+
+  tc_fit <- tryCatch(
+    nls(mad ~ sigma_twocomp(obs, sigma_low, rsd_high),
+      start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
+      weights = 1/sigma_twocomp(error_data_complete$obs,
+                                tc["sigma_low"],
+                                tc["rsd_high"])^2,
+      data = error_data_complete,
+      lower = 0,
+      algorithm = "port"),
+    error = function(e) paste("Fitting the error model failed in iteration", iteration))
+  return(tc_fit)
+}
+# Alternative way to fit the error model, fitting to modelled instead of
+# observed values
+# .fit_error_model_mad_mod <- function(tmp_res, tc) {
+#   mad_agg <- aggregate(tmp_res$res.unweighted,
+#                        by = list(name = tmp_res$name, time = tmp_res$x),
+#                        FUN = function(x) mad(x, center = 0))
+#   names(mad_agg) <- c("name", "time", "mad")
+#   mod_agg <- aggregate(tmp_res$mod,
+#                        by = list(name = tmp_res$name, time = tmp_res$x),
+#                        FUN = mean)
+#   names(mod_agg) <- c("name", "time", "mod")
+#   mod_mad <- merge(mod_agg, mad_agg)
+# 
+#   tc_fit <- tryCatch(
+#     nls(mad ~ sigma_twocomp(mod, sigma_low, rsd_high),
+#       start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
+#       data = mod_mad,
+#       weights = 1/mod_mad$mad,
+#       lower = 0,
+#       algorithm = "port"),
+#     error = "Fitting the error model failed in iteration")
+#   return(tc_fit)
+# }
 # vim: set ts=2 sw=2 expandtab:

@@ -1,0 +1,13 @@
+language: r
+r:
+  - release
+  - devel
+cache: packages
+addons:
+  apt:
+    packages:
+      - gcc
+github_packages:
+  - r-lib/covr
+after_success:
+  - Rscript -e 'covr::codecov()'
