@@ -1,3 +1,25 @@
+# mkin 0.9.48.1 (2019-02-22)
+
+- Add the function 'logLik.mkinfit' which makes it possible to calculate an AIC for mkinfit objects
+
+- Add the function 'AIC.mmkin' to makeqit easy to compare columns of mmkin objects
+
+- 'add_err': Respect the argument giving the number of replicates in the synthetic dataset
+
+- 'max_twa_parent': Support maximum time weighted average concentration calculations for the hockey stick (HS) model
+
+- 'mkinpredict': Make the function generic and create a method for mkinfit objects
+
+- 'mkinfit': Improve the correctness of the fitted two component error model by fitting the mean absolute deviance at each observation against the observed values, weighting with the current two-component error model
+
+- 'tests/testthat/test_irls.R': Test if the components of the error model used to generate the data can be reproduced with moderate accuracy
+
+- Add the function 'CAKE_export' to facilitate cross-checking of results
+
+- Implement the logistic model (only tested for parent fits)
+
+- 'nafta': Add evaluations according to the NAFTA guidance
+
 # mkin 0.9.47.5 (2018-09-14)
 
 - Make the two-component error model stop in cases where it is inadequate to avoid nls crashes on windows

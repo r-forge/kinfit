@@ -10,6 +10,7 @@ reference:
       - mkinmod
       - mkinfit
       - mmkin
+      - nafta
   - title: Show results
     desc: Functions working with mkinfit objects
     contents:
@@ -19,11 +20,13 @@ reference:
       -  mkinparplot
       -  endpoints
       -  mkinerrmin
+      - logLik.mkinfit
   - title: Work with mmkin objects
     desc: Functions working with aggregated results
     contents:
       - "`[.mmkin`"
       - plot.mmkin
+      - AIC.mmkin
   - title: Datasets and known results
     contents:
       - FOCUS_2006_A
@@ -31,12 +34,19 @@ reference:
       - FOCUS_2006_FOMC_ref_A_to_F
       - FOCUS_2006_HS_ref_A_to_F
       - FOCUS_2006_DFOP_ref_A_to_B
+      - NAFTA_SOP_2015
+      - NAFTA_SOP_Attachment
       - mccall81_245T
       - schaefer07_complex_case
       - synthetic_data_for_UBA_2014
       - test_data_from_UBA_2014
       - mkinds
       - print.mkinds
+  - title: NAFTA guidance
+    contents:
+      - nafta
+      - print.nafta
+      - plot.nafta
   - title: Helper functions
     contents:
       - geometric_mean
@@ -49,6 +59,7 @@ reference:
       - transform_odeparms
       - ilr
       - sigma_twocomp
+      - CAKE_export
   - title: Analytical solutions
     desc: Parent only model solutions
     contents:
@@ -58,6 +69,7 @@ reference:
       - SFORB.solution
       - HS.solution
       - IORE.solution
+      - logistic.solution
   - title: Generate synthetic datasets
     contents:
       - add_err
@@ -86,5 +98,7 @@ navbar:
         href: articles/web_only/compiled_models.html
       - text: Calculation of time weighted average concentrations with mkin
         href: articles/twa.html
+      - text: Example evaluation of NAFTA SOP Attachment examples
+        href: articles/web_only/NAFTA_examples.html
     - text: News
       href: news/index.html
