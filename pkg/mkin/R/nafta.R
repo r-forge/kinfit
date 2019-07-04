@@ -42,8 +42,8 @@ nafta <- function(ds, title = NA, quiet = FALSE, ...) {
 
   # Compare the sum of squared residuals (SSR) to the upper bound of the
   # confidence region of the SSR for the IORE model
-  result$S <- sapply(result$mmkin, function(x) x$ssr)
-  names(result$S) <- models
+  result$S <- sapply(result$mmkin, function(x) sum(x$data$residual^2))
+  names(result$S) <- c("SFO", "IORE", "DFOP")
   # Equation (3) on p. 3
   p <- 3
   result$S["IORE"]
@@ -64,18 +64,18 @@ plot.nafta <- function(x, legend = FALSE, main = "auto", ...) {
   plot(x$mmkin, ..., legend = legend, main = main)
 }
 
-print.nafta <- function(x, quiet = TRUE, ...) {
+print.nafta <- function(x, quiet = TRUE, digits = 3, ...) {
   cat("Sums of squares:\n")
   print(x$S)
   cat("\nCritical sum of squares for checking the SFO model:\n")
   print(x$S_c)
   cat("\nParameters:\n")
-  print(x$parameters)
+  print(x$parameters, digits = digits)
   t_rep <- .evaluate_nafta_results(x$S, x$S_c, x$distimes, quiet = quiet)
   cat("\nDTx values:\n")
-  print(signif((x$distimes), 3))
+  print(signif(x$distimes, digits = digits))
   cat("\nRepresentative half-life:\n")
-  print(t_rep)
+  print(round(t_rep, 2))
 }
 
 .evaluate_nafta_results <- function(S, S_c, distimes, quiet = FALSE) {

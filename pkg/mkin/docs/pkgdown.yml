@@ -1,5 +1,5 @@
 pandoc: 2.2.1
-pkgdown: 1.3.0.9000
+pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
   FOCUS_D: FOCUS_D.html
@@ -8,5 +8,6 @@ articles:
   twa: twa.html
   FOCUS_Z: web_only/FOCUS_Z.html
   NAFTA_examples: web_only/NAFTA_examples.html
+  benchmarks: web_only/benchmarks.html
   compiled_models: web_only/compiled_models.html
 

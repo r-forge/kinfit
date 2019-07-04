@@ -7,22 +7,25 @@ Critical sum of squares for checking the SFO model:
 
 Parameters:
 $SFO
-                Estimate       Pr(>t)      Lower      Upper
-parent_0      51.2430312 1.178492e-10 45.4036817 57.0823806
-k_parent_sink  0.2531291 1.608492e-06  0.1935733  0.3310082
+              Estimate   Pr(>t)  Lower  Upper
+parent_0        51.243 2.12e-10 45.724 56.762
+k_parent_sink    0.253 2.95e-06  0.193  0.332
+sigma            3.529 1.28e-04  2.061  4.997
 
 $IORE
-                        Estimate       Pr(>t)        Lower        Upper
-parent_0            51.710529483 8.522723e-15 4.951371e+01 53.907348241
-k__iore_parent_sink  0.001348359 6.841094e-02 3.421379e-04  0.005313859
-N_parent             2.661469429 3.975823e-08 2.191012e+00  3.131927092
+                    Estimate   Pr(>t)    Lower    Upper
+parent_0            51.71053 2.60e-14 4.97e+01 53.68122
+k__iore_parent_sink  0.00135 5.21e-02 3.88e-04  0.00469
+N_parent             2.66147 3.67e-08 2.23e+00  3.08855
+sigma                1.25124 1.76e-04 7.24e-01  1.77811
 
 $DFOP
-            Estimate       Pr(>t)        Lower       Upper
-parent_0 51.70546719 3.457982e-14 49.677926850 53.73300753
-k1        0.41569648 1.002119e-06  0.330769606  0.52242879
-k2        0.01273299 1.393989e-03  0.007230162  0.02242399
-g         0.83380396 5.718367e-12  0.771816175  0.88153694
+         Estimate   Pr(>t)    Lower   Upper
+parent_0  51.7055 8.99e-14 49.96593 53.4450
+k1         0.4157 5.65e-07  0.34129  0.5063
+k2         0.0127 7.78e-04  0.00768  0.0211
+g          0.8338 1.09e-11  0.78030  0.8763
+sigma      1.0880 2.50e-04  0.62286  1.5531
 
 
 DTx values:
@@ -32,4 +35,4 @@ IORE 1.37 28.5     8.57
 DFOP 2.17 39.9    54.40
 
 Representative half-life:
-[1] 8.573302
+[1] 8.57

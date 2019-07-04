@@ -19,7 +19,7 @@
 models <- c("SFO", "FOMC", "DFOP", "HS")
 fits <- mmkin(models,
   list(FOCUS_C = FOCUS_2006_C, FOCUS_D = FOCUS_2006_D),
-  quiet = TRUE, cores = if (Sys.getenv("TRAVIS") == "") 15 else 1)
+  quiet = TRUE, cores = 1)
 
 context("Calculation of maximum time weighted average concentrations (TWAs)")
 
@@ -58,6 +58,10 @@ test_that("The summary is reproducible", {
   test_summary$date.summary <- "Dummy date for testing"
   test_summary$calls <- "test 0"
   test_summary$time <- c(elapsed = "test time 0")
+  # The correlation matrix is quite platform dependent
+  # It differs between i386 and amd64 on Windows
+  # and between Travis and my own Linux system
+  test_summary$Corr <- signif(test_summary$Corr, 1)
   expect_known_output(print(test_summary), "summary_DFOP_FOCUS_C.txt")
 })
 
@@ -79,8 +83,8 @@ test_that("Plotting mmkin objects is reproducible", {
 context("AIC calculation")
 
 test_that("The AIC is reproducible", {
-  expect_equivalent(AIC(fits[["SFO", "FOCUS_C"]]), 59.8, scale = 1, tolerance = 0.1)
+  expect_equivalent(AIC(fits[["SFO", "FOCUS_C"]]), 59.3, scale = 1, tolerance = 0.1)
   expect_equivalent(AIC(fits[, "FOCUS_C"]), 
-                    data.frame(df = c(3, 4, 5, 5), AIC = c(59.8, 44.7, 29.1, 39.3)), 
+                    data.frame(df = c(3, 4, 5, 5), AIC = c(59.3, 44.7, 29.0, 39.2)), 
                     scale = 1, tolerance = 0.1)
 })
