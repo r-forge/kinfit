@@ -1,9 +1,6 @@
 # Copyright (C) 2010-2019 Johannes Ranke
 # Portions of this code are copyright (C) 2013 Eurofins Regulatory AG
 # Contact: jranke@uni-bremen.de
-# The summary function is an adapted and extended version of summary.modFit
-# from the FME package, v 1.1 by Soetart and Petzoldt, which was in turn
-# inspired by summary.nls.lm
 
 # This file is part of the R package mkin
 
@@ -24,24 +21,20 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 mkinfit <- function(mkinmod, observed,
   parms.ini = "auto",
   state.ini = "auto",
+  err.ini = "auto",
   fixed_parms = NULL,
   fixed_initials = names(mkinmod$diffs)[-1],
   from_max_mean = FALSE,
   solution_type = c("auto", "analytical", "eigen", "deSolve"),
   method.ode = "lsoda",
   use_compiled = "auto",
-  method.modFit = c("Port", "Marq", "SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B"),
-  maxit.modFit = "auto",
-  control.modFit = list(),
+  control = list(eval.max = 300, iter.max = 200),
   transform_rates = TRUE,
   transform_fractions = TRUE,
-  plot = FALSE, quiet = FALSE,
-  err = NULL,
-  weight = c("none", "manual", "std", "mean", "tc"),
-  tc = c(sigma_low = 0.5, rsd_high = 0.07),
-  scaleVar = FALSE,
+  quiet = FALSE,
   atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
-  reweight.method = NULL,
+  error_model = c("const", "obs", "tc"),
+  error_model_algorithm = c("d_3", "direct", "twostep", "threestep", "fourstep", "IRLS"),
   reweight.tol = 1e-8, reweight.max.iter = 10,
   trace_parms = FALSE,
   ...)
@@ -61,19 +54,6 @@ mkinfit <- function(mkinmod, observed,
     }
   }
 
-  # Check optimisation method and set maximum number of iterations if specified
-  method.modFit = match.arg(method.modFit)
-  if (maxit.modFit != "auto") {
-    if (method.modFit == "Marq") control.modFit$maxiter = maxit.modFit
-    if (method.modFit == "Port") {
-      control.modFit$iter.max = maxit.modFit
-      control.modFit$eval.max = maxit.modFit
-    }
-    if (method.modFit %in% c("SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B")) {
-        control.modFit$maxit = maxit.modFit
-    }
-  }
-
   # Get the names of the state variables in the model
   mod_vars <- names(mkinmod$diffs)
 
@@ -83,6 +63,12 @@ mkinfit <- function(mkinmod, observed,
   # Subset observed data with names of observed data in the model and remove NA values
   observed <- subset(observed, name %in% obs_vars)
   observed <- subset(observed, !is.na(value))
+
+  # Also remove zero values to avoid instabilities (e.g. of the 'tc' error model)
+  if (any(observed$value == 0)) {
+    warning("Observations with value of zero were removed from the data")
+    observed <- subset(observed, value != 0)
+  }
 
   # Obtain data for decline from maximum mean value if requested
   if (from_max_mean) {
@@ -96,6 +82,9 @@ mkinfit <- function(mkinmod, observed,
     observed$time <- observed$time - t_of_max
   }
 
+  # Number observations used for fitting
+  n_observed <- nrow(observed)
+
   # Define starting values for parameters where not specified by the user
   if (parms.ini[[1]] == "auto") parms.ini = vector()
 
@@ -104,6 +93,7 @@ mkinfit <- function(mkinmod, observed,
   if (length(wrongpar.names) > 0) {
     warning("Initial parameter(s) ", paste(wrongpar.names, collapse = ", "),
          " not used in the model")
+    parms.ini <- parms.ini[setdiff(names(parms.ini), wrongpar.names)]
   }
 
   # Warn that the sum of formation fractions may exceed one if they are not
@@ -254,47 +244,94 @@ mkinfit <- function(mkinmod, observed,
     }
   }
 
+  # Get the error model
+  err_mod <- match.arg(error_model)
+  error_model_algorithm = match.arg(error_model_algorithm)
+  errparm_names <- switch(err_mod,
+    "const" = "sigma",
+    "obs" = paste0("sigma_", obs_vars),
+    "tc" = c("sigma_low", "rsd_high"))
+
+  # Define starting values for the error model
+  if (err.ini[1] != "auto") {
+    if (!identical(names(err.ini), errparm_names)) {
+      stop("Please supply initial values for error model components ", paste(errparm_names, collapse = ", "))
+    } else {
+      errparms = err.ini
+    }
+  } else {
+    if (err_mod == "const") {
+      errparms = 3
+    }
+    if (err_mod == "obs") {
+      errparms = rep(3, length(obs_vars))
+    }
+    if (err_mod == "tc") {
+      errparms <- c(sigma_low = 0.1, rsd_high = 0.1)
+    }
+    names(errparms) <- errparm_names
+  }
+
   # Define outtimes for model solution.
   # Include time points at which observed data are available
   outtimes = sort(unique(c(observed$time, seq(min(observed$time),
                                               max(observed$time),
                                               length.out = n.outtimes))))
 
-  weight.ini <- weight <- match.arg(weight)
-  if (weight.ini == "tc") {
-     observed$err = sigma_twocomp(observed$value, tc["sigma_low"], tc["rsd_high"])
-     err <- "err"
-  } else {
-    if (!is.null(err)) weight.ini = "manual"
-  }
-
-  cost.old <- 1e100 # The first model cost should be smaller than this value
-  calls <- 0 # Counter for number of model solutions
-  out_predicted <- NA
-
-  # Define the model cost function for optimisation, including (back)transformations
-  cost <- function(P)
+  # Define log-likelihood function for optimisation, including (back)transformations
+  nlogLik <- function(P, trans = TRUE, OLS = FALSE, fixed_degparms = FALSE, fixed_errparms = FALSE, update_data = TRUE, ...)
   {
-    assign("calls", calls+1, inherits=TRUE) # Increase the model solution counter
+    assign("calls", calls + 1, inherits = TRUE) # Increase the model solution counter
 
-    # Trace parameter values if requested
-    if(trace_parms) cat(P, "\n")
+    # Trace parameter values if requested and if we are actually optimising
+    if(trace_parms & update_data) cat(P, "\n")
 
+    if (is.numeric(fixed_degparms)) {
+      degparms <- fixed_degparms
+      errparms <- P # This version of errparms is local to the function
+      degparms_fixed = TRUE
+    } else {
+      degparms_fixed = FALSE
+    }
+
+    if (is.numeric(fixed_errparms)) {
+      degparms <- P
+      errparms <- fixed_errparms # Local to the function
+      errparms_fixed = TRUE
+    } else {
+      errparms_fixed = FALSE
+    }
+
+    if (OLS) {
+      degparms <- P
+    }
+
+    if (!OLS & !degparms_fixed & !errparms_fixed) {
+      degparms <- P[1:(length(P) - length(errparms))]
+      errparms <- P[(length(degparms) + 1):length(P)]
+    }
+
+    # Initial states for t0
     if(length(state.ini.optim) > 0) {
-      odeini <- c(P[1:length(state.ini.optim)], state.ini.fixed)
+      odeini <- c(degparms[1:length(state.ini.optim)], state.ini.fixed)
       names(odeini) <- c(state.ini.optim.boxnames, state.ini.fixed.boxnames)
     } else {
       odeini <- state.ini.fixed
       names(odeini) <- state.ini.fixed.boxnames
     }
 
-    odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], transparms.fixed)
+    odeparms.optim <- degparms[(length(state.ini.optim) + 1):length(degparms)]
 
-    parms <- backtransform_odeparms(odeparms, mkinmod,
-                                    transform_rates = transform_rates,
-                                    transform_fractions = transform_fractions)
+    if (trans == TRUE) {
+      odeparms <- c(odeparms.optim, transparms.fixed)
+      parms <- backtransform_odeparms(odeparms, mkinmod,
+                                      transform_rates = transform_rates,
+                                      transform_fractions = transform_fractions)
+    } else {
+      parms <- c(odeparms.optim, parms.fixed)
+    }
 
-    # Solve the system with current transformed parameter values
+    # Solve the system with current parameter values
     out <- mkinpredict(mkinmod, parms,
                        odeini, outtimes,
                        solution_type = solution_type,
@@ -302,82 +339,64 @@ mkinfit <- function(mkinmod, observed,
                        method.ode = method.ode,
                        atol = atol, rtol = rtol, ...)
 
-    assign("out_predicted", out, inherits=TRUE)
+    out_long <- mkin_wide_to_long(out, time = "time")
 
-    mC <- modCost(out, observed, y = "value",
-      err = err, weight = weight, scaleVar = scaleVar)
-
-    # Report and/or plot if the model is improved
-    if (mC$model < cost.old) {
-      if(!quiet) cat("Model cost at call ", calls, ": ", mC$model, "\n")
-
-      # Plot the data and current model output if requested
-      if(plot) {
-        outtimes_plot = seq(min(observed$time), max(observed$time), length.out=100)
-
-        out_plot <- mkinpredict(mkinmod, parms,
-                                odeini, outtimes_plot,
-                                solution_type = solution_type,
-                                use_compiled = use_compiled,
-                                method.ode = method.ode,
-                                atol = atol, rtol = rtol, ...)
-
-        plot(0, type="n",
-          xlim = range(observed$time), ylim = c(0, max(observed$value, na.rm=TRUE)),
-          xlab = "Time", ylab = "Observed")
-        col_obs <- pch_obs <- 1:length(obs_vars)
-        lty_obs <- rep(1, length(obs_vars))
-        names(col_obs) <- names(pch_obs) <- names(lty_obs) <- obs_vars
-        for (obs_var in obs_vars) {
-          points(subset(observed, name == obs_var, c(time, value)),
-                 pch = pch_obs[obs_var], col = col_obs[obs_var])
-        }
-        matlines(out_plot$time, out_plot[-1], col = col_obs, lty = lty_obs)
-        legend("topright", inset=c(0.05, 0.05), legend=obs_vars,
-          col=col_obs, pch=pch_obs, lty=1:length(pch_obs))
-      }
-
-      assign("cost.old", mC$model, inherits=TRUE)
+    if (err_mod == "const") {
+      observed$std <- errparms["sigma"]
     }
-    return(mC)
-  }
+    if (err_mod == "obs") {
+      std_names <- paste0("sigma_", observed$name)
+      observed$std <- errparms[std_names]
+    }
+    if (err_mod == "tc") {
+      tmp <- merge(observed, out_long, by = c("time", "name"))
+      tmp$name <- ordered(tmp$name, levels = obs_vars)
+      tmp <- tmp[order(tmp$name, tmp$time), ]
+      observed$std <- sqrt(errparms["sigma_low"]^2 + tmp$value.y^2 * errparms["rsd_high"]^2)
+    }
 
-  # Define the model cost function for the t-test, without parameter transformation
-  cost_notrans <- function(P)
-  {
-    if(length(state.ini.optim) > 0) {
-      odeini <- c(P[1:length(state.ini.optim)], state.ini.fixed)
-      names(odeini) <- c(state.ini.optim.boxnames, state.ini.fixed.boxnames)
+    data_log_lik <- merge(observed[c("name", "time", "value", "std")], out_long,
+                         by = c("name", "time"), suffixes = c(".observed", ".predicted"))
+
+    if (OLS) {
+      nlogLik <- with(data_log_lik, sum((value.observed - value.predicted)^2))
     } else {
-      odeini <- state.ini.fixed
-      names(odeini) <- state.ini.fixed.boxnames
+      nlogLik <- - with(data_log_lik,
+        sum(dnorm(x = value.observed, mean = value.predicted, sd = std, log = TRUE)))
     }
 
-    odeparms <- c(P[(length(state.ini.optim) + 1):length(P)], parms.fixed)
+    # We update the current likelihood and data during the optimisation, not
+    # during hessian calculations
+    if (update_data) {
 
-    # Solve the system with current parameter values
-    out <- mkinpredict(mkinmod, odeparms,
-                       odeini, outtimes,
-                       solution_type = solution_type,
-                       use_compiled = use_compiled,
-                       method.ode = method.ode,
-                       atol = atol, rtol = rtol, ...)
+      assign("out_predicted", out_long, inherits = TRUE)
+      assign("data_errmod", data_log_lik, inherits = TRUE)
 
-    mC <- modCost(out, observed, y = "value",
-      err = err, weight = weight, scaleVar = scaleVar)
-
-    return(mC)
+      if (nlogLik < nlogLik.current) {
+        assign("nlogLik.current", nlogLik, inherits = TRUE)
+        if (!quiet) cat(ifelse(OLS, "Sum of squared residuals", "Negative log-likelihood"),
+                        " at call ", calls, ": ", nlogLik.current, "\n", sep = "")
+      }
+    }
+    return(nlogLik)
   }
+
+  n_optim <- length(c(state.ini.optim, transparms.optim, errparm_names))
+  names_optim <- c(names(state.ini.optim),
+                   names(transparms.optim),
+                   errparm_names)
 
   # Define lower and upper bounds other than -Inf and Inf for parameters
-  # for which no internal transformation is requested in the call to mkinfit.
-  lower <- rep(-Inf, length(c(state.ini.optim, transparms.optim)))
-  upper <- rep(Inf, length(c(state.ini.optim, transparms.optim)))
-  names(lower) <- names(upper) <- c(names(state.ini.optim), names(transparms.optim))
+  # for which no internal transformation is requested in the call to mkinfit
+  # and for error model parameters
+  lower <- rep(-Inf, n_optim)
+  upper <- rep(Inf, n_optim)
+  names(lower) <- names(upper) <- names_optim
 
-  # IORE exponentes are not transformed, but need a lower bound of zero
+  # IORE exponents are not transformed, but need a lower bound
   index_N <- grep("^N", names(lower))
   lower[index_N] <- 0
+
   if (!transform_rates) {
     index_k <- grep("^k_", names(lower))
     lower[index_k] <- 0
@@ -396,151 +415,181 @@ mkinfit <- function(mkinmod, observed,
     upper[other_fraction_parms] <- 1
   }
 
+  if (err_mod == "const") {
+    lower["sigma"] <- 0
+  }
+  if (err_mod == "obs") {
+    index_sigma <- grep("^sigma_", names(lower))
+    lower[index_sigma] <- 0
+  }
+  if (err_mod == "tc") {
+    lower["sigma_low"] <- 0
+    lower["rsd_high"] <- 0
+  }
+
+  # Counter for likelihood evaluations
+  calls = 0
+  nlogLik.current <- Inf
+  out_predicted <- NA
+  data_errmod <- NA
+
   # Show parameter names if tracing is requested
-  if(trace_parms) cat(names(c(state.ini.optim, transparms.optim)), "\n")
+  if(trace_parms) cat(names_optim, "\n")
 
-  # Do the fit and take the time
+  # browser()
+
+  # Do the fit and take the time until the hessians are calculated
   fit_time <- system.time({
-    fit <- modFit(cost, c(state.ini.optim, transparms.optim),
-                  method = method.modFit, control = control.modFit,
-                  lower = lower, upper = upper, ...)
+    degparms <- c(state.ini.optim, transparms.optim)
 
-    # Reiterate the fit until convergence of the variance components (IRLS)
-    # if requested by the user
+    if (err_mod == "const") {
+      if (!quiet) message("Ordinary least squares optimisation")
+      fit <- nlminb(degparms, nlogLik, control = control,
+        lower = lower[names(degparms)],
+        upper = upper[names(degparms)], OLS = TRUE, ...)
+      degparms <- fit$par
 
-    if (!is.null(reweight.method)) {
-      if (! reweight.method %in% c("obs", "tc")) stop("Only reweighting methods 'obs' and 'tc' are implemented")
+      # Get the maximum likelihood estimate for sigma at the optimum parameter values
+      data_errmod$residual <- data_errmod$value.observed - data_errmod$value.predicted
+      sigma_mle <- sqrt(sum(data_errmod$residual^2)/nrow(data_errmod))
 
-      if (reweight.method  == "obs") {
-        tc_fit <- NA
-        if(!quiet) {
-          cat("IRLS based on variance estimates for each observed variable\n")
-          cat("Initial variance estimates are:\n")
-          print(signif(fit$var_ms_unweighted, 8))
-        }
+      errparms <- c(sigma = sigma_mle)
+      nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
+      fit$logLik <- - nlogLik.current
+    } else {
+      if (error_model_algorithm == "d_3") {
+        if (!quiet) message("Directly optimising the complete model")
+        parms.start <- c(degparms, errparms)
+        fit_direct <- nlminb(parms.start, nlogLik,
+          lower = lower[names(parms.start)],
+          upper = upper[names(parms.start)],
+          control = control, ...)
+        fit_direct$logLik <- - nlogLik.current
+        nlogLik.current <- Inf # reset to avoid conflict with the OLS step
       }
-      if (reweight.method  == "tc") {
-        tc_fit <- .fit_error_model_mad_obs(cost(fit$par)$residuals, tc, 0)
+      if (error_model_algorithm != "direct") {
+        if (!quiet) message("Ordinary least squares optimisation")
+        fit <- nlminb(degparms, nlogLik, control = control,
+          lower = lower[names(degparms)],
+          upper = upper[names(degparms)], OLS = TRUE, ...)
+        degparms <- fit$par
+        # Get the maximum likelihood estimate for sigma at the optimum parameter values
+        data_errmod$residual <- data_errmod$value.observed - data_errmod$value.predicted
+        sigma_mle <- sqrt(sum(data_errmod$residual^2)/nrow(data_errmod))
 
-        if (is.character(tc_fit)) {
-          if (!quiet) {
-            cat(tc_fit, ".\n", "No reweighting will be performed.")
-          }
-          tc_fitted <- c(sigma_low = NA, rsd_high = NA)
-        } else {
-          tc_fitted <- coef(tc_fit)
-          if(!quiet) {
-            cat("IRLS based on variance estimates according to the two component error model\n")
-            cat("Initial variance components are:\n")
-            print(signif(tc_fitted))
-          }
-        }
+        nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
+        fit$logLik <- - nlogLik.current
       }
-      reweight.diff = 1
-      n.iter <- 0
-      if (!is.null(err)) observed$err.ini <- observed[[err]]
-      err = "err.irls"
+      if (error_model_algorithm %in% c("threestep", "fourstep", "d_3")) {
+        if (!quiet) message("Optimising the error model")
+        fit <- nlminb(errparms, nlogLik, control = control,
+          lower = lower[names(errparms)],
+          upper = upper[names(errparms)],
+          fixed_degparms = degparms, ...)
+        errparms <- fit$par
+      }
+      if (error_model_algorithm == "fourstep") {
+        if (!quiet) message("Optimising the degradation model")
+        fit <- nlminb(degparms, nlogLik, control = control,
+          lower = lower[names(degparms)],
+          upper = upper[names(degparms)],
+          fixed_errparms = errparms, ...)
+        degparms <- fit$par
+      }
+      if (error_model_algorithm %in% c("direct", "twostep", "threestep",
+                                       "fourstep", "d_3")) {
+        if (!quiet) message("Optimising the complete model")
+        parms.start <- c(degparms, errparms)
+        fit <- nlminb(parms.start, nlogLik,
+          lower = lower[names(parms.start)],
+          upper = upper[names(parms.start)],
+          control = control, ...)
+        fit$logLik <- - nlogLik.current
 
-      while (reweight.diff > reweight.tol &
-             n.iter < reweight.max.iter &
-             !is.character(tc_fit)) {
-        n.iter <- n.iter + 1
-        # Store squared residual predictors used for weighting in sr_old and define new weights
-        if (reweight.method == "obs") {
-          sr_old <- fit$var_ms_unweighted
-          observed[err] <- sqrt(fit$var_ms_unweighted[as.character(observed$name)])
-        }
-        if (reweight.method == "tc") {
-          sr_old <- tc_fitted
-
-          tmp_predicted <- mkin_wide_to_long(out_predicted, time = "time")
-          tmp_data <- suppressMessages(join(observed, tmp_predicted, by = c("time", "name")))
-
-          #observed[err] <- predict(tc_fit, newdata = data.frame(mod = tmp_data[[4]]))
-          observed[err] <- predict(tc_fit, newdata = data.frame(obs = observed$value))
-
-        }
-        fit <- modFit(cost, fit$par, method = method.modFit,
-                      control = control.modFit, lower = lower, upper = upper, ...)
-
-        if (reweight.method == "obs") {
-          sr_new <- fit$var_ms_unweighted
-        }
-        if (reweight.method == "tc") {
-          tc_fit <- .fit_error_model_mad_obs(cost(fit$par)$residuals, tc_fitted, n.iter)
-
-          if (is.character(tc_fit)) {
-            if (!quiet) {
-              cat(tc_fit, ".\n")
-            }
-            break
+        d_3_messages = c(
+           same = "Direct fitting and three-step fitting yield approximately the same likelihood",
+           threestep = "Three-step fitting yielded a higher likelihood than direct fitting",
+           direct = "Direct fitting yielded a higher likelihood than three-step fitting")
+        if (error_model_algorithm == "d_3") {
+          rel_diff <- abs((fit_direct$logLik - fit$logLik))/-mean(c(fit_direct$logLik, fit$logLik))
+          if (rel_diff < 0.0001) {
+            if (!quiet) message(d_3_messages["same"])
+            fit$d_3_message <- d_3_messages["same"]
           } else {
-            tc_fitted <- coef(tc_fit)
-            sr_new <- tc_fitted
+            if (fit$logLik > fit_direct$logLik) {
+              if (!quiet) message(d_3_messages["threestep"])
+              fit$d_3_message <- d_3_messages["threestep"]
+            } else {
+              if (!quiet) message(d_3_messages["direct"])
+              fit <- fit_direct
+              fit$d_3_message <- d_3_messages["direct"]
+            }
           }
         }
+      }
+      if (err_mod != "const" & error_model_algorithm == "IRLS") {
+        reweight.diff <- 1
+        n.iter <- 0
+        errparms_last <- errparms
 
-        reweight.diff = sum((sr_new - sr_old)^2)
-        if (!quiet) {
-          cat("Iteration", n.iter, "yields variance estimates:\n")
-          print(signif(sr_new, 8))
-          cat("Sum of squared differences to last variance (component) estimates:",
-              signif(reweight.diff, 2), "\n")
+        while (reweight.diff > reweight.tol &
+               n.iter < reweight.max.iter) {
+
+          if (!quiet) message("Optimising the error model")
+          fit <- nlminb(errparms, nlogLik, control = control,
+            lower = lower[names(errparms)],
+            upper = upper[names(errparms)],
+            fixed_degparms = degparms, ...)
+          errparms <- fit$par
+
+          if (!quiet) message("Optimising the degradation model")
+          fit <- nlminb(degparms, nlogLik, control = control,
+            lower = lower[names(degparms)],
+            upper = upper[names(degparms)],
+            fixed_errparms = errparms, ...)
+          degparms <- fit$par
+
+          reweight.diff <- dist(rbind(errparms, errparms_last))
+          errparms_last <- errparms
+
+          fit$par <- c(fit$par, errparms)
+          nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
+          fit$logLik <- - nlogLik.current
         }
       }
     }
+    fit$error_model_algorithm <- error_model_algorithm
+
+    # We include the error model in the parameter uncertainty analysis, also
+    # for constant variance, to get a confidence interval for it
+    if (err_mod == "const") {
+      fit$par <- c(fit$par, sigma = sigma_mle)
+    }
+    fit$hessian <- try(numDeriv::hessian(nlogLik, fit$par, update_data = FALSE), silent = TRUE)
+
+    # Backtransform parameters
+    bparms.optim = backtransform_odeparms(fit$par, mkinmod,
+      transform_rates = transform_rates,
+      transform_fractions = transform_fractions)
+    bparms.fixed = c(state.ini.fixed, parms.fixed)
+    bparms.all = c(bparms.optim, parms.fixed)
+
+    fit$hessian_notrans <- try(numDeriv::hessian(nlogLik, c(bparms.optim, fit$par[names(errparms)]),
+                                       trans = FALSE, update_data = FALSE), silent = TRUE)
   })
 
-  # Check for convergence
-  if (method.modFit == "Marq") {
-    if (!fit$info %in% c(1, 2, 3)) {
-      fit$warning = paste0("Optimisation by method ", method.modFit,
-                           " did not converge.\n",
-                           "The message returned by nls.lm is:\n",
-                                    fit$message)
-      warning(fit$warning)
-    }
-    else {
-      if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
-    }
-  }
-  if (method.modFit == "Port") {
-    if (fit$convergence != 0) {
-      fit$warning = paste0("Optimisation by method ", method.modFit,
-                           " did not converge:\n",
-                           if(is.character(fit$counts)) fit$counts # FME bug
-                           else fit$message)
-      warning(fit$warning)
-    } else {
-      if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
-    }
-  }
-  if (method.modFit %in% c("SANN", "Nelder-Mead", "BFGS", "CG", "L-BFGS-B")) {
-    if (fit$convergence != 0) {
-      fit$warning = paste0("Optimisation by method ", method.modFit,
-                           " did not converge.\n",
-                           "Convergence code returned by optim() is", fit$convergence)
-      warning(fit$warning)
-    } else {
-      if(!quiet) cat("Optimisation by method", method.modFit, "successfully terminated.\n")
-    }
-  }
-
-  # Return number of iterations for SANN method and alert user to check if
-  # the approximation to the optimum is sufficient
-  if (method.modFit == "SANN") {
-    fit$iter = maxit.modFit
-    fit$warning <- paste0("Termination of the SANN algorithm does not imply convergence.\n",
-      "Make sure the approximation of the optimum is adequate.")
+  if (fit$convergence != 0) {
+    fit$warning = paste0("Optimisation did not converge:\n", fit$message)
     warning(fit$warning)
+  } else {
+    if(!quiet) message("Optimisation successfully terminated.\n")
   }
 
   # We need to return some more data for summary and plotting
   fit$solution_type <- solution_type
   fit$transform_rates <- transform_rates
   fit$transform_fractions <- transform_fractions
-  fit$method.modFit <- method.modFit
-  fit$maxit.modFit <- maxit.modFit
+  fit$control <- control
   fit$calls <- calls
   fit$time <- fit_time
 
@@ -550,40 +599,20 @@ mkinfit <- function(mkinmod, observed,
   # We need data and predictions for summary and plotting
   fit$observed <- observed
   fit$obs_vars <- obs_vars
-  fit$predicted <- mkin_wide_to_long(out_predicted, time = "time")
+  fit$predicted <- out_predicted
 
-  # Backtransform parameters
-  bparms.optim = backtransform_odeparms(fit$par, fit$mkinmod,
-                                        transform_rates = transform_rates,
-                                        transform_fractions = transform_fractions)
-  bparms.fixed = c(state.ini.fixed, parms.fixed)
-  bparms.all = c(bparms.optim, parms.fixed)
-
-  # Attach the cost functions to the fit for post-hoc parameter uncertainty analysis
-  fit$cost <- cost
-  fit$cost_notrans <- cost_notrans
-
-  # Estimate the Hessian for the model cost without parameter transformations
-  # to make it possible to obtain the usual t-test
-  # Code ported from FME::modFit
-  Jac_notrans <- try(gradient(function(p, ...) cost_notrans(p)$residuals$res,
-                              bparms.optim, centered = TRUE), silent = TRUE)
-  if (inherits(Jac_notrans, "try-error")) {
-    warning("Calculation of the Jacobian failed for the cost function of the untransformed model.\n",
-            "No t-test results will be available")
-    fit$hessian_notrans <- NA
-  } else {
-    fit$hessian_notrans <- 2 * t(Jac_notrans) %*% Jac_notrans
-  }
+  # Attach the negative log-likelihood function for post-hoc parameter uncertainty analysis
+  fit$nlogLik <- nlogLik
 
   # Collect initial parameter values in three dataframes
   fit$start <- data.frame(value = c(state.ini.optim,
-                                    parms.optim))
+                                    parms.optim, errparms))
   fit$start$type = c(rep("state", length(state.ini.optim)),
-                     rep("deparm", length(parms.optim)))
+                     rep("deparm", length(parms.optim)),
+                     rep("error", length(errparms)))
 
   fit$start_transformed = data.frame(
-      value = c(state.ini.optim, transparms.optim),
+      value = c(state.ini.optim, transparms.optim, errparms),
       lower = lower,
       upper = upper)
 
@@ -591,33 +620,21 @@ mkinfit <- function(mkinmod, observed,
   fit$fixed$type = c(rep("state", length(state.ini.fixed)),
                      rep("deparm", length(parms.fixed)))
 
-  # Collect observed, predicted, residuals and weighting
-  data <- merge(fit$observed, fit$predicted, by = c("time", "name"))
-  data$name <- ordered(data$name, levels = obs_vars)
-  data <- data[order(data$name, data$time), ]
+  # Sort observed, predicted and residuals
+  data_errmod$name <- ordered(data_errmod$name, levels = obs_vars)
 
-  # Add a column named "value" holding the observed values for the case
-  # that this column was selected for manual weighting, so it can be
-  # shown in the summary as "err"
-  data$value <- data$value.x
+  data <- data_errmod[order(data_errmod$name, data_errmod$time), ]
 
   fit$data <- data.frame(time = data$time,
                          variable = data$name,
-                         observed = data$value.x,
-                         predicted = data$value.y)
+                         observed = data$value.observed,
+                         predicted = data$value.predicted)
 
   fit$data$residual <- fit$data$observed - fit$data$predicted
-  if (!is.null(data$err.ini)) fit$data$err.ini <- data$err.ini
-  if (!is.null(err)) fit$data[["err"]] <- data[[err]]
 
   fit$atol <- atol
   fit$rtol <- rtol
-  fit$weight.ini <- weight.ini
-  fit$tc.ini <- tc
-  fit$reweight.method <- reweight.method
-  fit$reweight.tol <- reweight.tol
-  fit$reweight.max.iter <- reweight.max.iter
-  if (exists("tc_fitted")) fit$tc_fitted <- tc_fitted
+  fit$err_mod <- err_mod
 
   # Return different sets of backtransformed parameters for summary and plotting
   fit$bparms.optim <- bparms.optim
@@ -628,6 +645,9 @@ mkinfit <- function(mkinmod, observed,
   fit$bparms.state <- c(bparms.all[setdiff(names(bparms.all), names(fit$bparms.ode))],
                         state.ini.fixed)
   names(fit$bparms.state) <- gsub("_0$", "", names(fit$bparms.state))
+
+  fit$errparms.optim <- fit$par[names(errparms)]
+  fit$df.residual <- n_observed - n_optim
 
   fit$date <- date()
   fit$version <- as.character(utils::packageVersion("mkin"))
@@ -641,39 +661,41 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
   param  <- object$par
   pnames <- names(param)
   bpnames <- names(object$bparms.optim)
+  epnames <- names(object$errparms.optim)
   p      <- length(param)
   mod_vars <- names(object$mkinmod$diffs)
-  covar  <- try(solve(0.5*object$hessian), silent = TRUE)   # unscaled covariance
-  covar_notrans  <- try(solve(0.5*object$hessian_notrans), silent = TRUE)   # unscaled covariance
-  rdf    <- object$df.residual
-  resvar <- object$ssr / rdf
+  covar  <- try(solve(object$hessian), silent = TRUE)
+  covar_notrans  <- try(solve(object$hessian_notrans), silent = TRUE)
+  rdf <- object$df.residual
+
   if (!is.numeric(covar) | is.na(covar[1])) {
     covar <- NULL
     se <- lci <- uci <- rep(NA, p)
   } else {
     rownames(covar) <- colnames(covar) <- pnames
-    se     <- sqrt(diag(covar) * resvar)
+    se     <- sqrt(diag(covar))
     lci    <- param + qt(alpha/2, rdf) * se
     uci    <- param + qt(1-alpha/2, rdf) * se
   }
 
+  beparms.optim <- c(object$bparms.optim, object$par[epnames])
   if (!is.numeric(covar_notrans) | is.na(covar_notrans[1])) {
     covar_notrans <- NULL
     se_notrans <- tval <- pval <- rep(NA, p)
   } else {
-    rownames(covar_notrans) <- colnames(covar_notrans) <- bpnames
-    se_notrans     <- sqrt(diag(covar_notrans) * resvar)
-    tval   <- object$bparms.optim/se_notrans
-    pval   <- pt(abs(tval), rdf, lower.tail = FALSE)
+    rownames(covar_notrans) <- colnames(covar_notrans) <- c(bpnames, epnames)
+    se_notrans <- sqrt(diag(covar_notrans))
+    tval  <- beparms.optim / se_notrans
+    pval  <- pt(abs(tval), rdf, lower.tail = FALSE)
   }
 
   names(se) <- pnames
-  modVariance <- object$ssr / length(object$residuals)
 
   param <- cbind(param, se, lci, uci)
   dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper"))
 
-  bparam <- cbind(Estimate = object$bparms.optim, se_notrans, "t value" = tval, "Pr(>t)" = pval, Lower = NA, Upper = NA)
+  bparam <- cbind(Estimate = beparms.optim, se_notrans,
+                  "t value" = tval, "Pr(>t)" = pval, Lower = NA, Upper = NA)
 
   # Transform boundaries of CI for one parameter at a time,
   # with the exception of sets of formation fractions (single fractions are OK).
@@ -699,6 +721,7 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
       bparam[names(bpu), "Upper"] <- bpu
     }
   }
+  bparam[epnames, c("Lower", "Upper")] <- param[epnames, c("Lower", "Upper")]
 
   ans <- list(
     version = as.character(utils::packageVersion("mkin")),
@@ -706,26 +729,16 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
     date.fit = object$date,
     date.summary = date(),
     solution_type = object$solution_type,
-    method.modFit = object$method.modFit,
     warning = object$warning,
     use_of_ff = object$mkinmod$use_of_ff,
-    weight.ini = object$weight.ini,
-    reweight.method = object$reweight.method,
-    tc.ini = object$tc.ini,
-    var_ms_unweighted = object$var_ms_unweighted,
-    tc_fitted = object$tc_fitted,
-    residuals = object$residuals,
-    residualVariance = resvar,
-    sigma = sqrt(resvar),
-    modVariance = modVariance,
+    error_model_algorithm = object$error_model_algorithm,
     df = c(p, rdf),
     cov.unscaled = covar,
-    cov.scaled = covar * resvar,
-    info = object$info,
+    err_mod = object$err_mod,
+    #cov.scaled = covar * resvar,
     niter = object$iterations,
     calls = object$calls,
     time = object$time,
-    stopmess = message,
     par = param,
     bpar = bparam)
 
@@ -749,7 +762,7 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
       rownames(Corr) <- colnames(Corr) <- rownames(ans$par)
       ans$Corr <- Corr
     } else {
-      warning("Could not estimate covariance matrix; singular system.")
+      warning("Could not calculate correlation; no covariance matrix")
     }
   }
 
@@ -757,8 +770,9 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
   ep <- endpoints(object)
   if (length(ep$ff) != 0)
     ans$ff <- ep$ff
-  if(distimes) ans$distimes <- ep$distimes
-  if(length(ep$SFORB) != 0) ans$SFORB <- ep$SFORB
+  if (distimes) ans$distimes <- ep$distimes
+  if (length(ep$SFORB) != 0) ans$SFORB <- ep$SFORB
+  if (!is.null(object$d_3_message)) ans$d_3_message <- object$d_3_message
   class(ans) <- c("summary.mkinfit", "summary.modFit")
   return(ans)
 }
@@ -786,27 +800,16 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
 
   cat("\nModel predictions using solution type", x$solution_type, "\n")
 
-  cat("\nFitted with method", x$method.modFit,
-      "using", x$calls, "model solutions performed in", x$time[["elapsed"]],  "s\n")
+  cat("\nFitted using", x$calls, "model solutions performed in", x$time[["elapsed"]],  "s\n")
 
-  cat("\nWeighting:", x$weight.ini)
-  if (x$weight.ini == "tc")  {
-    cat(" with variance components\n")
-    print(x$tc.ini)
-  } else {
-    cat ("\n")
-  }
-  if(!is.null(x$reweight.method)) {
-    cat("\nIterative reweighting with method", x$reweight.method, "\n")
-    if (x$reweight.method == "obs") {
-      cat("Final mean squared residuals of observed variables:\n")
-      print(x$var_ms_unweighted)
-    }
-    if (x$reweight.method == "tc") {
-      cat("Final components of fitted standard deviation:\n")
-      print(x$tc_fitted)
-    }
-  }
+  cat("\nError model: ")
+  cat(switch(x$err_mod,
+             const = "Constant variance",
+             obs = "Variance unique to each observed variable",
+             tc = "Two-component variance function"), "\n")
+
+  cat("\nError model algorithm:", x$error_model_algorithm, "\n")
+  if (!is.null(x$d_3_message)) cat(x$d_3_message, "\n")
 
   cat("\nStarting values for parameters to be optimised:\n")
   print(x$start)
@@ -826,12 +829,9 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
     if (!is.null(x$cov.unscaled)){
       print(x$Corr, digits = digits, ...)
     } else {
-      cat("Could not estimate covariance matrix; singular system.")
+      cat("No covariance matrix")
     }
   }
-
-  cat("\nResidual standard error:",
-      format(signif(x$sigma, digits)), "on", rdf, "degrees of freedom\n")
 
   cat("\nBacktransformed parameters:\n")
   cat("Confidence intervals for internally transformed parameters are asymmetric.\n")
@@ -844,7 +844,7 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
     print(signif(x$bpar[, c(1, 3, 4, 5, 6)], digits = digits))
   }
 
-  cat("\nChi2 error levels in percent:\n")
+  cat("\nFOCUS Chi2 error levels in percent:\n")
   x$errmin$err.min <- 100 * x$errmin$err.min
   print(x$errmin, digits=digits,...)
 
@@ -874,54 +874,4 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
 
   invisible(x)
 }
-
-# Fit the median absolute deviation against the observed values,
-# using the current error model for weighting
-.fit_error_model_mad_obs <- function(tmp_res, tc, iteration) {
-  mad_agg <- aggregate(tmp_res$res.unweighted,
-                       by = list(name = tmp_res$name, time = tmp_res$x),
-                       FUN = function(x) mad(x, center = 0))
-  names(mad_agg) <- c("name", "time", "mad")
-  error_data <- suppressMessages(
-    join(data.frame(name = tmp_res$name,
-                    time = tmp_res$x,
-                    obs = tmp_res$obs),
-         mad_agg))
-  error_data_complete <- na.omit(error_data)
-
-  tc_fit <- tryCatch(
-    nls(mad ~ sigma_twocomp(obs, sigma_low, rsd_high),
-      start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
-      weights = 1/sigma_twocomp(error_data_complete$obs,
-                                tc["sigma_low"],
-                                tc["rsd_high"])^2,
-      data = error_data_complete,
-      lower = 0,
-      algorithm = "port"),
-    error = function(e) paste("Fitting the error model failed in iteration", iteration))
-  return(tc_fit)
-}
-# Alternative way to fit the error model, fitting to modelled instead of
-# observed values
-# .fit_error_model_mad_mod <- function(tmp_res, tc) {
-#   mad_agg <- aggregate(tmp_res$res.unweighted,
-#                        by = list(name = tmp_res$name, time = tmp_res$x),
-#                        FUN = function(x) mad(x, center = 0))
-#   names(mad_agg) <- c("name", "time", "mad")
-#   mod_agg <- aggregate(tmp_res$mod,
-#                        by = list(name = tmp_res$name, time = tmp_res$x),
-#                        FUN = mean)
-#   names(mod_agg) <- c("name", "time", "mod")
-#   mod_mad <- merge(mod_agg, mad_agg)
-# 
-#   tc_fit <- tryCatch(
-#     nls(mad ~ sigma_twocomp(mod, sigma_low, rsd_high),
-#       start = list(sigma_low = tc["sigma_low"], rsd_high = tc["rsd_high"]),
-#       data = mod_mad,
-#       weights = 1/mod_mad$mad,
-#       lower = 0,
-#       algorithm = "port"),
-#     error = "Fitting the error model failed in iteration")
-#   return(tc_fit)
-# }
 # vim: set ts=2 sw=2 expandtab:
