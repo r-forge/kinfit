@@ -2,7 +2,6 @@ PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGDIR  := $(PWD)
 TGZ     := $(PKGNAME)_$(PKGVERS).tar.gz
-TGZVNR  := $(PKGNAME)_$(PKGVERS)-vignettes-not-rebuilt.tar.gz
 WINBIN  := $(PKGNAME)_$(PKGVERS).zip
 
 # Specify the directory holding R binaries. To use an alternate R build (say a
@@ -17,6 +16,7 @@ RFDIR ?= $(RFSVN)/pkg/gmkin
 SDDIR ?= $(RFSVN)/www/gmkin_static
 
 pkgfiles = NEWS.md \
+	.Rbuildignore \
 	data/* \
 	DESCRIPTION \
 	inst/GUI/* \
@@ -34,13 +34,10 @@ all: check clean
 $(TGZ): $(pkgfiles)
 	"$(RBIN)/R" CMD build .
 
-$(TGZVNR): $(pkgfiles)
-	"$(RBIN)/R" CMD build --no-build-vignettes . ;\
-	mv $(TGZ) $(TGZVNR)
-                
-build: $(TGZ)
+roxygen: 
+	"$(RBIN)/Rscript" -e 'devtools::document()'
 
-build-no-vignettes: $(TGZVNR)
+build: roxygen $(TGZ)
 
 $(WINBIN): build
 	@echo "Building windows binary package..."
@@ -52,17 +49,8 @@ winbin: $(WINBIN)
 install: build
 	"$(RBIN)/R" CMD INSTALL $(TGZ)
 
-install-no-vignettes: build-no-vignettes
-	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
-
 check: build
-	# Vignettes have been rebuilt by the build target
-	"$(RBIN)/R" CMD check --no-tests --no-build-vignettes $(TGZ)
-
-check-no-vignettes: build-no-vignettes
-	mv $(TGZVNR) $(TGZ)
 	"$(RBIN)/R" CMD check --no-tests $(TGZ)
-	mv $(TGZ) $(TGZVNR)
 
 README.html: README.md
 	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(self_contained = TRUE))"
@@ -83,7 +71,7 @@ drat: build
 	"$(RBIN)/Rscript" -e "drat::insertPackage('$(TGZ)', commit = TRUE)"
 
 dratwin: winbin
-	"$(RBIN)/Rscript" -e "drat::insertPackage('$(WINBIN)', 'e:/git/drat/', commit = TRUE)"
+	"$(RBIN)/Rscript" -e "drat::insertPackage('$(WINBIN)', '~/git/drat/', commit = TRUE)"
 
 r-forge:
 	git archive master > $(PKGDIR)/gmkin.tar;\
