@@ -1,22 +1,93 @@
-# Copyright (C) 2010-2016,2019 Johannes Ranke
-# Contact: jranke@uni-bremen.de
-
-# This file is part of the R package mkin
-
-# mkin is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>
 if(getRversion() >= '2.15.1') utils::globalVariables(c("type", "variable", "observed"))
 
+#' Plot the observed data and the fitted model of an mkinfit object
+#'
+#' Solves the differential equations with the optimised and fixed parameters
+#' from a previous successful call to \code{\link{mkinfit}} and plots the
+#' observed data together with the solution of the fitted model.
+#'
+#' If the current plot device is a \code{\link[tikzDevice]{tikz}} device, then
+#' latex is being used for the formatting of the chi2 error level, if
+#' \code{show_errmin = TRUE}.
+#'
+#' @aliases plot.mkinfit plot_sep plot_res plot_err
+#' @param x Alias for fit introduced for compatibility with the generic S3
+#'   method.
+#' @param fit An object of class \code{\link{mkinfit}}.
+#' @param obs_vars A character vector of names of the observed variables for
+#'   which the data and the model should be plotted. Defauls to all observed
+#'   variables in the model.
+#' @param xlab Label for the x axis.
+#' @param ylab Label for the y axis.
+#' @param xlim Plot range in x direction.
+#' @param ylim Plot range in y direction.
+#' @param col_obs Colors used for plotting the observed data and the
+#'   corresponding model prediction lines.
+#' @param pch_obs Symbols to be used for plotting the data.
+#' @param lty_obs Line types to be used for the model predictions.
+#' @param add Should the plot be added to an existing plot?
+#' @param legend Should a legend be added to the plot?
+#' @param show_residuals Should residuals be shown? If only one plot of the
+#'   fits is shown, the residual plot is in the lower third of the plot.
+#'   Otherwise, i.e. if "sep_obs" is given, the residual plots will be located
+#'   to the right of the plots of the fitted curves. If this is set to
+#'   'standardized', a plot of the residuals divided by the standard deviation
+#'    given by the fitted error model will be shown.
+#' @param standardized When calling 'plot_res', should the residuals be
+#'   standardized in the residual plot?
+#' @param show_errplot Should squared residuals and the error model be shown?
+#'   If only one plot of the fits is shown, this plot is in the lower third of
+#'   the plot.  Otherwise, i.e. if "sep_obs" is given, the residual plots will
+#'   be located to the right of the plots of the fitted curves.
+#' @param maxabs Maximum absolute value of the residuals. This is used for the
+#'   scaling of the y axis and defaults to "auto".
+#' @param sep_obs Should the observed variables be shown in separate subplots?
+#'   If yes, residual plots requested by "show_residuals" will be shown next
+#'   to, not below the plot of the fits.
+#' @param rel.height.middle The relative height of the middle plot, if more
+#'   than two rows of plots are shown.
+#' @param row_layout Should we use a row layout where the residual plot or the
+#'   error model plot is shown to the right?
+#' @param lpos Position(s) of the legend(s). Passed to \code{\link{legend}} as
+#'   the first argument.  If not length one, this should be of the same length
+#'   as the obs_var argument.
+#' @param inset Passed to \code{\link{legend}} if applicable.
+#' @param show_errmin Should the FOCUS chi2 error value be shown in the upper
+#'   margin of the plot?
+#' @param errmin_digits The number of significant digits for rounding the FOCUS
+#'   chi2 error percentage.
+#' @param frame Should a frame be drawn around the plots?
+#' @param \dots Further arguments passed to \code{\link{plot}}.
+#' @import graphics
+#' @importFrom grDevices dev.cur
+#' @return The function is called for its side effect.
+#' @author Johannes Ranke
+#' @examples
+#'
+#' # One parent compound, one metabolite, both single first order, path from
+#' # parent to sink included
+#' \dontrun{
+#' SFO_SFO <- mkinmod(parent = mkinsub("SFO", "m1", full = "Parent"),
+#'                    m1 = mkinsub("SFO", full = "Metabolite M1" ))
+#' fit <- mkinfit(SFO_SFO, FOCUS_2006_D, quiet = TRUE, error_model = "tc")
+#' plot(fit)
+#' plot_res(fit)
+#' plot_res(fit, standardized = FALSE)
+#' plot_err(fit)
+#'
+#' # Show the observed variables separately, with residuals
+#' plot(fit, sep_obs = TRUE, show_residuals = TRUE, lpos = c("topright", "bottomright"),
+#'      show_errmin = TRUE)
+#'
+#' # The same can be obtained with less typing, using the convenience function plot_sep
+#' plot_sep(fit, lpos = c("topright", "bottomright"))
+#'
+#' # Show the observed variables separately, with the error model
+#' plot(fit, sep_obs = TRUE, show_errplot = TRUE, lpos = c("topright", "bottomright"),
+#'      show_errmin = TRUE)
+#' }
+#'
+#' @export
 plot.mkinfit <- function(x, fit = x,
   obs_vars = names(fit$mkinmod$map),
   xlab = "Time", ylab = "Observed",
@@ -30,13 +101,23 @@ plot.mkinfit <- function(x, fit = x,
   show_errplot = FALSE,
   maxabs = "auto",
   sep_obs = FALSE, rel.height.middle = 0.9,
+  row_layout = FALSE,
   lpos = "topright", inset = c(0.05, 0.05),
-  show_errmin = FALSE, errmin_digits = 3, ...)
+  show_errmin = FALSE, errmin_digits = 3,
+  frame = TRUE, ...)
 {
+  if (identical(show_residuals, "standardized")) {
+    show_residuals <- TRUE
+    standardized <- TRUE
+  } else {
+    standardized <- FALSE
+  }
+
   if (add && show_residuals) stop("If adding to an existing plot we can not show residuals")
   if (add && show_errplot) stop("If adding to an existing plot we can not show the error model plot")
   if (show_residuals && show_errplot) stop("We can either show residuals over time or the error model plot, not both")
   if (add && sep_obs) stop("If adding to an existing plot we can not show observed variables separately")
+
 
   solution_type = fit$solution_type
   parms.all <- c(fit$bparms.optim, fit$bparms.fixed)
@@ -79,8 +160,9 @@ plot.mkinfit <- function(x, fit = x,
     # Layout should be restored afterwards
     oldpar <- par(no.readonly = TRUE)
 
-    # If the observed variables are shown separately, do row layout
-    if (sep_obs) {
+    # If the observed variables are shown separately, or if requested, do row layout
+    if (sep_obs | row_layout) {
+      row_layout <- TRUE
       n_plot_cols = if (show_residuals | show_errplot) 2 else 1
       n_plots = n_plot_rows * n_plot_cols
 
@@ -113,7 +195,7 @@ plot.mkinfit <- function(x, fit = x,
       ylim_row = ylim
     }
 
-    if (sep_obs) {
+    if (row_layout) {
       # Margins for top row of plots when we have more than one row
       # Reduce bottom margin by 2.1 - hides x axis legend
       if (plot_row == 1 & n_plot_rows > 1) {
@@ -138,7 +220,7 @@ plot.mkinfit <- function(x, fit = x,
     if (add == FALSE) {
       plot(0, type="n",
         xlim = xlim, ylim = ylim_row,
-        xlab = xlab, ylab = ylab, ...)
+        xlab = xlab, ylab = ylab, frame = frame, ...)
     }
 
     # Plot the data
@@ -185,37 +267,63 @@ plot.mkinfit <- function(x, fit = x,
       mtext(chi2_text, cex = 0.7, line = 0.4)
     }
 
+    if (do_layout & !row_layout) {
+      par(mar = c(5, 4, 0, 2) + 0.1)
+    }
+
     # Show residuals if requested
     if (show_residuals) {
-      residuals <- subset(fit$data, variable %in% row_obs_vars, residual)
-      if (maxabs == "auto") {
-        maxabs_row = max(abs(residuals), na.rm = TRUE)
-      } else {
-        maxabs_row = maxabs
-      }
-      if (!sep_obs) par(mar = c(5, 4, 0, 2) + 0.1)
-      plot(0, type="n",
-        xlim = xlim,
-        ylim = c(-1.2 * maxabs_row, 1.2 * maxabs_row),
-        xlab = xlab, ylab = "Residuals")
-      for(obs_var in row_obs_vars){
-        residuals_plot <- subset(fit$data, variable == obs_var, c("time", "residual"))
-        points(residuals_plot, pch = pch_obs[obs_var], col = col_obs[obs_var])
-      }
-      abline(h = 0, lty = 2)
+      mkinresplot(fit, obs_vars = row_obs_vars, standardized = standardized,
+        pch_obs = pch_obs[row_obs_vars], col_obs = col_obs[row_obs_vars],
+        legend = FALSE, frame = frame)
     }
 
     # Show error model plot if requested
     if (show_errplot) {
-      mkinerrplot(fit, obs_vars = row_obs_vars, pch_obs = pch_obs[row_obs_vars], col_obs = col_obs[row_obs_vars],
-                  legend = FALSE)
+      mkinerrplot(fit, obs_vars = row_obs_vars,
+        pch_obs = pch_obs[row_obs_vars], col_obs = col_obs[row_obs_vars],
+        legend = FALSE, frame = frame)
     }
   }
   if (do_layout) par(oldpar, no.readonly = TRUE)
 }
-# Convenience function for switching on some features of mkinfit
-# that have not been made the default to keep compatibility
-plot_sep <- function(fit, sep_obs = TRUE, show_residuals = TRUE, show_errmin = TRUE, ...) {
-  plot.mkinfit(fit, sep_obs = TRUE, show_residuals = TRUE,
-          show_errmin = TRUE, ...)
+
+#' @rdname plot.mkinfit
+#' @export
+plot_sep <- function(fit, show_errmin = TRUE,
+  show_residuals = ifelse(identical(fit$err_mod, "const"), TRUE, "standardized"), ...) {
+  plot.mkinfit(fit, sep_obs = TRUE, show_residuals = show_residuals,
+          show_errmin = show_errmin, ...)
+}
+
+#' @rdname plot.mkinfit
+#' @export
+plot_res <- function(fit, sep_obs = FALSE, show_errmin = sep_obs,
+  standardized = ifelse(identical(fit$err_mod, "const"), FALSE, TRUE), ...)
+{
+  plot.mkinfit(fit, sep_obs = sep_obs, show_errmin = show_errmin,
+    show_residuals = ifelse(standardized, "standardized", TRUE),
+    row_layout = TRUE, ...)
+}
+
+#' @rdname plot.mkinfit
+#' @export
+plot_err <- function(fit, sep_obs = FALSE, show_errmin = sep_obs, ...) {
+  plot.mkinfit(fit, sep_obs = sep_obs, show_errmin = show_errmin,
+    show_errplot = TRUE, row_layout = TRUE, ...)
+}
+
+#' Plot the observed data and the fitted model of an mkinfit object
+#'
+#' Deprecated function. It now only calls the plot method
+#' \code{\link{plot.mkinfit}}.
+#'
+#' @param fit an object of class \code{\link{mkinfit}}.
+#' @param \dots further arguments passed to \code{\link{plot.mkinfit}}.
+#' @return The function is called for its side effect.
+#' @author Johannes Ranke
+#' @export
+mkinplot <- function(fit, ...)
+{
+  plot(fit, ...)
 }

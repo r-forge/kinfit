@@ -39,11 +39,14 @@ $(TGZ): $(pkgfiles) vignettes
 	$(RM) Rplots.pdf
 	"$(RBIN)/R" CMD build . 2>&1 | tee build.log
 
+roxygen: 
+	"$(RBIN)/Rscript" -e 'devtools::document()'
+
 $(TGZVNR): $(pkgfiles)
 	"$(RBIN)/R" CMD build . --no-build-vignettes;\
 	mv $(TGZ) $(TGZVNR)
 
-build: $(TGZ)
+build: roxygen $(TGZ)
 
 build-no-vignettes: $(TGZVNR)
 
@@ -53,10 +56,10 @@ install: build
 quickinstall: build-no-vignettes
 	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
 
-check: build
+check: roxygen build
 	_R_CHECK_CRAN_INCOMING_REMOTE_=false "$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee check.log
 
-quickcheck: build-no-vignettes
+quickcheck: roxygen build-no-vignettes
 	mv $(TGZVNR) $(TGZ)
 	"$(RBIN)/R" CMD check --no-tests --no-build-vignettes --no-vignettes $(TGZ)
 	mv $(TGZ) $(TGZVNR)
@@ -70,6 +73,14 @@ clean:
 
 test: install
 	"$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
+	sed -i -e "s/\r.*\r//" test.log
+
+slowtests: install
+	NOT_CRAN=true "$(RBIN)/Rscript" -e 'library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee tests_slow.log
+	sed -i -e "s/\r.*\r//" tests_slow.log
+
+vdiffr:
+	"$(RBIN)/Rscript" -e 'vdiffr::manage_cases(filter = "plots|nafta")'
 
 testcheck: test check
 
@@ -79,15 +90,15 @@ README.html: README.md
 vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
 
-vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html
+vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/twa.html
 
 vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.Rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.Rmd', dir = 'vignettes/web_only')"
 
 articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html
 
-pd:
-	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
+pd: roxygen
+	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE, lazy = TRUE)"
 	git add -A
 	git commit -m 'Static documentation rebuilt by pkgdown' -e
 
@@ -117,7 +128,6 @@ winbin: $(WINBIN)
 
 dratwin: winbin
 	"$(RBIN)/Rscript" -e "drat::insertPackage('$(WINBIN)', '~/git/drat/', commit = TRUE)"
-
 
 submit:
 	@echo "\nHow about make test, make check, make pd, make winbuilder"

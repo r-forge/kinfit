@@ -1,3 +1,49 @@
+# mkin 0.9.49.8 (unreleased)
+
+- 'aw': Generic function for calculating Akaike weights, methods for mkinfit objects and mmkin columns
+
+- 'loftest': Add a lack-of-fit test
+
+- 'plot_res', 'plot_sep' and 'mkinerrplot': Add the possibility to show standardized residuals and make it the default for fits with error models other than 'const'
+
+- 'lrtest.mkinfit': Improve naming of the compared fits in the case of fixed parameters
+
+- 'confint.mkinfit': Make the quadratic approximation the default, as the likelihood profiling takes a lot of time, especially if the fit has more than three parameters
+
+# mkin 0.9.49.7 (2019-11-01)
+
+- Fix a bug introduced in 0.9.49.6 that occurred if the direct optimisation yielded a higher likelihood than the three-step optimisation in the d_3 algorithm, which caused the fitted parameters of the three-step optimisation to be returned instead of the parameters of the direct optimisation
+
+- Add a 'nobs' method for mkinfit objects, enabling the default 'BIC' method from the stats package. Also, add a 'BIC' method for mmkin column objects.
+
+# mkin 0.9.49.6 (2019-10-31)
+
+- Implement a likelihood ratio test as a method for 'lrtest' from the lmtest package
+
+- Add an 'update' method for mkinfit objects which remembers fitted parameters if appropriate
+
+- Add a 'residuals' method for mkinfit objects that supports scaling based on the error model
+
+- Fix a bug in 'mkinfit' that prevented summaries of objects fitted with fixed parameters to be generated
+
+- Add 'parms' and 'confint' methods for mkinfit objects. Confidence intervals based on the quadratic approximation as in the summary, and based on the profile likelihood
+
+- Move long-running tests to tests/testthat/slow with a separate test log. They currently take around 7 minutes on my system
+
+- 'mkinfit': Clean the code and return functions to calculate the log-likelihood and the sum of squared residuals
+
+- Vignette 'twa.html': Add the maximum time weighted average formulas for the hockey stick model
+
+- Support frameless plots ('frame = FALSE')
+
+- Support to suppress the chi2 error level ('show_errmin = FALSE') in 'plot.mmkin'
+
+- Update README and the introductory vignette
+
+- Report 'OLS' as error_model_algorithm in the summary in the case that the default error_model ('const') is used
+
+- Support summarizing 'mkinfit' objects generated with versions < 0.9.49.5
+
 # mkin 0.9.49.5 (2019-07-04)
 
 - Several algorithms for minimization of the negative log-likelihood for non-constant error models (two-component and variance by variable). In the case the error model is constant variance, least squares is used as this is more stable. The default algorithm 'd_3' tries direct minimization and a three-step procedure, and returns the model with the highest likelihood.
@@ -28,7 +74,7 @@
 
 - Add the function 'logLik.mkinfit' which makes it possible to calculate an AIC for mkinfit objects
 
-- Add the function 'AIC.mmkin' to makeqit easy to compare columns of mmkin objects
+- Add the function 'AIC.mmkin' to make it easy to compare columns of mmkin objects
 
 - 'add_err': Respect the argument giving the number of replicates in the synthetic dataset
 

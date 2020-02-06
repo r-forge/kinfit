@@ -8,21 +8,25 @@
 
 <title>Changelog • mkin</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,7 +34,9 @@
 
 
 
+
 <meta property="og:title" content="Changelog" />
+
 
 
 
@@ -42,6 +48,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -60,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mkin</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.49.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.49.9</span>
       </span>
     </div>
 
@@ -103,7 +110,6 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -113,6 +119,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -122,9 +129,50 @@
       
     </div>
 
+    <div id="mkin-0-9-49-8-unreleased" class="section level1">
+<h1 class="page-header">
+<a href="#mkin-0-9-49-8-unreleased" class="anchor"></a>mkin 0.9.49.8 (unreleased)<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>‘aw’: Generic function for calculating Akaike weights, methods for mkinfit objects and mmkin columns</p></li>
+<li><p>‘loftest’: Add a lack-of-fit test</p></li>
+<li><p>‘plot_res’, ‘plot_sep’ and ‘mkinerrplot’: Add the possibility to show standardized residuals and make it the default for fits with error models other than ‘const’</p></li>
+<li><p>‘lrtest.mkinfit’: Improve naming of the compared fits in the case of fixed parameters</p></li>
+<li><p>‘confint.mkinfit’: Make the quadratic approximation the default, as the likelihood profiling takes a lot of time, especially if the fit has more than three parameters</p></li>
+</ul>
+</div>
+    <div id="mkin-0-9-49-7-2019-11-01" class="section level1">
+<h1 class="page-header">
+<a href="#mkin-0-9-49-7-2019-11-01" class="anchor"></a>mkin 0.9.49.7 (2019-11-01)<small> 2019-11-02 </small>
+</h1>
+<ul>
+<li><p>Fix a bug introduced in 0.9.49.6 that occurred if the direct optimisation yielded a higher likelihood than the three-step optimisation in the d_3 algorithm, which caused the fitted parameters of the three-step optimisation to be returned instead of the parameters of the direct optimisation</p></li>
+<li><p>Add a ‘nobs’ method for mkinfit objects, enabling the default ‘BIC’ method from the stats package. Also, add a ‘BIC’ method for mmkin column objects.</p></li>
+</ul>
+</div>
+    <div id="mkin-0-9-49-6-2019-10-31" class="section level1">
+<h1 class="page-header">
+<a href="#mkin-0-9-49-6-2019-10-31" class="anchor"></a>mkin 0.9.49.6 (2019-10-31)<small> 2019-10-31 </small>
+</h1>
+<ul>
+<li><p>Implement a likelihood ratio test as a method for ‘lrtest’ from the lmtest package</p></li>
+<li><p>Add an ‘update’ method for mkinfit objects which remembers fitted parameters if appropriate</p></li>
+<li><p>Add a ‘residuals’ method for mkinfit objects that supports scaling based on the error model</p></li>
+<li><p>Fix a bug in ‘mkinfit’ that prevented summaries of objects fitted with fixed parameters to be generated</p></li>
+<li><p>Add ‘parms’ and ‘confint’ methods for mkinfit objects. Confidence intervals based on the quadratic approximation as in the summary, and based on the profile likelihood</p></li>
+<li><p>Move long-running tests to tests/testthat/slow with a separate test log. They currently take around 7 minutes on my system</p></li>
+<li><p>‘mkinfit’: Clean the code and return functions to calculate the log-likelihood and the sum of squared residuals</p></li>
+<li><p>Vignette ‘twa.html’: Add the maximum time weighted average formulas for the hockey stick model</p></li>
+<li><p>Support frameless plots (‘frame = FALSE’)</p></li>
+<li><p>Support to suppress the chi2 error level (‘show_errmin = FALSE’) in ‘plot.mmkin’</p></li>
+<li><p>Update README and the introductory vignette</p></li>
+<li><p>Report ‘OLS’ as error_model_algorithm in the summary in the case that the default error_model (‘const’) is used</p></li>
+<li><p>Support summarizing ‘mkinfit’ objects generated with versions &lt; 0.9.49.5</p></li>
+</ul>
+</div>
     <div id="mkin-0-9-49-5-2019-07-04" class="section level1">
 <h1 class="page-header">
-<a href="#mkin-0-9-49-5-2019-07-04" class="anchor"></a>mkin 0.9.49.5 (2019-07-04)<small> Unreleased </small>
+<a href="#mkin-0-9-49-5-2019-07-04" class="anchor"></a>mkin 0.9.49.5 (2019-07-04)<small> 2019-07-04 </small>
 </h1>
 <ul>
 <li><p>Several algorithms for minimization of the negative log-likelihood for non-constant error models (two-component and variance by variable). In the case the error model is constant variance, least squares is used as this is more stable. The default algorithm ‘d_3’ tries direct minimization and a three-step procedure, and returns the model with the highest likelihood.</p></li>
@@ -147,7 +195,7 @@
 </h1>
 <ul>
 <li><p>Add the function ‘logLik.mkinfit’ which makes it possible to calculate an AIC for mkinfit objects</p></li>
-<li><p>Add the function ‘AIC.mmkin’ to makeqit easy to compare columns of mmkin objects</p></li>
+<li><p>Add the function ‘AIC.mmkin’ to make it easy to compare columns of mmkin objects</p></li>
 <li><p>‘add_err’: Respect the argument giving the number of replicates in the synthetic dataset</p></li>
 <li><p>‘max_twa_parent’: Support maximum time weighted average concentration calculations for the hockey stick (HS) model</p></li>
 <li><p>‘mkinpredict’: Make the function generic and create a method for mkinfit objects</p></li>
@@ -376,7 +424,7 @@
 <a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>
-<code><a href="../reference/endpoints.html">endpoints()</a></code>: For DFOP and SFORB models, where <code><a href="https://www.rdocumentation.org/packages/stats/topics/optimize">optimize()</a></code> is used, make use of the fact that the DT50 must be between DT50_k1 and DT50_k2 (DFOP) or DT50_b1 and DT50_b2 (SFORB), as <code><a href="https://www.rdocumentation.org/packages/stats/topics/optimize">optimize()</a></code> sometimes did not find the minimum. Likewise for finding DT90 values. Also fit on the log scale to make the function more efficient.</li>
+<code><a href="../reference/endpoints.html">endpoints()</a></code>: For DFOP and SFORB models, where <code><a href="https://rdrr.io/r/stats/optimize.html">optimize()</a></code> is used, make use of the fact that the DT50 must be between DT50_k1 and DT50_k2 (DFOP) or DT50_b1 and DT50_b2 (SFORB), as <code><a href="https://rdrr.io/r/stats/optimize.html">optimize()</a></code> sometimes did not find the minimum. Likewise for finding DT90 values. Also fit on the log scale to make the function more efficient.</li>
 </ul>
 </div>
 <div id="internal-changes" class="section level2">
@@ -699,6 +747,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#mkin-0-9-49-8-unreleased">0.9.49.8</a></li>
+        <li><a href="#mkin-0-9-49-7-2019-11-01">0.9.49.7</a></li>
+        <li><a href="#mkin-0-9-49-6-2019-10-31">0.9.49.6</a></li>
         <li><a href="#mkin-0-9-49-5-2019-07-04">0.9.49.5</a></li>
         <li><a href="#mkin-0-9-48-1-2019-03-04">0.9.48.1</a></li>
         <li><a href="#mkin-0-9-47-5-2018-09-14">0.9.47.5</a></li>
@@ -737,19 +788,23 @@
 
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Johannes Ranke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

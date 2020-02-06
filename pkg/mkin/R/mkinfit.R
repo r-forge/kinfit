@@ -1,23 +1,239 @@
-# Copyright (C) 2010-2019 Johannes Ranke
-# Portions of this code are copyright (C) 2013 Eurofins Regulatory AG
-# Contact: jranke@uni-bremen.de
-
-# This file is part of the R package mkin
-
-# mkin is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>
 if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 
+#' Fit a kinetic model to data with one or more state variables
+#'
+#' This function maximises the likelihood of the observed data using the Port
+#' algorithm \code{\link{nlminb}}, and the specified initial or fixed
+#' parameters and starting values.  In each step of the optimsation, the
+#' kinetic model is solved using the function \code{\link{mkinpredict}}. The
+#' parameters of the selected error model are fitted simultaneously with the
+#' degradation model parameters, as both of them are arguments of the
+#' likelihood function.
+#'
+#' Per default, parameters in the kinetic models are internally transformed in
+#' order to better satisfy the assumption of a normal distribution of their
+#' estimators.
+#'
+#' @param mkinmod A list of class \code{\link{mkinmod}}, containing the kinetic
+#'   model to be fitted to the data, or one of the shorthand names ("SFO",
+#'   "FOMC", "DFOP", "HS", "SFORB", "IORE"). If a shorthand name is given, a
+#'   parent only degradation model is generated for the variable with the
+#'   highest value in \code{observed}.
+#' @param observed A dataframe with the observed data.  The first column called
+#'   "name" must contain the name of the observed variable for each data point.
+#'   The second column must contain the times of observation, named "time".
+#'   The third column must be named "value" and contain the observed values.
+#'   Zero values in the "value" column will be removed, with a warning, in
+#'   order to avoid problems with fitting the two-component error model. This
+#'   is not expected to be a problem, because in general, values of zero are
+#'   not observed in degradation data, because there is a lower limit of
+#'   detection.
+#' @param parms.ini A named vector of initial values for the parameters,
+#'   including parameters to be optimised and potentially also fixed parameters
+#'   as indicated by \code{fixed_parms}.  If set to "auto", initial values for
+#'   rate constants are set to default values.  Using parameter names that are
+#'   not in the model gives an error.
+#'
+#'   It is possible to only specify a subset of the parameters that the model
+#'   needs. You can use the parameter lists "bparms.ode" from a previously
+#'   fitted model, which contains the differential equation parameters from
+#'   this model.  This works nicely if the models are nested. An example is
+#'   given below.
+#' @param state.ini A named vector of initial values for the state variables of
+#'   the model. In case the observed variables are represented by more than one
+#'   model variable, the names will differ from the names of the observed
+#'   variables (see \code{map} component of \code{\link{mkinmod}}). The default
+#'   is to set the initial value of the first model variable to the mean of the
+#'   time zero values for the variable with the maximum observed value, and all
+#'   others to 0.  If this variable has no time zero observations, its initial
+#'   value is set to 100.
+#' @param err.ini A named vector of initial values for the error model
+#'   parameters to be optimised.  If set to "auto", initial values are set to
+#'   default values.  Otherwise, inital values for all error model parameters
+#'   must be given.
+#' @param fixed_parms The names of parameters that should not be optimised but
+#'   rather kept at the values specified in \code{parms.ini}. Alternatively,
+#'   a named numeric vector of parameters to be fixed, regardless of the values
+#'   in parms.ini.
+#' @param fixed_initials The names of model variables for which the initial
+#'   state at time 0 should be excluded from the optimisation. Defaults to all
+#'   state variables except for the first one.
+#' @param from_max_mean If this is set to TRUE, and the model has only one
+#'   observed variable, then data before the time of the maximum observed value
+#'   (after averaging for each sampling time) are discarded, and this time is
+#'   subtracted from all remaining time values, so the time of the maximum
+#'   observed mean value is the new time zero.
+#' @param solution_type If set to "eigen", the solution of the system of
+#'   differential equations is based on the spectral decomposition of the
+#'   coefficient matrix in cases that this is possible. If set to "deSolve", a
+#'   numerical ode solver from package \code{\link{deSolve}} is used. If set to
+#'   "analytical", an analytical solution of the model is used. This is only
+#'   implemented for simple degradation experiments with only one state
+#'   variable, i.e. with no metabolites. The default is "auto", which uses
+#'   "analytical" if possible, otherwise "deSolve" if a compiler is present,
+#'   and "eigen" if no compiler is present and the model can be expressed using
+#'   eigenvalues and eigenvectors.  This argument is passed on to the helper
+#'   function \code{\link{mkinpredict}}.
+#' @param method.ode The solution method passed via \code{\link{mkinpredict}}
+#'   to \code{\link{ode}} in case the solution type is "deSolve". The default
+#'   "lsoda" is performant, but sometimes fails to converge.
+#' @param use_compiled If set to \code{FALSE}, no compiled version of the
+#'   \code{\link{mkinmod}} model is used in the calls to
+#'   \code{\link{mkinpredict}} even if a compiled version is present.
+#' @param control A list of control arguments passed to \code{\link{nlminb}}.
+#' @param transform_rates Boolean specifying if kinetic rate constants should
+#'   be transformed in the model specification used in the fitting for better
+#'   compliance with the assumption of normal distribution of the estimator. If
+#'   TRUE, also alpha and beta parameters of the FOMC model are
+#'   log-transformed, as well as k1 and k2 rate constants for the DFOP and HS
+#'   models and the break point tb of the HS model.  If FALSE, zero is used as
+#'   a lower bound for the rates in the optimisation.
+#' @param transform_fractions Boolean specifying if formation fractions
+#'   constants should be transformed in the model specification used in the
+#'   fitting for better compliance with the assumption of normal distribution
+#'   of the estimator. The default (TRUE) is to do transformations. If TRUE,
+#'   the g parameter of the DFOP and HS models are also transformed, as they
+#'   can also be seen as compositional data. The transformation used for these
+#'   transformations is the \code{\link{ilr}} transformation.
+#' @param quiet Suppress printing out the current value of the negative
+#'   log-likelihood after each improvement?
+#' @param atol Absolute error tolerance, passed to \code{\link{ode}}. Default
+#'   is 1e-8, lower than in \code{\link{lsoda}}.
+#' @param rtol Absolute error tolerance, passed to \code{\link{ode}}. Default
+#'   is 1e-10, much lower than in \code{\link{lsoda}}.
+#' @param n.outtimes The length of the dataseries that is produced by the model
+#'   prediction function \code{\link{mkinpredict}}. This impacts the accuracy
+#'   of the numerical solver if that is used (see \code{solution_type}
+#'   argument.  The default value is 100.
+#' @param error_model If the error model is "const", a constant standard
+#'   deviation is assumed.
+#'
+#'   If the error model is "obs", each observed variable is assumed to have its
+#'   own variance.
+#'
+#'   If the error model is "tc" (two-component error model), a two component
+#'   error model similar to the one described by Rocke and Lorenzato (1995) is
+#'   used for setting up the likelihood function.  Note that this model
+#'   deviates from the model by Rocke and Lorenzato, as their model implies
+#'   that the errors follow a lognormal distribution for large values, not a
+#'   normal distribution as assumed by this method.
+#' @param error_model_algorithm If "auto", the selected algorithm depends on
+#'   the error model.  If the error model is "const", unweighted nonlinear
+#'   least squares fitting ("OLS") is selected. If the error model is "obs", or
+#'   "tc", the "d_3" algorithm is selected.
+#'
+#'   The algorithm "d_3" will directly minimize the negative log-likelihood and
+#'   - independently - also use the three step algorithm described below. The
+#'   fit with the higher likelihood is returned.
+#'
+#'   The algorithm "direct" will directly minimize the negative log-likelihood.
+#'
+#'   The algorithm "twostep" will minimize the negative log-likelihood after an
+#'   initial unweighted least squares optimisation step.
+#'
+#'   The algorithm "threestep" starts with unweighted least squares, then
+#'   optimizes only the error model using the degradation model parameters
+#'   found, and then minimizes the negative log-likelihood with free
+#'   degradation and error model parameters.
+#'
+#'   The algorithm "fourstep" starts with unweighted least squares, then
+#'   optimizes only the error model using the degradation model parameters
+#'   found, then optimizes the degradation model again with fixed error model
+#'   parameters, and finally minimizes the negative log-likelihood with free
+#'   degradation and error model parameters.
+#'
+#'   The algorithm "IRLS" (Iteratively Reweighted Least Squares) starts with
+#'   unweighted least squares, and then iterates optimization of the error
+#'   model parameters and subsequent optimization of the degradation model
+#'   using those error model parameters, until the error model parameters
+#'   converge.
+#' @param reweight.tol Tolerance for the convergence criterion calculated from
+#'   the error model parameters in IRLS fits.
+#' @param reweight.max.iter Maximum number of iterations in IRLS fits.
+#' @param trace_parms Should a trace of the parameter values be listed?
+#' @param \dots Further arguments that will be passed on to
+#'   \code{\link{deSolve}}.
+#' @importFrom stats nlminb aggregate dist
+#' @return A list with "mkinfit" in the class attribute.  A summary can be
+#'   obtained by \code{\link{summary.mkinfit}}.
+#' @note When using the "IORE" submodel for metabolites, fitting with
+#'   "transform_rates = TRUE" (the default) often leads to failures of the
+#'   numerical ODE solver. In this situation it may help to switch off the
+#'   internal rate transformation.
+#' @author Johannes Ranke
+#' @seealso Plotting methods \code{\link{plot.mkinfit}} and
+#'   \code{\link{mkinparplot}}.
+#'
+#'   Comparisons of models fitted to the same data can be made using
+#'   \code{\link{AIC}} by virtue of the method \code{\link{logLik.mkinfit}}.
+#'
+#'   Fitting of several models to several datasets in a single call to
+#'   \code{\link{mmkin}}.
+#' @source Rocke, David M. und Lorenzato, Stefan (1995) A two-component model
+#'   for measurement error in analytical chemistry. Technometrics 37(2), 176-184.
+#' @examples
+#'
+#' # Use shorthand notation for parent only degradation
+#' fit <- mkinfit("FOMC", FOCUS_2006_C, quiet = TRUE)
+#' summary(fit)
+#'
+#' # One parent compound, one metabolite, both single first order.
+#' # Use mkinsub for convenience in model formulation. Pathway to sink included per default.
+#' SFO_SFO <- mkinmod(
+#'   parent = mkinsub("SFO", "m1"),
+#'   m1 = mkinsub("SFO"))
+#' # Fit the model to the FOCUS example dataset D using defaults
+#' print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D,
+#'                            solution_type = "eigen", quiet = TRUE)))
+#' coef(fit)
+#' endpoints(fit)
+#' \dontrun{
+#' # deSolve is slower when no C compiler (gcc) was available during model generation
+#' print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D,
+#'                            solution_type = "deSolve")))
+#' coef(fit.deSolve)
+#' endpoints(fit.deSolve)
+#' }
+#'
+#' # Use stepwise fitting, using optimised parameters from parent only fit, FOMC
+#' \dontrun{
+#' FOMC_SFO <- mkinmod(
+#'   parent = mkinsub("FOMC", "m1"),
+#'   m1 = mkinsub("SFO"))
+#' # Fit the model to the FOCUS example dataset D using defaults
+#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE)
+#' # Use starting parameters from parent only FOMC fit
+#' fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, quiet = TRUE)
+#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE,
+#'   parms.ini = fit.FOMC$bparms.ode)
+#'
+#' # Use stepwise fitting, using optimised parameters from parent only fit, SFORB
+#' SFORB_SFO <- mkinmod(
+#'   parent = list(type = "SFORB", to = "m1", sink = TRUE),
+#'   m1 = list(type = "SFO"))
+#' # Fit the model to the FOCUS example dataset D using defaults
+#' fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, quiet = TRUE)
+#' fit.SFORB_SFO.deSolve <- mkinfit(SFORB_SFO, FOCUS_2006_D, solution_type = "deSolve",
+#'                                  quiet = TRUE)
+#' # Use starting parameters from parent only SFORB fit (not really needed in this case)
+#' fit.SFORB = mkinfit("SFORB", FOCUS_2006_D, quiet = TRUE)
+#' fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode, quiet = TRUE)
+#' }
+#'
+#' \dontrun{
+#' # Weighted fits, including IRLS
+#' SFO_SFO.ff <- mkinmod(parent = mkinsub("SFO", "m1"),
+#'                       m1 = mkinsub("SFO"), use_of_ff = "max")
+#' f.noweight <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, quiet = TRUE)
+#' summary(f.noweight)
+#' f.obs <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "obs", quiet = TRUE)
+#' summary(f.obs)
+#' f.tc <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "tc", quiet = TRUE)
+#' summary(f.tc)
+#' }
+#'
+#'
+#' @export
 mkinfit <- function(mkinmod, observed,
   parms.ini = "auto",
   state.ini = "auto",
@@ -34,11 +250,17 @@ mkinfit <- function(mkinmod, observed,
   quiet = FALSE,
   atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
   error_model = c("const", "obs", "tc"),
-  error_model_algorithm = c("d_3", "direct", "twostep", "threestep", "fourstep", "IRLS"),
+  error_model_algorithm = c("auto", "d_3", "direct", "twostep", "threestep", "fourstep", "IRLS", "OLS"),
   reweight.tol = 1e-8, reweight.max.iter = 10,
   trace_parms = FALSE,
   ...)
 {
+  call <- match.call()
+
+  # Derive the name used for the model
+  if (is.character(mkinmod)) mkinmod_name <- mkinmod
+  else mkinmod_name <- deparse(substitute(mkinmod))
+
   # Check mkinmod and generate a model for the variable whith the highest value
   # if a suitable string is given
   parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE", "logistic")
@@ -87,6 +309,14 @@ mkinfit <- function(mkinmod, observed,
 
   # Define starting values for parameters where not specified by the user
   if (parms.ini[[1]] == "auto") parms.ini = vector()
+
+  # Override parms.ini for parameters given as a numeric vector in
+  # fixed_parms
+  if (is.numeric(fixed_parms)) {
+    fixed_parm_names <- names(fixed_parms)
+    parms.ini[fixed_parm_names] <- fixed_parms
+    fixed_parms <- fixed_parm_names
+  }
 
   # Warn for inital parameter specifications that are not in the model
   wrongpar.names <- setdiff(names(parms.ini), mkinmod$parms)
@@ -170,15 +400,22 @@ mkinfit <- function(mkinmod, observed,
 
   # Set default for state.ini if appropriate
   parent_name = names(mkinmod$spec)[[1]]
-  if (state.ini[1] == "auto") {
-    parent_time_0 = subset(observed, time == 0 & name == parent_name)$value
-    parent_time_0_mean = mean(parent_time_0, na.rm = TRUE)
-    if (is.na(parent_time_0_mean)) {
-      state.ini = c(100, rep(0, length(mkinmod$diffs) - 1))
-    } else {
-      state.ini = c(parent_time_0_mean, rep(0, length(mkinmod$diffs) - 1))
-    }
+  parent_time_0 = subset(observed, time == 0 & name == parent_name)$value
+  parent_time_0_mean = mean(parent_time_0, na.rm = TRUE)
+  if (is.na(parent_time_0_mean)) {
+    state.ini_auto = c(100, rep(0, length(mkinmod$diffs) - 1))
+  } else {
+    state.ini_auto = c(parent_time_0_mean, rep(0, length(mkinmod$diffs) - 1))
   }
+  names(state.ini_auto) <- mod_vars
+
+  if (state.ini[1] == "auto") {
+    state.ini_used <- state.ini_auto
+  } else {
+    state.ini_used <- state.ini_auto
+    state.ini_used[names(state.ini)] <- state.ini
+  }
+  state.ini <- state.ini_used
 
   # Name the inital state variable values if they are not named yet
   if(is.null(names(state.ini))) names(state.ini) <- mod_vars
@@ -244,13 +481,21 @@ mkinfit <- function(mkinmod, observed,
     }
   }
 
-  # Get the error model
+  # Get the error model and the algorithm for fitting
   err_mod <- match.arg(error_model)
   error_model_algorithm = match.arg(error_model_algorithm)
+  if (error_model_algorithm == "OLS") {
+    if (err_mod != "const") stop("OLS is only appropriate for constant variance")
+  }
+  if (error_model_algorithm == "auto") {
+    error_model_algorithm = switch(err_mod,
+      const = "OLS", obs = "d_3", tc = "d_3")
+  }
   errparm_names <- switch(err_mod,
     "const" = "sigma",
     "obs" = paste0("sigma_", obs_vars),
     "tc" = c("sigma_low", "rsd_high"))
+  errparm_names_optim <- if (error_model_algorithm == "OLS") NULL else errparm_names
 
   # Define starting values for the error model
   if (err.ini[1] != "auto") {
@@ -271,6 +516,11 @@ mkinfit <- function(mkinmod, observed,
     }
     names(errparms) <- errparm_names
   }
+  if (error_model_algorithm == "OLS") {
+    errparms_optim <- NULL
+  } else {
+    errparms_optim <- errparms
+  }
 
   # Define outtimes for model solution.
   # Include time points at which observed data are available
@@ -278,49 +528,51 @@ mkinfit <- function(mkinmod, observed,
                                               max(observed$time),
                                               length.out = n.outtimes))))
 
-  # Define log-likelihood function for optimisation, including (back)transformations
-  nlogLik <- function(P, trans = TRUE, OLS = FALSE, fixed_degparms = FALSE, fixed_errparms = FALSE, update_data = TRUE, ...)
+  # Define the objective function for optimisation, including (back)transformations
+  cost_function <- function(P, trans = TRUE, OLS = FALSE, fixed_degparms = FALSE, fixed_errparms = FALSE, update_data = TRUE, ...)
   {
     assign("calls", calls + 1, inherits = TRUE) # Increase the model solution counter
 
     # Trace parameter values if requested and if we are actually optimising
     if(trace_parms & update_data) cat(P, "\n")
 
+    # Determine local parameter values for the cost estimation
     if (is.numeric(fixed_degparms)) {
-      degparms <- fixed_degparms
-      errparms <- P # This version of errparms is local to the function
+      cost_degparms <- fixed_degparms
+      cost_errparms <- P
       degparms_fixed = TRUE
     } else {
       degparms_fixed = FALSE
     }
 
     if (is.numeric(fixed_errparms)) {
-      degparms <- P
-      errparms <- fixed_errparms # Local to the function
+      cost_degparms <- P
+      cost_errparms <- fixed_errparms
       errparms_fixed = TRUE
     } else {
       errparms_fixed = FALSE
     }
 
     if (OLS) {
-      degparms <- P
+      cost_degparms <- P
+      cost_errparms <- numeric(0)
     }
 
     if (!OLS & !degparms_fixed & !errparms_fixed) {
-      degparms <- P[1:(length(P) - length(errparms))]
-      errparms <- P[(length(degparms) + 1):length(P)]
+      cost_degparms <- P[1:(length(P) - length(errparms))]
+      cost_errparms <- P[(length(cost_degparms) + 1):length(P)]
     }
 
     # Initial states for t0
     if(length(state.ini.optim) > 0) {
-      odeini <- c(degparms[1:length(state.ini.optim)], state.ini.fixed)
+      odeini <- c(cost_degparms[1:length(state.ini.optim)], state.ini.fixed)
       names(odeini) <- c(state.ini.optim.boxnames, state.ini.fixed.boxnames)
     } else {
       odeini <- state.ini.fixed
       names(odeini) <- state.ini.fixed.boxnames
     }
 
-    odeparms.optim <- degparms[(length(state.ini.optim) + 1):length(degparms)]
+    odeparms.optim <- cost_degparms[(length(state.ini.optim) + 1):length(cost_degparms)]
 
     if (trans == TRUE) {
       odeparms <- c(odeparms.optim, transparms.fixed)
@@ -342,53 +594,55 @@ mkinfit <- function(mkinmod, observed,
     out_long <- mkin_wide_to_long(out, time = "time")
 
     if (err_mod == "const") {
-      observed$std <- errparms["sigma"]
+      observed$std <- if (OLS) NA else cost_errparms["sigma"]
     }
     if (err_mod == "obs") {
       std_names <- paste0("sigma_", observed$name)
-      observed$std <- errparms[std_names]
+      observed$std <- cost_errparms[std_names]
     }
     if (err_mod == "tc") {
       tmp <- merge(observed, out_long, by = c("time", "name"))
       tmp$name <- ordered(tmp$name, levels = obs_vars)
       tmp <- tmp[order(tmp$name, tmp$time), ]
-      observed$std <- sqrt(errparms["sigma_low"]^2 + tmp$value.y^2 * errparms["rsd_high"]^2)
+      observed$std <- sqrt(cost_errparms["sigma_low"]^2 + tmp$value.y^2 * cost_errparms["rsd_high"]^2)
     }
 
-    data_log_lik <- merge(observed[c("name", "time", "value", "std")], out_long,
+    cost_data <- merge(observed[c("name", "time", "value", "std")], out_long,
                          by = c("name", "time"), suffixes = c(".observed", ".predicted"))
 
     if (OLS) {
-      nlogLik <- with(data_log_lik, sum((value.observed - value.predicted)^2))
+      # Cost is the sum of squared residuals
+      cost <- with(cost_data, sum((value.observed - value.predicted)^2))
     } else {
-      nlogLik <- - with(data_log_lik,
+      # Cost is the negative log-likelihood
+      cost <- - with(cost_data,
         sum(dnorm(x = value.observed, mean = value.predicted, sd = std, log = TRUE)))
     }
 
-    # We update the current likelihood and data during the optimisation, not
+    # We update the current cost and data during the optimisation, not
     # during hessian calculations
     if (update_data) {
 
       assign("out_predicted", out_long, inherits = TRUE)
-      assign("data_errmod", data_log_lik, inherits = TRUE)
+      assign("current_data", cost_data, inherits = TRUE)
 
-      if (nlogLik < nlogLik.current) {
-        assign("nlogLik.current", nlogLik, inherits = TRUE)
+      if (cost < cost.current) {
+        assign("cost.current", cost, inherits = TRUE)
         if (!quiet) cat(ifelse(OLS, "Sum of squared residuals", "Negative log-likelihood"),
-                        " at call ", calls, ": ", nlogLik.current, "\n", sep = "")
+                        " at call ", calls, ": ", cost.current, "\n", sep = "")
       }
     }
-    return(nlogLik)
+    return(cost)
   }
 
-  n_optim <- length(c(state.ini.optim, transparms.optim, errparm_names))
   names_optim <- c(names(state.ini.optim),
                    names(transparms.optim),
-                   errparm_names)
+                   errparm_names_optim)
+  n_optim <- length(names_optim)
 
   # Define lower and upper bounds other than -Inf and Inf for parameters
   # for which no internal transformation is requested in the call to mkinfit
-  # and for error model parameters
+  # and for optimised error model parameters
   lower <- rep(-Inf, n_optim)
   upper <- rep(Inf, n_optim)
   names(lower) <- names(upper) <- names_optim
@@ -416,7 +670,9 @@ mkinfit <- function(mkinmod, observed,
   }
 
   if (err_mod == "const") {
-    lower["sigma"] <- 0
+    if (error_model_algorithm != "OLS") {
+      lower["sigma"] <- 0
+    }
   }
   if (err_mod == "obs") {
     index_sigma <- grep("^sigma_", names(lower))
@@ -427,11 +683,11 @@ mkinfit <- function(mkinmod, observed,
     lower["rsd_high"] <- 0
   }
 
-  # Counter for likelihood evaluations
+  # Counter for cost function evaluations
   calls = 0
-  nlogLik.current <- Inf
+  cost.current <- Inf
   out_predicted <- NA
-  data_errmod <- NA
+  current_data <- NA
 
   # Show parameter names if tracing is requested
   if(trace_parms) cat(names_optim, "\n")
@@ -441,142 +697,149 @@ mkinfit <- function(mkinmod, observed,
   # Do the fit and take the time until the hessians are calculated
   fit_time <- system.time({
     degparms <- c(state.ini.optim, transparms.optim)
+    n_degparms <- length(degparms)
+    degparms_index <- seq(1, n_degparms)
+    errparms_index <- seq(n_degparms + 1, length.out = length(errparms))
 
-    if (err_mod == "const") {
+    if (error_model_algorithm == "d_3") {
+      if (!quiet) message("Directly optimising the complete model")
+      parms.start <- c(degparms, errparms)
+      fit_direct <- nlminb(parms.start, cost_function,
+        lower = lower[names(parms.start)],
+        upper = upper[names(parms.start)],
+        control = control, ...)
+      fit_direct$logLik <- - cost.current
+      if (error_model_algorithm == "direct") {
+        degparms <- fit_direct$par[degparms_index]
+        errparms <- fit_direct$par[errparms_index]
+      } else {
+        cost.current <- Inf # reset to avoid conflict with the OLS step
+      }
+    }
+    if (error_model_algorithm != "direct") {
       if (!quiet) message("Ordinary least squares optimisation")
-      fit <- nlminb(degparms, nlogLik, control = control,
+      fit <- nlminb(degparms, cost_function, control = control,
         lower = lower[names(degparms)],
         upper = upper[names(degparms)], OLS = TRUE, ...)
       degparms <- fit$par
 
       # Get the maximum likelihood estimate for sigma at the optimum parameter values
-      data_errmod$residual <- data_errmod$value.observed - data_errmod$value.predicted
-      sigma_mle <- sqrt(sum(data_errmod$residual^2)/nrow(data_errmod))
+      current_data$residual <- current_data$value.observed - current_data$value.predicted
+      sigma_mle <- sqrt(sum(current_data$residual^2)/nrow(current_data))
 
-      errparms <- c(sigma = sigma_mle)
-      nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
-      fit$logLik <- - nlogLik.current
-    } else {
+      # Use that estimate for the constant variance, or as first guess if err_mod = "obs"
+      if (err_mod != "tc") {
+        errparms[names(errparms)] <- sigma_mle
+      }
+      fit$par <- c(fit$par, errparms)
+
+      cost.current <- cost_function(c(degparms, errparms), OLS = FALSE)
+      fit$logLik <- - cost.current
+    }
+    if (error_model_algorithm %in% c("threestep", "fourstep", "d_3")) {
+      if (!quiet) message("Optimising the error model")
+      fit <- nlminb(errparms, cost_function, control = control,
+        lower = lower[names(errparms)],
+        upper = upper[names(errparms)],
+        fixed_degparms = degparms, ...)
+      errparms <- fit$par
+    }
+    if (error_model_algorithm == "fourstep") {
+      if (!quiet) message("Optimising the degradation model")
+      fit <- nlminb(degparms, cost_function, control = control,
+        lower = lower[names(degparms)],
+        upper = upper[names(degparms)],
+        fixed_errparms = errparms, ...)
+      degparms <- fit$par
+    }
+    if (error_model_algorithm %in%
+      c("direct", "twostep", "threestep", "fourstep", "d_3")) {
+      if (!quiet) message("Optimising the complete model")
+      parms.start <- c(degparms, errparms)
+      fit <- nlminb(parms.start, cost_function,
+        lower = lower[names(parms.start)],
+        upper = upper[names(parms.start)],
+        control = control, ...)
+      degparms <- fit$par[degparms_index]
+      errparms <- fit$par[errparms_index]
+      fit$logLik <- - cost.current
+
       if (error_model_algorithm == "d_3") {
-        if (!quiet) message("Directly optimising the complete model")
-        parms.start <- c(degparms, errparms)
-        fit_direct <- nlminb(parms.start, nlogLik,
-          lower = lower[names(parms.start)],
-          upper = upper[names(parms.start)],
-          control = control, ...)
-        fit_direct$logLik <- - nlogLik.current
-        nlogLik.current <- Inf # reset to avoid conflict with the OLS step
-      }
-      if (error_model_algorithm != "direct") {
-        if (!quiet) message("Ordinary least squares optimisation")
-        fit <- nlminb(degparms, nlogLik, control = control,
-          lower = lower[names(degparms)],
-          upper = upper[names(degparms)], OLS = TRUE, ...)
-        degparms <- fit$par
-        # Get the maximum likelihood estimate for sigma at the optimum parameter values
-        data_errmod$residual <- data_errmod$value.observed - data_errmod$value.predicted
-        sigma_mle <- sqrt(sum(data_errmod$residual^2)/nrow(data_errmod))
-
-        nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
-        fit$logLik <- - nlogLik.current
-      }
-      if (error_model_algorithm %in% c("threestep", "fourstep", "d_3")) {
-        if (!quiet) message("Optimising the error model")
-        fit <- nlminb(errparms, nlogLik, control = control,
-          lower = lower[names(errparms)],
-          upper = upper[names(errparms)],
-          fixed_degparms = degparms, ...)
-        errparms <- fit$par
-      }
-      if (error_model_algorithm == "fourstep") {
-        if (!quiet) message("Optimising the degradation model")
-        fit <- nlminb(degparms, nlogLik, control = control,
-          lower = lower[names(degparms)],
-          upper = upper[names(degparms)],
-          fixed_errparms = errparms, ...)
-        degparms <- fit$par
-      }
-      if (error_model_algorithm %in% c("direct", "twostep", "threestep",
-                                       "fourstep", "d_3")) {
-        if (!quiet) message("Optimising the complete model")
-        parms.start <- c(degparms, errparms)
-        fit <- nlminb(parms.start, nlogLik,
-          lower = lower[names(parms.start)],
-          upper = upper[names(parms.start)],
-          control = control, ...)
-        fit$logLik <- - nlogLik.current
-
         d_3_messages = c(
            same = "Direct fitting and three-step fitting yield approximately the same likelihood",
            threestep = "Three-step fitting yielded a higher likelihood than direct fitting",
            direct = "Direct fitting yielded a higher likelihood than three-step fitting")
-        if (error_model_algorithm == "d_3") {
-          rel_diff <- abs((fit_direct$logLik - fit$logLik))/-mean(c(fit_direct$logLik, fit$logLik))
-          if (rel_diff < 0.0001) {
-            if (!quiet) message(d_3_messages["same"])
-            fit$d_3_message <- d_3_messages["same"]
+        rel_diff <- abs((fit_direct$logLik - fit$logLik))/-mean(c(fit_direct$logLik, fit$logLik))
+        if (rel_diff < 0.0001) {
+          if (!quiet) message(d_3_messages["same"])
+          fit$d_3_message <- d_3_messages["same"]
+        } else {
+          if (fit$logLik > fit_direct$logLik) {
+            if (!quiet) message(d_3_messages["threestep"])
+            fit$d_3_message <- d_3_messages["threestep"]
           } else {
-            if (fit$logLik > fit_direct$logLik) {
-              if (!quiet) message(d_3_messages["threestep"])
-              fit$d_3_message <- d_3_messages["threestep"]
-            } else {
-              if (!quiet) message(d_3_messages["direct"])
-              fit <- fit_direct
-              fit$d_3_message <- d_3_messages["direct"]
-            }
+            if (!quiet) message(d_3_messages["direct"])
+            fit <- fit_direct
+            fit$d_3_message <- d_3_messages["direct"]
+            degparms <- fit$par[degparms_index]
+            errparms <- fit$par[errparms_index]
           }
         }
       }
-      if (err_mod != "const" & error_model_algorithm == "IRLS") {
-        reweight.diff <- 1
-        n.iter <- 0
+    }
+    if (err_mod != "const" & error_model_algorithm == "IRLS") {
+      reweight.diff <- 1
+      n.iter <- 0
+      errparms_last <- errparms
+
+      while (reweight.diff > reweight.tol &
+             n.iter < reweight.max.iter) {
+
+        if (!quiet) message("Optimising the error model")
+        fit <- nlminb(errparms, cost_function, control = control,
+          lower = lower[names(errparms)],
+          upper = upper[names(errparms)],
+          fixed_degparms = degparms, ...)
+        errparms <- fit$par
+
+        if (!quiet) message("Optimising the degradation model")
+        fit <- nlminb(degparms, cost_function, control = control,
+          lower = lower[names(degparms)],
+          upper = upper[names(degparms)],
+          fixed_errparms = errparms, ...)
+        degparms <- fit$par
+
+        reweight.diff <- dist(rbind(errparms, errparms_last))
         errparms_last <- errparms
 
-        while (reweight.diff > reweight.tol &
-               n.iter < reweight.max.iter) {
-
-          if (!quiet) message("Optimising the error model")
-          fit <- nlminb(errparms, nlogLik, control = control,
-            lower = lower[names(errparms)],
-            upper = upper[names(errparms)],
-            fixed_degparms = degparms, ...)
-          errparms <- fit$par
-
-          if (!quiet) message("Optimising the degradation model")
-          fit <- nlminb(degparms, nlogLik, control = control,
-            lower = lower[names(degparms)],
-            upper = upper[names(degparms)],
-            fixed_errparms = errparms, ...)
-          degparms <- fit$par
-
-          reweight.diff <- dist(rbind(errparms, errparms_last))
-          errparms_last <- errparms
-
-          fit$par <- c(fit$par, errparms)
-          nlogLik.current <- nlogLik(c(degparms, errparms), OLS = FALSE)
-          fit$logLik <- - nlogLik.current
-        }
+        fit$par <- c(fit$par, errparms)
+        cost.current <- cost_function(c(degparms, errparms), OLS = FALSE)
+        fit$logLik <- - cost.current
       }
     }
-    fit$error_model_algorithm <- error_model_algorithm
 
-    # We include the error model in the parameter uncertainty analysis, also
-    # for constant variance, to get a confidence interval for it
-    if (err_mod == "const") {
-      fit$par <- c(fit$par, sigma = sigma_mle)
-    }
-    fit$hessian <- try(numDeriv::hessian(nlogLik, fit$par, update_data = FALSE), silent = TRUE)
+    fit$hessian <- try(numDeriv::hessian(cost_function, c(degparms, errparms), OLS = FALSE,
+        update_data = FALSE), silent = TRUE)
+    dimnames(fit$hessian) <- list(names(c(degparms, errparms)),
+      names(c(degparms, errparms)))
 
     # Backtransform parameters
-    bparms.optim = backtransform_odeparms(fit$par, mkinmod,
+    bparms.optim = backtransform_odeparms(degparms, mkinmod,
       transform_rates = transform_rates,
       transform_fractions = transform_fractions)
     bparms.fixed = c(state.ini.fixed, parms.fixed)
     bparms.all = c(bparms.optim, parms.fixed)
 
-    fit$hessian_notrans <- try(numDeriv::hessian(nlogLik, c(bparms.optim, fit$par[names(errparms)]),
-                                       trans = FALSE, update_data = FALSE), silent = TRUE)
+    fit$hessian_notrans <- try(numDeriv::hessian(cost_function, c(bparms.optim, errparms),
+        OLS = FALSE, trans = FALSE, update_data = FALSE), silent = TRUE)
+
+    dimnames(fit$hessian_notrans) <- list(names(c(bparms.optim, errparms)),
+      names(c(bparms.optim, errparms)))
   })
+
+  fit$call <- call
+
+  fit$error_model_algorithm <- error_model_algorithm
 
   if (fit$convergence != 0) {
     fit$warning = paste0("Optimisation did not converge:\n", fit$message)
@@ -589,30 +852,39 @@ mkinfit <- function(mkinmod, observed,
   fit$solution_type <- solution_type
   fit$transform_rates <- transform_rates
   fit$transform_fractions <- transform_fractions
+  fit$reweight.tol <- reweight.tol
+  fit$reweight.max.iter <- reweight.max.iter
   fit$control <- control
   fit$calls <- calls
   fit$time <- fit_time
 
-  # We also need the model for summary and plotting
+  # We also need the model and a model name for summary and plotting
   fit$mkinmod <- mkinmod
+  fit$mkinmod$name <- mkinmod_name
 
   # We need data and predictions for summary and plotting
   fit$observed <- observed
   fit$obs_vars <- obs_vars
   fit$predicted <- out_predicted
 
-  # Attach the negative log-likelihood function for post-hoc parameter uncertainty analysis
-  fit$nlogLik <- nlogLik
+  # Residual sum of squares as a function of the fitted parameters
+  fit$rss <- function(P) cost_function(P, OLS = TRUE, update_data = FALSE)
+
+  # Log-likelihood with possibility to fix degparms or errparms
+  fit$ll <- function(P, fixed_degparms = FALSE, fixed_errparms = FALSE) {
+    - cost_function(P, trans = FALSE, fixed_degparms = fixed_degparms,
+      fixed_errparms = fixed_errparms, OLS = FALSE, update_data = FALSE)
+  }
 
   # Collect initial parameter values in three dataframes
   fit$start <- data.frame(value = c(state.ini.optim,
-                                    parms.optim, errparms))
+                                    parms.optim, errparms_optim))
   fit$start$type = c(rep("state", length(state.ini.optim)),
                      rep("deparm", length(parms.optim)),
-                     rep("error", length(errparms)))
+                     rep("error", length(errparms_optim)))
 
   fit$start_transformed = data.frame(
-      value = c(state.ini.optim, transparms.optim, errparms),
+      value = c(state.ini.optim, transparms.optim, errparms_optim),
       lower = lower,
       upper = upper)
 
@@ -621,14 +893,14 @@ mkinfit <- function(mkinmod, observed,
                      rep("deparm", length(parms.fixed)))
 
   # Sort observed, predicted and residuals
-  data_errmod$name <- ordered(data_errmod$name, levels = obs_vars)
+  current_data$name <- ordered(current_data$name, levels = obs_vars)
 
-  data <- data_errmod[order(data_errmod$name, data_errmod$time), ]
+  ordered_data <- current_data[order(current_data$name, current_data$time), ]
 
-  fit$data <- data.frame(time = data$time,
-                         variable = data$name,
-                         observed = data$value.observed,
-                         predicted = data$value.predicted)
+  fit$data <- data.frame(time = ordered_data$time,
+                         variable = ordered_data$name,
+                         observed = ordered_data$value.observed,
+                         predicted = ordered_data$value.predicted)
 
   fit$data$residual <- fit$data$observed - fit$data$predicted
 
@@ -646,8 +918,8 @@ mkinfit <- function(mkinmod, observed,
                         state.ini.fixed)
   names(fit$bparms.state) <- gsub("_0$", "", names(fit$bparms.state))
 
-  fit$errparms.optim <- fit$par[names(errparms)]
-  fit$df.residual <- n_observed - n_optim
+  fit$errparms <- errparms
+  fit$df.residual <- n_observed - length(c(degparms, errparms))
 
   fit$date <- date()
   fit$version <- as.character(utils::packageVersion("mkin"))
@@ -656,222 +928,3 @@ mkinfit <- function(mkinmod, observed,
   class(fit) <- c("mkinfit", "modFit")
   return(fit)
 }
-
-summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, ...) {
-  param  <- object$par
-  pnames <- names(param)
-  bpnames <- names(object$bparms.optim)
-  epnames <- names(object$errparms.optim)
-  p      <- length(param)
-  mod_vars <- names(object$mkinmod$diffs)
-  covar  <- try(solve(object$hessian), silent = TRUE)
-  covar_notrans  <- try(solve(object$hessian_notrans), silent = TRUE)
-  rdf <- object$df.residual
-
-  if (!is.numeric(covar) | is.na(covar[1])) {
-    covar <- NULL
-    se <- lci <- uci <- rep(NA, p)
-  } else {
-    rownames(covar) <- colnames(covar) <- pnames
-    se     <- sqrt(diag(covar))
-    lci    <- param + qt(alpha/2, rdf) * se
-    uci    <- param + qt(1-alpha/2, rdf) * se
-  }
-
-  beparms.optim <- c(object$bparms.optim, object$par[epnames])
-  if (!is.numeric(covar_notrans) | is.na(covar_notrans[1])) {
-    covar_notrans <- NULL
-    se_notrans <- tval <- pval <- rep(NA, p)
-  } else {
-    rownames(covar_notrans) <- colnames(covar_notrans) <- c(bpnames, epnames)
-    se_notrans <- sqrt(diag(covar_notrans))
-    tval  <- beparms.optim / se_notrans
-    pval  <- pt(abs(tval), rdf, lower.tail = FALSE)
-  }
-
-  names(se) <- pnames
-
-  param <- cbind(param, se, lci, uci)
-  dimnames(param) <- list(pnames, c("Estimate", "Std. Error", "Lower", "Upper"))
-
-  bparam <- cbind(Estimate = beparms.optim, se_notrans,
-                  "t value" = tval, "Pr(>t)" = pval, Lower = NA, Upper = NA)
-
-  # Transform boundaries of CI for one parameter at a time,
-  # with the exception of sets of formation fractions (single fractions are OK).
-  f_names_skip <- character(0)
-  for (box in mod_vars) { # Figure out sets of fractions to skip
-    f_names <- grep(paste("^f", box, sep = "_"), pnames, value = TRUE)
-    n_paths <- length(f_names)
-    if (n_paths > 1) f_names_skip <- c(f_names_skip, f_names)
-  }
-
-  for (pname in pnames) {
-    if (!pname %in% f_names_skip) {
-      par.lower <- param[pname, "Lower"]
-      par.upper <- param[pname, "Upper"]
-      names(par.lower) <- names(par.upper) <- pname
-      bpl <- backtransform_odeparms(par.lower, object$mkinmod,
-                                            object$transform_rates,
-                                            object$transform_fractions)
-      bpu <- backtransform_odeparms(par.upper, object$mkinmod,
-                                            object$transform_rates,
-                                            object$transform_fractions)
-      bparam[names(bpl), "Lower"] <- bpl
-      bparam[names(bpu), "Upper"] <- bpu
-    }
-  }
-  bparam[epnames, c("Lower", "Upper")] <- param[epnames, c("Lower", "Upper")]
-
-  ans <- list(
-    version = as.character(utils::packageVersion("mkin")),
-    Rversion = paste(R.version$major, R.version$minor, sep="."),
-    date.fit = object$date,
-    date.summary = date(),
-    solution_type = object$solution_type,
-    warning = object$warning,
-    use_of_ff = object$mkinmod$use_of_ff,
-    error_model_algorithm = object$error_model_algorithm,
-    df = c(p, rdf),
-    cov.unscaled = covar,
-    err_mod = object$err_mod,
-    #cov.scaled = covar * resvar,
-    niter = object$iterations,
-    calls = object$calls,
-    time = object$time,
-    par = param,
-    bpar = bparam)
-
-  if (!is.null(object$version)) {
-    ans$fit_version <- object$version
-    ans$fit_Rversion <- object$Rversion
-  }
-
-  ans$diffs <- object$mkinmod$diffs
-  if(data) ans$data <- object$data
-  ans$start <- object$start
-  ans$start_transformed <- object$start_transformed
-
-  ans$fixed <- object$fixed
-
-  ans$errmin <- mkinerrmin(object, alpha = 0.05)
-
-  if (object$calls > 0) {
-    if (!is.null(ans$cov.unscaled)){
-      Corr <- cov2cor(ans$cov.unscaled)
-      rownames(Corr) <- colnames(Corr) <- rownames(ans$par)
-      ans$Corr <- Corr
-    } else {
-      warning("Could not calculate correlation; no covariance matrix")
-    }
-  }
-
-  ans$bparms.ode <- object$bparms.ode
-  ep <- endpoints(object)
-  if (length(ep$ff) != 0)
-    ans$ff <- ep$ff
-  if (distimes) ans$distimes <- ep$distimes
-  if (length(ep$SFORB) != 0) ans$SFORB <- ep$SFORB
-  if (!is.null(object$d_3_message)) ans$d_3_message <- object$d_3_message
-  class(ans) <- c("summary.mkinfit", "summary.modFit")
-  return(ans)
-}
-
-# Expanded from print.summary.modFit
-print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  if (is.null(x$fit_version)) {
-    cat("mkin version:   ", x$version, "\n")
-    cat("R version:      ", x$Rversion, "\n")
-  } else {
-    cat("mkin version used for fitting:   ", x$fit_version, "\n")
-    cat("R version used for fitting:      ", x$fit_Rversion, "\n")
-  }
-
-  cat("Date of fit:    ", x$date.fit, "\n")
-  cat("Date of summary:", x$date.summary, "\n")
-
-  if (!is.null(x$warning)) cat("\n\nWarning:", x$warning, "\n\n")
-
-  cat("\nEquations:\n")
-  nice_diffs <- gsub("^(d.*) =", "\\1/dt =", x[["diffs"]])
-  writeLines(strwrap(nice_diffs, exdent = 11))
-  df  <- x$df
-  rdf <- df[2]
-
-  cat("\nModel predictions using solution type", x$solution_type, "\n")
-
-  cat("\nFitted using", x$calls, "model solutions performed in", x$time[["elapsed"]],  "s\n")
-
-  cat("\nError model: ")
-  cat(switch(x$err_mod,
-             const = "Constant variance",
-             obs = "Variance unique to each observed variable",
-             tc = "Two-component variance function"), "\n")
-
-  cat("\nError model algorithm:", x$error_model_algorithm, "\n")
-  if (!is.null(x$d_3_message)) cat(x$d_3_message, "\n")
-
-  cat("\nStarting values for parameters to be optimised:\n")
-  print(x$start)
-
-  cat("\nStarting values for the transformed parameters actually optimised:\n")
-  print(x$start_transformed)
-
-  cat("\nFixed parameter values:\n")
-  if(length(x$fixed$value) == 0) cat("None\n")
-  else print(x$fixed)
-
-  cat("\nOptimised, transformed parameters with symmetric confidence intervals:\n")
-  print(signif(x$par, digits = digits))
-
-  if (x$calls > 0) {
-    cat("\nParameter correlation:\n")
-    if (!is.null(x$cov.unscaled)){
-      print(x$Corr, digits = digits, ...)
-    } else {
-      cat("No covariance matrix")
-    }
-  }
-
-  cat("\nBacktransformed parameters:\n")
-  cat("Confidence intervals for internally transformed parameters are asymmetric.\n")
-  if ((x$version) < "0.9-36") {
-    cat("To get the usual (questionable) t-test, upgrade mkin and repeat the fit.\n")
-    print(signif(x$bpar, digits = digits))
-  } else {
-    cat("t-test (unrealistically) based on the assumption of normal distribution\n")
-    cat("for estimators of untransformed parameters.\n")
-    print(signif(x$bpar[, c(1, 3, 4, 5, 6)], digits = digits))
-  }
-
-  cat("\nFOCUS Chi2 error levels in percent:\n")
-  x$errmin$err.min <- 100 * x$errmin$err.min
-  print(x$errmin, digits=digits,...)
-
-  printSFORB <- !is.null(x$SFORB)
-  if(printSFORB){
-    cat("\nEstimated Eigenvalues of SFORB model(s):\n")
-    print(x$SFORB, digits=digits,...)
-  }
-
-  printff <- !is.null(x$ff)
-  if(printff){
-    cat("\nResulting formation fractions:\n")
-    print(data.frame(ff = x$ff), digits=digits,...)
-  }
-
-  printdistimes <- !is.null(x$distimes)
-  if(printdistimes){
-    cat("\nEstimated disappearance times:\n")
-    print(x$distimes, digits=digits,...)
-  }
-
-  printdata <- !is.null(x$data)
-  if (printdata){
-    cat("\nData:\n")
-    print(format(x$data, digits = digits, ...), row.names = FALSE)
-  }
-
-  invisible(x)
-}
-# vim: set ts=2 sw=2 expandtab:
