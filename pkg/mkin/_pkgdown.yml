@@ -1,3 +1,5 @@
+url: https://pkgdown.jrwb.de/mkin
+
 title: mkin
 
 template:
@@ -16,12 +18,15 @@ reference:
     contents:
       - plot.mkinfit
       - summary.mkinfit
-      - mkinresplot
-      -  mkinparplot
-      -  mkinerrplot
-      -  endpoints
-      -  mkinerrmin
-      - logLik.mkinfit
+      - parms.mkinfit
+      - confint.mkinfit
+      - update.mkinfit
+      - lrtest.mkinfit
+      - loftest
+      - mkinerrmin
+      - endpoints
+      - aw
+      - CAKE_export
   - title: Work with mmkin objects
     desc: Functions working with aggregated results
     contents:
@@ -49,9 +54,8 @@ reference:
       - nafta
       - print.nafta
       - plot.nafta
-  - title: Helper functions
+  - title: Helper functions mainly used internally
     contents:
-      - geometric_mean
       - mkinsub
       - max_twa_parent
       - mkinpredict
@@ -61,7 +65,12 @@ reference:
       - transform_odeparms
       - ilr
       - sigma_twocomp
-      - CAKE_export
+      - logLik.mkinfit
+      - residuals.mkinfit
+      - nobs.mkinfit
+      - mkinresplot
+      - mkinparplot
+      - mkinerrplot
   - title: Analytical solutions
     desc: Parent only model solutions
     contents:
