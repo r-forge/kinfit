@@ -1,6 +1,22 @@
 # NEWS for package 'gmkin'
 
-## gmkin 0.6-7 (2016-01-25)
+## gmkin 0.6-10 (2019-07-09)
+
+- Adapt to mkin 0.9.49.6, making the new way to fit variance by variable and the two-component error model available to gmkin
+
+- Use devEMF for better vector graphics export for Windows
+
+- Manual weighting is not possible as this functionality is currently not present in mkin versions > 0.9.48.1
+
+## gmkin 0.6-9 (2018-09-13)
+
+- Enable fits with the two-component error model during iterative reweighting (IRLS)
+
+## gmkin 0.6-8 (2016-01-25)
+
+- Formal improvements mainly in the docs
+
+## gmkin 0.6-7 (2017-03-06)
 
 ### Bug fixes
 
