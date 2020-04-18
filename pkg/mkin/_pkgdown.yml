@@ -33,6 +33,13 @@ reference:
       - "`[.mmkin`"
       - plot.mmkin
       - AIC.mmkin
+  - title: Mixed models
+    desc: Create and work with nonlinear mixed models
+    contents:
+      - nlme.mmkin
+      - plot.nlme.mmkin
+      - nlme_function
+      - get_deg_func
   - title: Datasets and known results
     contents:
       - FOCUS_2006_A

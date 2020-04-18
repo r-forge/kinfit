@@ -5,10 +5,20 @@
 \title{Plot model fits (observed and fitted) and the residuals for a row or column
 of an mmkin object}
 \usage{
-\method{plot}{mmkin}(x, main = "auto", legends = 1,
-  resplot = c("time", "errmod"), show_errmin = TRUE,
-  errmin_var = "All data", errmin_digits = 3, cex = 0.7,
-  rel.height.middle = 0.9, ymax = "auto", ...)
+\method{plot}{mmkin}(
+  x,
+  main = "auto",
+  legends = 1,
+  resplot = c("time", "errmod"),
+  standardized = FALSE,
+  show_errmin = TRUE,
+  errmin_var = "All data",
+  errmin_digits = 3,
+  cex = 0.7,
+  rel.height.middle = 0.9,
+  ymax = "auto",
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{\link{mmkin}}, with either one row or one
@@ -21,6 +31,10 @@ column.}
 \item{resplot}{Should the residuals plotted against time, using
 \code{\link{mkinresplot}}, or as squared residuals against predicted
 values, with the error model, using \code{\link{mkinerrplot}}.}
+
+\item{standardized}{Should the residuals be standardized? This option
+is passed to \code{\link{mkinresplot}}, it only takes effect if
+`resplot = "time"`.}
 
 \item{show_errmin}{Should the chi2 error level be shown on top of the plots
 to the left?}
@@ -62,6 +76,7 @@ latex is being used for the formatting of the chi2 error level.
                 cores = 1, quiet = TRUE, error_model = "tc")
   plot(fits[, "FOCUS C"])
   plot(fits["FOMC", ])
+  plot(fits["FOMC", ], show_errmin = FALSE)
 
   # We can also plot a single fit, if we like the way plot.mmkin works, but then the plot
   # height should be smaller than the plot width (this is not possible for the html pages

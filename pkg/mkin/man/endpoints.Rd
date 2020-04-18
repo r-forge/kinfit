@@ -8,10 +8,14 @@ with mkinfit}
 endpoints(fit)
 }
 \arguments{
-\item{fit}{An object of class \code{\link{mkinfit}}.}
+\item{fit}{An object of class \code{\link{mkinfit}} or
+\code{\link{nlme.mmkin}}}
 }
 \value{
-A list with the components mentioned above.
+A list with a matrix of dissipation times named distimes,
+  and, if applicable, a vector of formation fractions named ff
+  and, if the SFORB model was in use, a vector of eigenvalues
+  of these SFORB models, equivalent to DFOP rate constants
 }
 \description{
 This function calculates DT50 and DT90 values as well as formation fractions
@@ -26,7 +30,11 @@ The function is used internally by \code{\link{summary.mkinfit}}.
 \examples{
 
   fit <- mkinfit("FOMC", FOCUS_2006_C, quiet = TRUE)
-  endpoints(fit)  
+  endpoints(fit)
+  \dontrun{
+    fit_2 <- mkinfit("SFORB", FOCUS_2006_C, quiet = TRUE)
+    endpoints(fit_2)
+  }
 
 }
 \author{

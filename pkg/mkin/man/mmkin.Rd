@@ -5,11 +5,16 @@
 \title{Fit one or more kinetic models with one or more state variables to one or
 more datasets}
 \usage{
-mmkin(models = c("SFO", "FOMC", "DFOP"), datasets,
-  cores = round(detectCores()/2), cluster = NULL, ...)
+mmkin(
+  models = c("SFO", "FOMC", "DFOP"),
+  datasets,
+  cores = round(detectCores()/2),
+  cluster = NULL,
+  ...
+)
 }
 \arguments{
-\item{models}{Either a character vector of shorthand names like 
+\item{models}{Either a character vector of shorthand names like
 \code{c("SFO", "FOMC", "DFOP", "HS", "SFORB")}, or an optionally named
 list of \code{\link{mkinmod}} objects.}
 
@@ -27,8 +32,9 @@ for parallel execution.}
 \item{\dots}{Further arguments that will be passed to \code{\link{mkinfit}}.}
 }
 \value{
-A matrix of \code{\link{mkinfit}} objects that can be indexed using
-  the model and dataset names as row and column indices.
+A two-dimensional \code{\link{array}} of \code{\link{mkinfit}}
+  objects that can be indexed using the model names for the first index (row index) 
+  and the dataset names for the second index (column index).
 }
 \description{
 This function calls \code{\link{mkinfit}} on all combinations of models and
