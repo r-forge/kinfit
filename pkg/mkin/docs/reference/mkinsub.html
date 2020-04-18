@@ -70,7 +70,7 @@ mkinmod." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mkin</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.49.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.49.9</span>
       </span>
     </div>
 
@@ -181,10 +181,11 @@ results on other operating systems or system configurations.</p></td>
 <span class='no'>SFO_SFO.2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mkinmod.html'>mkinmod</a></span>(
   <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>, <span class='st'>"m1"</span>),
   <span class='kw'>m1</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>))</div><div class='output co'>#&gt; <span class='message'>Successfully compiled differential equation model from auto-generated C code.</span></div><div class='input'>
-<span class='co'># Now supplying full names</span>
-<span class='no'>SFO_SFO.2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mkinmod.html'>mkinmod</a></span>(
-  <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>, <span class='st'>"m1"</span>, <span class='kw'>full_name</span> <span class='kw'>=</span> <span class='st'>"Test compound"</span>),
-  <span class='kw'>m1</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>, <span class='kw'>full_name</span> <span class='kw'>=</span> <span class='st'>"Metabolite M1"</span>))</div><div class='output co'>#&gt; <span class='message'>Successfully compiled differential equation model from auto-generated C code.</span></div><div class='input'>
+<span class='co'># \dontrun{</span>
+  <span class='co'># Now supplying full names</span>
+  <span class='no'>SFO_SFO.2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mkinmod.html'>mkinmod</a></span>(
+    <span class='kw'>parent</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>, <span class='st'>"m1"</span>, <span class='kw'>full_name</span> <span class='kw'>=</span> <span class='st'>"Test compound"</span>),
+    <span class='kw'>m1</span> <span class='kw'>=</span> <span class='fu'>mkinsub</span>(<span class='st'>"SFO"</span>, <span class='kw'>full_name</span> <span class='kw'>=</span> <span class='st'>"Metabolite M1"</span>))</div><div class='output co'>#&gt; <span class='message'>Successfully compiled differential equation model from auto-generated C code.</span></div><div class='input'> # }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
