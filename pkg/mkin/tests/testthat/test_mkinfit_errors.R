@@ -1,21 +1,3 @@
-# Copyright (C) 2019 Johannes Ranke
-# Contact: jranke@uni-bremen.de
-
-# This file is part of the R package mkin
-
-# mkin is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>
-
 context("Special cases of mkinfit calls")
 
 test_that("mkinfit stops to prevent and/or explain user errors", {
@@ -25,6 +7,7 @@ test_that("mkinfit stops to prevent and/or explain user errors", {
   # We remove zero observations from FOCUS_2006_D beforehand in
   # order to avoid another expect_warning in the code
   FOCUS_2006_D <- subset(FOCUS_2006_D, value != 0)
+
   # We get a warning if we use transform_fractions = FALSE with formation fractions
   # and an error if any pathway to sink is turned off as well
   expect_warning(
@@ -32,7 +15,7 @@ test_that("mkinfit stops to prevent and/or explain user errors", {
       mkinfit(SFO_SFO.ff.nosink, FOCUS_2006_D, transform_fractions = FALSE, quiet = TRUE),
       "turn off pathways to sink"
       ),
-    "sum of formation fractions")
+    "sum of formation fractions may exceed one")
 
   expect_error(mkinfit(SFO_SFO.ff, FOCUS_2006_D, transform_fractions = TRUE,
                        parms.ini = c(f_parent_to_m1 = 0.5), fixed_parms = "f_parent_to_m1", quiet = TRUE),
