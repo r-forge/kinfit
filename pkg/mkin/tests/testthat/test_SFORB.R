@@ -1,21 +1,3 @@
-# Copyright (C) 2019 Johannes Ranke
-# Contact: jranke@uni-bremen.de
-
-# This file is part of the R package mkin
-
-# mkin is free software: you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-# details.
-
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>
-
 context("Fitting the SFORB model")
 
 test_that("Fitting the SFORB model is equivalent to fitting DFOP", {
@@ -27,4 +9,22 @@ test_that("Fitting the SFORB model is equivalent to fitting DFOP", {
   expect_match(s_sforb, "Estimated Eigenvalues of SFORB model\\(s\\):")
   expect_match(s_sforb, "parent_b1 parent_b2")
   expect_match(s_sforb, "0.45956 *0.01785")
+
+  DFOP_SFO <- mkinmod(parent = mkinsub("DFOP", "M1"),
+    M1 = mkinsub("SFO"),
+    use_of_ff = "max", quiet = TRUE)
+  SFORB_SFO <- mkinmod(parent = mkinsub("SFORB", "M1"),
+    M1 = mkinsub("SFO"),
+    use_of_ff = "max", quiet = TRUE)
+
+  SFORB_SFO$coefmat
+
+  f_dfop_sfo <- mkinfit(DFOP_SFO, DFOP_par_c, quiet = TRUE)
+  f_sforb_sfo <- mkinfit(SFORB_SFO, DFOP_par_c, quiet = TRUE)
+  f_sforb_sfo_eigen <- mkinfit(SFORB_SFO, DFOP_par_c, solution_type = "eigen", quiet = TRUE)
+
+  expect_equivalent(endpoints(f_sforb_sfo)$distimes, endpoints(f_dfop_sfo)$distimes,
+    tolerance = 1e-6)
+  expect_equivalent(endpoints(f_sforb_sfo_eigen)$distimes, endpoints(f_dfop_sfo)$distimes,
+    tolerance = 1e-6)
 })
