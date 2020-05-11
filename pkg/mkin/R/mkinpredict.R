@@ -1,9 +1,9 @@
 #' Produce predictions from a kinetic model using specific parameters
-#' 
+#'
 #' This function produces a time series for all the observed variables in a
 #' kinetic model as specified by \code{\link{mkinmod}}, using a specific set of
 #' kinetic parameters and initial values for the state variables.
-#' 
+#'
 #' @aliases mkinpredict mkinpredict.mkinmod mkinpredict.mkinfit
 #' @param x A kinetic model as produced by \code{\link{mkinmod}}, or a kinetic
 #'   fit as fitted by \code{\link{mkinfit}}. In the latter case, the fitted
@@ -32,67 +32,75 @@
 #'   is 1e-10, much lower than in \code{\link{lsoda}}.
 #' @param map_output Boolean to specify if the output should list values for
 #'   the observed variables (default) or for all state variables (if set to
-#'   FALSE).
+#'   FALSE). Setting this to FALSE has no effect for analytical solutions,
+#'   as these always return mapped output.
 #' @param \dots Further arguments passed to the ode solver in case such a
 #'   solver is used.
 #' @import deSolve
 #' @importFrom inline getDynLib
-#' @return A matrix in the same format as the output of \code{\link{ode}}.
+#' @return A matrix with the numeric solution in wide format
 #' @author Johannes Ranke
 #' @examples
-#' 
-#'   SFO <- mkinmod(degradinol = mkinsub("SFO"))
-#'   # Compare solution types
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         solution_type = "analytical")
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         solution_type = "deSolve")
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         solution_type = "deSolve", use_compiled = FALSE)
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         solution_type = "eigen")
-#' 
-#' 
-#'   # Compare integration methods to analytical solution
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         solution_type = "analytical")[21,]
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         method = "lsoda")[21,]
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         method = "ode45")[21,]
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100), 0:20,
-#'         method = "rk4")[21,]
-#'  # rk4 is not as precise here
-#' 
-#'   # The number of output times used to make a lot of difference until the
-#'   # default for atol was adjusted
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100),
-#'         seq(0, 20, by = 0.1))[201,]
-#'   mkinpredict(SFO, c(k_degradinol_sink = 0.3), c(degradinol = 100),
-#'         seq(0, 20, by = 0.01))[2001,]
-#' 
-#'   # Check compiled model versions - they are faster than the eigenvalue based solutions!
-#'   SFO_SFO = mkinmod(parent = list(type = "SFO", to = "m1"),
-#'                     m1 = list(type = "SFO"))
-#'   system.time(
-#'     print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
-#'                 c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
-#'                 solution_type = "eigen")[201,]))
-#'   system.time(
-#'     print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
-#'                 c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
-#'                 solution_type = "deSolve")[201,]))
-#'   system.time(
-#'     print(mkinpredict(SFO_SFO, c(k_parent_m1 = 0.05, k_parent_sink = 0.1, k_m1_sink = 0.01),
-#'                 c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
-#'                 solution_type = "deSolve", use_compiled = FALSE)[201,]))
-#' 
-#'   \dontrun{
-#'     # Predict from a fitted model
-#'     f <- mkinfit(SFO_SFO, FOCUS_2006_C)
-#'     head(mkinpredict(f))
-#'   }
-#' 
+#'
+#' SFO <- mkinmod(degradinol = mkinsub("SFO"))
+#' # Compare solution types
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       solution_type = "analytical")
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       solution_type = "deSolve")
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       solution_type = "deSolve", use_compiled = FALSE)
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       solution_type = "eigen")
+#'
+#' # Compare integration methods to analytical solution
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       solution_type = "analytical")[21,]
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       method = "lsoda")[21,]
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       method = "ode45")[21,]
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
+#'       method = "rk4")[21,]
+#' # rk4 is not as precise here
+#'
+#' # The number of output times used to make a lot of difference until the
+#' # default for atol was adjusted
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100),
+#'       seq(0, 20, by = 0.1))[201,]
+#' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100),
+#'       seq(0, 20, by = 0.01))[2001,]
+#'
+#' # Comparison of the performance of solution types
+#' SFO_SFO = mkinmod(parent = list(type = "SFO", to = "m1"),
+#'                   m1 = list(type = "SFO"), use_of_ff = "max")
+#' if(require(rbenchmark)) {
+#'   benchmark(replications = 10, order = "relative", columns = c("test", "relative", "elapsed"),
+#'     eigen = mkinpredict(SFO_SFO,
+#'       c(k_parent = 0.15, f_parent_to_m1 = 0.5, k_m1 = 0.01),
+#'       c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
+#'       solution_type = "eigen")[201,],
+#'     deSolve_compiled = mkinpredict(SFO_SFO,
+#'       c(k_parent = 0.15, f_parent_to_m1 = 0.5, k_m1 = 0.01),
+#'       c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
+#'       solution_type = "deSolve")[201,],
+#'     deSolve = mkinpredict(SFO_SFO,
+#'       c(k_parent = 0.15, f_parent_to_m1 = 0.5, k_m1 = 0.01),
+#'       c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
+#'       solution_type = "deSolve", use_compiled = FALSE)[201,],
+#'     analytical = mkinpredict(SFO_SFO,
+#'       c(k_parent = 0.15, f_parent_to_m1 = 0.5, k_m1 = 0.01),
+#'       c(parent = 100, m1 = 0), seq(0, 20, by = 0.1),
+#'       solution_type = "analytical", use_compiled = FALSE)[201,])
+#' }
+#'
+#' \dontrun{
+#'   # Predict from a fitted model
+#'   f <- mkinfit(SFO_SFO, FOCUS_2006_C, quiet = TRUE)
+#'   f <- mkinfit(SFO_SFO, FOCUS_2006_C, quiet = TRUE, solution_type = "deSolve")
+#'   head(mkinpredict(f))
+#' }
+#'
 #' @export
 mkinpredict <- function(x, odeparms, odeini,
   outtimes = seq(0, 120, by = 0.1),
@@ -116,62 +124,38 @@ mkinpredict.mkinmod <- function(x,
   map_output = TRUE, ...)
 {
 
-  # Get the names of the state variables in the model
+  # Names of state variables and observed variables
   mod_vars <- names(x$diffs)
+  obs_vars <- names(x$spec)
 
   # Order the inital values for state variables if they are named
   if (!is.null(names(odeini))) {
     odeini <- odeini[mod_vars]
   }
 
-  # Create function for evaluation of expressions with ode parameters and initial values
-  evalparse <- function(string)
-  {
-    eval(parse(text=string), as.list(c(odeparms, odeini)))
+  out_obs <- matrix(NA, nrow = length(outtimes), ncol = 1 + length(obs_vars),
+    dimnames = list(as.character(outtimes), c("time", obs_vars)))
+  out_obs[, "time"] <- outtimes
+
+  if (solution_type == "analytical") {
+    # This is clumsy, as we wanted fast analytical predictions for mkinfit
+    pseudo_observed <-
+      data.frame(name = rep(obs_vars, each = length(outtimes)),
+      time = rep(outtimes, length(obs_vars)))
+    pseudo_observed$predicted <- x$deg_func(pseudo_observed, odeini, odeparms)
+    for (obs_var in obs_vars) {
+      out_obs[, obs_var] <- pseudo_observed[pseudo_observed$name == obs_var, "predicted"]
+    }
+    # We don't have solutions for unobserved state variables, the output of
+    # analytical solutions is always mapped to observed variables
+    return(out_obs)
   }
 
-  # Create a function calculating the differentials specified by the model
-  # if necessary
-  if (solution_type == "analytical") {
-    parent.type = names(x$map[[1]])[1]
-    parent.name = names(x$diffs)[[1]]
-    o <- switch(parent.type,
-      SFO = SFO.solution(outtimes,
-          evalparse(parent.name),
-          ifelse(x$use_of_ff == "min",
-      evalparse(paste("k", parent.name, "sink", sep="_")),
-      evalparse(paste("k", parent.name, sep="_")))),
-      FOMC = FOMC.solution(outtimes,
-          evalparse(parent.name),
-          evalparse("alpha"), evalparse("beta")),
-      IORE = IORE.solution(outtimes,
-          evalparse(parent.name),
-          ifelse(x$use_of_ff == "min",
-      evalparse(paste("k__iore", parent.name, "sink", sep="_")),
-      evalparse(paste("k__iore", parent.name, sep="_"))),
-            evalparse("N_parent")),
-      DFOP = DFOP.solution(outtimes,
-          evalparse(parent.name),
-          evalparse("k1"), evalparse("k2"),
-          evalparse("g")),
-      HS = HS.solution(outtimes,
-          evalparse(parent.name),
-          evalparse("k1"), evalparse("k2"),
-          evalparse("tb")),
-      SFORB = SFORB.solution(outtimes,
-          evalparse(parent.name),
-          evalparse(paste("k", parent.name, "bound", sep="_")),
-          evalparse(paste("k", sub("free", "bound", parent.name), "free", sep="_")),
-          evalparse(paste("k", parent.name, "sink", sep="_"))),
-      logistic = logistic.solution(outtimes,
-          evalparse(parent.name),
-          evalparse("kmax"), evalparse("k0"),
-          evalparse("r"))
-    )
-    out <- data.frame(outtimes, o)
-    names(out) <- c("time", sub("_free", "", parent.name))
-  }
   if (solution_type == "eigen") {
+    evalparse <- function(string) {
+      eval(parse(text=string), as.list(c(odeparms, odeini)))
+    }
+
     coefmat.num <- matrix(sapply(as.vector(x$coefmat), evalparse),
       nrow = length(mod_vars))
     e <- eigen(coefmat.num)
@@ -181,9 +165,10 @@ mkinpredict.mkinmod <- function(x,
     }
     o <- matrix(mapply(f.out, outtimes),
       nrow = length(mod_vars), ncol = length(outtimes))
-    out <- data.frame(outtimes, t(o))
-    names(out) <- c("time", mod_vars)
+    out <- cbind(outtimes, t(o))
+    colnames(out) <- c("time", mod_vars)
   }
+
   if (solution_type == "deSolve") {
     if (!is.null(x$cf) & use_compiled[1] != FALSE) {
       out <- ode(
@@ -225,20 +210,22 @@ mkinpredict.mkinmod <- function(x,
     if (sum(is.na(out)) > 0) {
       stop("Differential equations were not integrated for all output times because\n",
      "NaN values occurred in output from ode()")
-      }
+    }
   }
+
   if (map_output) {
     # Output transformation for models with unobserved compartments like SFORB
-    out_mapped <- data.frame(time = out[,"time"])
+    # if not already mapped in analytical solution
     for (var in names(x$map)) {
-      if((length(x$map[[var]]) == 1) || solution_type == "analytical") {
-        out_mapped[var] <- out[, var]
+      if((length(x$map[[var]]) == 1)) {
+        out_obs[, var] <- out[, var]
       } else {
-        out_mapped[var] <- rowSums(out[, x$map[[var]]])
+        out_obs[, var] <- out[, x$map[[var]][1]] + out[, x$map[[var]][2]]
       }
     }
-    return(out_mapped)
+    return(out_obs)
   } else {
+    dimnames(out) <- list(time = as.character(outtimes), c("time", mod_vars))
     return(out)
   }
 }

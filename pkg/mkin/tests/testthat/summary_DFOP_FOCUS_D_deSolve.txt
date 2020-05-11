@@ -33,6 +33,11 @@ Fixed parameter values:
      value  type
 m1_0     0 state
 
+Results:
+
+       AIC      BIC    logLik
+  204.4486 212.6365 -97.22429
+
 Optimised, transformed parameters with symmetric confidence intervals:
                   Estimate Std. Error  Lower   Upper
 parent_0            99.600    1.57000 96.400 102.800
@@ -42,7 +47,7 @@ log_k_m1_sink       -5.248    0.13320 -5.518  -4.977
 sigma                3.126    0.35850  2.396   3.855
 
 Parameter correlation:
-NULL
+[1] "Correlation matrix is platform dependent, not tested"
 
 Backtransformed parameters:
 Confidence intervals for internally transformed parameters are asymmetric.

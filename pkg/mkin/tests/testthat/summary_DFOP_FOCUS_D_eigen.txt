@@ -33,6 +33,11 @@ Fixed parameter values:
      value  type
 m1_0     0 state
 
+Results:
+
+       AIC      BIC    logLik
+  204.4486 212.6365 -97.22429
+
 Optimised, transformed parameters with symmetric confidence intervals:
                   Estimate Std. Error  Lower   Upper
 parent_0            99.600    1.57000 96.400 102.800
@@ -42,7 +47,7 @@ log_k_m1_sink       -5.248    0.13320 -5.518  -4.977
 sigma                3.126    0.35850  2.396   3.855
 
 Parameter correlation:
-NULL
+[1] "Correlation matrix is platform dependent, not tested"
 
 Backtransformed parameters:
 Confidence intervals for internally transformed parameters are asymmetric.
@@ -74,41 +79,41 @@ m1     131.761 437.70
 
 Data:
  time variable observed predicted   residual
-    0   parent    99.46  99.59848 -1.385e-01
-    0   parent   102.04  99.59848  2.442e+00
-    1   parent    93.50  90.23787  3.262e+00
-    1   parent    92.50  90.23787  2.262e+00
-    3   parent    63.23  74.07320 -1.084e+01
-    3   parent    68.99  74.07320 -5.083e+00
-    7   parent    52.32  49.91207  2.408e+00
-    7   parent    55.13  49.91207  5.218e+00
-   14   parent    27.27  25.01257  2.257e+00
-   14   parent    26.64  25.01257  1.627e+00
-   21   parent    11.50  12.53462 -1.035e+00
-   21   parent    11.64  12.53462 -8.946e-01
-   35   parent     2.85   3.14787 -2.979e-01
-   35   parent     2.91   3.14787 -2.379e-01
-   50   parent     0.69   0.71624 -2.624e-02
-   50   parent     0.63   0.71624 -8.624e-02
-   75   parent     0.05   0.06074 -1.074e-02
-   75   parent     0.06   0.06074 -7.382e-04
-    1       m1     4.84   4.80296  3.704e-02
-    1       m1     5.64   4.80296  8.370e-01
-    3       m1    12.91  13.02400 -1.140e-01
-    3       m1    12.96  13.02400 -6.400e-02
-    7       m1    22.97  25.04476 -2.075e+00
-    7       m1    24.47  25.04476 -5.748e-01
-   14       m1    41.69  36.69002  5.000e+00
-   14       m1    33.21  36.69002 -3.480e+00
-   21       m1    44.37  41.65310  2.717e+00
-   21       m1    46.44  41.65310  4.787e+00
-   35       m1    41.22  43.31312 -2.093e+00
-   35       m1    37.95  43.31312 -5.363e+00
-   50       m1    41.19  41.21831 -2.831e-02
-   50       m1    40.01  41.21831 -1.208e+00
-   75       m1    40.09  36.44703  3.643e+00
-   75       m1    33.85  36.44703 -2.597e+00
-  100       m1    31.04  31.98163 -9.416e-01
-  100       m1    33.13  31.98163  1.148e+00
-  120       m1    25.15  28.78984 -3.640e+00
-  120       m1    33.31  28.78984  4.520e+00
+    0   parent    99.46  99.59848 not tested
+    0   parent   102.04  99.59848 not tested
+    1   parent    93.50  90.23787 not tested
+    1   parent    92.50  90.23787 not tested
+    3   parent    63.23  74.07320 not tested
+    3   parent    68.99  74.07320 not tested
+    7   parent    52.32  49.91207 not tested
+    7   parent    55.13  49.91207 not tested
+   14   parent    27.27  25.01257 not tested
+   14   parent    26.64  25.01257 not tested
+   21   parent    11.50  12.53462 not tested
+   21   parent    11.64  12.53462 not tested
+   35   parent     2.85   3.14787 not tested
+   35   parent     2.91   3.14787 not tested
+   50   parent     0.69   0.71624 not tested
+   50   parent     0.63   0.71624 not tested
+   75   parent     0.05   0.06074 not tested
+   75   parent     0.06   0.06074 not tested
+    1       m1     4.84   4.80296 not tested
+    1       m1     5.64   4.80296 not tested
+    3       m1    12.91  13.02400 not tested
+    3       m1    12.96  13.02400 not tested
+    7       m1    22.97  25.04476 not tested
+    7       m1    24.47  25.04476 not tested
+   14       m1    41.69  36.69002 not tested
+   14       m1    33.21  36.69002 not tested
+   21       m1    44.37  41.65310 not tested
+   21       m1    46.44  41.65310 not tested
+   35       m1    41.22  43.31312 not tested
+   35       m1    37.95  43.31312 not tested
+   50       m1    41.19  41.21831 not tested
+   50       m1    40.01  41.21831 not tested
+   75       m1    40.09  36.44703 not tested
+   75       m1    33.85  36.44703 not tested
+  100       m1    31.04  31.98163 not tested
+  100       m1    33.13  31.98163 not tested
+  120       m1    25.15  28.78984 not tested
+  120       m1    33.31  28.78984 not tested

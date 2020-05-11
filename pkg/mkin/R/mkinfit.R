@@ -101,10 +101,6 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'   is 1e-8, lower than in \code{\link{lsoda}}.
 #' @param rtol Absolute error tolerance, passed to \code{\link{ode}}. Default
 #'   is 1e-10, much lower than in \code{\link{lsoda}}.
-#' @param n.outtimes The length of the dataseries that is produced by the model
-#'   prediction function \code{\link{mkinpredict}}. This impacts the accuracy
-#'   of the numerical solver if that is used (see \code{solution_type}
-#'   argument.  The default value is 100.
 #' @param error_model If the error model is "const", a constant standard
 #'   deviation is assumed.
 #'
@@ -185,13 +181,13 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' # Fit the model to the FOCUS example dataset D using defaults
 #' print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D,
 #'                            solution_type = "eigen", quiet = TRUE)))
-#' coef(fit)
+#' parms(fit)
 #' endpoints(fit)
 #' \dontrun{
 #' # deSolve is slower when no C compiler (gcc) was available during model generation
 #' print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D,
 #'                            solution_type = "deSolve")))
-#' coef(fit.deSolve)
+#' parms(fit.deSolve)
 #' endpoints(fit.deSolve)
 #' }
 #'
@@ -248,7 +244,7 @@ mkinfit <- function(mkinmod, observed,
   transform_rates = TRUE,
   transform_fractions = TRUE,
   quiet = FALSE,
-  atol = 1e-8, rtol = 1e-10, n.outtimes = 100,
+  atol = 1e-8, rtol = 1e-10,
   error_model = c("const", "obs", "tc"),
   error_model_algorithm = c("auto", "d_3", "direct", "twostep", "threestep", "fourstep", "IRLS", "OLS"),
   reweight.tol = 1e-8, reweight.max.iter = 10,
@@ -269,7 +265,7 @@ mkinfit <- function(mkinmod, observed,
     if (mkinmod[[1]] %in% parent_models_available) {
       speclist <- list(list(type = mkinmod, sink = TRUE))
       names(speclist) <- presumed_parent_name
-      mkinmod <- mkinmod(speclist = speclist)
+      mkinmod <- mkinmod(speclist = speclist, use_of_ff = "min")
     } else {
       stop("Argument mkinmod must be of class mkinmod or a string containing one of\n  ",
            paste(parent_models_available, collapse = ", "))
@@ -292,11 +288,16 @@ mkinfit <- function(mkinmod, observed,
     observed <- subset(observed, value != 0)
   }
 
+  # Sort observed values for efficient analytical predictions
+  observed$name <- ordered(observed$name, levels = obs_vars)
+  observed <- observed[order(observed$name, observed$time), ]
+
   # Obtain data for decline from maximum mean value if requested
   if (from_max_mean) {
     # This is only used for simple decline models
     if (length(obs_vars) > 1)
       stop("Decline from maximum is only implemented for models with a single observed variable")
+    observed$name <- as.character(observed$name)
 
     means <- aggregate(value ~ time, data = observed, mean, na.rm=TRUE)
     t_of_max <- means[which.max(means$value), "time"]
@@ -459,12 +460,12 @@ mkinfit <- function(mkinmod, observed,
   # Prefer deSolve over eigen if a compiled model is present and use_compiled
   # is not set to FALSE
   solution_type = match.arg(solution_type)
-  if (solution_type == "analytical" && length(mkinmod$spec) > 1)
-     stop("Analytical solution not implemented for models with metabolites.")
+  if (solution_type == "analytical" && !is.function(mkinmod$deg_func))
+     stop("Analytical solution not implemented for this model.")
   if (solution_type == "eigen" && !is.matrix(mkinmod$coefmat))
      stop("Eigenvalue based solution not possible, coefficient matrix not present.")
   if (solution_type == "auto") {
-    if (length(mkinmod$spec) == 1) {
+    if (length(mkinmod$spec) == 1 || is.function(mkinmod$deg_func)) {
       solution_type = "analytical"
     } else {
       if (!is.null(mkinmod$cf) & use_compiled[1] != FALSE) {
@@ -523,11 +524,8 @@ mkinfit <- function(mkinmod, observed,
     errparms_optim <- errparms
   }
 
-  # Define outtimes for model solution.
-  # Include time points at which observed data are available
-  outtimes = sort(unique(c(observed$time, seq(min(observed$time),
-                                              max(observed$time),
-                                              length.out = n.outtimes))))
+  # Unique outtimes for model solution.
+  outtimes <- sort(unique(observed$time))
 
   # Define the objective function for optimisation, including (back)transformations
   cost_function <- function(P, trans = TRUE, OLS = FALSE, fixed_degparms = FALSE, fixed_errparms = FALSE, update_data = TRUE, ...)
@@ -535,7 +533,7 @@ mkinfit <- function(mkinmod, observed,
     assign("calls", calls + 1, inherits = TRUE) # Increase the model solution counter
 
     # Trace parameter values if requested and if we are actually optimising
-    if(trace_parms & update_data) cat(P, "\n")
+    if(trace_parms & update_data) cat(format(P, width = 10, digits = 6), "\n")
 
     # Determine local parameter values for the cost estimation
     if (is.numeric(fixed_degparms)) {
@@ -585,15 +583,21 @@ mkinfit <- function(mkinmod, observed,
     }
 
     # Solve the system with current parameter values
-    out <- mkinpredict(mkinmod, parms,
-                       odeini, outtimes,
-                       solution_type = solution_type,
-                       use_compiled = use_compiled,
-                       method.ode = method.ode,
-                       atol = atol, rtol = rtol, ...)
+    if (solution_type == "analytical") {
+      observed$predicted <- mkinmod$deg_func(observed, odeini, parms)
+    } else {
+      out <- mkinpredict(mkinmod, parms,
+                         odeini, outtimes,
+                         solution_type = solution_type,
+                         use_compiled = use_compiled,
+                         method.ode = method.ode,
+                         atol = atol, rtol = rtol, ...)
 
-    out_long <- mkin_wide_to_long(out, time = "time")
+      observed_index <- cbind(as.character(observed$time), as.character(observed$name))
+      observed$predicted <- out[observed_index]
+    }
 
+    # Define standard deviation for each observation
     if (err_mod == "const") {
       observed$std <- if (OLS) NA else cost_errparms["sigma"]
     }
@@ -602,30 +606,24 @@ mkinfit <- function(mkinmod, observed,
       observed$std <- cost_errparms[std_names]
     }
     if (err_mod == "tc") {
-      tmp <- merge(observed, out_long, by = c("time", "name"))
-      tmp$name <- ordered(tmp$name, levels = obs_vars)
-      tmp <- tmp[order(tmp$name, tmp$time), ]
-      observed$std <- sqrt(cost_errparms["sigma_low"]^2 + tmp$value.y^2 * cost_errparms["rsd_high"]^2)
+      observed$std <- sqrt(cost_errparms["sigma_low"]^2 + observed$predicted^2 * cost_errparms["rsd_high"]^2)
     }
 
-    cost_data <- merge(observed[c("name", "time", "value", "std")], out_long,
-                         by = c("name", "time"), suffixes = c(".observed", ".predicted"))
-
+    # Calculate model cost
     if (OLS) {
       # Cost is the sum of squared residuals
-      cost <- with(cost_data, sum((value.observed - value.predicted)^2))
+      cost <- with(observed, sum((value - predicted)^2))
     } else {
       # Cost is the negative log-likelihood
-      cost <- - with(cost_data,
-        sum(dnorm(x = value.observed, mean = value.predicted, sd = std, log = TRUE)))
+      cost <- - with(observed,
+        sum(dnorm(x = value, mean = predicted, sd = std, log = TRUE)))
     }
 
     # We update the current cost and data during the optimisation, not
     # during hessian calculations
     if (update_data) {
 
-      assign("out_predicted", out_long, inherits = TRUE)
-      assign("current_data", cost_data, inherits = TRUE)
+      assign("current_data", observed, inherits = TRUE)
 
       if (cost < cost.current) {
         assign("cost.current", cost, inherits = TRUE)
@@ -691,9 +689,9 @@ mkinfit <- function(mkinmod, observed,
   current_data <- NA
 
   # Show parameter names if tracing is requested
-  if(trace_parms) cat(names_optim, "\n")
+  if(trace_parms) cat(format(names_optim, width = 10), "\n")
 
-  # browser()
+  #browser()
 
   # Do the fit and take the time until the hessians are calculated
   fit_time <- system.time({
@@ -725,7 +723,7 @@ mkinfit <- function(mkinmod, observed,
       degparms <- fit$par
 
       # Get the maximum likelihood estimate for sigma at the optimum parameter values
-      current_data$residual <- current_data$value.observed - current_data$value.predicted
+      current_data$residual <- current_data$value - current_data$predicted
       sigma_mle <- sqrt(sum(current_data$residual^2)/nrow(current_data))
 
       # Use that estimate for the constant variance, or as first guess if err_mod = "obs"
@@ -862,11 +860,7 @@ mkinfit <- function(mkinmod, observed,
   # We also need the model and a model name for summary and plotting
   fit$mkinmod <- mkinmod
   fit$mkinmod$name <- mkinmod_name
-
-  # We need data and predictions for summary and plotting
-  fit$observed <- observed
   fit$obs_vars <- obs_vars
-  fit$predicted <- out_predicted
 
   # Residual sum of squares as a function of the fitted parameters
   fit$rss <- function(P) cost_function(P, OLS = TRUE, update_data = FALSE)
@@ -893,15 +887,10 @@ mkinfit <- function(mkinmod, observed,
   fit$fixed$type = c(rep("state", length(state.ini.fixed)),
                      rep("deparm", length(parms.fixed)))
 
-  # Sort observed, predicted and residuals
-  current_data$name <- ordered(current_data$name, levels = obs_vars)
-
-  ordered_data <- current_data[order(current_data$name, current_data$time), ]
-
-  fit$data <- data.frame(time = ordered_data$time,
-                         variable = ordered_data$name,
-                         observed = ordered_data$value.observed,
-                         predicted = ordered_data$value.predicted)
+  fit$data <- data.frame(time = current_data$time,
+                         variable = current_data$name,
+                         observed = current_data$value,
+                         predicted = current_data$predicted)
 
   fit$data$residual <- fit$data$observed - fit$data$predicted
 
@@ -926,6 +915,6 @@ mkinfit <- function(mkinmod, observed,
   fit$version <- as.character(utils::packageVersion("mkin"))
   fit$Rversion <- paste(R.version$major, R.version$minor, sep=".")
 
-  class(fit) <- c("mkinfit", "modFit")
+  class(fit) <- c("mkinfit")
   return(fit)
 }

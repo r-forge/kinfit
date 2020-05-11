@@ -70,7 +70,7 @@
 #' @examples
 #'
 #' # Specify the SFO model (this is not needed any more, as we can now mkinfit("SFO", ...)
-#' SFO <- mkinmod(parent = list(type = "SFO"))
+#' SFO <- mkinmod(parent = mkinsub("SFO"))
 #'
 #' # One parent compound, one metabolite, both single first order
 #' SFO_SFO <- mkinmod(
@@ -101,7 +101,7 @@
 #' }
 #'
 #' @export mkinmod
-mkinmod <- function(..., use_of_ff = "min", speclist = NULL, quiet = FALSE, verbose = FALSE)
+mkinmod <- function(..., use_of_ff = "max", speclist = NULL, quiet = FALSE, verbose = FALSE)
 {
   if (is.null(speclist)) spec <- list(...)
   else spec <- speclist
@@ -117,13 +117,6 @@ mkinmod <- function(..., use_of_ff = "min", speclist = NULL, quiet = FALSE, verb
   if (!use_of_ff %in% c("min", "max"))
     stop("The use of formation fractions 'use_of_ff' can only be 'min' or 'max'")
 
-  # The returned model will be a list of character vectors, containing {{{
-  # differential equations (if supported), parameter names and a mapping from
-  # model variables to observed variables. If possible, a matrix representation
-  # of the differential equations is included
-  # Compiling the functions from the C code generated below only works if the
-  # implicit assumption about differential equations specified below
-  # is satisfied
   parms <- vector()
   # }}}
 
@@ -427,6 +420,9 @@ mkinmod <- function(..., use_of_ff = "min", speclist = NULL, quiet = FALSE, verb
     }
   }
   # }}}
+
+  # Attach a degradation function if an analytical solution is available
+  model$deg_func <- create_deg_func(spec, use_of_ff)
 
   class(model) <- "mkinmod"
   return(model)
