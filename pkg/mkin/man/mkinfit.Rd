@@ -26,10 +26,9 @@ mkinfit(
   quiet = FALSE,
   atol = 1e-08,
   rtol = 1e-10,
-  n.outtimes = 100,
   error_model = c("const", "obs", "tc"),
-  error_model_algorithm = c("auto", "d_3", "direct", "twostep", "threestep", "fourstep",
-    "IRLS", "OLS"),
+  error_model_algorithm = c("auto", "d_3", "direct", "twostep", "threestep",
+    "fourstep", "IRLS", "OLS"),
   reweight.tol = 1e-08,
   reweight.max.iter = 10,
   trace_parms = FALSE,
@@ -141,11 +140,6 @@ is 1e-8, lower than in \code{\link{lsoda}}.}
 \item{rtol}{Absolute error tolerance, passed to \code{\link{ode}}. Default
 is 1e-10, much lower than in \code{\link{lsoda}}.}
 
-\item{n.outtimes}{The length of the dataseries that is produced by the model
-prediction function \code{\link{mkinpredict}}. This impacts the accuracy
-of the numerical solver if that is used (see \code{solution_type}
-argument.  The default value is 100.}
-
 \item{error_model}{If the error model is "const", a constant standard
   deviation is assumed.
 
@@ -238,13 +232,13 @@ SFO_SFO <- mkinmod(
 # Fit the model to the FOCUS example dataset D using defaults
 print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D,
                            solution_type = "eigen", quiet = TRUE)))
-coef(fit)
+parms(fit)
 endpoints(fit)
 \dontrun{
 # deSolve is slower when no C compiler (gcc) was available during model generation
 print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D,
                            solution_type = "deSolve")))
-coef(fit.deSolve)
+parms(fit.deSolve)
 endpoints(fit.deSolve)
 }
 
