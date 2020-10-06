@@ -10,6 +10,7 @@ WINBIN  := $(PKGSRC)_$(PKGVERS).zip
 # If no alternate bin folder is specified, the default is to use the folder
 # containing the first instance of R on the PATH.
 RBIN ?= $(shell dirname "`which R`")
+RDEVBIN=/home/jranke/svn/R/r-devel/build/bin
 
 # Specify package and static documentation directories for subversion on r-forge
 RFSVN ?= $(HOME)/svn/r-forge/kinfit
@@ -21,6 +22,8 @@ pkgfiles = \
 	.Rbuildignore \
 	data/* \
 	DESCRIPTION \
+	inst/WORDLIST \
+	inst/testdata/fit_old_FOCUS_D.rda \
 	man/* \
 	NAMESPACE \
 	NEWS.md \
@@ -75,32 +78,39 @@ test: install
 	"$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
 	sed -i -e "s/\r.*\r//" test.log
 
+devtest: install
+	"$(RDEVBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test_dev.log
+	sed -i -e "s/\r.*\r//" test.log
+
 slowtests: install
 	NOT_CRAN=true "$(RBIN)/Rscript" -e 'library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee tests_slow.log
 	sed -i -e "s/\r.*\r//" tests_slow.log
 
 vdiffr:
-	"$(RBIN)/Rscript" -e 'vdiffr::manage_cases(filter = "plots|nafta")'
+	"$(RDEVBIN)/Rscript" -e 'vdiffr::manage_cases(filter = "plot|nafta")'
 
 testcheck: test check
 
 README.html: README.md
 	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(mathjax = NULL))"
 
-vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.Rmd
-	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.Rmd', dir = 'vignettes')"
+vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.rmd
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.rmd', dir = 'vignettes')"
 
 vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vignettes/twa.html
 
-vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.Rmd
-	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.Rmd', dir = 'vignettes/web_only')"
+vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.rmd
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.rmd', dir = 'vignettes/web_only')"
 
-articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html
+articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html
 
 pd: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE, lazy = TRUE)"
 	git add -A
-	git commit -m 'Static documentation rebuilt by pkgdown' -e
+
+pd_release: roxygen
+	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
+	git add -A
 
 r-forge:
 	git archive master > $(HOME)/git/mkin/mkin.tar;\

@@ -2,6 +2,10 @@ url: https://pkgdown.jrwb.de/mkin
 
 title: mkin
 
+development:
+  mode: devel
+  version_label: info
+
 template:
   bootswatch: spacelab
 
@@ -39,6 +43,8 @@ reference:
       - nlme.mmkin
       - plot.nlme.mmkin
       - nlme_function
+      - saemix_model
+      - saemix_data
       - get_deg_func
   - title: Datasets and known results
     contents:
@@ -119,5 +125,7 @@ navbar:
         href: articles/twa.html
       - text: Example evaluation of NAFTA SOP Attachment examples
         href: articles/web_only/NAFTA_examples.html
+      - text: Some benchmark timings
+        href: articles/web_only/benchmarks.html
     - text: News
       href: news/index.html

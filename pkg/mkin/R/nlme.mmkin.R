@@ -154,7 +154,6 @@ nlme.mmkin <- function(model, data = sys.frame(sys.parent()),
 #' @export
 #' @rdname nlme.mmkin
 #' @param x An nlme.mmkin object to print
-#' @param data Should the data be printed?
 #' @param ... Further arguments as in the generic
 print.nlme.mmkin <- function(x, ...) {
   x$call$data <- "Not shown"
@@ -169,34 +168,5 @@ update.nlme.mmkin <- function(object, ...) {
   res <- NextMethod()
   res$mmkin_orig <- object$mmkin_orig
   class(res) <- c("nlme.mmkin", "nlme", "lme")
-  return(res)
-}
-
-# The following is necessary as long as R bug 17761 is not fixed
-# https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17761
-#' @export
-anova.nlme.mmkin <- function(object, ...) {
-  thisCall <- as.list(match.call())[-1]
-  object_name <- as.character(thisCall[[1]])
-  other_object_names <- sapply(thisCall[-1], as.character)
-
-  remove_class <- function(object, classname) {
-    old_class <- class(object)
-    class(object) <- setdiff(old_class, classname)
-    return(object)
-  }
-  object <- remove_class(object, "nlme.mmkin")
-  other_objects <- list(...)
-  other_objects <- lapply(other_objects, remove_class, "nlme.mmkin")
-
-  env <- new.env()
-  assign(object_name, object, env)
-  for (i in seq_along(other_objects)) {
-    assign(other_object_names[i], other_objects[[i]], env)
-  }
-  res <- eval(parse(text = paste0("anova.lme(", object_name, ", ",
-        paste(other_object_names, collapse = ", "), ")")),
-    envir = env)
-
   return(res)
 }

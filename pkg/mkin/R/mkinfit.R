@@ -3,9 +3,11 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' Fit a kinetic model to data with one or more state variables
 #'
 #' This function maximises the likelihood of the observed data using the Port
-#' algorithm \code{\link{nlminb}}, and the specified initial or fixed
-#' parameters and starting values.  In each step of the optimsation, the
-#' kinetic model is solved using the function \code{\link{mkinpredict}}. The
+#' algorithm [stats::nlminb()], and the specified initial or fixed
+#' parameters and starting values.  In each step of the optimisation, the
+#' kinetic model is solved using the function [mkinpredict()], except
+#' if an analytical solution is implemented, in which case the model is solved
+#' using the degradation function in the [mkinmod] object. The
 #' parameters of the selected error model are fitted simultaneously with the
 #' degradation model parameters, as both of them are arguments of the
 #' likelihood function.
@@ -14,7 +16,7 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' order to better satisfy the assumption of a normal distribution of their
 #' estimators.
 #'
-#' @param mkinmod A list of class \code{\link{mkinmod}}, containing the kinetic
+#' @param mkinmod A list of class [mkinmod], containing the kinetic
 #'   model to be fitted to the data, or one of the shorthand names ("SFO",
 #'   "FOMC", "DFOP", "HS", "SFORB", "IORE"). If a shorthand name is given, a
 #'   parent only degradation model is generated for the variable with the
@@ -42,7 +44,7 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' @param state.ini A named vector of initial values for the state variables of
 #'   the model. In case the observed variables are represented by more than one
 #'   model variable, the names will differ from the names of the observed
-#'   variables (see \code{map} component of \code{\link{mkinmod}}). The default
+#'   variables (see \code{map} component of [mkinmod]). The default
 #'   is to set the initial value of the first model variable to the mean of the
 #'   time zero values for the variable with the maximum observed value, and all
 #'   others to 0.  If this variable has no time zero observations, its initial
@@ -66,21 +68,19 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' @param solution_type If set to "eigen", the solution of the system of
 #'   differential equations is based on the spectral decomposition of the
 #'   coefficient matrix in cases that this is possible. If set to "deSolve", a
-#'   numerical ode solver from package \code{\link{deSolve}} is used. If set to
-#'   "analytical", an analytical solution of the model is used. This is only
-#'   implemented for simple degradation experiments with only one state
-#'   variable, i.e. with no metabolites. The default is "auto", which uses
-#'   "analytical" if possible, otherwise "deSolve" if a compiler is present,
-#'   and "eigen" if no compiler is present and the model can be expressed using
-#'   eigenvalues and eigenvectors.  This argument is passed on to the helper
-#'   function \code{\link{mkinpredict}}.
-#' @param method.ode The solution method passed via \code{\link{mkinpredict}}
-#'   to \code{\link{ode}} in case the solution type is "deSolve". The default
+#'   numerical [ode solver from package deSolve][deSolve::ode()] is used. If
+#'   set to "analytical", an analytical solution of the model is used. This is
+#'   only implemented for relatively simple degradation models.  The default is
+#'   "auto", which uses "analytical" if possible, otherwise "deSolve" if a
+#'   compiler is present, and "eigen" if no compiler is present and the model
+#'   can be expressed using eigenvalues and eigenvectors.
+#' @param method.ode The solution method passed via [mkinpredict()]
+#'   to [deSolve::ode()] in case the solution type is "deSolve". The default
 #'   "lsoda" is performant, but sometimes fails to converge.
 #' @param use_compiled If set to \code{FALSE}, no compiled version of the
-#'   \code{\link{mkinmod}} model is used in the calls to
-#'   \code{\link{mkinpredict}} even if a compiled version is present.
-#' @param control A list of control arguments passed to \code{\link{nlminb}}.
+#'   [mkinmod] model is used in the calls to [mkinpredict()] even if a compiled
+#'   version is present.
+#' @param control A list of control arguments passed to [stats::nlminb()].
 #' @param transform_rates Boolean specifying if kinetic rate constants should
 #'   be transformed in the model specification used in the fitting for better
 #'   compliance with the assumption of normal distribution of the estimator. If
@@ -94,13 +94,14 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'   of the estimator. The default (TRUE) is to do transformations. If TRUE,
 #'   the g parameter of the DFOP and HS models are also transformed, as they
 #'   can also be seen as compositional data. The transformation used for these
-#'   transformations is the \code{\link{ilr}} transformation.
+#'   transformations is the [ilr()] transformation.
 #' @param quiet Suppress printing out the current value of the negative
 #'   log-likelihood after each improvement?
-#' @param atol Absolute error tolerance, passed to \code{\link{ode}}. Default
-#'   is 1e-8, lower than in \code{\link{lsoda}}.
-#' @param rtol Absolute error tolerance, passed to \code{\link{ode}}. Default
-#'   is 1e-10, much lower than in \code{\link{lsoda}}.
+#' @param atol Absolute error tolerance, passed to [deSolve::ode()]. Default
+#'   is 1e-8, which is lower than the default in the [deSolve::lsoda()]
+#'   function which is used per default.
+#' @param rtol Absolute error tolerance, passed to [deSolve::ode()]. Default
+#'   is 1e-10, much lower than in [deSolve::lsoda()].
 #' @param error_model If the error model is "const", a constant standard
 #'   deviation is assumed.
 #'
@@ -118,9 +119,9 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'   least squares fitting ("OLS") is selected. If the error model is "obs", or
 #'   "tc", the "d_3" algorithm is selected.
 #'
-#'   The algorithm "d_3" will directly minimize the negative log-likelihood and
-#'   - independently - also use the three step algorithm described below. The
-#'   fit with the higher likelihood is returned.
+#'   The algorithm "d_3" will directly minimize the negative log-likelihood
+#'   and independently also use the three step algorithm described below.
+#'   The fit with the higher likelihood is returned.
 #'
 #'   The algorithm "direct" will directly minimize the negative log-likelihood.
 #'
@@ -148,25 +149,27 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' @param reweight.max.iter Maximum number of iterations in IRLS fits.
 #' @param trace_parms Should a trace of the parameter values be listed?
 #' @param \dots Further arguments that will be passed on to
-#'   \code{\link{deSolve}}.
-#' @importFrom stats nlminb aggregate dist
-#' @return A list with "mkinfit" in the class attribute.  A summary can be
-#'   obtained by \code{\link{summary.mkinfit}}.
+#'   [deSolve::ode()].
+#' @importFrom stats nlminb aggregate dist shapiro.test
+#' @return A list with "mkinfit" in the class attribute.
 #' @note When using the "IORE" submodel for metabolites, fitting with
 #'   "transform_rates = TRUE" (the default) often leads to failures of the
 #'   numerical ODE solver. In this situation it may help to switch off the
 #'   internal rate transformation.
 #' @author Johannes Ranke
-#' @seealso Plotting methods \code{\link{plot.mkinfit}} and
-#'   \code{\link{mkinparplot}}.
+#' @seealso [summary.mkinfit], [plot.mkinfit], [parms] and [lrtest].
 #'
 #'   Comparisons of models fitted to the same data can be made using
 #'   \code{\link{AIC}} by virtue of the method \code{\link{logLik.mkinfit}}.
 #'
 #'   Fitting of several models to several datasets in a single call to
 #'   \code{\link{mmkin}}.
-#' @source Rocke, David M. und Lorenzato, Stefan (1995) A two-component model
-#'   for measurement error in analytical chemistry. Technometrics 37(2), 176-184.
+#' @references Rocke DM and Lorenzato S (1995) A two-component model
+#'   for measurement error in analytical chemistry. *Technometrics* 37(2), 176-184.
+#'
+#'   Ranke J and Meinecke S (2019) Error Models for the Kinetic Evaluation of Chemical
+#'   Degradation Data. *Environments* 6(12) 124
+#'   [doi:10.3390/environments6120124](https://doi.org/10.3390/environments6120124).
 #' @examples
 #'
 #' # Use shorthand notation for parent only degradation
@@ -174,61 +177,63 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #' summary(fit)
 #'
 #' # One parent compound, one metabolite, both single first order.
+#' # We remove zero values from FOCUS dataset D in order to avoid warnings
+#' FOCUS_D <- subset(FOCUS_2006_D, value != 0)
 #' # Use mkinsub for convenience in model formulation. Pathway to sink included per default.
 #' SFO_SFO <- mkinmod(
 #'   parent = mkinsub("SFO", "m1"),
 #'   m1 = mkinsub("SFO"))
-#' # Fit the model to the FOCUS example dataset D using defaults
-#' print(system.time(fit <- mkinfit(SFO_SFO, FOCUS_2006_D,
-#'                            solution_type = "eigen", quiet = TRUE)))
-#' parms(fit)
-#' endpoints(fit)
+#'
+#' # Fit the model quietly to the FOCUS example dataset D using defaults
+#' fit <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE)
+#' # Since mkin 0.9.50.3, we get a warning about non-normality of residuals,
+#' # so we try an alternative error model
+#' fit.tc <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc")
+#' # This avoids the warning, and the likelihood ratio test confirms it is preferable
+#' lrtest(fit.tc, fit)
+#' # We can also allow for different variances of parent and metabolite as error model
+#' fit.obs <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "obs")
+#' # This also avoids the warning about non-normality, but the two-component error model
+#' # has significantly higher likelihood
+#' lrtest(fit.obs, fit.tc)
+#' parms(fit.tc)
+#' endpoints(fit.tc)
+#'
+#' # We can show a quick (only one replication) benchmark for this case, as we
+#' # have several alternative solution methods for the model. We skip
+#' # uncompiled deSolve, as it is so slow. More benchmarks are found in the
+#' # benchmark vignette
 #' \dontrun{
-#' # deSolve is slower when no C compiler (gcc) was available during model generation
-#' print(system.time(fit.deSolve <- mkinfit(SFO_SFO, FOCUS_2006_D,
-#'                            solution_type = "deSolve")))
-#' parms(fit.deSolve)
-#' endpoints(fit.deSolve)
+#' if(require(rbenchmark)) {
+#'   benchmark(replications = 1, order = "relative", columns = c("test", "relative", "elapsed"),
+#'     deSolve_compiled = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+#'       solution_type = "deSolve", use_compiled = TRUE),
+#'     eigen = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+#'       solution_type = "eigen"),
+#'     analytical = mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc",
+#'       solution_type = "analytical"))
+#' }
 #' }
 #'
-#' # Use stepwise fitting, using optimised parameters from parent only fit, FOMC
+#' # Use stepwise fitting, using optimised parameters from parent only fit, FOMC-SFO
 #' \dontrun{
 #' FOMC_SFO <- mkinmod(
 #'   parent = mkinsub("FOMC", "m1"),
 #'   m1 = mkinsub("SFO"))
-#' # Fit the model to the FOCUS example dataset D using defaults
-#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE)
-#' # Use starting parameters from parent only FOMC fit
-#' fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, quiet = TRUE)
-#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_2006_D, quiet = TRUE,
-#'   parms.ini = fit.FOMC$bparms.ode)
+#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE)
+#' # Again, we get a warning and try a more sophisticated error model
+#' fit.FOMC_SFO.tc <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE, error_model = "tc")
+#' # This model has a higher likelihood, but not significantly so
+#' lrtest(fit.tc, fit.FOMC_SFO.tc)
+#' # Also, the missing standard error for log_beta and the t-tests for alpha
+#' # and beta indicate overparameterisation
+#' summary(fit.FOMC_SFO.tc, data = FALSE)
 #'
-#' # Use stepwise fitting, using optimised parameters from parent only fit, SFORB
-#' SFORB_SFO <- mkinmod(
-#'   parent = list(type = "SFORB", to = "m1", sink = TRUE),
-#'   m1 = list(type = "SFO"))
-#' # Fit the model to the FOCUS example dataset D using defaults
-#' fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, quiet = TRUE)
-#' fit.SFORB_SFO.deSolve <- mkinfit(SFORB_SFO, FOCUS_2006_D, solution_type = "deSolve",
-#'                                  quiet = TRUE)
-#' # Use starting parameters from parent only SFORB fit (not really needed in this case)
-#' fit.SFORB = mkinfit("SFORB", FOCUS_2006_D, quiet = TRUE)
-#' fit.SFORB_SFO <- mkinfit(SFORB_SFO, FOCUS_2006_D, parms.ini = fit.SFORB$bparms.ode, quiet = TRUE)
+#' # We can easily use starting parameters from the parent only fit (only for illustration)
+#' fit.FOMC = mkinfit("FOMC", FOCUS_2006_D, quiet = TRUE, error_model = "tc")
+#' fit.FOMC_SFO <- mkinfit(FOMC_SFO, FOCUS_D, quiet = TRUE,
+#'   parms.ini = fit.FOMC$bparms.ode, error_model = "tc")
 #' }
-#'
-#' \dontrun{
-#' # Weighted fits, including IRLS
-#' SFO_SFO.ff <- mkinmod(parent = mkinsub("SFO", "m1"),
-#'                       m1 = mkinsub("SFO"), use_of_ff = "max")
-#' f.noweight <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, quiet = TRUE)
-#' summary(f.noweight)
-#' f.obs <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "obs", quiet = TRUE)
-#' summary(f.obs)
-#' f.tc <- mkinfit(SFO_SFO.ff, FOCUS_2006_D, error_model = "tc", quiet = TRUE)
-#' summary(f.tc)
-#' }
-#'
-#'
 #' @export
 mkinfit <- function(mkinmod, observed,
   parms.ini = "auto",
@@ -253,6 +258,8 @@ mkinfit <- function(mkinmod, observed,
 {
   call <- match.call()
 
+  summary_warnings <- character()
+
   # Derive the name used for the model
   if (is.character(mkinmod)) mkinmod_name <- mkinmod
   else mkinmod_name <- deparse(substitute(mkinmod))
@@ -265,7 +272,7 @@ mkinfit <- function(mkinmod, observed,
     if (mkinmod[[1]] %in% parent_models_available) {
       speclist <- list(list(type = mkinmod, sink = TRUE))
       names(speclist) <- presumed_parent_name
-      mkinmod <- mkinmod(speclist = speclist, use_of_ff = "min")
+      mkinmod <- mkinmod(speclist = speclist, use_of_ff = "max")
     } else {
       stop("Argument mkinmod must be of class mkinmod or a string containing one of\n  ",
            paste(parent_models_available, collapse = ", "))
@@ -284,7 +291,9 @@ mkinfit <- function(mkinmod, observed,
 
   # Also remove zero values to avoid instabilities (e.g. of the 'tc' error model)
   if (any(observed$value == 0)) {
-    warning("Observations with value of zero were removed from the data")
+    zero_warning <- "Observations with value of zero were removed from the data"
+    summary_warnings <- c(summary_warnings, zero_warning)
+    warning(zero_warning)
     observed <- subset(observed, value != 0)
   }
 
@@ -415,7 +424,8 @@ mkinfit <- function(mkinmod, observed,
     state.ini_used <- state.ini_auto
   } else {
     state.ini_used <- state.ini_auto
-    state.ini_used[names(state.ini)] <- state.ini
+    state.ini_good <- intersect(names(mkinmod$diffs), names(state.ini))
+    state.ini_used[state.ini_good] <- state.ini[state.ini_good]
   }
   state.ini <- state.ini_used
 
@@ -628,7 +638,7 @@ mkinfit <- function(mkinmod, observed,
       if (cost < cost.current) {
         assign("cost.current", cost, inherits = TRUE)
         if (!quiet) cat(ifelse(OLS, "Sum of squared residuals", "Negative log-likelihood"),
-                        " at call ", calls, ": ", cost.current, "\n", sep = "")
+                        " at call ", calls, ": ", signif(cost.current, 6), "\n", sep = "")
       }
     }
     return(cost)
@@ -703,16 +713,17 @@ mkinfit <- function(mkinmod, observed,
     if (error_model_algorithm == "d_3") {
       if (!quiet) message("Directly optimising the complete model")
       parms.start <- c(degparms, errparms)
-      fit_direct <- nlminb(parms.start, cost_function,
+      fit_direct <- try(nlminb(parms.start, cost_function,
         lower = lower[names(parms.start)],
         upper = upper[names(parms.start)],
-        control = control, ...)
-      fit_direct$logLik <- - cost.current
-      if (error_model_algorithm == "direct") {
-        degparms <- fit_direct$par[degparms_index]
-        errparms <- fit_direct$par[errparms_index]
-      } else {
+        control = control, ...))
+      if (!inherits(fit_direct, "try-error")) {
+        fit_direct$logLik <- - cost.current
         cost.current <- Inf # reset to avoid conflict with the OLS step
+        data_direct <- current_data # We need this later if it was better
+        direct_failed = FALSE
+      } else {
+        direct_failed = TRUE
       }
     }
     if (error_model_algorithm != "direct") {
@@ -765,23 +776,30 @@ mkinfit <- function(mkinmod, observed,
 
       if (error_model_algorithm == "d_3") {
         d_3_messages = c(
+           direct_failed = "Direct fitting failed, results of three-step fitting are returned",
            same = "Direct fitting and three-step fitting yield approximately the same likelihood",
            threestep = "Three-step fitting yielded a higher likelihood than direct fitting",
            direct = "Direct fitting yielded a higher likelihood than three-step fitting")
-        rel_diff <- abs((fit_direct$logLik - fit$logLik))/-mean(c(fit_direct$logLik, fit$logLik))
-        if (rel_diff < 0.0001) {
-          if (!quiet) message(d_3_messages["same"])
-          fit$d_3_message <- d_3_messages["same"]
+        if (direct_failed) {
+          if (!quiet) message(d_3_messages["direct_failed"])
+          fit$d_3_message <- d_3_messages["direct_failed"]
         } else {
-          if (fit$logLik > fit_direct$logLik) {
-            if (!quiet) message(d_3_messages["threestep"])
-            fit$d_3_message <- d_3_messages["threestep"]
+          rel_diff <- abs((fit_direct$logLik - fit$logLik))/-mean(c(fit_direct$logLik, fit$logLik))
+          if (rel_diff < 0.0001) {
+            if (!quiet) message(d_3_messages["same"])
+            fit$d_3_message <- d_3_messages["same"]
           } else {
-            if (!quiet) message(d_3_messages["direct"])
-            fit <- fit_direct
-            fit$d_3_message <- d_3_messages["direct"]
-            degparms <- fit$par[degparms_index]
-            errparms <- fit$par[errparms_index]
+            if (fit$logLik > fit_direct$logLik) {
+              if (!quiet) message(d_3_messages["threestep"])
+              fit$d_3_message <- d_3_messages["threestep"]
+            } else {
+              if (!quiet) message(d_3_messages["direct"])
+              fit <- fit_direct
+              fit$d_3_message <- d_3_messages["direct"]
+              degparms <- fit$par[degparms_index]
+              errparms <- fit$par[errparms_index]
+              current_data  <- data_direct
+            }
           }
         }
       }
@@ -841,8 +859,9 @@ mkinfit <- function(mkinmod, observed,
   fit$error_model_algorithm <- error_model_algorithm
 
   if (fit$convergence != 0) {
-    fit$warning = paste0("Optimisation did not converge:\n", fit$message)
-    warning(fit$warning)
+    convergence_warning = paste0("Optimisation did not converge:\n", fit$message)
+    summary_warnings <- c(summary_warnings, convergence_warning)
+    warning(convergence_warning)
   } else {
     if(!quiet) message("Optimisation successfully terminated.\n")
   }
@@ -911,10 +930,22 @@ mkinfit <- function(mkinmod, observed,
   fit$errparms <- errparms
   fit$df.residual <- n_observed - length(c(degparms, errparms))
 
+  # Assign the class here so method dispatch works for residuals
+  class(fit) <- c("mkinfit")
+
+  # Check for normal distribution of residuals
+  fit$shapiro.p <- shapiro.test(residuals(fit, standardized = TRUE))$p.value
+  if (fit$shapiro.p < 0.05) {
+    shapiro_warning <- paste("Shapiro-Wilk test for standardized residuals: p = ", signif(fit$shapiro.p, 3))
+    warning(shapiro_warning)
+    summary_warnings <- c(summary_warnings, shapiro_warning)
+  }
+
+  fit$summary_warnings <- summary_warnings
+
   fit$date <- date()
   fit$version <- as.character(utils::packageVersion("mkin"))
   fit$Rversion <- paste(R.version$major, R.version$minor, sep=".")
 
-  class(fit) <- c("mkinfit")
   return(fit)
 }

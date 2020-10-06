@@ -1,4 +1,32 @@
-# mkin 0.9.50.1 (unreleased)
+# mkin 0.9.50.3 (unreleased)
+
+- 'parms': Add a method for mmkin objects
+
+- 'saemix_model', 'saemix_data': Helper functions to fit nonlinear mixed-effects models for mmkin row objects using the saemix package
+
+- 'mmkin' and 'confint(method = 'profile'): Use all cores detected by parallel::detectCores() per default
+
+- 'confint(method = 'profile'): Choose accuracy based on 'rel_tol' argument, relative to the bounds obtained by the quadratic approximation
+
+- 'mkinfit': Make 'use_of_ff' = "max" also the default for models specified using short names like "SFO" or "FOMC"
+
+- 'mkinfit': Run 'stats::shapiro.test()' on standardized residuals and warn if p < 0.05
+
+- 'mkinfit': 'error_model_algorithm' = 'd_3' does not fail if direct fitting fails, but reports that the results for the threestep algorithm are returned
+
+- 'mmkin': Do not fail any more if one of the fits fails, but assign the try-error to the respective position in the mmkin object
+
+- 'mkinfit': Ignore components of state.ini that do not correspond to state variables in the model
+
+- 'endpoints': Back-calculate DT50 value from DT90 also for the biphasic models DFOP, HS and SFORB
+
+# mkin 0.9.50.2 (2020-05-12)
+
+- Increase tolerance for a platform specific test results on the Solaris test machine on CRAN
+
+- Updates and corrections (using the spelling package) to the documentation
+
+# mkin 0.9.50.1 (2020-05-11)
 
 - Support SFORB with formation fractions
 
@@ -400,7 +428,7 @@
 
 - The FOCUS_Z vignette was rebuilt with the above improvement and using a width of 70 to avoid output outside of the grey area
 
-- `print.summary.mkinfit()`: Avoid a warning that occurred when gmkin showed summaries ofinitial fits without iterations
+- `print.summary.mkinfit()`: Avoid a warning that occurred when gmkin showed summaries of initial fits without iterations
 
 - `mkinfit()`: Avoid a warning that occurred when summarising a fit that was performed with maxitmodFit = 0 as done in gmkin for configuring new fits.
 
@@ -422,7 +450,7 @@
 
 ## Bug fixes
 
-- Avoid plotting an artifical 0 residual at time zero in `mkinresplot`
+- Avoid plotting an artificial 0 residual at time zero in `mkinresplot`
 
 - In the determination of the degrees of freedom in `mkinerrmin`, formation fractions were accounted for multiple times in the case of parallel formation of metabolites. See the new feature described above for the solution.
 
@@ -512,7 +540,7 @@
 
 - Remove warning about constant formation fractions in mkinmod as it was based on a misconception
 
-- Restrict the unit test with the Schaefer data to parent and primary metabolites as formation fraction and DT50 for A2 are higly correlated and passing the test is platform dependent. For example, the test fails in 1 out of 14 platforms on CRAN as of today.
+- Restrict the unit test with the Schaefer data to parent and primary metabolites as formation fraction and DT50 for A2 are highly correlated and passing the test is platform dependent. For example, the test fails in 1 out of 14 platforms on CRAN as of today.
 
 - Add Eurofins Regulatory AG copyright notices
 

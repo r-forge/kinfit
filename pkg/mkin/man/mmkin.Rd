@@ -8,7 +8,7 @@ more datasets}
 mmkin(
   models = c("SFO", "FOMC", "DFOP"),
   datasets,
-  cores = round(detectCores()/2),
+  cores = detectCores(),
   cluster = NULL,
   ...
 )
@@ -24,7 +24,8 @@ data for \code{\link{mkinfit}}.}
 \item{cores}{The number of cores to be used for multicore processing. This
 is only used when the \code{cluster} argument is \code{NULL}. On Windows
 machines, cores > 1 is not supported, you need to use the \code{cluster}
-argument to use multiple logical processors.}
+argument to use multiple logical processors. Per default, all cores
+detected by \code{\link[parallel:detectCores]{parallel::detectCores()}} are used.}
 
 \item{cluster}{A cluster as returned by \code{\link{makeCluster}} to be used
 for parallel execution.}
@@ -33,8 +34,9 @@ for parallel execution.}
 }
 \value{
 A two-dimensional \code{\link{array}} of \code{\link{mkinfit}}
-  objects that can be indexed using the model names for the first index (row index) 
-  and the dataset names for the second index (column index).
+objects and/or try-errors that can be indexed using the model names for the
+first index (row index) and the dataset names for the second index (column
+index).
 }
 \description{
 This function calls \code{\link{mkinfit}} on all combinations of models and
@@ -79,7 +81,7 @@ plot(fits.0[1, 1])
 }
 \seealso{
 \code{\link{[.mmkin}} for subsetting, \code{\link{plot.mmkin}} for
-  plotting.
+plotting.
 }
 \author{
 Johannes Ranke

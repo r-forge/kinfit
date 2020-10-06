@@ -30,7 +30,7 @@
 \arguments{
 \item{model}{An \code{\link{mmkin}} row object.}
 
-\item{data}{Should the data be printed?}
+\item{data}{Ignored, data are taken from the mmkin model}
 
 \item{fixed}{Ignored, all degradation parameters fitted in the
 mmkin model are used as fixed parameters}
@@ -67,7 +67,7 @@ parameters taken from the mmkin object are used}
 }
 \value{
 Upon success, a fitted nlme.mmkin object, which is an nlme object
-  with additional elements
+with additional elements
 }
 \description{
 This functions sets up a nonlinear mixed effects model for an mmkin row

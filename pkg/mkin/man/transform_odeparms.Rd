@@ -47,13 +47,12 @@ transformations is the \code{\link{ilr}} transformation.}
 fitting procedure.}
 }
 \value{
-A vector of transformed or backtransformed parameters with the same
-  names as the original parameters.
+A vector of transformed or backtransformed parameters
 }
 \description{
 The transformations are intended to map parameters that should only take on
 restricted values to the full scale of real numbers. For kinetic rate
-constants and other paramters that can only take on positive values, a
+constants and other parameters that can only take on positive values, a
 simple log transformation is used. For compositional parameters, such as the
 formations fractions that should always sum up to 1 and can not be negative,
 the \code{\link{ilr}} transformation is used.
@@ -63,11 +62,6 @@ The transformation of sets of formation fractions is fragile, as it supposes
 the same ordering of the components in forward and backward transformation.
 This is no problem for the internal use in \code{\link{mkinfit}}.
 }
-\section{Functions}{
-\itemize{
-\item \code{backtransform_odeparms}: Backtransform the set of transformed parameters
-}}
-
 \examples{
 
 SFO_SFO <- mkinmod(

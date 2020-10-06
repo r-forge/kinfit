@@ -122,7 +122,7 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
     date.fit = object$date,
     date.summary = date(),
     solution_type = object$solution_type,
-    warning = object$warning,
+    warnings = object$summary_warnings,
     use_of_ff = object$mkinmod$use_of_ff,
     error_model_algorithm = object$error_model_algorithm,
     df = c(p, rdf),
@@ -165,6 +165,7 @@ summary.mkinfit <- function(object, data = TRUE, distimes = TRUE, alpha = 0.05, 
   }
 
   ans$bparms.ode <- object$bparms.ode
+  ans$shapiro.p <- object$shapiro.p
   ep <- endpoints(object)
   if (length(ep$ff) != 0)
     ans$ff <- ep$ff
@@ -188,8 +189,6 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
 
   cat("Date of fit:    ", x$date.fit, "\n")
   cat("Date of summary:", x$date.summary, "\n")
-
-  if (!is.null(x$warning)) cat("\n\nWarning:", x$warning, "\n\n")
 
   cat("\nEquations:\n")
   nice_diffs <- gsub("^(d.*) =", "\\1/dt =", x[["diffs"]])
@@ -221,6 +220,14 @@ print.summary.mkinfit <- function(x, digits = max(3, getOption("digits") - 3), .
   cat("\nFixed parameter values:\n")
   if(length(x$fixed$value) == 0) cat("None\n")
   else print(x$fixed)
+
+  # We used to only have one warning - show this for summarising old objects
+   if (!is.null(x[["warning"]])) cat("\n\nWarning:", x$warning, "\n\n")
+
+  if (length(x$warnings) > 0) {
+    cat("\n\nWarning(s):", "\n")
+    cat(x$warnings, sep = "\n")
+  }
 
   if (!is.null(x$AIC)) {
     cat("\nResults:\n\n")
