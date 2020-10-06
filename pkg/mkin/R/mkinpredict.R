@@ -11,7 +11,7 @@
 #' @param odeparms A numeric vector specifying the parameters used in the
 #'   kinetic model, which is generally defined as a set of ordinary
 #'   differential equations.
-#' @param odeini A numeric vectory containing the initial values of the state
+#' @param odeini A numeric vector containing the initial values of the state
 #'   variables of the model. Note that the state variables can differ from the
 #'   observed variables, for example in the case of the SFORB model.
 #' @param outtimes A numeric vector specifying the time points for which model
@@ -138,7 +138,8 @@ mkinpredict.mkinmod <- function(x,
   out_obs[, "time"] <- outtimes
 
   if (solution_type == "analytical") {
-    # This is clumsy, as we wanted fast analytical predictions for mkinfit
+    # This is clumsy, as we wanted fast analytical predictions for mkinfit,
+    # which bypasses mkinpredict in the case of analytical solutions
     pseudo_observed <-
       data.frame(name = rep(obs_vars, each = length(outtimes)),
       time = rep(outtimes, length(obs_vars)))

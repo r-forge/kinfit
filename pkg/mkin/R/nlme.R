@@ -3,7 +3,7 @@
 #' These functions facilitate setting up a nonlinear mixed effects model for
 #' an mmkin row object. An mmkin row object is essentially a list of mkinfit
 #' objects that have been obtained by fitting the same model to a list of
-#' datasets.
+#' datasets. They are used internally by the [nlme.mmkin()] method.
 #'
 #' @param object An mmkin row object containing several fits of the same model to different datasets
 #' @import nlme
@@ -125,7 +125,7 @@ nlme_function <- function(object) {
 #' @return If random is FALSE (default), a named vector containing mean values
 #'   of the fitted degradation model parameters. If random is TRUE, a list with
 #'   fixed and random effects, in the format required by the start argument of
-#'   nlme for the case of a single grouping variable ds?
+#'   nlme for the case of a single grouping variable ds.
 #' @param random Should a list with fixed and random effects be returned?
 #' @export
 mean_degparms <- function(object, random = FALSE) {

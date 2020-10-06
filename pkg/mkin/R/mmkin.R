@@ -12,14 +12,16 @@
 #' @param cores The number of cores to be used for multicore processing. This
 #'   is only used when the \code{cluster} argument is \code{NULL}. On Windows
 #'   machines, cores > 1 is not supported, you need to use the \code{cluster}
-#'   argument to use multiple logical processors.
+#'   argument to use multiple logical processors. Per default, all cores
+#'   detected by [parallel::detectCores()] are used.
 #' @param cluster A cluster as returned by \code{\link{makeCluster}} to be used
 #'   for parallel execution.
 #' @param \dots Further arguments that will be passed to \code{\link{mkinfit}}.
 #' @importFrom parallel mclapply parLapply detectCores
 #' @return A two-dimensional \code{\link{array}} of \code{\link{mkinfit}}
-#'   objects that can be indexed using the model names for the first index (row index) 
-#'   and the dataset names for the second index (column index).
+#'   objects and/or try-errors that can be indexed using the model names for the
+#'   first index (row index) and the dataset names for the second index (column
+#'   index).
 #' @author Johannes Ranke
 #' @seealso \code{\link{[.mmkin}} for subsetting, \code{\link{plot.mmkin}} for
 #'   plotting.
@@ -62,7 +64,7 @@
 #'
 #' @export mmkin
 mmkin <- function(models = c("SFO", "FOMC", "DFOP"), datasets,
-                  cores = round(detectCores()/2), cluster = NULL, ...)
+  cores = detectCores(), cluster = NULL, ...)
 {
   parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE", "logistic")
   n.m <- length(models)
@@ -94,7 +96,7 @@ mmkin <- function(models = c("SFO", "FOMC", "DFOP"), datasets,
     w <- which(fit_indices == fit_index, arr.ind = TRUE)
     model_index <- w[1]
     dataset_index <- w[2]
-    mkinfit(models[[model_index]], datasets[[dataset_index]], ...)
+    res <- try(mkinfit(models[[model_index]], datasets[[dataset_index]], ...))
   }
 
   if (is.null(cluster)) {

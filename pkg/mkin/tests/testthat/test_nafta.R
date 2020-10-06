@@ -22,14 +22,17 @@ test_that("Test data from Appendix B are correctly evaluated", {
 
   plot_nafta <- function() plot(res)
   if(requireNamespace("vdiffr", quietly = TRUE)) {
-    skip_if(getRversion() > 4.0)
+    skip_if(getRversion() < "4.1.0")
     vdiffr::expect_doppelganger("NAFTA SOP Appendix B", plot_nafta)
   }
 })
 
 test_that("Test data from Appendix D are correctly evaluated", {
+  # We are not interested in the warnings about non-normal residuals here
+  suppressWarnings(
   res <- nafta(NAFTA_SOP_Appendix_D, "MRID 555555", 
-                              cores = 1, quiet = TRUE)
+    cores = 1, quiet = TRUE)
+  )
 
   # From Figure D.1
   dtx_sop <- matrix(c(407, 541, 429, 1352, 5192066, 2383), nrow = 3, ncol = 2)
@@ -47,7 +50,7 @@ test_that("Test data from Appendix D are correctly evaluated", {
 
   plot_nafta <- function() plot(res)
   if(requireNamespace("vdiffr", quietly = TRUE)) {
-    skip_if(getRversion() > 4.0)
+    skip_if(getRversion() < "4.1.0")
     vdiffr::expect_doppelganger("Plot NAFTA analysis", plot_nafta)
   }
 })

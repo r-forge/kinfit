@@ -75,7 +75,7 @@ datasets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mkin</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.50</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.50.2</span>
       </span>
     </div>
 
@@ -173,9 +173,9 @@ datasets.</p>
 
     <p>A function that can be used with nlme</p>
 <p>If random is FALSE (default), a named vector containing mean values
-  of the fitted degradation model parameters. If random is TRUE, a list with
-  fixed and random effects, in the format required by the start argument of
-  nlme for the case of a single grouping variable ds?</p>
+of the fitted degradation model parameters. If random is TRUE, a list with
+fixed and random effects, in the format required by the start argument of
+nlme for the case of a single grouping variable ds?</p>
 <p>A <code><a href='https://rdrr.io/pkg/nlme/man/groupedData.html'>groupedData</a></code> object</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -228,20 +228,20 @@ datasets.</p>
 #&gt;  Formula: list(parent_0 ~ 1, log_k_parent_sink ~ 1)
 #&gt;  Level: ds
 #&gt;  Structure: Diagonal
-#&gt;             parent_0 log_k_parent_sink Residual
-#&gt; StdDev: 0.0006768135         0.6800777 2.489397
+#&gt;            parent_0 log_k_parent_sink Residual
+#&gt; StdDev: 0.004139378         0.6800778 2.489396
 #&gt; 
 #&gt; Fixed effects: parent_0 + log_k_parent_sink ~ 1 
 #&gt;                       Value Std.Error DF   t-value p-value
-#&gt; parent_0          101.74884 0.6456014 44 157.60321       0
-#&gt; log_k_parent_sink  -3.05575 0.4015811 44  -7.60929       0
+#&gt; parent_0          101.74884 0.6456057 44 157.60213       0
+#&gt; log_k_parent_sink  -3.05575 0.4015812 44  -7.60929       0
 #&gt;  Correlation: 
 #&gt;                   prnt_0
 #&gt; log_k_parent_sink 0.026 
 #&gt; 
 #&gt; Standardized Within-Group Residuals:
-#&gt;        Min         Q1        Med         Q3        Max 
-#&gt; -2.1317488 -0.6878121  0.0828385  0.8592270  2.9529864 
+#&gt;         Min          Q1         Med          Q3         Max 
+#&gt; -2.13168782 -0.68780415  0.08282907  0.85913228  2.95298904 
 #&gt; 
 #&gt; Number of Observations: 48
 #&gt; Number of Groups: 3 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/nlme/man/augPred.html'>augPred</a></span>(<span class='no'>m_nlme</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>1</span>), <span class='kw'>layout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>))</div><div class='img'><img src='nlme-1.png' alt='' width='700' height='433' /></div><div class='input'># augPred does not seem to work on fits with more than one state

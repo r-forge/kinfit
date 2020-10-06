@@ -7,7 +7,7 @@
 The R package **mkin** provides calculation routines for the analysis of
 chemical degradation data, including <b>m</b>ulticompartment <b>kin</b>etics as
 needed for modelling the formation and decline of transformation products, or
-if several compartments are involved.
+if several degradation compartments are involved.
 
 ## Installation
 
@@ -28,7 +28,7 @@ detailed guidance and helpful tools have been developed as detailed in
 
 ## Usage
 
-For a start, have a look a the code examples provided for
+For a start, have a look at the code examples provided for
 [`plot.mkinfit`](https://pkgdown.jrwb.de/mkin/reference/plot.mkinfit.html)
 and
 [`plot.mmkin`](https://pkgdown.jrwb.de/mkin/reference/plot.mmkin.html), and
@@ -38,10 +38,10 @@ at the package vignettes
 
 ## Documentation
 
-The HTML documentation is available at
-[jrwb.de](https://pkgdown.jrwb.de/mkin), at
-[github](http://jranke.github.io/mkin)
-and at [R-Forge](http://kinfit.r-forge.r-project.org/mkin_static/index.html).
+The HTML documentation of the latest version released to CRAN is available at
+[jrwb.de](https://pkgdown.jrwb.de/mkin) and
+[github](http://jranke.github.io/mkin). Documentation of the development
+version is found in the ['dev' subdirectory](https://pkgdown.jrwb.de/mkin/dev).
 
 ## Features
 
@@ -146,7 +146,7 @@ The first `mkin` code was
 on 18 May 2010.
 
 In 2011, Bayer Crop Science started to distribute an R based successor to KinGUI named
-KinGUII whose R code is based on `mkin`, but which added, amongst other
+KinGUII whose R code is based on `mkin`, but which added, among other
 refinements, a closed source graphical user interface (GUI), iteratively
 reweighted least squares (IRLS) optimisation of the variance for each of the
 observed variables, and Markov Chain Monte Carlo (MCMC) simulation

@@ -40,7 +40,7 @@ seed is not set.}
 }
 \value{
 A list of datasets compatible with \code{\link{mmkin}}, i.e. the
-  components of the list are datasets compatible with \code{\link{mkinfit}}.
+components of the list are datasets compatible with \code{\link{mkinfit}}.
 }
 \description{
 Normally distributed errors are added to data predicted for a specific
@@ -96,7 +96,7 @@ plot(f_SFO_SFO[1, 3])
 Ranke J and Lehmann R (2015) To t-test or not to t-test, that is
 the question. XV Symposium on Pesticide Chemistry 2-4 September 2015,
 Piacenza, Italy
-http://chem.uft.uni-bremen.de/ranke/posters/piacenza_2015.pdf
+https://jrwb.de/posters/piacenza_2015.pdf
 }
 \author{
 Johannes Ranke
