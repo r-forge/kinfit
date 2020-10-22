@@ -1,8 +1,10 @@
-# mkin 0.9.50.3 (unreleased)
-
-- 'parms': Add a method for mmkin objects
+# mkin 0.9.50.4 (unreleased)
 
 - 'saemix_model', 'saemix_data': Helper functions to fit nonlinear mixed-effects models for mmkin row objects using the saemix package
+
+# mkin 0.9.50.3 (2020-10-08)
+
+- 'parms': Add a method for mmkin objects
 
 - 'mmkin' and 'confint(method = 'profile'): Use all cores detected by parallel::detectCores() per default
 
@@ -518,7 +520,7 @@
 
 # mkin 0.9-27 (2014-05-10)
 
-- Fork the GUI into a separate package [gmkin](http://github.com/jranke/gmkin)
+- Fork the GUI into a separate package [gmkin](https://github.com/jranke/gmkin)
 
 - DESCRIPTION, NAMESPACE, TODO: Adapt and add copyright information
 
