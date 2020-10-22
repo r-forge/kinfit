@@ -9,8 +9,13 @@ addons:
   apt:
     packages:
       - gcc
+repos:
+  CRAN: https://cloud.r-project.org
+  jranke: https://jranke.github.io/drat
 r_github_packages:
-  - saemixdevelopment/saemixextension
+  - jranke/saemixextension
+r_packages:
+  - nlme
 script:
   - |
     R CMD build .

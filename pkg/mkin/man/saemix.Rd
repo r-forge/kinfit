@@ -43,12 +43,38 @@ sfo_sfo <- mkinmod(parent = mkinsub("SFO", "A1"),
 \dontrun{
 f_mmkin <- mmkin(list("SFO-SFO" = sfo_sfo), ds, quiet = TRUE)
 library(saemix)
-m_saemix <- saemix_model(f_mmkin)
+m_saemix <- saemix_model(f_mmkin, cores = 1)
 d_saemix <- saemix_data(f_mmkin)
 saemix_options <- list(seed = 123456,
   save = FALSE, save.graphs = FALSE, displayProgress = FALSE,
   nbiter.saemix = c(200, 80))
 f_saemix <- saemix(m_saemix, d_saemix, saemix_options)
 plot(f_saemix, plot.type = "convergence")
+}
+# Synthetic data with two-component error
+sampling_times = c(0, 1, 3, 7, 14, 28, 60, 90, 120)
+dt50_sfo_in <- c(80, 90, 100, 111.111, 125)
+k_in <- log(2) / dt50_sfo_in
+
+SFO <- mkinmod(parent = mkinsub("SFO"))
+
+pred_sfo <- function(k) {
+  mkinpredict(SFO, c(k_parent = k),
+    c(parent = 100), sampling_times)
+}
+
+ds_sfo_mean <- lapply(k_in, pred_sfo)
+set.seed(123456L)
+ds_sfo_syn <- lapply(ds_sfo_mean, function(ds) {
+  add_err(ds, sdfunc = function(value) sqrt(1^2 + value^2 * 0.07^2),
+     n = 1)[[1]]
+ })
+\dontrun{
+f_mmkin_syn <- mmkin("SFO", ds_sfo_syn, error_model = "tc", quiet = TRUE)
+# plot(f_mmkin_syn)
+m_saemix_tc <- saemix_model(f_mmkin_syn, cores = 1)
+d_saemix_tc <- saemix_data(f_mmkin_syn)
+f_saemix_tc <- saemix(m_saemix_tc, d_saemix_tc, saemix_options)
+plot(f_saemix_tc, plot.type = "convergence")
 }
 }
