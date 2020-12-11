@@ -8,11 +8,12 @@
 \usage{
 \method{nlme}{mmkin}(
   model,
-  data = sys.frame(sys.parent()),
-  fixed,
-  random = fixed,
+  data = "auto",
+  fixed = lapply(as.list(names(mean_degparms(model))), function(el) eval(parse(text =
+    paste(el, 1, sep = "~")))),
+  random = pdDiag(fixed),
   groups,
-  start,
+  start = mean_degparms(model, random = TRUE),
   correlation = NULL,
   weights = NULL,
   subset,
@@ -23,20 +24,22 @@
   verbose = FALSE
 )
 
-\method{print}{nlme.mmkin}(x, ...)
+\method{print}{nlme.mmkin}(x, digits = max(3, getOption("digits") - 3), ...)
 
 \method{update}{nlme.mmkin}(object, ...)
 }
 \arguments{
-\item{model}{An \code{\link{mmkin}} row object.}
+\item{model}{An \link{mmkin} row object.}
 
 \item{data}{Ignored, data are taken from the mmkin model}
 
 \item{fixed}{Ignored, all degradation parameters fitted in the
 mmkin model are used as fixed parameters}
 
-\item{random}{If not specified, all fixed effects are complemented
-with uncorrelated random effects}
+\item{random}{If not specified, correlated random effects are set up
+for all optimised degradation model parameters using the log-Cholesky
+parameterization \link[nlme:pdLogChol]{nlme::pdLogChol} that is also the default of
+the generic \link{nlme} method.}
 
 \item{groups}{See the documentation of nlme}
 
@@ -61,18 +64,25 @@ parameters taken from the mmkin object are used}
 
 \item{x}{An nlme.mmkin object to print}
 
+\item{digits}{Number of digits to use for printing}
+
 \item{...}{Update specifications passed to update.nlme}
 
 \item{object}{An nlme.mmkin object to update}
 }
 \value{
-Upon success, a fitted nlme.mmkin object, which is an nlme object
-with additional elements
+Upon success, a fitted 'nlme.mmkin' object, which is an nlme object
+with additional elements. It also inherits from 'mixed.mmkin'.
 }
 \description{
 This functions sets up a nonlinear mixed effects model for an mmkin row
 object. An mmkin row object is essentially a list of mkinfit objects that
 have been obtained by fitting the same model to a list of datasets.
+}
+\note{
+As the object inherits from \link[nlme:nlme]{nlme::nlme}, there is a wealth of
+methods that will automatically work on 'nlme.mmkin' objects, such as
+\code{\link[nlme:intervals]{nlme::intervals()}}, \code{\link[nlme:anova.lme]{nlme::anova.lme()}} and \code{\link[nlme:coef.lme]{nlme::coef.lme()}}.
 }
 \examples{
 ds <- lapply(experimental_data_for_UBA_2019[6:10],
@@ -80,71 +90,52 @@ ds <- lapply(experimental_data_for_UBA_2019[6:10],
 f <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, cores = 1)
 library(nlme)
 f_nlme_sfo <- nlme(f["SFO", ])
-f_nlme_dfop <- nlme(f["DFOP", ])
-AIC(f_nlme_sfo, f_nlme_dfop)
-print(f_nlme_dfop)
-endpoints(f_nlme_dfop)
+
 \dontrun{
-  f_nlme_2 <- nlme(f["SFO", ], start = c(parent_0 = 100, log_k_parent = 0.1))
-  update(f_nlme_2, random = parent_0 ~ 1)
+
+  f_nlme_dfop <- nlme(f["DFOP", ])
+  anova(f_nlme_sfo, f_nlme_dfop)
+  print(f_nlme_dfop)
+  plot(f_nlme_dfop)
+  endpoints(f_nlme_dfop)
+
   ds_2 <- lapply(experimental_data_for_UBA_2019[6:10],
    function(x) x$data[c("name", "time", "value")])
   m_sfo_sfo <- mkinmod(parent = mkinsub("SFO", "A1"),
     A1 = mkinsub("SFO"), use_of_ff = "min", quiet = TRUE)
   m_sfo_sfo_ff <- mkinmod(parent = mkinsub("SFO", "A1"),
     A1 = mkinsub("SFO"), use_of_ff = "max", quiet = TRUE)
-  m_fomc_sfo <- mkinmod(parent = mkinsub("FOMC", "A1"),
-    A1 = mkinsub("SFO"), quiet = TRUE)
   m_dfop_sfo <- mkinmod(parent = mkinsub("DFOP", "A1"),
     A1 = mkinsub("SFO"), quiet = TRUE)
 
   f_2 <- mmkin(list("SFO-SFO" = m_sfo_sfo,
    "SFO-SFO-ff" = m_sfo_sfo_ff,
-   "FOMC-SFO" = m_fomc_sfo,
    "DFOP-SFO" = m_dfop_sfo),
     ds_2, quiet = TRUE)
-  plot(f_2["SFO-SFO", 3:4]) # Separate fits for datasets 3 and 4
 
   f_nlme_sfo_sfo <- nlme(f_2["SFO-SFO", ])
-  # plot(f_nlme_sfo_sfo) # not feasible with pkgdown figures
-  plot(f_nlme_sfo_sfo, 3:4) # Global mixed model: Fits for datasets 3 and 4
+  plot(f_nlme_sfo_sfo)
 
-  # With formation fractions
-  f_nlme_sfo_sfo_ff <- nlme(f_2["SFO-SFO-ff", ])
-  plot(f_nlme_sfo_sfo_ff, 3:4) # chi2 different due to different df attribution
+  # With formation fractions this does not coverge with defaults
+  # f_nlme_sfo_sfo_ff <- nlme(f_2["SFO-SFO-ff", ])
+  #plot(f_nlme_sfo_sfo_ff)
 
-  # For more parameters, we need to increase pnlsMaxIter and the tolerance
-  # to get convergence
-  f_nlme_fomc_sfo <- nlme(f_2["FOMC-SFO", ],
-    control = list(pnlsMaxIter = 100, tolerance = 1e-4), verbose = TRUE)
-  f_nlme_dfop_sfo <- nlme(f_2["DFOP-SFO", ],
-    control = list(pnlsMaxIter = 120, tolerance = 5e-4), verbose = TRUE)
-  plot(f_2["FOMC-SFO", 3:4])
-  plot(f_nlme_fomc_sfo, 3:4)
+  # With the log-Cholesky parameterization, this converges in 11
+  # iterations and around 100 seconds, but without tweaking control
+  # parameters (with pdDiag, increasing the tolerance and pnlsMaxIter was
+  # necessary)
+  f_nlme_dfop_sfo <- nlme(f_2["DFOP-SFO", ])
 
-  plot(f_2["DFOP-SFO", 3:4])
-  plot(f_nlme_dfop_sfo, 3:4)
+  plot(f_nlme_dfop_sfo)
 
-  anova(f_nlme_dfop_sfo, f_nlme_fomc_sfo, f_nlme_sfo_sfo)
-  anova(f_nlme_dfop_sfo, f_nlme_sfo_sfo) # if we ignore FOMC
+  anova(f_nlme_dfop_sfo, f_nlme_sfo_sfo)
 
   endpoints(f_nlme_sfo_sfo)
   endpoints(f_nlme_dfop_sfo)
 
   if (length(findFunction("varConstProp")) > 0) { # tc error model for nlme available
-    # Attempts to fit metabolite kinetics with the tc error model
-    #f_2_tc <- mmkin(list("SFO-SFO" = m_sfo_sfo,
-    #  "SFO-SFO-ff" = m_sfo_sfo_ff,
-    #  "FOMC-SFO" = m_fomc_sfo,
-    #  "DFOP-SFO" = m_dfop_sfo),
-    #   ds_2, quiet = TRUE,
-    #   error_model = "tc")
-    #f_nlme_sfo_sfo_tc <- nlme(f_2_tc["SFO-SFO", ], control = list(maxIter = 100))
-    #f_nlme_dfop_sfo_tc <- nlme(f_2_tc["DFOP-SFO", ])
-    #f_nlme_dfop_sfo_tc <- update(f_nlme_dfop_sfo, weights = varConstProp(),
-    #  control = list(sigma = 1, msMaxIter = 100, pnlsMaxIter = 15))
-    # Fitting metabolite kinetics with nlme.mmkin and the two-component
-    # error model currently does not work, at least not with these data.
+    # Attempts to fit metabolite kinetics with the tc error model are possible,
+    # but need tweeking of control values and sometimes do not converge
 
     f_tc <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, error_model = "tc")
     f_nlme_sfo_tc <- nlme(f_tc["SFO", ])
@@ -152,17 +143,26 @@ endpoints(f_nlme_dfop)
     AIC(f_nlme_sfo, f_nlme_sfo_tc, f_nlme_dfop, f_nlme_dfop_tc)
     print(f_nlme_dfop_tc)
   }
+
   f_2_obs <- mmkin(list("SFO-SFO" = m_sfo_sfo,
    "DFOP-SFO" = m_dfop_sfo),
     ds_2, quiet = TRUE, error_model = "obs")
   f_nlme_sfo_sfo_obs <- nlme(f_2_obs["SFO-SFO", ])
   print(f_nlme_sfo_sfo_obs)
-  # The same with DFOP-SFO does not converge, apparently the variances of
-  # parent and A1 are too similar in this case, so that the model is
-  # overparameterised
-  #f_nlme_dfop_sfo_obs <- nlme(f_2_obs["DFOP-SFO", ], control = list(maxIter = 100))
+  f_nlme_dfop_sfo_obs <- nlme(f_2_obs["DFOP-SFO", ])
+
+  f_2_tc <- mmkin(list("SFO-SFO" = m_sfo_sfo,
+   "DFOP-SFO" = m_dfop_sfo),
+    ds_2, quiet = TRUE, error_model = "tc")
+  # f_nlme_sfo_sfo_tc <- nlme(f_2_tc["SFO-SFO", ]) # stops with error message
+  f_nlme_dfop_sfo_tc <- nlme(f_2_tc["DFOP-SFO", ])
+  # We get warnings about false convergence in the LME step in several iterations
+  # but as the last such warning occurs in iteration 25 and we have 28 iterations
+  # we can ignore these
+  anova(f_nlme_dfop_sfo, f_nlme_dfop_sfo_obs, f_nlme_dfop_sfo_tc)
+
 }
 }
 \seealso{
-\code{\link{nlme_function}}
+\code{\link[=nlme_function]{nlme_function()}}, \link{plot.mixed.mmkin}, \link{summary.nlme.mmkin}
 }

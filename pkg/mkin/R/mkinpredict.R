@@ -34,10 +34,10 @@
 #'   the observed variables (default) or for all state variables (if set to
 #'   FALSE). Setting this to FALSE has no effect for analytical solutions,
 #'   as these always return mapped output.
+#' @param na_stop Should it be an error if deSolve::ode returns NaN values
 #' @param \dots Further arguments passed to the ode solver in case such a
 #'   solver is used.
 #' @import deSolve
-#' @importFrom inline getDynLib
 #' @return A matrix with the numeric solution in wide format
 #' @author Johannes Ranke
 #' @examples
@@ -102,12 +102,7 @@
 #' }
 #'
 #' @export
-mkinpredict <- function(x, odeparms, odeini,
-  outtimes = seq(0, 120, by = 0.1),
-  solution_type = "deSolve",
-  use_compiled = "auto",
-  method.ode = "lsoda", atol = 1e-8, rtol = 1e-10,
-  map_output = TRUE, ...)
+mkinpredict <- function(x, odeparms, odeini, outtimes, ...)
 {
   UseMethod("mkinpredict", x)
 }
@@ -121,7 +116,9 @@ mkinpredict.mkinmod <- function(x,
   solution_type = "deSolve",
   use_compiled = "auto",
   method.ode = "lsoda", atol = 1e-8, rtol = 1e-10,
-  map_output = TRUE, ...)
+  map_output = TRUE,
+  na_stop = TRUE,
+  ...)
 {
 
   # Names of state variables and observed variables
@@ -136,6 +133,8 @@ mkinpredict.mkinmod <- function(x,
   out_obs <- matrix(NA, nrow = length(outtimes), ncol = 1 + length(obs_vars),
     dimnames = list(as.character(outtimes), c("time", obs_vars)))
   out_obs[, "time"] <- outtimes
+
+  n_out_na <- 0 # to check if we get NA values with deSolve
 
   if (solution_type == "analytical") {
     # This is clumsy, as we wanted fast analytical predictions for mkinfit,
@@ -172,12 +171,13 @@ mkinpredict.mkinmod <- function(x,
 
   if (solution_type == "deSolve") {
     if (!is.null(x$cf) & use_compiled[1] != FALSE) {
-      out <- ode(
+
+      out <- deSolve::ode(
         y = odeini,
         times = outtimes,
-        func = "func",
+        func = "diffs",
         initfunc = "initpar",
-        dllname = getDynLib(x$cf)[["name"]],
+        dllname = inline::getDynLib(x$cf)[["name"]],
         parms = odeparms[x$parms], # Order matters when using compiled models
         method = method.ode,
         atol = atol,
@@ -197,7 +197,7 @@ mkinpredict.mkinmod <- function(x,
         }
         return(list(c(diffs)))
       }
-      out <- ode(
+      out <- deSolve::ode(
         y = odeini,
         times = outtimes,
         func = mkindiff,
@@ -208,20 +208,33 @@ mkinpredict.mkinmod <- function(x,
         ...
       )
     }
-    if (sum(is.na(out)) > 0) {
+    n_out_na <- sum(is.na(out))
+    if (n_out_na > 0 & na_stop) {
+      cat("odeini:\n")
+      print(odeini)
+      cat("odeparms:\n")
+      print(odeparms)
+      cat("out:\n")
+      print(out)
       stop("Differential equations were not integrated for all output times because\n",
-     "NaN values occurred in output from ode()")
+        n_out_na, " NaN values occurred in output from ode()")
     }
   }
 
   if (map_output) {
     # Output transformation for models with unobserved compartments like SFORB
     # if not already mapped in analytical solution
+    if (n_out_na > 0 & !na_stop) {
+      available <- c(TRUE, rep(FALSE, length(outtimes) - 1))
+    } else {
+      available <- rep(TRUE, length(outtimes))
+    }
     for (var in names(x$map)) {
       if((length(x$map[[var]]) == 1)) {
-        out_obs[, var] <- out[, var]
+        out_obs[available, var] <- out[available, var]
       } else {
-        out_obs[, var] <- out[, x$map[[var]][1]] + out[, x$map[[var]][2]]
+        out_obs[available, var] <- out[available, x$map[[var]][1]] +
+          out[available, x$map[[var]][2]]
       }
     }
     return(out_obs)
