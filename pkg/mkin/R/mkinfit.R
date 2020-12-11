@@ -1,4 +1,4 @@
-if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
+utils::globalVariables(c("name", "time", "value"))
 
 #' Fit a kinetic model to data with one or more state variables
 #'
@@ -89,12 +89,11 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'   models and the break point tb of the HS model.  If FALSE, zero is used as
 #'   a lower bound for the rates in the optimisation.
 #' @param transform_fractions Boolean specifying if formation fractions
-#'   constants should be transformed in the model specification used in the
-#'   fitting for better compliance with the assumption of normal distribution
-#'   of the estimator. The default (TRUE) is to do transformations. If TRUE,
-#'   the g parameter of the DFOP and HS models are also transformed, as they
-#'   can also be seen as compositional data. The transformation used for these
-#'   transformations is the [ilr()] transformation.
+#'   should be transformed in the model specification used in the fitting for
+#'   better compliance with the assumption of normal distribution of the
+#'   estimator. The default (TRUE) is to do transformations. If TRUE,
+#'   the g parameter of the DFOP model is also transformed. Transformations
+#'   are described in [transform_odeparms].
 #' @param quiet Suppress printing out the current value of the negative
 #'   log-likelihood after each improvement?
 #' @param atol Absolute error tolerance, passed to [deSolve::ode()]. Default
@@ -148,6 +147,7 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'   the error model parameters in IRLS fits.
 #' @param reweight.max.iter Maximum number of iterations in IRLS fits.
 #' @param trace_parms Should a trace of the parameter values be listed?
+#' @param test_residuals Should the residuals be tested for normal distribution?
 #' @param \dots Further arguments that will be passed on to
 #'   [deSolve::ode()].
 #' @importFrom stats nlminb aggregate dist shapiro.test
@@ -186,15 +186,14 @@ if(getRversion() >= '2.15.1') utils::globalVariables(c("name", "time", "value"))
 #'
 #' # Fit the model quietly to the FOCUS example dataset D using defaults
 #' fit <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE)
-#' # Since mkin 0.9.50.3, we get a warning about non-normality of residuals,
-#' # so we try an alternative error model
+#' plot_sep(fit)
+#' # As lower parent values appear to have lower variance, we try an alternative error model
 #' fit.tc <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "tc")
 #' # This avoids the warning, and the likelihood ratio test confirms it is preferable
 #' lrtest(fit.tc, fit)
 #' # We can also allow for different variances of parent and metabolite as error model
 #' fit.obs <- mkinfit(SFO_SFO, FOCUS_D, quiet = TRUE, error_model = "obs")
-#' # This also avoids the warning about non-normality, but the two-component error model
-#' # has significantly higher likelihood
+#' # The two-component error model has significantly higher likelihood
 #' lrtest(fit.obs, fit.tc)
 #' parms(fit.tc)
 #' endpoints(fit.tc)
@@ -254,6 +253,7 @@ mkinfit <- function(mkinmod, observed,
   error_model_algorithm = c("auto", "d_3", "direct", "twostep", "threestep", "fourstep", "IRLS", "OLS"),
   reweight.tol = 1e-8, reweight.max.iter = 10,
   trace_parms = FALSE,
+  test_residuals = FALSE,
   ...)
 {
   call <- match.call()
@@ -292,7 +292,7 @@ mkinfit <- function(mkinmod, observed,
   # Also remove zero values to avoid instabilities (e.g. of the 'tc' error model)
   if (any(observed$value == 0)) {
     zero_warning <- "Observations with value of zero were removed from the data"
-    summary_warnings <- c(summary_warnings, zero_warning)
+    summary_warnings <- c(summary_warnings, Z = zero_warning)
     warning(zero_warning)
     observed <- subset(observed, value != 0)
   }
@@ -860,7 +860,7 @@ mkinfit <- function(mkinmod, observed,
 
   if (fit$convergence != 0) {
     convergence_warning = paste0("Optimisation did not converge:\n", fit$message)
-    summary_warnings <- c(summary_warnings, convergence_warning)
+    summary_warnings <- c(summary_warnings, C = convergence_warning)
     warning(convergence_warning)
   } else {
     if(!quiet) message("Optimisation successfully terminated.\n")
@@ -885,8 +885,8 @@ mkinfit <- function(mkinmod, observed,
   fit$rss <- function(P) cost_function(P, OLS = TRUE, update_data = FALSE)
 
   # Log-likelihood with possibility to fix degparms or errparms
-  fit$ll <- function(P, fixed_degparms = FALSE, fixed_errparms = FALSE) {
-    - cost_function(P, trans = FALSE, fixed_degparms = fixed_degparms,
+  fit$ll <- function(P, fixed_degparms = FALSE, fixed_errparms = FALSE, trans = FALSE) {
+    - cost_function(P, trans = trans, fixed_degparms = fixed_degparms,
       fixed_errparms = fixed_errparms, OLS = FALSE, update_data = FALSE)
   }
 
@@ -933,12 +933,14 @@ mkinfit <- function(mkinmod, observed,
   # Assign the class here so method dispatch works for residuals
   class(fit) <- c("mkinfit")
 
-  # Check for normal distribution of residuals
-  fit$shapiro.p <- shapiro.test(residuals(fit, standardized = TRUE))$p.value
-  if (fit$shapiro.p < 0.05) {
-    shapiro_warning <- paste("Shapiro-Wilk test for standardized residuals: p = ", signif(fit$shapiro.p, 3))
-    warning(shapiro_warning)
-    summary_warnings <- c(summary_warnings, shapiro_warning)
+  if (test_residuals) {
+    # Check for normal distribution of residuals
+    fit$shapiro.p <- shapiro.test(residuals(fit, standardized = TRUE))$p.value
+    if (fit$shapiro.p < 0.05) {
+      shapiro_warning <- paste("Shapiro-Wilk test for standardized residuals: p = ", signif(fit$shapiro.p, 3))
+      warning(shapiro_warning)
+      summary_warnings <- c(summary_warnings, S = shapiro_warning)
+    }
   }
 
   fit$summary_warnings <- summary_warnings

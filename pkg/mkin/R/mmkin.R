@@ -60,12 +60,24 @@
 #' # Plotting with mmkin (single brackets, extracting an mmkin object) does not
 #' # allow to plot the observed variables separately
 #' plot(fits.0[1, 1])
+#'
+#' # On Windows, we can use multiple cores by making a cluster using the parallel
+#' # package, which gets loaded with mkin, and passing it to mmkin, e.g.
+#' cl <- makePSOCKcluster(12)
+#' f <- mmkin(c("SFO", "FOMC", "DFOP"),
+#'   list(A = FOCUS_2006_A, B = FOCUS_2006_B, C = FOCUS_2006_C, D = FOCUS_2006_D),
+#'   cluster = cl, quiet = TRUE)
+#' print(f)
+#' # We get false convergence for the FOMC fit to FOCUS_2006_A because this
+#' # dataset is really SFO, and the FOMC fit is overparameterised
+#' stopCluster(cl)
 #' }
 #'
 #' @export mmkin
 mmkin <- function(models = c("SFO", "FOMC", "DFOP"), datasets,
-  cores = detectCores(), cluster = NULL, ...)
+  cores = parallel::detectCores(), cluster = NULL, ...)
 {
+  call <- match.call()
   parent_models_available = c("SFO", "FOMC", "DFOP", "HS", "SFORB", "IORE", "logistic")
   n.m <- length(models)
   n.d <- length(datasets)
@@ -97,22 +109,24 @@ mmkin <- function(models = c("SFO", "FOMC", "DFOP"), datasets,
     model_index <- w[1]
     dataset_index <- w[2]
     res <- try(mkinfit(models[[model_index]], datasets[[dataset_index]], ...))
+    if (!inherits(res, "try-error")) res$mkinmod$name <- names(models)[model_index]
+    return(res)
   }
 
   if (is.null(cluster)) {
-    results <- mclapply(as.list(1:n.fits), fit_function, mc.cores = cores)
+    results <- parallel::mclapply(as.list(1:n.fits), fit_function,
+      mc.cores = cores, mc.preschedule = FALSE)
   } else {
-    results <- parLapply(cluster, as.list(1:n.fits), fit_function)
+    results <- parallel::parLapply(cluster, as.list(1:n.fits), fit_function)
   }
 
   attributes(results) <- attributes(fit_indices)
+  attr(results, "call") <- call
   class(results) <- "mmkin"
   return(results)
 }
 
 #' Subsetting method for mmkin objects
-#'
-#' Subsetting method for mmkin objects.
 #'
 #' @param x An \code{\link{mmkin} object}
 #' @param i Row index selecting the fits for specific models
@@ -136,11 +150,80 @@ mmkin <- function(models = c("SFO", "FOMC", "DFOP"), datasets,
 #'     # This extracts an mkinfit object with lots of components
 #'     fits[["FOMC", "B"]]
 #'   )
-#'
 #' @export
 `[.mmkin` <- function(x, i, j, ..., drop = FALSE) {
   class(x) <- NULL
   x_sub <- x[i, j, drop = drop]
   if (!drop) class(x_sub) <- "mmkin"
   return(x_sub)
+}
+
+#' Print method for mmkin objects
+#'
+#' @param x An [mmkin] object.
+#' @param \dots Not used.
+#' @export
+print.mmkin <- function(x, ...) {
+  cat("<mmkin> object\n")
+  cat("Status of individual fits:\n\n")
+  all_summary_warnings <- character()
+  sww <- 0 # Counter for Shapiro-Wilks warnings
+
+  display <- lapply(x,
+    function(fit) {
+      if (inherits(fit, "try-error")) return("E")
+      sw <- fit$summary_warnings
+      swn <- names(sw)
+      if (length(sw) > 0) {
+        if (any(grepl("S", swn))) {
+          sww <<- sww + 1
+          swn <- gsub("S", paste0("S", sww), swn)
+        }
+        warnstring <- paste(swn, collapse = ", ")
+        names(sw) <- swn
+        all_summary_warnings <<- c(all_summary_warnings, sw)
+        return(warnstring)
+      } else {
+        return("OK")
+      }
+    })
+  display <- unlist(display)
+  dim(display) <- dim(x)
+  dimnames(display) <- dimnames(x)
+  print(display, quote = FALSE)
+
+  cat("\n")
+  if (any(display == "OK")) cat("OK: No warnings\n")
+  if (any(display == "E")) cat("E: Error\n")
+  u_swn <- unique(names(all_summary_warnings))
+  u_w <- all_summary_warnings[u_swn]
+  for (i in seq_along(u_w)) {
+    cat(names(u_w)[i], ": ", u_w[i], "\n", sep = "")
+  }
+
+}
+
+#' @export
+update.mmkin <- function(object, ..., evaluate = TRUE)
+{
+  call <- attr(object, "call")
+
+  update_arguments <- match.call(expand.dots = FALSE)$...
+
+  if (length(update_arguments) > 0) {
+    update_arguments_in_call <- !is.na(match(names(update_arguments), names(call)))
+  }
+
+  for (a in names(update_arguments)[update_arguments_in_call]) {
+    call[[a]] <- update_arguments[[a]]
+  }
+
+  update_arguments_not_in_call <- !update_arguments_in_call
+  if(any(update_arguments_not_in_call)) {
+    call <- c(as.list(call), update_arguments[update_arguments_not_in_call])
+    call <- as.call(call)
+  }
+
+  if(evaluate) eval(call, parent.frame())
+  else call
 }

@@ -3,12 +3,11 @@ dist: xenial
 language: r
 r:
   - release
-  - devel
-cache: packages
 addons:
   apt:
     packages:
       - gcc
+cache: packages
 repos:
   CRAN: https://cloud.r-project.org
   jranke: https://jranke.github.io/drat
@@ -17,8 +16,8 @@ r_github_packages:
 r_packages:
   - nlme
 script:
-  - |
-    R CMD build .
-    travis_wait 30 R CMD check mkin_*.tar.gz
+  - R CMD build .
+  - R CMD check --no-tests mkin_*.tar.gz
+  - Rscript -e 'devtools::test()'
 after_success:
-  - travis_wait 30 Rscript -e 'covr::codecov()'
+  - Rscript -e 'covr::codecov()'
