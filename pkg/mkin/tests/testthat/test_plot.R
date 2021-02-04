@@ -1,6 +1,6 @@
 context("Plotting")
 
-test_that("Plotting mkinfit and mmkin objects is reproducible", {
+test_that("Plotting mkinfit, mmkin and mixed model objects is reproducible", {
   skip_on_cran()
   plot_default_FOCUS_C_SFO <- function() plot(fits[["SFO", "FOCUS_C"]])
   plot_res_FOCUS_C_SFO <- function() plot(fits[["SFO", "FOCUS_C"]], show_residuals = TRUE)
@@ -35,9 +35,6 @@ test_that("Plotting mkinfit and mmkin objects is reproducible", {
   plot_biphasic_mmkin <- function() plot(f_uba_dfop_sfo_mixed)
   vdiffr::expect_doppelganger("mixed model fit for mmkin object", plot_biphasic_mmkin)
 
-  plot_biphasic_saem_s <- function() plot(f_uba_dfop_sfo_saem)
-  vdiffr::expect_doppelganger("mixed model fit for saem object with saemix transformations", plot_biphasic_saem_s)
-
   skip_on_travis()
 
   plot_biphasic_nlme <- function() plot(dfop_nlme_1)
@@ -46,10 +43,6 @@ test_that("Plotting mkinfit and mmkin objects is reproducible", {
   #plot_biphasic_mmkin <- function() plot(mixed(mmkin_biphasic))
   # Biphasic fits with lots of data and fits have lots of potential for differences
   plot_biphasic_nlme <- function() plot(nlme_biphasic)
-  #plot_biphasic_saem_s <- function() plot(saem_biphasic_s)
-  plot_biphasic_saem_m <- function() plot(saem_biphasic_m)
-
-  vdiffr::expect_doppelganger("mixed model fit for saem object with mkin transformations", plot_biphasic_saem_m)
 
   # different results when working with eigenvalues
   plot_errmod_fit_D_obs_eigen <- function() plot_err(fit_D_obs_eigen, sep_obs = FALSE)

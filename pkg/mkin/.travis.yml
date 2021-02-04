@@ -7,14 +7,12 @@ addons:
   apt:
     packages:
       - gcc
+      - libgit2-dev
 cache: packages
 repos:
   CRAN: https://cloud.r-project.org
-  jranke: https://jranke.github.io/drat
 r_github_packages:
-  - jranke/saemixextension
-r_packages:
-  - nlme
+  - saemixdevelopment/saemixextension@master
 script:
   - R CMD build .
   - R CMD check --no-tests mkin_*.tar.gz

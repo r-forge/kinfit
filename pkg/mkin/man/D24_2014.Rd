@@ -36,9 +36,16 @@ specific pieces of information in the comments.
 }
 \examples{
 print(D24_2014)
+\dontrun{
 print(D24_2014$ds[[1]], data = TRUE)
 m_D24 = mkinmod(D24 = mkinsub("SFO", to = "DCP"),
   DCP = mkinsub("SFO", to = "DCA"),
   DCA = mkinsub("SFO"))
+print(m_D24)
+m_D24_2 = mkinmod(D24 = mkinsub("DFOP", to = "DCP"),
+  DCP = mkinsub("SFO", to = "DCA"),
+  DCA = mkinsub("SFO"))
+print(m_D24_2)
+}
 }
 \keyword{datasets}
