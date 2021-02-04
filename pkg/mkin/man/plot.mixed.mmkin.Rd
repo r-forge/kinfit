@@ -12,11 +12,12 @@
   xlab = "Time",
   xlim = range(x$data$time),
   resplot = c("predicted", "time"),
+  pred_over = NULL,
   ymax = "auto",
   maxabs = "auto",
   ncol.legend = ifelse(length(i) <= 3, length(i) + 1, ifelse(length(i) <= 8, 3, 4)),
   nrow.legend = ceiling((length(i) + 1)/ncol.legend),
-  rel.height.legend = 0.03 + 0.08 * nrow.legend,
+  rel.height.legend = 0.02 + 0.07 * nrow.legend,
   rel.height.bottom = 1.1,
   pch_ds = 1:length(i),
   col_ds = pch_ds + 1,
@@ -26,7 +27,7 @@
 )
 }
 \arguments{
-\item{x}{An object of class \link{mixed.mmkin}, \link{saem.mmkin} or \link{nlme.mmkin}}
+\item{x}{An object of class \link{mixed.mmkin}, \link{nlme.mmkin}}
 
 \item{i}{A numeric index to select datasets for which to plot the individual predictions,
 in case plots get too large}
@@ -44,6 +45,9 @@ variables in the model.}
 
 \item{resplot}{Should the residuals plotted against time or against
 predicted values?}
+
+\item{pred_over}{Named list of alternative predictions as obtained
+from \link{mkinpredict} with a compatible \link{mkinmod}.}
 
 \item{ymax}{Vector of maximum y axis values}
 
@@ -90,8 +94,6 @@ plot(f[, 3:4], standardized = TRUE)
 f_nlme <- nlme(f, control = list(pnlsMaxIter = 120, tolerance = 1e-3))
 plot(f_nlme)
 
-f_saem <- saem(f)
-plot(f_saem)
 }
 }
 \author{
