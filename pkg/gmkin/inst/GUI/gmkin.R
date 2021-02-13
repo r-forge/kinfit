@@ -1,6 +1,6 @@
 # gWidgetsWWW2 GUI for mkin {{{1
 
-# Copyright (C) 2013-2016,2018,2019 Johannes Ranke
+# Copyright (C) 2013-2016,2018,2019,2021 Johannes Ranke
 # Portions of this file are copyright (C) 2013 Eurofins Regulatory AG, Switzerland
 # Contact: jranke@uni-bremen.de
 
@@ -21,17 +21,18 @@
 
 # Configuration {{{1
 # Widgets {{{2
+# Three column layout
 left_width = 250
 right_width = 500
+# Widget heights in left column
 ds_height = 142
 m_height = 142
 f_height = 142
-save_keybinding = "Shift-F12"
+# Model editor gcombobox with mkinmod model definition
 gcb_observed_width = 100
 gcb_type_width = 70
 gcb_to_width = 160
 gcb_sink_width = 70
-
 # Plotting {{{2
 plot_formats <- c("png", "pdf")
 if (requireNamespace("devEMF", quietly = TRUE)) {
@@ -40,6 +41,8 @@ if (requireNamespace("devEMF", quietly = TRUE)) {
 plot_format <- plot_formats[[1]]
 # Options {{{2
 options(width = 75) # For summary
+# Keybinding {{{2
+save_keybinding = "Shift-F12"
 # Set the GUI title and create the basic widget layout {{{1
 # Three panel layout {{{2
 window_title <- paste0("gmkin ", packageVersion("gmkin"),
@@ -984,19 +987,11 @@ run_fit_handler <- function(h, ...) { #{{{3
       iniparms <- Parameters.ini$Initial
       names(iniparms) <- sub("_0", "", Parameters.ini$Name)
       inifixed <- names(iniparms[Parameters.ini$Fixed])
-      if (svalue(f.gg.opts.plot)) {
-        if (.Platform$OS.type == "windows") {
-          # When on windows, check for an active windows device. If not present,
-          # open one
-          if (attr(dev.cur(), "names") != "windows") windows()
-        }
-      }
       ftmp <<- mkinfit(m.cur, override(ds.cur$data),
                        state.ini = iniparms,
                        fixed_initials = inifixed,
                        parms.ini = deparms,
                        fixed_parms = defixed,
-                       plot = svalue(f.gg.opts.plot),
                        solution_type = svalue(f.gg.opts.st),
                        atol = as.numeric(svalue(f.gg.opts.atol)),
                        rtol = as.numeric(svalue(f.gg.opts.rtol)),
@@ -1139,8 +1134,6 @@ f.gg.opts.g <- ggroup(cont = f.config)
 # First group {{{4
 f.gg.opts.1 <- gformlayout(cont = f.gg.opts.g)
 solution_types <- c("auto", "analytical", "eigen", "deSolve")
-f.gg.opts.plot <- gcheckbox("Plot during the fit",
-                            cont = f.gg.opts.1, checked = FALSE)
 f.gg.opts.st <- gcombobox(solution_types, selected = 1,
                           label = "solution_type", width = 160,
                           cont = f.gg.opts.1)
