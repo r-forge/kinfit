@@ -1,12 +1,20 @@
-# mkin 1.0.3
+# mkin 1.0.4 (Unreleased)
+
+- All plotting functions setting graphical parameters: Use on.exit() for resetting graphical parameters
+
+- 'plot.mkinfit': Use xlab and xlim for the residual plot if show_residuals is TRUE
+
+- 'mmkin': Use cores = 1 per default on Windows to make it easier for first time users
+
+# mkin 1.0.3 (2021-02-15)
 
 - Review and update README, the 'Introduction to mkin' vignette and some of the help pages
 
-# mkin 1.0.2
+# mkin 1.0.2 (Unreleased)
 
 - 'mkinfit': Keep model names stored in 'mkinmod' objects, avoiding their loss in 'gmkin'
 
-# mkin 1.0.1
+# mkin 1.0.1 (2021-02-10)
 
 - 'confint.mmkin', 'nlme.mmkin', 'transform_odeparms': Fix example code in dontrun sections that failed with current defaults
 
@@ -18,7 +26,7 @@
 
 - Increase test tolerance for some parameter comparisons that also proved to be platform dependent
 
-# mkin 1.0.0
+# mkin 1.0.0 (2021-02-03)
 
 ## General
 
