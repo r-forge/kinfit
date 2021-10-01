@@ -1,8 +1,6 @@
-os: linux
-dist: xenial
 language: r
 r:
-  - release
+  - 4.1.0
 addons:
   apt:
     packages:
@@ -11,8 +9,12 @@ addons:
 cache: packages
 repos:
   CRAN: https://cloud.r-project.org
-r_github_packages:
-  - saemixdevelopment/saemixextension@master
+  https: https://jranke.github.io/drat
+r_packages:
+  - nlme
+  - devtools
+  - covr
+  - vdiffr
 script:
   - R CMD build .
   - R CMD check --no-tests mkin_*.tar.gz
