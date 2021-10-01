@@ -1,7 +1,7 @@
 # mkin
 
 [![](https://www.r-pkg.org/badges/version/mkin)](https://cran.r-project.org/package=mkin)
-[![Build Status](https://travis-ci.com/jranke/mkin.svg?branch=master)](https://travis-ci.com/jranke/mkin)
+[![Build Status](https://travis-ci.com/jranke/mkin.svg?branch=master)](https://app.travis-ci.com/github/jranke/mkin)
 [![codecov](https://codecov.io/github/jranke/mkin/branch/master/graphs/badge.svg)](https://codecov.io/github/jranke/mkin)
 
 The R package **mkin** provides calculation routines for the analysis of
@@ -208,6 +208,13 @@ to ModelMaker 4.0, 2014-2015)
 ## References
 
 <table>
+  <tr><td>Ranke J, Wöltjen J, Schmidt J, and Comets E (2021)
+  Taking kinetic evaluations of degradation data to the next level with nonlinear mixed-effects models.
+  <i>Environments</i>
+  <b>8</b> (8) 71
+  <a href='https://doi.org/10.3390/environments8080071'>doi:10.3390/environments8080071</a>
+  </td></tr>
+
   <tr><td>Ranke J, Meinecke S (2019)
   Error Models for the Kinetic Evaluation of Chemical Degradation Data
   <i>Environments</i>
