@@ -42,11 +42,16 @@ reference:
     desc: Create and work with nonlinear mixed effects models
     contents:
       - nlme.mmkin
+      - saem.mmkin
       - plot.mixed.mmkin
       - summary.nlme.mmkin
+      - summary.saem.mmkin
       - nlme_function
       - get_deg_func
+      - saemix_model
       - mixed
+      - intervals
+      - intervals.saem.mmkin
   - title: Datasets and known results
     contents:
       - focus_soil_moisture
@@ -88,6 +93,7 @@ reference:
       - mkinresplot
       - mkinparplot
       - mkinerrplot
+      - mean_degparms
       - create_deg_func
   - title: Analytical solutions
     desc: Parent only model solutions
@@ -122,6 +128,8 @@ navbar:
         href: articles/FOCUS_D.html
       - text: Example evaluation of FOCUS Laboratory Data L1 to L3
         href: articles/FOCUS_L.html
+      - text: Example evaluations of dimethenamid data from 2018 with nonlinear mixed-effects models
+        href: articles/web_only/dimethenamid_2018.html
       - text: Example evaluation of FOCUS Example Dataset Z
         href: articles/web_only/FOCUS_Z.html
       - text: Performance benefit by using compiled model definitions in mkin

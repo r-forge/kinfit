@@ -57,6 +57,9 @@ build-no-vignettes: $(TGZVNR)
 install: build
 	"$(RBIN)/R" CMD INSTALL $(TGZ)
 
+devinstall: build
+	"$(RDEVBIN)/R" CMD INSTALL $(TGZ)
+
 quickinstall: build-no-vignettes
 	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
 
@@ -79,15 +82,15 @@ clean:
 	$(RM) Rplots.pdf
 
 test: install
-	"$(RBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test.log
-	sed -i -e "s/\r.*\r//" test.log
+	"$(RBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee test.log
+	sed -i -e "s/.*\r.*\r//" test.log
 
-devtest: install
-	"$(RDEVBIN)/Rscript" -e 'devtools::test()' 2>&1 | tee test_dev.log
+devtest: devinstall
+	"$(RDEVBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee test_dev.log
 	sed -i -e "s/\r.*\r//" test_dev.log
 
 slowtests: install
-	NOT_CRAN=true "$(RBIN)/Rscript" -e 'library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee tests_slow.log
+	NOT_CRAN=true "$(RBIN)/Rscript" -e 'cli.dynamic = TRUE); library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee tests_slow.log
 	sed -i -e "s/\r.*\r//" tests_slow.log
 
 testcheck: roxygen test check
@@ -103,13 +106,13 @@ vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vig
 vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.rmd', dir = 'vignettes/web_only')"
 
-articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html
+articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html vignettes/web_only/dimethenamid_2018.html
 
 pd: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE, lazy = TRUE)"
 	git add -A
 
-pd_release: roxygen
+pd_all: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
 	git add -A
 

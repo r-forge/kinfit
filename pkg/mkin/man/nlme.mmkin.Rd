@@ -13,7 +13,7 @@
     paste(el, 1, sep = "~")))),
   random = pdDiag(fixed),
   groups,
-  start = mean_degparms(model, random = TRUE),
+  start = mean_degparms(model, random = TRUE, test_log_parms = TRUE),
   correlation = NULL,
   weights = NULL,
   subset,
@@ -36,10 +36,9 @@
 \item{fixed}{Ignored, all degradation parameters fitted in the
 mmkin model are used as fixed parameters}
 
-\item{random}{If not specified, correlated random effects are set up
-for all optimised degradation model parameters using the log-Cholesky
-parameterization \link[nlme:pdLogChol]{nlme::pdLogChol} that is also the default of
-the generic \link{nlme} method.}
+\item{random}{If not specified, no correlations between random effects are
+set up for the optimised degradation model parameters. This is
+achieved by using the \link[nlme:pdDiag]{nlme::pdDiag} method.}
 
 \item{groups}{See the documentation of nlme}
 
@@ -93,12 +92,11 @@ methods that will automatically work on 'nlme.mmkin' objects, such as
 \examples{
 ds <- lapply(experimental_data_for_UBA_2019[6:10],
  function(x) subset(x$data[c("name", "time", "value")], name == "parent"))
-f <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, cores = 1)
-library(nlme)
-f_nlme_sfo <- nlme(f["SFO", ])
 
 \dontrun{
-
+  f <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, cores = 1)
+  library(nlme)
+  f_nlme_sfo <- nlme(f["SFO", ])
   f_nlme_dfop <- nlme(f["DFOP", ])
   anova(f_nlme_sfo, f_nlme_dfop)
   print(f_nlme_dfop)

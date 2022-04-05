@@ -62,11 +62,13 @@
 #'     n = 1)[[1]]
 #' })
 #'
+#' \dontrun{
 #' # Evaluate using mmkin and nlme
 #' library(nlme)
 #' f_mmkin <- mmkin("SFO", ds_sfo_syn, quiet = TRUE, error_model = "tc", cores = 1)
 #' f_nlme <- nlme(f_mmkin)
 #' summary(f_nlme, data = TRUE)
+#' }
 #'
 #' @export
 summary.nlme.mmkin <- function(object, data = FALSE, verbose = FALSE, distimes = TRUE, alpha = 0.05, ...) {
@@ -200,7 +202,7 @@ print.summary.nlme.mmkin <- function(x, digits = max(3, getOption("digits") - 3)
   if (nrow(x$confint_trans) > 1) {
     corr <- x$corFixed
     class(corr) <- "correlation"
-    print(corr, title = "\nCorrelation:", ...)
+    print(corr, title = "\nCorrelation:", rdig = digits, ...)
   }
 
   cat("\n") # Random effects

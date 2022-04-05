@@ -106,6 +106,7 @@ const <- function(value) 2
 set.seed(123456)
 SFO <- mkinmod(parent = mkinsub("SFO"))
 k_parent = rlnorm(n, log(0.03), log_sd)
+set.seed(123456)
 ds_sfo <- lapply(1:n, function(i) {
   ds_mean <- mkinpredict(SFO, c(k_parent = k_parent[i]),
     c(parent = 100), sampling_times)
@@ -118,6 +119,7 @@ fomc_pop <- list(parent_0 = 100, alpha = 2, beta = 8)
 fomc_parms <- as.matrix(data.frame(
     alpha = rlnorm(n, log(fomc_pop$alpha), 0.4),
     beta = rlnorm(n, log(fomc_pop$beta), 0.2)))
+set.seed(123456)
 ds_fomc <- lapply(1:3, function(i) {
   ds_mean <- mkinpredict(FOMC, fomc_parms[i, ],
     c(parent = 100), sampling_times)
@@ -131,6 +133,7 @@ dfop_parms <- as.matrix(data.frame(
   k1 = rlnorm(n, log(dfop_pop$k1), log_sd),
   k2 = rlnorm(n, log(dfop_pop$k2), log_sd),
   g = plogis(rnorm(n, qlogis(dfop_pop$g), log_sd))))
+set.seed(123456)
 ds_dfop <- lapply(1:n, function(i) {
   ds_mean <- mkinpredict(DFOP, dfop_parms[i, ],
     c(parent = dfop_pop$parent_0), sampling_times)
@@ -144,6 +147,7 @@ hs_parms <- as.matrix(data.frame(
   k1 = rlnorm(n, log(hs_pop$k1), log_sd),
   k2 = rlnorm(n, log(hs_pop$k2), log_sd),
   tb = rlnorm(n, log(hs_pop$tb), 0.1)))
+set.seed(123456)
 ds_hs <- lapply(1:10, function(i) {
   ds_mean <- mkinpredict(HS, hs_parms[i, ],
     c(parent = hs_pop$parent_0), sampling_times)
@@ -156,8 +160,8 @@ DFOP_SFO <- mkinmod(
   m1 = mkinsub("SFO"),
   quiet = TRUE)
 dfop_sfo_pop <- list(parent_0 = 100,
-  k_m1 = 0.005, f_parent_to_m1 = 0.5,
-  k1 = 0.05, k2 = 0.01, g = 0.5)
+  k_m1 = 0.007, f_parent_to_m1 = 0.5,
+  k1 = 0.1, k2 = 0.02, g = 0.5)
 syn_biphasic_parms <- as.matrix(data.frame(
   k1 = rlnorm(n_biphasic, log(dfop_sfo_pop$k1), log_sd),
   k2 = rlnorm(n_biphasic, log(dfop_sfo_pop$k2), log_sd),
@@ -171,6 +175,7 @@ ds_biphasic_mean <- lapply(1:n_biphasic,
       c(parent = 100, m1 = 0), sampling_times)
   }
 )
+set.seed(123456)
 ds_biphasic <- lapply(ds_biphasic_mean, function(ds) {
   add_err(ds,
     sdfunc = function(value) sqrt(err_1$const^2 + value^2 * err_1$prop^2),
@@ -180,20 +185,20 @@ ds_biphasic <- lapply(ds_biphasic_mean, function(ds) {
 # Mixed model fits
 mmkin_sfo_1 <- mmkin("SFO", ds_sfo, quiet = TRUE, error_model = "tc", cores = n_cores)
 mmkin_dfop_1 <- mmkin("DFOP", ds_dfop, quiet = TRUE, cores = n_cores)
-mmkin_biphasic <- mmkin(list("DFOP-SFO" = DFOP_SFO), ds_biphasic, quiet = TRUE, cores = n_cores)
-mmkin_biphasic_mixed <- mixed(mmkin_biphasic)
+mmkin_biphasic <- mmkin(list("DFOP-SFO" = DFOP_SFO), ds_biphasic, quiet = TRUE, cores = n_cores,
+  control = list(eval.max = 500, iter.max = 400),
+  error_model = "tc")
 
+# nlme
 dfop_nlme_1 <- nlme(mmkin_dfop_1)
-nlme_biphasic <- nlme(mmkin_biphasic)
+nlme_biphasic <- suppressWarnings(nlme(mmkin_biphasic))
 
-ds_uba <- lapply(experimental_data_for_UBA_2019[6:10],
-  function(x) subset(x$data[c("name", "time", "value")]))
-names(ds_uba) <- paste("Dataset", 6:10)
-sfo_sfo_uba <- mkinmod(parent = mkinsub("SFO", "A1"),
-  A1 = mkinsub("SFO"), quiet = TRUE)
-dfop_sfo_uba <- mkinmod(parent = mkinsub("DFOP", "A1"),
-  A1 = mkinsub("SFO"), quiet = TRUE)
-f_uba_mmkin <- mmkin(list("SFO-SFO" = sfo_sfo_uba, "DFOP-SFO" = dfop_sfo_uba),
-  ds_uba, quiet = TRUE, cores = n_cores)
-f_uba_dfop_sfo_mixed <- mixed(f_uba_mmkin[2, ])
+# saemix
+sfo_saem_1 <- saem(mmkin_sfo_1, quiet = TRUE, transformations = "saemix")
+
+dfop_saemix_1 <- saem(mmkin_dfop_1, quiet = TRUE, transformations = "mkin")
+dfop_saemix_2 <- saem(mmkin_dfop_1, quiet = TRUE, transformations = "saemix")
+
+saem_biphasic_m <- saem(mmkin_biphasic, transformations = "mkin", quiet = TRUE)
+saem_biphasic_s <- saem(mmkin_biphasic, transformations = "saemix", quiet = TRUE)
 

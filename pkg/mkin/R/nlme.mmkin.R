@@ -24,7 +24,7 @@ get_deg_func <- function() {
 #' This functions sets up a nonlinear mixed effects model for an mmkin row
 #' object. An mmkin row object is essentially a list of mkinfit objects that
 #' have been obtained by fitting the same model to a list of datasets.
-#' 
+#'
 #' Note that the convergence of the nlme algorithms depends on the quality
 #' of the data. In degradation kinetics, we often only have few datasets
 #' (e.g. data for few soils) and complicated degradation models, which may
@@ -34,10 +34,9 @@ get_deg_func <- function() {
 #' @param data Ignored, data are taken from the mmkin model
 #' @param fixed Ignored, all degradation parameters fitted in the
 #'   mmkin model are used as fixed parameters
-#' @param random If not specified, correlated random effects are set up
-#'   for all optimised degradation model parameters using the log-Cholesky
-#'   parameterization [nlme::pdLogChol] that is also the default of
-#'   the generic [nlme] method.
+#' @param random If not specified, no correlations between random effects are
+#'   set up for the optimised degradation model parameters. This is
+#'   achieved by using the [nlme::pdDiag] method.
 #' @param groups See the documentation of nlme
 #' @param start If not specified, mean values of the fitted degradation
 #'   parameters taken from the mmkin object are used
@@ -60,12 +59,11 @@ get_deg_func <- function() {
 #' @examples
 #' ds <- lapply(experimental_data_for_UBA_2019[6:10],
 #'  function(x) subset(x$data[c("name", "time", "value")], name == "parent"))
-#' f <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, cores = 1)
-#' library(nlme)
-#' f_nlme_sfo <- nlme(f["SFO", ])
 #'
 #' \dontrun{
-#'
+#'   f <- mmkin(c("SFO", "DFOP"), ds, quiet = TRUE, cores = 1)
+#'   library(nlme)
+#'   f_nlme_sfo <- nlme(f["SFO", ])
 #'   f_nlme_dfop <- nlme(f["DFOP", ])
 #'   anova(f_nlme_sfo, f_nlme_dfop)
 #'   print(f_nlme_dfop)
@@ -135,7 +133,7 @@ nlme.mmkin <- function(model, data = "auto",
     function(el) eval(parse(text = paste(el, 1, sep = "~")))),
   random = pdDiag(fixed),
   groups,
-  start = mean_degparms(model, random = TRUE),
+  start = mean_degparms(model, random = TRUE, test_log_parms = TRUE),
   correlation = NULL, weights = NULL,
   subset, method = c("ML", "REML"),
   na.action = na.fail, naPattern,
@@ -194,7 +192,8 @@ nlme.mmkin <- function(model, data = "auto",
   val$mkinmod <- model[[1]]$mkinmod
   val$data <- thisCall[["data"]]
   val$mmkin <- model
-  val$mean_dp_start <- start$fixed
+  if (is.list(start)) val$mean_dp_start <- start$fixed
+  else val$mean_dp_start <- start
   val$transform_rates <- model[[1]]$transform_rates
   val$transform_fractions <- model[[1]]$transform_fractions
   val$solution_type <- model[[1]]$solution_type
