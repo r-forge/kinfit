@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mkin</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@
 </h2>
 <p>You can install the latest released version from <a href="https://cran.r-project.org/package=mkin" class="external-link">CRAN</a> from within R:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mkin"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mkin"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
@@ -151,7 +151,7 @@
 <li>The usual one-sided t-test for significant difference from zero is nevertheless shown based on estimators for the untransformed parameters.</li>
 <li>Summary and plotting functions. The <code>summary</code> of an <code>mkinfit</code> object is in fact a full report that should give enough information to be able to approximately reproduce the fit with other tools.</li>
 <li>The chi-squared error level as defined in the FOCUS kinetics guidance (see below) is calculated for each observed variable.</li>
-<li>The ‘variance by variable’ error model which is often fitted using Iteratively Reweighted Least Squares (IRLS) should now be specified as <code>error_model = "obs"</code>.</li>
+<li>The ‘variance by variable’ error model which is often fitted using Iteratively Reweighted Least Squares (IRLS) can be specified as <code>error_model = "obs"</code>.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -214,21 +214,12 @@
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <table class="table">
-<tr>
-<td>
-Ranke J, Wöltjen J, Schmidt J, and Comets E (2021) Taking kinetic evaluations of degradation data to the next level with nonlinear mixed-effects models. <i>Environments</i> <b>8</b> (8) 71 <a href="https://doi.org/10.3390/environments8080071" class="external-link">doi:10.3390/environments8080071</a>
-</td>
-</tr>
-<tr>
-<td>
-Ranke J, Meinecke S (2019) Error Models for the Kinetic Evaluation of Chemical Degradation Data <i>Environments</i> <b>6</b> (12) 124 <a href="https://doi.org/10.3390/environments6120124" class="external-link">doi:10.3390/environments6120124</a>
-</td>
-</tr>
-<tr>
-<td>
-Ranke J, Wöltjen J, Meinecke S (2018) Comparison of software tools for kinetic evaluation of chemical degradation data <i>Environmental Sciences Europe</i> <b>30</b> 17 <a href="https://doi.org/10.1186/s12302-018-0145-1" class="external-link">doi:10.1186/s12302-018-0145-1</a>
-</td>
-</tr>
+<tr><td>Ranke J, Wöltjen J, Schmidt J, and Comets E (2021) Taking kinetic evaluations of degradation data to the next level with nonlinear mixed-effects models. <i>Environments</i> <b>8</b> (8) 71 <a href="https://doi.org/10.3390/environments8080071" class="external-link">doi:10.3390/environments8080071</a>
+</td></tr>
+<tr><td>Ranke J, Meinecke S (2019) Error Models for the Kinetic Evaluation of Chemical Degradation Data <i>Environments</i> <b>6</b> (12) 124 <a href="https://doi.org/10.3390/environments6120124" class="external-link">doi:10.3390/environments6120124</a>
+</td></tr>
+<tr><td>Ranke J, Wöltjen J, Meinecke S (2018) Comparison of software tools for kinetic evaluation of chemical degradation data <i>Environmental Sciences Europe</i> <b>30</b> 17 <a href="https://doi.org/10.1186/s12302-018-0145-1" class="external-link">doi:10.1186/s12302-018-0145-1</a>
+</td></tr>
 </table>
 </div>
 <div class="section level2">
@@ -272,14 +263,7 @@ Ranke J, Wöltjen J, Meinecke S (2018) Comparison of software tools for kinetic 
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=mkin" class="external-link"><img src="https://www.r-pkg.org/badges/version/mkin"></a></li>
-<li><a href="https://app.travis-ci.com/github/jranke/mkin" class="external-link"><img src="https://travis-ci.com/jranke/mkin.svg?branch=main" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/github/jranke/mkin" class="external-link"><img src="https://codecov.io/github/jranke/mkin/branch/main/graphs/badge.svg" alt="codecov"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -292,7 +276,7 @@ Ranke J, Wöltjen J, Meinecke S (2018) Comparison of software tools for kinetic 
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

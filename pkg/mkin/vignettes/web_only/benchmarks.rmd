@@ -1,7 +1,7 @@
 ---
 title: "Benchmark timings for mkin"
 author: "Johannes Ranke"
-date: Last change 13 May 2020 (rebuilt `r Sys.Date()`)
+date: Last change 1 July 2022 (rebuilt `r Sys.Date()`)
 output:
   html_document:
     toc: true
@@ -19,19 +19,40 @@ opts_chunk$set(tidy = FALSE, cache = FALSE)
 library("mkin")
 ```
 
-Each system is characterized by its CPU type, the operating system type and the
-mkin version. Currently only values for one system are available. A compiler
-was available, so if no analytical solution was available, compiled ODE models are
-used.
+Each system is characterized by the operating system type, the CPU type, the
+mkin version, and, as in June 2022 the current R version lead to worse
+performance, the R version. A compiler was available, so if no analytical
+solution was available, compiled ODE models are used.
+
+Every fit is only performed once, so the accuracy of the benchmarks is limited.
 
 ```{r include = FALSE}
 cpu_model <- benchmarkme::get_cpu()$model_name
+# Abbreviate CPU identifiers
+cpu_model <- gsub("AMD ", "", cpu_model)
+cpu_model <- gsub("Intel\\(R\\) Core\\(TM\\) ", "", cpu_model)
+cpu_model <- gsub(" Eight-Core Processor", "", cpu_model)
+cpu_model <- gsub(" CPU @ 2.50GHz", "", cpu_model)
+
 operating_system <- Sys.info()[["sysname"]]
 mkin_version <- as.character(packageVersion("mkin"))
-system_string <- paste0(operating_system, ", ", cpu_model, ", mkin version ", mkin_version)
-load("~/git/mkin/vignettes/web_only/mkin_benchmarks.rda")
-mkin_benchmarks[system_string, c("CPU", "OS", "mkin")] <-
-  c(cpu_model, operating_system, mkin_version)
+R_version <- paste0(R.version$major, ".", R.version$minor)
+system_string <- paste0(operating_system, ", ", cpu_model, ", mkin ", mkin_version, ", R ", R_version)
+
+benchmark_path = normalizePath("~/git/mkin/vignettes/web_only/mkin_benchmarks.rda")
+load(benchmark_path)
+
+# Used for reformatting the data on 2022-06-30
+# mkin_benchmarks[, "R"] <- NA
+# mkin_benchmarks <- mkin_benchmarks[c(2, 1, 15, 3, 4:14)]
+# mkin_benchmarks[, "CPU"] <- gsub("AMD.*", "Ryzen 7 1700", mkin_benchmarks[, "CPU"])
+# mkin_benchmarks[, "CPU"] <- gsub("Intel.*", "i7-4710MQ", mkin_benchmarks[, "CPU"])
+# rownames(mkin_benchmarks) <- gsub("AMD Ryzen 7 1700 Eight-Core Processor", "Ryzen 7 1700", rownames(mkin_benchmarks))
+# rownames(mkin_benchmarks) <- gsub("Intel\\(R\\) Core\\(TM\\) i7-4710MQ CPU @ 2.50GHz", "i7-4710MQ", rownames(mkin_benchmarks))
+# rownames(mkin_benchmarks) <- gsub(" version", "", rownames(mkin_benchmarks))
+
+mkin_benchmarks[system_string, c("CPU", "OS", "mkin", "R")] <-
+  c(cpu_model, operating_system, mkin_version, R_version)
 
 if (mkin_version > "0.9.48.1") {
   mmkin_bench <- function(models, datasets, error_model = "const") {
@@ -111,22 +132,16 @@ t11 <- system.time(mmkin_bench(list(m_synth_DFOP_par), list(DFOP_par_c),
 ```{r results}
 mkin_benchmarks[system_string, paste0("t", 1:11)] <-
   c(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11)
-save(mkin_benchmarks, file = "~/git/mkin/vignettes/web_only/mkin_benchmarks.rda")
+save(mkin_benchmarks, file = benchmark_path)
+# Hide rownames from kable for results section
+rownames(mkin_benchmarks) <- NULL
 ```
 
 ## Results
 
-Currently, we only have benchmark information on one system, therefore only the mkin
-version is shown with the results below. Timings are in seconds, shorter is better.
-All results were obtained by serial, i.e. not using multiple computing cores.
-
-```{r, include = FALSE}
-dimnames(mkin_benchmarks) <- list(as.character(mkin_benchmarks$mkin),
-  c("CPU", "OS", "mkin version", paste0("t", 1:11, " [s]")))
-```
-
-
-Benchmarks for all available error models are shown.
+Benchmarks for all available error models are shown. They are intended for
+improving mkin, not for comparing CPUs or operating systems. All trademarks
+belong to their respective owners.
 
 ### Parent only
 
@@ -134,7 +149,7 @@ Constant variance (t1) and two-component error model (t2) for four models
 fitted to two datasets, i.e. eight fits for each test.
 
 ```{r, echo = FALSE}
-kable(mkin_benchmarks[, 4:5], rownames = "mkin version")
+kable(mkin_benchmarks[, c(1:4, 5:6)])
 ```
 
 ### One metabolite
@@ -143,7 +158,7 @@ Constant variance (t3), two-component error model (t4), and variance by variable
 for three models fitted to one dataset, i.e. three fits for each test.
 
 ```{r, echo = FALSE}
-kable(mkin_benchmarks[, 6:8], rownames = "mkin version")
+kable(mkin_benchmarks[, c(1:4, 7:9)])
 ```
 
 ### Two metabolites
@@ -153,5 +168,5 @@ variance by variable (t10 and t11) for one model fitted to one dataset, i.e.
 one fit for each test.
 
 ```{r, echo = FALSE}
-kable(mkin_benchmarks[, 9:14], rownames = "mkin version")
+kable(mkin_benchmarks[, c(1:4, 10:15)])
 ```

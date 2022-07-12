@@ -1,10 +1,22 @@
 # mkin 1.1.1
 
+- 'R/{mkinmod,mkinpredict}.R: Store DLL information in mkinmod objects and use that information in mkinpredict to avoid a performance regression brought by a bugfix in R 4.2.x. Thanks to Tomas Kalibera for his analysis of the problem on the r-package-devel list and his suggestion on how to fix it.
+
+- 'vignettes/FOCUS_L.rmd': Remove an outdated note referring to a failure to calculate the covariance matrix for DFOP with the L2 dataset. Since 0.9.45.5 the covariance matrix is available
+
+- 'vignettes/web_only/benchmarks.rmd': Add the first benchmark data using my laptop system, therefore add the CPU when showing the benchmark results.
+
 - 'dimethenamid_2018': Update example code to use saemix
 
 - 'CAKE_export': Check for validity of the map argument, updates
 
 - 'saem()': Slightly improve speed in the case that no analytical solution for saemix is implemented, activate a test of the respective code
+
+- 'mean_degparms': New argument 'default_log_parms' that makes it possible to supply a surrogate value (default) for log parameters that fail the t-test
+
+- 'plot.mixed.mmkin': Pass the frame argument also to residual plots, take the 'default_log_parms' argument for 'mean_degparms' used for constructing approximate population curves, plot population curve last to avoid that it is covered by data
+
+- 'plot.mkinfit': Respect argument 'maxabs' for residual plots, and make it possible to give ylim as a list, for row layouts
 
 # mkin 1.1.0 (2022-03-14)
 
