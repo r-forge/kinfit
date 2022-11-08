@@ -1,4 +1,26 @@
-# mkin 1.1.1
+# mkin 1.2.0 (unreleased)
+
+- 'R/mhmkin.R': New method for performing multiple hierarchical mkin fits in one function call, optionally in parallel.
+
+- 'R/mhmkin.R': 'anova.mhmkin' for conveniently comparing the resulting fits.
+
+- 'R/illparms.R': New generic to show ill-defined parameters with methods for 'mkinfit', 'mmkin', 'saem.mmkin' and 'mhmkin' objects.
+
+- 'R/multistart.R': New method for testing multiple start parameters for hierarchical model fits, with function 'llhist' and new generic 'parplot' for diagnostics, and new generics 'which.best' and 'best' for extracting the fit with the highest likelihood
+
+- 'R/saem.R': 'logLik', 'update' and 'anova' methods for 'saem.mmkin' objects.
+
+- 'R/status.R': New generic to show status information for fit array objects with methods for 'mmkin', 'mhmkin' and 'multistart' objects.
+
+- 'R/summary.mmkin.R': Summary method for mmkin objects.
+
+- 'R/saem.R': Implement and test saemix transformations for FOMC and HS. Also, error out if saemix transformations are requested but not supported.
+
+- 'R/read_spreadsheet.R': Conveniently read in data from a spreadsheet file.
+
+- 'R/tex_listings.R': Conveniently include summaries of fit objects in R markdown documents that are compiled to LaTeX.
+
+# mkin 1.1.1 (2022-07-12)
 
 - 'R/{mkinmod,mkinpredict}.R: Store DLL information in mkinmod objects and use that information in mkinpredict to avoid a performance regression brought by a bugfix in R 4.2.x. Thanks to Tomas Kalibera for his analysis of the problem on the r-package-devel list and his suggestion on how to fix it.
 

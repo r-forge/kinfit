@@ -30,8 +30,7 @@ pkgfiles = \
 	NEWS.md \
 	R/* \
 	tests/* \
-	tests/testthat* \
-	TODO
+	tests/testthat*
 
 all: build
 
@@ -41,7 +40,7 @@ $(TGZ): $(pkgfiles) vignettes
 	$(RM) -r vignettes/*.R
 	$(RM) -r vignettes/web_only/*.R
 	$(RM) Rplots.pdf
-	"$(RBIN)/R" CMD build . 2>&1 | tee build.log
+	"$(RBIN)/R" CMD build . 2>&1 | tee log/build.log
 
 roxygen:
 	"$(RBIN)/Rscript" -e 'devtools::document()'
@@ -64,10 +63,10 @@ quickinstall: build-no-vignettes
 	"$(RBIN)/R" CMD INSTALL $(TGZVNR)
 
 check: roxygen build
-	_R_CHECK_CRAN_INCOMING_REMOTE_=false "$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee check.log
+	_R_CHECK_CRAN_INCOMING_REMOTE_=false "$(RBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee log/check.log
 
 devcheck: roxygen build
-	_R_CHECK_CRAN_INCOMING_REMOTE_=false "$(RDEVBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee check_dev.log
+	_R_CHECK_CRAN_INCOMING_REMOTE_=false "$(RDEVBIN)/R" CMD check --as-cran --no-tests $(TGZ) 2>&1 | tee log/check_dev.log
 
 quickcheck: roxygen build-no-vignettes
 	mv $(TGZVNR) $(TGZ)
@@ -82,16 +81,16 @@ clean:
 	$(RM) Rplots.pdf
 
 test: install
-	"$(RBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee test.log
-	sed -i -e "s/.*\r.*\r//" test.log
+	"$(RBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test.log
+	sed -i -e "s/.*\r.*\r//" log/test.log
 
 devtest: devinstall
-	"$(RDEVBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee test_dev.log
-	sed -i -e "s/\r.*\r//" test_dev.log
+	"$(RDEVBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test_dev.log
+	sed -i -e "s/\r.*\r//" log/test_dev.log
 
 slowtests: install
-	NOT_CRAN=true "$(RBIN)/Rscript" -e 'cli.dynamic = TRUE); library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee tests_slow.log
-	sed -i -e "s/\r.*\r//" tests_slow.log
+	NOT_CRAN=true "$(RBIN)/Rscript" -e 'cli.dynamic = TRUE); library(mkin); testthat::test_dir("tests/testthat/slow")' 2>&1 | tee log/tests_slow.log
+	sed -i -e "s/\r.*\r//" log/tests_slow.log
 
 testcheck: roxygen test check
 
@@ -106,7 +105,7 @@ vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vig
 vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.rmd', dir = 'vignettes/web_only', keep='mkin_benchmarks.rda')"
 
-articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html vignettes/web_only/dimethenamid_2018.html
+articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html vignettes/web_only/dimethenamid_2018.html vignettes/web_only/multistart.html
 
 pd: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE, lazy = TRUE)"

@@ -1,11 +1,17 @@
 context("Nonlinear mixed-effects models")
 
+# Round error model parameters as they are not rounded in print methods
+dfop_nlme_1$modelStruct$varStruct$const <-
+  signif(dfop_nlme_1$modelStruct$varStruct$const, 3)
+dfop_nlme_1$modelStruct$varStruct$prop <-
+  signif(dfop_nlme_1$modelStruct$varStruct$prop, 4)
+
 test_that("Print methods work", {
   expect_known_output(print(fits[, 2:3], digits = 2), "print_mmkin_parent.txt")
   expect_known_output(print(mixed(mmkin_sfo_1), digits = 2), "print_mmkin_sfo_1_mixed.txt")
   expect_known_output(print(dfop_nlme_1, digits = 1), "print_dfop_nlme_1.txt")
 
-  expect_known_output(print(sfo_saem_1, digits = 1), "print_sfo_saem_1.txt")
+  expect_known_output(print(dfop_saemix_1, digits = 1), "print_dfop_saemix_1.txt")
 })
 
 test_that("nlme results are reproducible to some degree", {

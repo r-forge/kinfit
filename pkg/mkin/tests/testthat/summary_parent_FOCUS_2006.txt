@@ -1,0 +1,20 @@
+Error model: Constant variance 
+Fitted in test time 0 s
+
+Status:
+      dataset
+model  FOCUS_C FOCUS_D
+  SFO  OK      OK     
+  FOMC OK      OK     
+  DFOP OK      OK     
+  HS   OK      OK     
+
+OK: No warnings
+
+Ill-defined parameters:
+      dataset
+model  FOCUS_C FOCUS_D    
+  SFO                     
+  FOMC         alpha, beta
+  DFOP         g          
+  HS           k2         

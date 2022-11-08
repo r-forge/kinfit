@@ -6,6 +6,7 @@
 \alias{print.saem.mmkin}
 \alias{saemix_model}
 \alias{saemix_data}
+\alias{parms.saem.mmkin}
 \title{Fit nonlinear mixed models with SAEM}
 \usage{
 saem(object, ...)
@@ -13,14 +14,18 @@ saem(object, ...)
 \method{saem}{mmkin}(
   object,
   transformations = c("mkin", "saemix"),
+  error_model = "auto",
   degparms_start = numeric(),
   test_log_parms = TRUE,
   conf.level = 0.6,
   solution_type = "auto",
+  covariance.model = "auto",
+  covariates = NULL,
+  covariate_models = NULL,
+  no_random_effect = NULL,
   nbiter.saemix = c(300, 100),
   control = list(displayProgress = FALSE, print = FALSE, nbiter.saemix = nbiter.saemix,
     save = FALSE, save.graphs = FALSE),
-  fail_with_errors = TRUE,
   verbose = FALSE,
   quiet = FALSE,
   ...
@@ -32,14 +37,21 @@ saemix_model(
   object,
   solution_type = "auto",
   transformations = c("mkin", "saemix"),
+  error_model = "auto",
   degparms_start = numeric(),
+  covariance.model = "auto",
+  no_random_effect = NULL,
+  covariates = NULL,
+  covariate_models = NULL,
   test_log_parms = FALSE,
   conf.level = 0.6,
   verbose = FALSE,
   ...
 )
 
-saemix_data(object, verbose = FALSE, ...)
+saemix_data(object, covariates = NULL, verbose = FALSE, ...)
+
+\method{parms}{saem.mmkin}(object, ci = FALSE, ...)
 }
 \arguments{
 \item{object}{An \link{mmkin} row object containing several fits of the same
@@ -49,9 +61,11 @@ saemix_data(object, verbose = FALSE, ...)
 
 \item{transformations}{Per default, all parameter transformations are done
 in mkin. If this argument is set to 'saemix', parameter transformations
-are done in 'saemix' for the supported cases. Currently this is only
-supported in cases where the initial concentration of the parent is not fixed,
-SFO or DFOP is used for the parent and there is either no metabolite or one.}
+are done in 'saemix' for the supported cases, i.e. (as of version 1.1.2)
+SFO, FOMC, DFOP and HS without fixing \code{parent_0}, and SFO or DFOP with
+one SFO metabolite.}
+
+\item{error_model}{Possibility to override the error model used in the mmkin object}
 
 \item{degparms_start}{Parameter values given as a named numeric vector will
 be used to override the starting values obtained from the 'mmkin' object.}
@@ -67,13 +81,25 @@ for parameter that are tested if requested by 'test_log_parms'.}
 \item{solution_type}{Possibility to specify the solution type in case the
 automatic choice is not desired}
 
+\item{covariance.model}{Will be passed to \code{\link[saemix:SaemixModel-class]{saemix::SaemixModel()}}. Per
+default, uncorrelated random effects are specified for all degradation
+parameters.}
+
+\item{covariates}{A data frame with covariate data for use in
+'covariate_models', with dataset names as row names.}
+
+\item{covariate_models}{A list containing linear model formulas with one explanatory
+variable, i.e. of the type 'parameter ~ covariate'. Covariates must be available
+in the 'covariates' data frame.}
+
+\item{no_random_effect}{Character vector of degradation parameters for
+which there should be no variability over the groups. Only used
+if the covariance model is not explicitly specified.}
+
 \item{nbiter.saemix}{Convenience option to increase the number of
 iterations}
 
 \item{control}{Passed to \link[saemix:saemix]{saemix::saemix}.}
-
-\item{fail_with_errors}{Should a failure to compute standard errors
-from the inverse of the Fisher Information Matrix be a failure?}
 
 \item{verbose}{Should we print information about created objects of
 type \link[saemix:SaemixModel-class]{saemix::SaemixModel} and \link[saemix:SaemixData-class]{saemix::SaemixData}?}
@@ -84,6 +110,9 @@ and the end of the optimisation process?}
 \item{x}{An saem.mmkin object to print}
 
 \item{digits}{Number of digits to use for printing}
+
+\item{ci}{Should a matrix with estimates and confidence interval boundaries
+be returned? If FALSE (default), a vector of estimates is returned.}
 }
 \value{
 An S3 object of class 'saem.mmkin', containing the fitted
@@ -120,7 +149,13 @@ f_mmkin_parent <- mmkin(c("SFO", "FOMC", "DFOP"), ds, quiet = TRUE)
 f_saem_sfo <- saem(f_mmkin_parent["SFO", ])
 f_saem_fomc <- saem(f_mmkin_parent["FOMC", ])
 f_saem_dfop <- saem(f_mmkin_parent["DFOP", ])
+anova(f_saem_sfo, f_saem_fomc, f_saem_dfop)
+anova(f_saem_sfo, f_saem_dfop, test = TRUE)
+illparms(f_saem_dfop)
+f_saem_dfop_red <- update(f_saem_dfop, no_random_effect = "g_qlogis")
+anova(f_saem_dfop, f_saem_dfop_red, test = TRUE)
 
+anova(f_saem_sfo, f_saem_fomc, f_saem_dfop)
 # The returned saem.mmkin object contains an SaemixObject, therefore we can use
 # functions from saemix
 library(saemix)
@@ -132,7 +167,7 @@ plot(f_saem_fomc$so, plot.type = "vpc")
 
 f_mmkin_parent_tc <- update(f_mmkin_parent, error_model = "tc")
 f_saem_fomc_tc <- saem(f_mmkin_parent_tc["FOMC", ])
-compare.saemix(f_saem_fomc$so, f_saem_fomc_tc$so)
+anova(f_saem_fomc, f_saem_fomc_tc, test = TRUE)
 
 sfo_sfo <- mkinmod(parent = mkinsub("SFO", "A1"),
   A1 = mkinsub("SFO"))

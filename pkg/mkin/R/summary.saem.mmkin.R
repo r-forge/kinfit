@@ -73,7 +73,12 @@
 #' f_mmkin_dfop_sfo <- mmkin(list(dfop_sfo), ds_syn_dfop_sfo,
 #'   quiet = TRUE, error_model = "tc", cores = 5)
 #' f_saem_dfop_sfo <- saem(f_mmkin_dfop_sfo)
-#' summary(f_saem_dfop_sfo, data = TRUE)
+#' print(f_saem_dfop_sfo)
+#' illparms(f_saem_dfop_sfo)
+#' f_saem_dfop_sfo_2 <- update(f_saem_dfop_sfo, covariance.model = diag(c(0, 0, 1, 1, 1, 0)))
+#' illparms(f_saem_dfop_sfo_2)
+#' intervals(f_saem_dfop_sfo_2)
+#' summary(f_saem_dfop_sfo_2, data = TRUE)
 #' }
 #'
 #' @export
@@ -82,18 +87,19 @@ summary.saem.mmkin <- function(object, data = FALSE, verbose = FALSE, distimes =
   mod_vars <- names(object$mkinmod$diffs)
 
   pnames <- names(object$mean_dp_start)
-  np <- length(pnames)
+  names_fixed_effects <- object$so@results@name.fixed
+  n_fixed <- length(names_fixed_effects)
 
   conf.int <- object$so@results@conf.int
   rownames(conf.int) <- conf.int$name
-  confint_trans <- as.matrix(conf.int[pnames, c("estimate", "lower", "upper")])
+  confint_trans <- as.matrix(parms(object, ci = TRUE))
   colnames(confint_trans)[1] <- "est."
 
   # In case objects were produced by earlier versions of saem
   if (is.null(object$transformations)) object$transformations <- "mkin"
 
   if (object$transformations == "mkin") {
-    bp <- backtransform_odeparms(confint_trans[, "est."], object$mkinmod,
+    bp <- backtransform_odeparms(confint_trans[pnames, "est."], object$mkinmod,
       object$transform_rates, object$transform_fractions)
     bpnames <- names(bp)
 
@@ -126,27 +132,30 @@ summary.saem.mmkin <- function(object, data = FALSE, verbose = FALSE, distimes =
       }
     }
   } else {
-    confint_back <- confint_trans
+    confint_back <- confint_trans[names_fixed_effects, ]
   }
 
   #  Correlation of fixed effects (inspired by summary.nlme)
-  varFix <- vcov(object$so)[1:np, 1:np]
-  stdFix <- sqrt(diag(varFix))
-  object$corFixed <- array(
-    t(varFix/stdFix)/stdFix,
-    dim(varFix),
-    list(pnames, pnames))
+  varFix <- try(vcov(object$so)[1:n_fixed, 1:n_fixed])
+  if (inherits(varFix, "try-error")) {
+    object$corFixed <- NA
+  } else {
+    stdFix <- sqrt(diag(varFix))
+    object$corFixed <- array(
+      t(varFix/stdFix)/stdFix,
+      dim(varFix),
+      list(names_fixed_effects, names_fixed_effects))
+  }
 
   # Random effects
-  rnames <- paste0("SD.", pnames)
-  confint_ranef <- as.matrix(conf.int[rnames, c("estimate", "lower", "upper")])
+  sdnames <- intersect(rownames(conf.int), paste0("SD.", pnames))
+  confint_ranef <- as.matrix(conf.int[sdnames, c("estimate", "lower", "upper")])
   colnames(confint_ranef)[1] <- "est."
 
   # Error model
   enames <- if (object$err_mod == "const") "a.1" else c("a.1", "b.1")
   confint_errmod <- as.matrix(conf.int[enames, c("estimate", "lower", "upper")])
   colnames(confint_errmod)[1] <- "est."
-
 
   object$confint_trans <- confint_trans
   object$confint_ranef <- confint_ranef
@@ -167,9 +176,14 @@ summary.saem.mmkin <- function(object, data = FALSE, verbose = FALSE, distimes =
   object$verbose <- verbose
 
   object$fixed <- object$mmkin_orig[[1]]$fixed
-  object$AIC = AIC(object$so)
-  object$BIC = BIC(object$so)
-  object$logLik = logLik(object$so, method = "is")
+  ll <-try(logLik(object$so, method = "is"), silent = TRUE)
+  if (inherits(ll, "try-error")) {
+    object$logLik <- object$AIC <- object $BIC <- NA
+  } else {
+    object$logLik = logLik(object$so, method = "is")
+    object$AIC = AIC(object$so)
+    object$BIC = BIC(object$so)
+  }
 
   ep <- endpoints(object)
   if (length(ep$ff) != 0)
@@ -202,7 +216,7 @@ print.summary.saem.mmkin <- function(x, digits = max(3, getOption("digits") - 3)
   cat("\nModel predictions using solution type", x$solution_type, "\n")
 
   cat("\nFitted in", x$time[["elapsed"]],  "s\n")
-  cat("Using", paste(x$so@options$nbiter.saemix, collapse = ", "), 
+  cat("Using", paste(x$so@options$nbiter.saemix, collapse = ", "),
     "iterations and", x$so@options$nb.chains, "chains\n")
 
   cat("\nVariance model: ")
@@ -226,7 +240,9 @@ print.summary.saem.mmkin <- function(x, digits = max(3, getOption("digits") - 3)
   cat("\nOptimised parameters:\n")
   print(x$confint_trans, digits = digits)
 
-  if (nrow(x$confint_trans) > 1) {
+  if (identical(x$corFixed, NA)) {
+    cat("\nCorrelation is not available\n")
+  } else {
     corr <- x$corFixed
     class(corr) <- "correlation"
     print(corr, title = "\nCorrelation:", rdig = digits, ...)

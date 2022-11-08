@@ -1,23 +1,39 @@
-language: r
-r:
-  - 4.1.2
-  - devel
-addons:
-  apt:
-    packages:
-      - gcc
-      - libgit2-dev
-      - libmpfr-dev
-cache: packages
-repos:
-  CRAN: https://cloud.r-project.org
-r_packages:
-  - devtools
-  - covr
-  - vdiffr
+# Run CI for R using https://eddelbuettel.github.io/r-ci/
+
+language: c
+sudo: required
+dist: focal
+
+jobs:
+  include:
+    - name: linux
+      os: linux
+
+env:
+  global:
+    - USE_BSPM="true"
+    - NOT_CRAN="true"
+
+before_install:
+  - curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
+  - chmod 0755 run.sh
+  - ./run.sh bootstrap
+
+install:
+  - ./run.sh install_r nlme
+  - ./run.sh install_all
+  - ./run.sh install_github jranke/saemixextension@installable_dev_version
+
 script:
-  - R CMD build .
-  - R CMD check --no-tests mkin_*.tar.gz
-  - Rscript -e 'devtools::test()'
+  - ./run.sh run_tests
+
+after_failure:
+  - ./run.sh dump_logs
+
 after_success:
-  - travis_wait Rscript -e 'covr::codecov()'
+  - travis_wait ./run.sh coverage
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
