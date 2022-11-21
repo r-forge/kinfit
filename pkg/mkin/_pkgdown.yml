@@ -1,8 +1,8 @@
 url: https://pkgdown.jrwb.de/mkin
 
 development:
-  mode: devel
-  version_label: info
+  mode: release
+  version_label: default
 
 template:
   bootswatch: spacelab
@@ -67,7 +67,7 @@ reference:
       - parplot
   - title: Datasets and known results
     contents:
-      - focus_soil_moisture
+      - ds_mixed
       - D24_2014
       - dimethenamid_2018
       - FOCUS_2006_A
@@ -82,6 +82,7 @@ reference:
       - synthetic_data_for_UBA_2014
       - experimental_data_for_UBA_2019
       - test_data_from_UBA_2014
+      - focus_soil_moisture
       - mkinds
       - mkindsg
   - title: NAFTA guidance
@@ -155,7 +156,9 @@ navbar:
         href: articles/twa.html
       - text: Example evaluation of NAFTA SOP Attachment examples
         href: articles/web_only/NAFTA_examples.html
-      - text: Some benchmark timings
+      - text: Benchmark timings for mkin
         href: articles/web_only/benchmarks.html
+      - text: Benchmark timings for saem.mmkin
+        href: articles/web_only/saem_benchmarks.html
     - text: News
       href: news/index.html

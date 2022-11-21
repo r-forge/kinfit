@@ -5,7 +5,7 @@
 * using options ‘--no-tests --as-cran’
 * checking for file ‘mkin/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘mkin’ version ‘1.2.0’
+* this is package ‘mkin’ version ‘1.2.1’
 * package encoding: UTF-8
 * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
 Maintainer: ‘Johannes Ranke <johannes.ranke@jrwb.de>’
@@ -41,7 +41,7 @@ Maintainer: ‘Johannes Ranke <johannes.ranke@jrwb.de>’
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... [14s/14s] OK
+* checking R code for possible problems ... [17s/17s] OK
 * checking Rd files ... OK
 * checking Rd metadata ... OK
 * checking Rd line widths ... OK
@@ -57,12 +57,12 @@ Maintainer: ‘Johannes Ranke <johannes.ranke@jrwb.de>’
 * checking data for ASCII and uncompressed saves ... OK
 * checking installed files from ‘inst/doc’ ... OK
 * checking files in ‘vignettes’ ... OK
-* checking examples ... [36s/46s] OK
+* checking examples ... [20s/20s] OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ... SKIPPED
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in ‘inst/doc’ ... OK
-* checking re-building of vignette outputs ... [26s/41s] OK
+* checking re-building of vignette outputs ... OK
 * checking PDF version of manual ... OK
 * checking HTML version of manual ... OK
 * checking for non-standard things in the check directory ... OK
