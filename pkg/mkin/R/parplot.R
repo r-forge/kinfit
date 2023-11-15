@@ -10,7 +10,10 @@
 #'
 #' @param object The [multistart] object
 #' @param llmin The minimum likelihood of objects to be shown
-#' @param scale By default, scale parameters using the best available fit.
+#' @param llquant Fractional value for selecting only the fits with higher
+#' likelihoods. Overrides 'llmin'.
+#' @param scale By default, scale parameters using the best
+#' available fit.
 #' If 'median', parameters are scaled using the median parameters from all fits.
 #' @param main Title of the plot
 #' @param lpos Positioning of the legend.
@@ -20,7 +23,7 @@
 #' of the in vitro erythropoiesis. BMC Bioinformatics. 2021 Oct 4;22(1):478.
 #' doi: 10.1186/s12859-021-04373-4.
 #' @seealso [multistart]
-#' @importFrom stats median
+#' @importFrom stats median quantile
 #' @export
 parplot <- function(object, ...) {
   UseMethod("parplot")
@@ -28,7 +31,8 @@ parplot <- function(object, ...) {
 
 #' @rdname parplot
 #' @export
-parplot.multistart.saem.mmkin <- function(object, llmin = -Inf, scale = c("best", "median"),
+parplot.multistart.saem.mmkin <- function(object, llmin = -Inf, llquant = NA,
+  scale = c("best", "median"),
   lpos = "bottomleft", main = "", ...)
 {
   oldpar <- par(no.readonly = TRUE)
@@ -37,7 +41,7 @@ parplot.multistart.saem.mmkin <- function(object, llmin = -Inf, scale = c("best"
   orig <- attr(object, "orig")
   orig_parms <- parms(orig)
   start_degparms <- orig$mean_dp_start
-  all_parms <- parms(object)
+  all_parms <- parms(object, exclude_failed = FALSE)
 
   if (inherits(object, "multistart.saem.mmkin")) {
     llfunc <- function(object) {
@@ -48,6 +52,10 @@ parplot.multistart.saem.mmkin <- function(object, llmin = -Inf, scale = c("best"
     stop("parplot is only implemented for multistart.saem.mmkin objects")
   }
   ll <- sapply(object, llfunc)
+  if (!is.na(llquant[1])) {
+    if (llmin != -Inf) warning("Overriding 'llmin' because 'llquant' was specified")
+    llmin <- quantile(ll, 1 - llquant)
+  }
   selected <- which(ll > llmin)
   selected_parms <- all_parms[selected, ]
 
@@ -110,7 +118,7 @@ parplot.multistart.saem.mmkin <- function(object, llmin = -Inf, scale = c("best"
   legend(lpos, inset = c(0.05, 0.05), bty = "n",
     pch = 1, col = 3:1, lty = c(NA, NA, 1),
     legend = c(
-      "Starting parameters",
-      "Original run",
+      "Original start",
+      "Original results",
       "Multistart runs"))
 }

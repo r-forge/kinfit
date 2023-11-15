@@ -1,6 +1,7 @@
 ^_pkgdown\.yml$
 ^\.travis\.yml$
 ^codemeta\.json$
+^coverage$
 ^docs$
 ^log$
 ^mkin.Rcheck$
@@ -9,6 +10,10 @@
 ^test.R$
 ^mkin_.*\.tar\.gz
 ^mkin.tar$
+^inst/rmarkdown/templates/hierarchical_kinetics/skeleton/skeleton.pdf$
+^inst/rmarkdown/templates/hierarchical_kinetics/skeleton/skeleton_cache
+^inst/rmarkdown/templates/hierarchical_kinetics/skeleton/skeleton_files
+^inst/rmarkdown/templates/hierarchical_kinetics/skeleton/dlls
 ^vignettes/.build.timestamp$
 ^vignettes/.*_cache$
 ^vignettes/.*cache$
@@ -24,8 +29,9 @@
 ^vignettes/.*.synctex.gz
 ^vignettes/.*.toc$
 ^vignettes/figure
+^vignettes/prebuilt/.*_dlls
 ^vignettes/FOCUS_Z.tex$
 ^vignettes/mkin.tex$
-^vignettes/mkin_benchmarks.rda$
-^vignettes/web_only/.build.timestamp$
-^vignettes/web_only/mkin_benchmarks.rda$
+^vignettes/web_only/.*$
+^.*\.Rproj$
+^\.Rproj\.user$

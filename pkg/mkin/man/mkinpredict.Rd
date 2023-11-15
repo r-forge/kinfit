@@ -15,10 +15,11 @@ mkinpredict(x, odeparms, odeini, outtimes, ...)
   outtimes = seq(0, 120, by = 0.1),
   solution_type = "deSolve",
   use_compiled = "auto",
+  use_symbols = FALSE,
   method.ode = "lsoda",
   atol = 1e-08,
   rtol = 1e-10,
-  maxsteps = 20000,
+  maxsteps = 20000L,
   map_output = TRUE,
   na_stop = TRUE,
   ...
@@ -60,23 +61,25 @@ solver is used.}
 \item{solution_type}{The method that should be used for producing the
 predictions. This should generally be "analytical" if there is only one
 observed variable, and usually "deSolve" in the case of several observed
-variables. The third possibility "eigen" is faster but not applicable to
-some models e.g.  using FOMC for the parent compound.}
+variables. The third possibility "eigen" is fast in comparison to uncompiled
+ODE models, but not applicable to some models, e.g. using FOMC for the
+parent compound.}
 
 \item{use_compiled}{If set to \code{FALSE}, no compiled version of the
 \link{mkinmod} model is used, even if is present.}
 
+\item{use_symbols}{If set to \code{TRUE} (default), symbol info present in
+the \link{mkinmod} object is used if available for accessing compiled code}
+
 \item{method.ode}{The solution method passed via \link{mkinpredict} to \link{ode}] in
-case the solution type is "deSolve". The default "lsoda" is performant, but
-sometimes fails to converge.}
+case the solution type is "deSolve" and we are not using compiled code.
+When using compiled code, only lsoda is supported.}
 
-\item{atol}{Absolute error tolerance, passed to \link{ode}. Default is 1e-8,
-lower than in \link{lsoda}.}
+\item{atol}{Absolute error tolerance, passed to the ode solver.}
 
-\item{rtol}{Absolute error tolerance, passed to \link{ode}. Default is 1e-10,
-much lower than in \link{lsoda}.}
+\item{rtol}{Absolute error tolerance, passed to the ode solver.}
 
-\item{maxsteps}{Maximum number of steps, passed to \link{ode}.}
+\item{maxsteps}{Maximum number of steps, passed to the ode solver.}
 
 \item{map_output}{Boolean to specify if the output should list values for
 the observed variables (default) or for all state variables (if set to
@@ -110,11 +113,11 @@ mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
 mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
       solution_type = "analytical")[21,]
 mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-      method = "lsoda")[21,]
+      method = "lsoda", use_compiled = FALSE)[21,]
 mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-      method = "ode45")[21,]
+      method = "ode45", use_compiled = FALSE)[21,]
 mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-      method = "rk4")[21,]
+      method = "rk4", use_compiled = FALSE)[21,]
 # rk4 is not as precise here
 
 # The number of output times used to make a lot of difference until the

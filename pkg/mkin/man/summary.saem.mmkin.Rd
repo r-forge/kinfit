@@ -5,7 +5,15 @@
 \alias{print.summary.saem.mmkin}
 \title{Summary method for class "saem.mmkin"}
 \usage{
-\method{summary}{saem.mmkin}(object, data = FALSE, verbose = FALSE, distimes = TRUE, ...)
+\method{summary}{saem.mmkin}(
+  object,
+  data = FALSE,
+  verbose = FALSE,
+  covariates = NULL,
+  covariate_quantile = 0.5,
+  distimes = TRUE,
+  ...
+)
 
 \method{print}{summary.saem.mmkin}(x, digits = max(3, getOption("digits") - 3), verbose = x$verbose, ...)
 }
@@ -16,6 +24,13 @@
 the summary.}
 
 \item{verbose}{Should the summary be verbose?}
+
+\item{covariates}{Numeric vector with covariate values for all variables in
+any covariate models in the object. If given, it overrides 'covariate_quantile'.}
+
+\item{covariate_quantile}{This argument only has an effect if the fitted
+object has covariate models. If so, the default is to show endpoints
+for the median of the covariate values (50th percentile).}
 
 \item{distimes}{logical, indicating whether DT50 and DT90 values should be
 included.}
@@ -92,10 +107,21 @@ f_mmkin_dfop_sfo <- mmkin(list(dfop_sfo), ds_syn_dfop_sfo,
 f_saem_dfop_sfo <- saem(f_mmkin_dfop_sfo)
 print(f_saem_dfop_sfo)
 illparms(f_saem_dfop_sfo)
-f_saem_dfop_sfo_2 <- update(f_saem_dfop_sfo, covariance.model = diag(c(0, 0, 1, 1, 1, 0)))
+f_saem_dfop_sfo_2 <- update(f_saem_dfop_sfo,
+  no_random_effect = c("parent_0", "log_k_m1"))
 illparms(f_saem_dfop_sfo_2)
 intervals(f_saem_dfop_sfo_2)
 summary(f_saem_dfop_sfo_2, data = TRUE)
+# Add a correlation between random effects of g and k2
+cov_model_3 <- f_saem_dfop_sfo_2$so@model@covariance.model
+cov_model_3["log_k2", "g_qlogis"] <- 1
+cov_model_3["g_qlogis", "log_k2"] <- 1
+f_saem_dfop_sfo_3 <- update(f_saem_dfop_sfo,
+  covariance.model = cov_model_3)
+intervals(f_saem_dfop_sfo_3)
+# The correlation does not improve the fit judged by AIC and BIC, although
+# the likelihood is higher with the additional parameter
+anova(f_saem_dfop_sfo, f_saem_dfop_sfo_2, f_saem_dfop_sfo_3)
 }
 
 }

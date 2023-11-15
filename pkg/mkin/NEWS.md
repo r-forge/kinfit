@@ -1,4 +1,50 @@
-# mkin 1.2.1 (unreleased)
+# mkin 1.2.5
+
+- 'vignettes/mesotrione_parent_2023.rnw': Prebuilt vignette showing how covariate modelling can be done for all relevant parent degradation models.
+
+- 'inst/testdata/mesotrione_soil_efsa_2016}.xlsx': Another example spreadsheets for use with 'read_spreadsheet()', featuring pH dependent degradation
+
+- R/illparms.R: Fix the detection of ill-defined slope or error model parameters for the case that the estimate is negative
+
+# mkin 1.2.4
+
+- R/endpoints.R: Fix the calculation of endpoints for user specified covariate values
+
+# mkin 1.2.3.1 (unreleased)
+
+- Small fixes to get the online docs right (example code in R/hierarchical_kinetics, cluster setup in cyantraniliprole and dmta pathway vignettes, graphics and model comparison in multistart vignette), rebuild online docs
+
+# mkin 1.2.3 (2023-04-17)
+
+- 'R/{endpoints,parms,plot.mixed.mmkin,summary.saem.mmkin}.R': Calculate parameters and endpoints and plot population curves for specific covariate values, or specific percentiles of covariate values used in saem fits.
+
+- Depend on current deSolve version with the possibility to avoid resolving symbols in a shared library (compiled models) over and over, thanks to Thomas Petzoldt.
+
+- 'inst/rmarkdown/templates/hierarchical_kinetics/skeleton/skeleton.Rmd': Start a new cluster after creating a model stored in the user specified location, because otherwise symbols are not found by the worker processes.
+
+- 'tests/testthat/test_compiled_symbols.R': Some new tests to control problems that may have been introduced by the possibility to use pre-resolved symbols.
+
+- 'R/mkinerrmin.R': Fix typo in subset (use of = instead of ==), thanks to Sebastian Meyer for spotting this during his work on R 4.3.0.
+
+# mkin 1.2.2 (unreleased)
+
+- 'inst/rmarkdown/templates/hierarchical_kinetics': R markdown template to facilitate the application of hierarchical kinetic models.
+
+- 'inst/testdata/{cyantraniliprole_soil_efsa_2014,lambda-cyhalothrin_soil_efsa_2014}.xlsx': Example spreadsheets for use with 'read_spreadsheet()'.
+
+- 'R/mhmkin.R': Allow an 'illparms.mhmkin' object or a list with suitable dimensions as value of the argument 'no_random_effects', making it possible to exclude random effects that were ill-defined in simpler variants of the set of degradation models. Remove the possibility to exclude random effects based on separate fits, as it did not work well.
+
+- 'R/summary.saem.mmkin.R': List all initial parameter values in the summary, including random effects and error model parameters. Avoid redundant warnings that occurred in the calculation of correlations of the fixed effects in the case that the Fisher information matrix could not be inverted. List correlations of random effects if specified by the user in the covariance model.
+
+- 'R/parplot.R': Possibility to select the top 'llquant' fraction of the fits for the parameter plots, and improved legend text.
+
+- 'R/illparms.R': Also check if confidence intervals for slope parameters in covariate models include zero. Only implemented for fits obtained with the saemix backend.
+
+- 'R/parplot.R': Make the function work also in the case that some of the multistart runs failed.
+
+- 'R/intervals.R': Include correlations of random effects in the model in case there are any.
+
+# mkin 1.2.1 (2022-11-19)
 
 - '{data,R}/ds_mixed.rda': Include the test data in the package instead of generating it in 'tests/testthat/setup_script.R'. Refactor the generating code to make it consistent and update tests.
 

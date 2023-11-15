@@ -19,18 +19,19 @@
 #' @param solution_type The method that should be used for producing the
 #' predictions. This should generally be "analytical" if there is only one
 #' observed variable, and usually "deSolve" in the case of several observed
-#' variables. The third possibility "eigen" is faster but not applicable to
-#' some models e.g.  using FOMC for the parent compound.
+#' variables. The third possibility "eigen" is fast in comparison to uncompiled
+#' ODE models, but not applicable to some models, e.g. using FOMC for the
+#' parent compound.
 #' @param method.ode The solution method passed via [mkinpredict] to [ode]] in
-#' case the solution type is "deSolve". The default "lsoda" is performant, but
-#' sometimes fails to converge.
+#' case the solution type is "deSolve" and we are not using compiled code.
+#' When using compiled code, only lsoda is supported.
 #' @param use_compiled If set to \code{FALSE}, no compiled version of the
 #' [mkinmod] model is used, even if is present.
-#' @param atol Absolute error tolerance, passed to [ode]. Default is 1e-8,
-#' lower than in [lsoda].
-#' @param rtol Absolute error tolerance, passed to [ode]. Default is 1e-10,
-#' much lower than in [lsoda].
-#' @param maxsteps Maximum number of steps, passed to [ode].
+#' @param use_symbols If set to \code{TRUE} (default), symbol info present in
+#' the [mkinmod] object is used if available for accessing compiled code
+#' @param atol Absolute error tolerance, passed to the ode solver.
+#' @param rtol Absolute error tolerance, passed to the ode solver.
+#' @param maxsteps Maximum number of steps, passed to the ode solver.
 #' @param map_output Boolean to specify if the output should list values for
 #'   the observed variables (default) or for all state variables (if set to
 #'   FALSE). Setting this to FALSE has no effect for analytical solutions,
@@ -38,7 +39,6 @@
 #' @param na_stop Should it be an error if [ode] returns NaN values
 #' @param \dots Further arguments passed to the ode solver in case such a
 #'   solver is used.
-#' @import deSolve
 #' @return A matrix with the numeric solution in wide format
 #' @author Johannes Ranke
 #' @examples
@@ -58,11 +58,11 @@
 #' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
 #'       solution_type = "analytical")[21,]
 #' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-#'       method = "lsoda")[21,]
+#'       method = "lsoda", use_compiled = FALSE)[21,]
 #' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-#'       method = "ode45")[21,]
+#'       method = "ode45", use_compiled = FALSE)[21,]
 #' mkinpredict(SFO, c(k_degradinol = 0.3), c(degradinol = 100), 0:20,
-#'       method = "rk4")[21,]
+#'       method = "rk4", use_compiled = FALSE)[21,]
 #' # rk4 is not as precise here
 #'
 #' # The number of output times used to make a lot of difference until the
@@ -116,7 +116,8 @@ mkinpredict.mkinmod <- function(x,
   outtimes = seq(0, 120, by = 0.1),
   solution_type = "deSolve",
   use_compiled = "auto",
-  method.ode = "lsoda", atol = 1e-8, rtol = 1e-10, maxsteps = 20000,
+  use_symbols = FALSE,
+  method.ode = "lsoda", atol = 1e-8, rtol = 1e-10, maxsteps = 20000L,
   map_output = TRUE,
   na_stop = TRUE,
   ...)
@@ -173,20 +174,26 @@ mkinpredict.mkinmod <- function(x,
   if (solution_type == "deSolve") {
     if (!is.null(x$cf) & use_compiled[1] != FALSE) {
 
-      out <- deSolve::ode(
+      if (!is.null(x$symbols) & use_symbols) {
+        lsoda_func <- x$symbols
+      } else {
+        lsoda_func <- "diffs"
+      }
+
+      out <- deSolve::lsoda(
         y = odeini,
         times = outtimes,
-        func = "diffs",
+        func = lsoda_func,
         initfunc = "initpar",
-        dllname = if (is.null(x$dll_info)) inline::getDynLib(x$cf)[["name"]]
-          else x$dll_info[["name"]],
+        dllname = x$dll_info[["name"]],
         parms = odeparms[x$parms], # Order matters when using compiled models
-        method = method.ode,
         atol = atol,
         rtol = rtol,
         maxsteps = maxsteps,
         ...
       )
+
+      colnames(out) <- c("time", mod_vars)
     } else {
       mkindiff <- function(t, state, parms) {
 

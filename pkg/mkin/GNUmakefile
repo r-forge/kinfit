@@ -9,6 +9,9 @@ WINBIN  := $(PKGSRC)_$(PKGVERS).zip
 # pre-prelease version) use `make RBIN=/path/to/other/R/` or `export RBIN=...`
 # If no alternate bin folder is specified, the default is to use the folder
 # containing the first instance of R on the PATH.
+# If using a patched version of R, you may want to use the same libraries
+# as for the Debian packaged version, by using
+# `export R_LIBS_SITE=${R_LIBS_SITE-'/usr/local/lib/R/site-library:/usr/lib/R/site-library:/usr/lib/R/library'}`
 RBIN ?= $(shell dirname "`which R`")
 RDEVBIN=/home/jranke/svn/R/r-devel/build/bin
 
@@ -24,7 +27,9 @@ pkgfiles = \
 	DESCRIPTION \
 	inst/WORDLIST \
 	inst/dataset_generation/* \
-	inst/testdata/fit_old_FOCUS_D.rda \
+	inst/rmarkdown/templates/hierarchical_kinetics/template.yaml \
+	inst/rmarkdown/templates/hierarchical_kinetics/skeleton/skeleton.Rmd \
+	inst/testdata/* \
 	man/* \
 	NAMESPACE \
 	NEWS.md \
@@ -35,10 +40,6 @@ pkgfiles = \
 all: build
 
 $(TGZ): $(pkgfiles) vignettes
-	$(RM) -r vignettes/*_cache
-	$(RM) -r vignettes/*_files
-	$(RM) -r vignettes/*.R
-	$(RM) -r vignettes/web_only/*.R
 	$(RM) Rplots.pdf
 	"$(RBIN)/R" CMD build . 2>&1 | tee log/build.log
 
@@ -80,12 +81,16 @@ clean:
 	$(RM) -r vignettes/web_only/*.R
 	$(RM) Rplots.pdf
 
+# We set PROCESSX_NOTIFY_OLD_SIGCHILD in order to avoid the message
+# "Error while shutting down parallel: unable to terminate some child processes",
+# which is said to be harmless, see https://processx.r-lib.org/#mixing-processx-and-the-parallel-base-r-package
+# and https://github.com/r-lib/processx/issues/236
 test: install
-	"$(RBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test.log
+	PROCESSX_NOTIFY_OLD_SIGCHLD=true "$(RBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test.log
 	sed -i -e "s/.*\r.*\r//" log/test.log
 
 devtest: devinstall
-	"$(RDEVBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test_dev.log
+	PROCESSX_NOTIFY_OLD_SIGCHLD=true "$(RDEVBIN)/Rscript" -e 'options(cli.dynamic = TRUE); devtools::test()' 2>&1 | tee log/test_dev.log
 	sed -i -e "s/\r.*\r//" log/test_dev.log
 
 slowtests: install
@@ -97,6 +102,9 @@ testcheck: roxygen test check
 README.html: README.md
 	"$(RBIN)/Rscript" -e "rmarkdown::render('README.md', output_format = 'html_document', output_options = list(mathjax = NULL))"
 
+vignettes/%.pdf: vignettes/references.bib vignettes/%.rnw
+	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.rnw', dir = 'vignettes')"
+
 vignettes/%.html: vignettes/mkin_vignettes.css vignettes/references.bib vignettes/%.rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/$*.rmd', dir = 'vignettes')"
 
@@ -105,7 +113,8 @@ vignettes: vignettes/mkin.html vignettes/FOCUS_D.html vignettes/FOCUS_L.html vig
 vignettes/web_only/%.html: vignettes/references.bib vignettes/web_only/%.rmd
 	"$(RBIN)/Rscript" -e "tools::buildVignette(file = 'vignettes/web_only/$*.rmd', dir = 'vignettes/web_only', keep=c('mkin_benchmarks.rda', 'saem_benchmarks.rda'))"
 
-articles: vignettes/web_only/FOCUS_Z.html vignettes/web_only/compiled_models.html vignettes/web_only/benchmarks.html vignettes/web_only/dimethenamid_2018.html vignettes/web_only/multistart.html
+vignettes/prebuilt/%.pdf: vignettes/prebuilt/references.bib vignettes/prebuilt/%.rmd
+	"$(RBIN)/Rscript" -e "rmarkdown::render('vignettes/prebuilt/$*.rmd')"
 
 pd: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE, lazy = TRUE)"
@@ -114,6 +123,10 @@ pd: roxygen
 pd_all: roxygen
 	"$(RBIN)/Rscript" -e "pkgdown::build_site(run_dont_run = TRUE)"
 	git add -A
+
+coverage:
+	mkdir -p docs/dev/coverage
+	"$(RBIN)/Rscript" -e "covr::report(file = 'coverage/coverage.html')"
 
 r-forge:
 	git archive main > $(HOME)/git/mkin/mkin.tar;\

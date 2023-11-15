@@ -26,7 +26,7 @@
 #'   Additionally, [mkinsub()] has an argument \code{to}, specifying names of
 #'   variables to which a transfer is to be assumed in the model.
 #'   If the argument \code{use_of_ff} is set to "min"
-#'   (default) and the model for the compartment is "SFO" or "SFORB", an
+#'   and the model for the compartment is "SFO" or "SFORB", an
 #'   additional [mkinsub()] argument can be \code{sink = FALSE}, effectively
 #'   fixing the flux to sink to zero.
 #'   In print.mkinmod, this argument is currently not used.
@@ -45,7 +45,9 @@
 #' @param dll_dir Directory where an DLL object, if generated internally by
 #'   [inline::cfunction()], should be saved.  The DLL will only be stored in a
 #'   permanent location for use in future sessions, if 'dll_dir' and 'name'
-#'   are specified.
+#'   are specified. This is helpful if fit objects are cached e.g. by knitr,
+#'   as the cache remains functional across sessions if the DLL is stored in
+#'   a user defined location.
 #' @param unload If a DLL from the target location in 'dll_dir' is already
 #'   loaded, should that be unloaded first?
 #' @param overwrite If a file exists at the target DLL location in 'dll_dir',
@@ -462,13 +464,14 @@ mkinmod <- function(..., use_of_ff = "max", name = NULL,
       silent = TRUE)
 
     if (!inherits(model$cf, "try-error")) {
-      if (is.null(dll_dir)) {
-        if (!quiet) message("Temporary DLL for differentials generated and loaded")
-        model$dll_info <- inline::getDynLib(model$cf)
-      } else {
-        model$dll_info <- inline::moveDLL(model$cf, name, dll_dir,
-          unload = unload, overwrite = overwrite, verbose = !quiet)
+      if (!quiet) message("Temporary DLL for differentials generated and loaded")
+      if (!is.null(dll_dir)) {
+        # We suppress warnings, as we get a warning about a path "(embedding)" 
+        # under Windows, at least when using RStudio
+        suppressWarnings(inline::moveDLL(model$cf, name, dll_dir,
+          unload = unload, overwrite = overwrite, verbose = !quiet))
       }
+      model$dll_info <- inline::getDynLib(model$cf)
     }
   }
   # }}}

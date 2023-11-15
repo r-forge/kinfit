@@ -6,7 +6,6 @@
 \alias{print.saem.mmkin}
 \alias{saemix_model}
 \alias{saemix_data}
-\alias{parms.saem.mmkin}
 \title{Fit nonlinear mixed models with SAEM}
 \usage{
 saem(object, ...)
@@ -54,8 +53,6 @@ saemix_model(
 )
 
 saemix_data(object, covariates = NULL, verbose = FALSE, ...)
-
-\method{parms}{saem.mmkin}(object, ci = FALSE, ...)
 }
 \arguments{
 \item{object}{An \link{mmkin} row object containing several fits of the same
@@ -124,9 +121,6 @@ and the end of the optimisation process?}
 \item{x}{An saem.mmkin object to print}
 
 \item{digits}{Number of digits to use for printing}
-
-\item{ci}{Should a matrix with estimates and confidence interval boundaries
-be returned? If FALSE (default), a vector of estimates is returned.}
 }
 \value{
 An S3 object of class 'saem.mmkin', containing the fitted
@@ -206,12 +200,12 @@ plot(f_saem_dfop_sfo)
 summary(f_saem_dfop_sfo, data = TRUE)
 
 # The following takes about 6 minutes
-#f_saem_dfop_sfo_deSolve <- saem(f_mmkin["DFOP-SFO", ], solution_type = "deSolve",
-#  control = list(nbiter.saemix = c(200, 80), nbdisplay = 10))
+f_saem_dfop_sfo_deSolve <- saem(f_mmkin["DFOP-SFO", ], solution_type = "deSolve",
+  nbiter.saemix = c(200, 80))
 
-#saemix::compare.saemix(list(
-#  f_saem_dfop_sfo$so,
-#  f_saem_dfop_sfo_deSolve$so))
+#anova(
+#  f_saem_dfop_sfo,
+#  f_saem_dfop_sfo_deSolve))
 
 # If the model supports it, we can also use eigenvalue based solutions, which
 # take a similar amount of time

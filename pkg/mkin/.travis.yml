@@ -1,6 +1,6 @@
 language: c
 sudo: required
-dist: focal
+dist: jammy
 
 jobs:
   include:
@@ -18,13 +18,12 @@ before_install:
 
 install:
   - ./run.sh install_all
-  - ./run.sh install_github jranke/saemixextension@installable_dev_version
 
 script:
-  - ./run.sh run_tests
+  - travis_wait 30 ./run.sh run_tests
 
 after_failure:
   - ./run.sh dump_logs
 
 after_success:
-  - travis_wait ./run.sh coverage
+  - travis_wait 30 ./run.sh coverage

@@ -149,6 +149,15 @@ nlme.mmkin <- function(model, data = "auto",
     warning("'nlme.mmkin' will redefine 'data'")
   }
 
+  # Get native symbol info for speed
+  if (model[[1]]$solution_type == "deSolve" & !is.null(model[[1]]$mkinmod$cf)) {
+    # The mkinmod stored in the first fit will be used by nlme
+    model[[1]]$mkinmod$symbols <- deSolve::checkDLL(
+      dllname = model[[1]]$mkinmod$dll_info[["name"]],
+      func = "diffs", initfunc = "initpar",
+      jacfunc = NULL, nout = 0, outnames = NULL)
+  }
+
   deg_func <- nlme_function(model)
 
   assign("deg_func", deg_func, getFromNamespace(".nlme_env", "mkin"))
@@ -190,6 +199,9 @@ nlme.mmkin <- function(model, data = "auto",
   val$time <- fit_time
 
   val$mkinmod <- model[[1]]$mkinmod
+  # Don't return addresses that will become invalid
+  val$mkinmod$symbols <- NULL
+
   val$data <- thisCall[["data"]]
   val$mmkin <- model
   if (is.list(start)) val$mean_dp_start <- start$fixed

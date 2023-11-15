@@ -120,12 +120,12 @@ utils::globalVariables(c("predicted", "std"))
 #' summary(f_saem_dfop_sfo, data = TRUE)
 #'
 #' # The following takes about 6 minutes
-#' #f_saem_dfop_sfo_deSolve <- saem(f_mmkin["DFOP-SFO", ], solution_type = "deSolve",
-#' #  control = list(nbiter.saemix = c(200, 80), nbdisplay = 10))
+#' f_saem_dfop_sfo_deSolve <- saem(f_mmkin["DFOP-SFO", ], solution_type = "deSolve",
+#'   nbiter.saemix = c(200, 80))
 #'
-#' #saemix::compare.saemix(list(
-#' #  f_saem_dfop_sfo$so,
-#' #  f_saem_dfop_sfo_deSolve$so))
+#' #anova(
+#' #  f_saem_dfop_sfo,
+#' #  f_saem_dfop_sfo_deSolve))
 #'
 #' # If the model supports it, we can also use eigenvalue based solutions, which
 #' # take a similar amount of time
@@ -226,6 +226,8 @@ saem.mmkin <- function(object,
     transformations = transformations,
     transform_rates = object[[1]]$transform_rates,
     transform_fractions = object[[1]]$transform_fractions,
+    covariates = covariates,
+    covariate_models = covariate_models,
     sm = m_saemix,
     so = f_saemix,
     call = call,
@@ -304,6 +306,10 @@ saemix_model <- function(object, solution_type = "auto",
   if (nrow(object) > 1) stop("Only row objects allowed")
 
   mkin_model <- object[[1]]$mkinmod
+
+  if (length(mkin_model$spec) > 1 & solution_type[1] == "analytical") {
+    stop("mkin analytical solutions not supported for more thane one observed variable")
+  }
 
   degparms_optim <-  mean_degparms(object, test_log_parms = test_log_parms)
   na_degparms <- names(which(is.na(degparms_optim)))
@@ -580,6 +586,18 @@ saemix_model <- function(object, solution_type = "auto",
     transform_rates <- object[[1]]$transform_rates
     transform_fractions <- object[[1]]$transform_fractions
 
+    # Get native symbol info for speed
+    use_symbols = FALSE
+    if (solution_type == "deSolve" & !is.null(mkin_model$cf)) {
+      mkin_model$symbols <- try(deSolve::checkDLL(
+        dllname = mkin_model$dll_info[["name"]],
+        func = "diffs", initfunc = "initpar",
+        jacfunc = NULL, nout = 0, outnames = NULL))
+      if (!inherits(mkin_model$symbols, "try-error")) {
+        use_symbols = TRUE
+      }
+    }
+
     # Define the model function
     model_function <- function(psi, id, xidep) {
 
@@ -792,10 +810,14 @@ update.saem.mmkin <- function(object, ..., evaluate = TRUE) {
 }
 
 #' @export
-#' @rdname saem
+#' @rdname parms
 #' @param ci Should a matrix with estimates and confidence interval boundaries
-#' be returned? If FALSE (default), a vector of estimates is returned.
-parms.saem.mmkin <- function(object, ci = FALSE, ...) {
+#' be returned? If FALSE (default), a vector of estimates is returned if no
+#' covariates are given, otherwise a matrix of estimates is returned, with
+#' each column corresponding to a row of the data frame holding the covariates
+#' @param covariates A data frame holding covariate values for which to
+#' return parameter values. Only has an effect if 'ci' is FALSE.
+parms.saem.mmkin <- function(object, ci = FALSE, covariates = NULL, ...) {
   cov.mod <- object$sm@covariance.model
   n_cov_mod_parms <- sum(cov.mod[upper.tri(cov.mod, diag = TRUE)])
   n_parms <- length(object$sm@name.modpar) +
@@ -817,6 +839,29 @@ parms.saem.mmkin <- function(object, ci = FALSE, ...) {
 
   names(estimate) <- rownames(conf.int)
 
-  if (ci) return(conf.int)
-  else return(estimate)
+  if (ci) {
+    return(conf.int)
+  } else {
+    if (is.null(covariates)) {
+      return(estimate)
+    } else {
+      est_for_cov <- matrix(NA,
+        nrow = length(object$sm@name.modpar), ncol = nrow(covariates),
+        dimnames = (list(object$sm@name.modpar, rownames(covariates))))
+      covmods <- object$covariate_models
+      names(covmods) <- sapply(covmods, function(x) as.character(x[[2]]))
+      for (deg_parm_name in rownames(est_for_cov)) {
+        if (deg_parm_name %in% names(covmods)) {
+          covariate <- covmods[[deg_parm_name]][[3]]
+          beta_degparm_name <- paste0("beta_", covariate,
+            "(", deg_parm_name, ")")
+          est_for_cov[deg_parm_name, ] <- estimate[deg_parm_name] +
+            covariates[[covariate]] * estimate[beta_degparm_name]
+        } else {
+          est_for_cov[deg_parm_name, ] <- estimate[deg_parm_name]
+        }
+      }
+      return(est_for_cov)
+    }
+  }
 }

@@ -14,6 +14,11 @@
 #' another object that has list components mkinmod containing an [mkinmod]
 #' degradation model, and two numeric vectors, bparms.optim and bparms.fixed,
 #' that contain parameter values for that model.
+#' @param covariates Numeric vector with covariate values for all variables in
+#' any covariate models in the object. If given, it overrides 'covariate_quantile'.
+#' @param covariate_quantile This argument only has an effect if the fitted
+#' object has covariate models. If so, the default is to show endpoints
+#' for the median of the covariate values (50th percentile).
 #' @importFrom stats optimize
 #' @return A list with a matrix of dissipation times named distimes, and, if
 #' applicable, a vector of formation fractions named ff and, if the SFORB model
@@ -34,17 +39,44 @@
 #'   }
 #'
 #' @export
-endpoints <- function(fit) {
-  ep <- list()
+endpoints <- function(fit, covariates = NULL, covariate_quantile = 0.5) {
   mkinmod <- fit$mkinmod
-  degparms <- c(fit$bparms.optim, fit$bparms.fixed)
   obs_vars <- names(mkinmod$spec)
+
+  if (!is.null(fit$covariate_models)) {
+    if (is.null(covariates)) {
+      covariates = as.data.frame(
+        apply(fit$covariates, 2, quantile,
+          covariate_quantile, simplify = FALSE))
+    } else {
+      covariate_m <- matrix(covariates, byrow = TRUE)
+      colnames(covariate_m) <- names(covariates)
+      rownames(covariate_m) <- "User"
+      covariates <- as.data.frame(covariate_m)
+    }
+    degparms_trans <- parms(fit, covariates = covariates)[, 1]
+    if (inherits(fit, "saem.mmkin") & (fit$transformations == "saemix")) {
+      degparms <- degparms_trans
+    } else {
+      degparms <- backtransform_odeparms(degparms_trans,
+        fit$mkinmod,
+        transform_rates = fit$transform_rates,
+        transform_fractions = fit$transform_fractions)
+    }
+  } else {
+    degparms <- c(fit$bparms.optim, fit$bparms.fixed)
+  }
+
+  # Set up object to return
+  ep <- list()
+  ep$covariates <- covariates
   ep$ff <- vector()
   ep$SFORB <- vector()
   ep$distimes <- data.frame(
     DT50 = rep(NA, length(obs_vars)),
     DT90 = rep(NA, length(obs_vars)),
     row.names = obs_vars)
+
   for (obs_var in obs_vars) {
     type = names(mkinmod$map[[obs_var]])[1]
 
